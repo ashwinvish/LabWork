@@ -39,10 +39,10 @@ for kk = 1: numel(cellIDs)
         treeVisualizer(thisTree, [1],[],[{thisPreSynapse} {thisPostSynapse}],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
         %treeVisualizer(thisTree, [1],[],[],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        %treeVisualizer(thisTree, [1],[],[{thisPreSynapse} {thisPostSynapse}],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
+        treeVisualizer(thisTree, [1],[],[{thisPreSynapse} {thisPostSynapse}],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
         %treeVisualizer(thisTree, [1],[],[],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
     else
-        %treeVisualizer(thisTree, [1],[],[{thisPreSynapse} {thisPostSynapse}],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
+        treeVisualizer(thisTree, [1],[],[{thisPreSynapse} {thisPostSynapse}],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
         %treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
     end
     daspect([1 1 1]);
@@ -239,41 +239,27 @@ end
 
 % plot heat map of presynaptic sites
 figure(14);
-for kk = 1:length(allPost)
-    volPost = zeros((15e4-0)/res,(2.5e5-0)/res,(8e4-0)/res); 
+for kk = 1:length(cellIDs)
+    volPost = zeros((15e4-0)/res,(2.6e5-0)/res,(8e4-0)/res); 
     % add 10000/res pixels to the zaxis to avoid edge effects
     for n = 1:length(allPost{kk});
         volPost(round(allPost{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,2)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2)) = ...
             volPost(round(allPost{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,2)/res) + (-ksize/2:ksize/2),round(allPost{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2))  + K3D;
     end
     subplot(3,8,kk);
-    %plot XZ
-    tempXZ = max(volPost,[],2);
-    for i = 1:size(tempXZ,3)
-        B(:,i) = tempXZ(:,:,i);
-    end
-    imagesc(0,0,imrotate(B,-90)); colormap(jet);
+    threeView(volPost);
     title(cellIDs{kk});
-    hold on;
-    plot(160-CellSoma(kk,2)/res, 80-(CellSoma(kk,3))/res,'Marker','o', 'MarkerFaceColor','w');
-    
-    %plot XY
-    tempXY = max(volPost,[],3);
-    h2 = imagesc(0,90,imrotate(tempXY,-90));set(gca,'YDir','normal'); colormap(jet);
-    title(cellIDs{kk});
-    plot(160-CellSoma(kk,2)/res, 90 + CellSoma(kk,1)/res,'Marker','o', 'MarkerFaceColor','w');
 
-    %plot yz
-    tempYZ = max(volPost,[],1);
-    for i = 1:size(tempYZ,3)
-        C(i,:) = tempYZ(:,:,i);
-    end
-    imagesc(160,90,imrotate(C,-90));set(gca,'YDir','normal'); colormap(jet);
-    title(cellIDs{kk});
-    plot(160+(CellSoma(kk,3))/res, 90+ CellSoma(kk,1)/res,'Marker','o', 'MarkerFaceColor','w');
+    %plot XZ soma location
+    plot(160-(CellSoma(kk,2))/res, 80 -(CellSoma(kk,3))/res,'Marker','o', 'MarkerFaceColor','w');
+    %plot XY soma location
+    plot(160-(CellSoma(kk,2))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w');
+    %plot YZ soma location
+    plot(160+(CellSoma(kk,3))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w');
  
     axis off
-    axis image
+    axis vis3d
+
     
     [m,I] = max(volPost(:));
     maxDesnity(kk) = m;
@@ -295,51 +281,31 @@ clear volPre;
 clear('tempXY','tempXZ','tempYZ');
 clear ('B','C');
 figure(15);
-for kk = 1:length(allPreSynapse)
+i = 0;
+for kk = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,kk)) == 1
         continue;
     else
+        i = i+1;
         volPre = zeros((15e4-0)/res,(2.6e5-0)/res,(8e4-0)/res);
         for n = 1:size(allPreSynapse{kk},1);
             volPre(round(allPreSynapse{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPreSynapse{kk}(n,2)/res) + (-ksize/2:ksize/2), round(allPreSynapse{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2)) = ...
                 volPre(round(allPreSynapse{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPreSynapse{kk}(n,2)/res) + (-ksize/2:ksize/2),round(allPreSynapse{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2))  + K3D;
         end
-        subplot(3,8,kk);
-        %plot XY
-        tempXY = max(volPre,[],3);
-        %figure('Units','pixels','Position', [0,0,m,n]);
-        imagesc(0,90,imrotate(tempXY,-90));set(gca,'YDir','normal'); colormap(jet);
-        title(cellIDs{kk});
-        axis off
-        hold on;
-        plot(160-CellSoma(kk,2)/res, 90 + CellSoma(kk,1)/res,'Marker','o', 'MarkerFaceColor','w');
-        axis image;
-        %plot XZ
-        tempXZ = max(volPre,[],2);
-        for i = 1:size(tempXZ,3)
-            B(:,i) = tempXZ(:,:,i);
-        end
-        imagesc(0,0,imrotate(B,-90));set(gca,'YDir','normal'); colormap(jet);
-        title(cellIDs{kk});
-        axis off
-        hold on;
-        plot(160-CellSoma(kk,2)/res,80-(CellSoma(kk,3))/res,'Marker','o', 'MarkerFaceColor','w');
-        axis image;
-        clear B;
-        %plot yz
-        tempYZ = max(volPre,[],1);
-        for i = 1:size(tempYZ,3)
-            C(i,:) = tempYZ(:,:,i);
-        end
-        imagesc(160,90,imrotate(C,-90));set(gca,'YDir','normal'); colormap(jet);
-        title(cellIDs{kk});
-        axis off
-        hold on;
-        plot(160+(CellSoma(kk,3))/res, 90+ CellSoma(kk,1)/res,'Marker','o', 'MarkerFaceColor','w');
-        axis image;
-        clear C;
         
+        subplot(3,8,i);
+        threeView(volPre);
+        title(cellIDs{kk});
+        %plot XY
+        plot(160-(CellSoma(kk,2))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w'); 
+        %plot XZ
+        plot(160-(CellSoma(kk,2))/res, 80 - (CellSoma(kk,3))/res,'Marker','o', 'MarkerFaceColor','w');
+        %plot yz
+        plot(160+(CellSoma(kk,3))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w');   
     end
+    
+    axis off
+    axis vis3d
     
     [m,I] = max(volPre(:));
     maxPreDesnity(kk) = m;
