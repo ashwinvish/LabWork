@@ -15,14 +15,17 @@
 %Int2_8 = [10 12 22 64];
 %Int3_5 = [1 91 34 52 80 82 83 86 88 90 103 104 107 111 112 113 114 115 92 81 84 87 89 95 96 98 99 100 93 94 101 102]; 
 
-clc; clear all;
-%cellIDs = {'Int1_5','Int1_2', 'Int2_2',  'Int3_6'};
+clc; 
+clear all;
+% all the cell IDS
 cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };
-cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'}; % alx Cells
-cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8','Int3_5'}; %
-cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'}; %
-%Lateral Cells
-%figure(1);
+% all the alx cells
+cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
+% all bdx1b cells
+cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8','Int3_5'};
+% all barhl1 cells
+cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'}; 
+
 
 for kk = 1: numel(cellIDs)
     disp([cellIDs{kk} , '_WithTags.swc']);
@@ -43,35 +46,37 @@ for kk = 1: numel(cellIDs)
         %treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
     end
     daspect([1 1 1]);
+    
     %view([-50,40]);
-   % box on;
-   %grid on;
-%     daspect([1 1 1]);
+    % box on;
+    %grid on;
+    %daspect([1 1 1]);
     % axis vis3d;
-     
-%     XColor = [1,1,1]; YColor = [1,1,1];
-%     h = gcf;
-    % set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
-%     view([-90,90]);
-%     %title(cellIDs{kk});
-%     saveas(h,[cellIDs{kk},'.png'],'png');
+    %XColor = [1,1,1]; YColor = [1,1,1];
+    %h = gcf;
+    %set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
+    %view([-90,90]);
+    %title(cellIDs{kk});
+    %saveas(h,[cellIDs{kk},'.png'],'png');
 end
-% % daspect([1 1 1]);
- h1 = gcf;
- box on;
- XColor = [1,1,1]; YColor = [1,1,1];
- set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
- %view([-50,40]);
+% daspect([1 1 1]);
+h1 = gcf;
+box on;
+XColor = [1,1,1]; YColor = [1,1,1];
+set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
+%view([-50,40]);
 view([-90,90]);
+%XZ view
 h2 = figure(2);
 copyobj(get(h1,'children'),h2);
 axis([-0 30000 20000 140000]);
-view([-90, 0]); % xz view
+view([-90, 0]); 
 daspect([2 1 2]);
+% YZ view
 h3 = figure(3);
 copyobj(get(h1,'children'),h3);
 axis([60000 250000 -30000 0]);
-view([0,0]);camroll(90); % yz view
+view([0,0]);camroll(90); 
 %% Get cell Somas and plot pairwise distances
 % All soma locations
 for kk = 1 : length(allTrees)
@@ -85,10 +90,15 @@ CellSoma(:,[1,2,3]) = CellSoma(:,[2,1,3]);
 CellSomaSort = CellSoma(I,:);
 tempdist = pdist(CellSomaSort);
 EucDist = squareform(tempdist);
-figure(4);imagesc(EucDist);colormap(hsv);
+figure(4);
+imagesc(EucDist);
+colormap(hsv);
 axis square;
+
 Links = linkage(tempdist);
-figure(5); dendrogram(Links,'Labels',cellIDs) % dendrogram of cell distances
+figure(5); 
+dendrogram(Links,'Labels',cellIDs) % dendrogram of cell distances
+
 h = figure(6);
 clear kk; clear n;
 % Pairwise Eucledian distance of postsynapses
@@ -140,7 +150,8 @@ end
 tau = [7.16323454600000,6.23690945500000,9.88816223500000,17.7411357900000,5.48599643300000,10.1172859600000,7.51255049400000,18.1882559300000,57.0990589000000,100,38.7012773800000,11.6985985200000,11.0576103400000,1.44892223200000,19.5401836000000,100,16.5597699400000,10.3971051900000,26.7744003700000,7.92791676600000,6.10909614600000,5.21884052300000];
 rho = [0.5207986709, 0.6661018539, 0.6648735491, 0.8190294252, 0.6370840437, 0.3520511176, 0.6180659652, 0.7770252108, 0.8445793478, 0.5048882377, 0.6169858888, 0.4693437009, 0.7319155263 ...
 0.2311146742, 0.5600555905, 0.69884915, 0.8217790613, 0.5105536878, 0.8749909893, 0.3470572669, 0.5251032841, 0.5768530374];
-figure(7);scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdgeColor', 'k');
+figure(8);
+scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdgeColor', 'k');
 grid off;
 daspect([1 1 1]);
 axis([60000 250000 20000 140000]);
@@ -151,17 +162,16 @@ hold on;
 plot([240000, 240000], [120000, 140000], '-k' );
 % to plot the other views
 h1 = gcf;
-
 set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
-h2 = figure(8);
+h2 = figure(9);
 copyobj(get(h1,'children'),h2);
 view([-90, 0]); % xz view
-h3 = figure(9);
+h3 = figure(10);
 copyobj(get(h1,'children'),h3);
 view([0,0]);camroll(90); % yz view
-%%
+%% Additional Plots
 %Rho vs Number of Post synpases
-figure(10);
+figure(11);
 for i = 1:length(cellIDs)
     hold on
     if ismember(cellIDs{i},cellIDsAlx)==1
@@ -179,7 +189,7 @@ ylabel('Persistence measure Rho' );
 xlabel('Number of postsynaptic sites');
 
 % Rho Vs Law pathlength of neuron
-figure(11)
+figure(12)
 for i = 1:length(cellIDs)
     hold on
     if ismember(cellIDs{i},cellIDsAlx)==1
@@ -197,7 +207,7 @@ ylabel('Persistence measure Rho');
 xlabel('Raw neuron length in nm');
 
 % Rho vs synaptic density (number of synapses/raw length)
-figure(16);
+figure(13);
 for i = 1:length(cellIDs)
     hold on;
     if ismember(cellIDs{i},cellIDsAlx)==1
@@ -227,6 +237,8 @@ for i = 1:(ksize+1)
     K3D(:,:,i) = K(:,:)*Gwin(i);
 end
 
+% plot heat map of presynaptic sites
+figure(14);
 for kk = 1:length(allPost)
     volPost = zeros((15e4-0)/res,(2.5e5-0)/res,(8e4-0)/res); 
     % add 10000/res pixels to the zaxis to avoid edge effects
@@ -282,6 +294,7 @@ end
 clear volPre;
 clear('tempXY','tempXZ','tempYZ');
 clear ('B','C');
+figure(15);
 for kk = 1:length(allPreSynapse)
     if cellfun('isempty',allPreSynapse(1,kk)) == 1
         continue;
@@ -344,9 +357,9 @@ for i = 1:size(cellIDs,2)
     end
 end
 
-% Plot rho vs Peakdensity
+%% Plot rho vs Peakdensity
 %PostPeakDensity
-figure(13);
+figure(16);
 for i = 1:length(cellIDs)
     hold on;
     if ismember(cellIDs{i},cellIDsAlx)==1
@@ -359,7 +372,7 @@ for i = 1:length(cellIDs)
    % text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
 end
 %PrePeakDensity
-figure(14);
+figure(17);
 for i = 1:length(cellIDs)
     hold on;
     if ismember(cellIDs{i},cellIDsAlx)==1
@@ -383,7 +396,7 @@ end
 %allPostSorted = allPost(Index);
 %allRawLengthSorted = allRawLength(Index);
 % distribution of postsynaptic sites
-figure();
+figure(18);
 for i = 1:length(cellIDs)
     lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i},[-1:10]);
     allLengthToPostNode{i} = lengthToPostNode ;
@@ -391,7 +404,7 @@ for i = 1:length(cellIDs)
     scatter(1:size(allPost{i},1),sort(lengthToPostNode)/allRawLength(i));
     title(cellIDs{i})
 end
- figure();
+ figure(19);
  for i = 1:length(cellIDs)
  subplot(3,8,i);
  hist(sort(allLengthToPostNode{i})/allRawLength(i), length(allPost{i}));title(cellIDs{i});
@@ -399,7 +412,7 @@ end
  end
  
  % distribution of presynaptic sites
- figure();
+ figure(20);
  for i = 1:length(cellIDs)
       if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
@@ -411,7 +424,7 @@ end
     title(cellIDs{i})
       end
 end
- figure();
+ figure(21);
  for i = 1:length(cellIDs)
      if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
@@ -422,7 +435,7 @@ end
      end
  end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
+%% Misc. plots
 % plot emperical CDFs for all cells
 for i = 1:22
 p = ((1:size(allLengthToPostNode{i},1))-0.5)'./size(allLengthToPostNode{i},1);
