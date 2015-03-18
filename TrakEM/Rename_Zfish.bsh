@@ -1,0 +1,44 @@
+import fiji.util.gui.GenericDialogPlus;
+// Create dialog        
+gd = new GenericDialogPlus( "Generate TrakEM2 text file" );
+        
+gd.addDirectoryField("Input directory", "/", 50);
+gd.addNumericField( "Number of sections:", 2, 0 );
+gd.addNumericField( "Number of rows:", 2, 0 );	
+gd.addNumericField( "Number of columns:", 2, 0 );
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+
+sourceDirectory = gd.getNextString();
+numSections = gd.getNextNumber();
+numRows = gd.getNextNumber();
+numColumns = gd.getNextNumber();
+
+for( sec = 28; sec <= numSections; sec++ )
+	{
+		for( row = 1; row <= numRows; row++ )
+			for( col = 1; col <= numColumns; col ++ )
+			{	
+				newRow = row+5;
+				newCol = col+2;
+				
+					OldFname = sourceDirectory + "/W002"  + "_Sec"  + sec + "_Montage" + "/Tile_r" 
+					+ row + "-c" + col + "_W002" +"_sec" + sec + ".tif ";
+					file = new File(OldFname);
+					NewFname = sourceDirectory + "/W002"  + "_Sec"  + sec + "_Montage" + "/Tile_r" 
+					+ newRow + "-c" + newCol + "_W002" +"_sec" + sec + ".tif ";
+					file2 = new File(NewFname);
+
+					file.renameTo(file2);
+
+					//IJ.log(OldFname);
+					//IJ.log(NewFname);
+					//if( file.exists() == false ) IJ.log("error: file does not exist");
+					//continue 
+					
+					
+			}
+	}
+		

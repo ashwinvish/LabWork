@@ -1,0 +1,57 @@
+// parameters
+//newVar = 40.0;
+//newMean = 132.0;
+
+newVar = 49.038;
+newMean = 124.818;
+
+
+import fiji.util.gui.GenericDialogPlus;
+
+
+// Create dialog        
+gd = new GenericDialogPlus( "Normalize images in folder" );
+
+gd.addDirectoryField("Input directory", "/", 50);
+gd.addNumericField( "Number of sections:", 2, 0 );
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+
+sourceDirectory = gd.getNextString();
+numSections = gd.getNextNumber();
+
+for(Sec = 1; Sec<=numSections; slice++)
+{
+	
+if( (new File ( sourceDirectory + "/S2-W002" + "_Sec" + sec + "_Montage" )).exists() == false)
+	continue;	
+	
+	ip = image.getImageStack().getProcessor( slice );
+	// get mean and standard deviation of current slice
+	stats = ImageStatistics.getStatistics( ip, Measurements.MEAN + Measurements.STD_DEV, null);
+
+	fp = ip.convertToFloat();
+
+	// subtract mean
+	fp.subtract(stats.mean);
+	
+	// divide by std dev
+	fp.multiply(1.0 / stats.stdDev);
+
+	// multiply by the new variance
+	fp.multiply( newVar );
+
+	// add the new mean
+	fp.add( newMean );
+
+	// convert to byte
+	ip = fp.convertToByte( false );
+
+	// add slice to new stack
+	is.addSlice(image.getImageStack().getSliceLabel( slice ), ip);
+}
+
+(new ImagePlus("Normalized " + image.getTitle(), is)).show();	
+	

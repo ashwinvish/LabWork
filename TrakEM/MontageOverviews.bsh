@@ -1,0 +1,27 @@
+import fiji.util.gui.GenericDialogPlus;
+
+// Script to import montage overviews
+
+
+// Create dialog        
+gd = new GenericDialogPlus( "Generate TrakEM2 text file" );
+
+gd.addDirectoryField("Input directory", "/", 50);
+gd.addNumericField( "Number of sections:", 2, 0 );
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+
+			sourceDirectory = gd.getNextString();
+			numSections = gd.getNextNumber();
+
+			for( sec = 1; sec <= numSections; sec++ )
+	{
+		if( (new File ( sourceDirectory + "/S2-W002" + "_Sec" + sec + "_Montage" )).exists() == false)
+			continue;
+						
+			IJ.log(sourceDirectory + "/S2-W002"  + "_Sec" + sec + "_Montage" + "/MontageOverviewImage_S2-W002_sec" + sec + ".tif");
+	}
+
+	

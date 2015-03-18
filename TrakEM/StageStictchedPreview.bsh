@@ -1,0 +1,33 @@
+// imageJ script to make stack with StageStitched overviews
+// written by AV 02/20/2012
+
+import fiji.util.gui.GenericDialogPlus;
+
+// Create dialog        
+gd = new GenericDialogPlus( "Generate StageStitched preview files" );
+
+gd.addDirectoryField("Input directory", "/", 50);
+gd.addNumericField( "Number of sections:", 2, 0 );
+gd.addNumericField( "Wafer Number:", 2, 0 );	
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+
+sourceDirectory = gd.getNextString();
+numSections = gd.getNextNumber();
+//numWafer = gd.getNextNumber();
+numWafer = 7;
+
+for (sec = 1 ; sec <= numSections ; sec++)
+	{
+		if( (new File ( sourceDirectory + "/S2-W00" + numWafer + "_Sec" + sec + "_Montage" )).exists() == false)
+			continue;
+			
+		IJ.log(sourceDirectory + "/S2-W00" + numWafer + "_Sec" + sec + "_Montage" + "/StageStitched_S2-W00" + numWafer + "_sec" + sec + ".tif");
+	
+	}
+
+	
+
+

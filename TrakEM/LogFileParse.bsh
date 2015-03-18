@@ -1,0 +1,46 @@
+// enter file name with path
+fileName = "/Users/ashwin/Desktop/Affine-NewParam-Montage-W007-Log.txt";
+
+IJ.log("No models found");
+int i =1;
+
+//Reading file
+fr = new FileReader(fileName);
+br = new BufferedReader(fr);
+
+//Read line by line
+
+while ((line = br.readLine()) != null) 
+{
+	// Clean zero spaces and tabs
+	line = line.trim();
+	//IJ.log(line);		
+
+	if( line.startsWith("Montaging layer") )
+	
+		{
+			i1 = line.indexOf("=");
+			layer = line.substring(i1);
+			IJ.log("Layer number "  +layer);
+		}
+
+	if( line.indexOf("model") == 3)
+		{
+			tokens = line.split(" ");
+			//temp = line;
+			
+			int r1 = Integer.parseInt(tokens[5].substring(7,8));
+			int c1 = Integer.parseInt(tokens[5].substring(10,11));
+
+			int r2 = Integer.parseInt(tokens[9].substring(7,8));
+			int c2 = Integer.parseInt(tokens[9].substring(10,11));
+		
+
+			if(Math.abs(r2-r1)+Math.abs(c2-c1) == 1)
+			{
+			 	IJ.log("" +line);
+					
+			}
+		} 
+}
+fr.close();

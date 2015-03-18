@@ -1,0 +1,27 @@
+import fiji.util.gui.GenericDialogPlus;
+
+// Script to import the stage stitched overviews from the HighRes folder 
+// to check for image defects before removing wafer!
+
+// Create dialog        
+gd = new GenericDialogPlus( "Generate TrakEM2 text file" );
+
+gd.addDirectoryField("Input directory", "/", 50);
+gd.addNumericField( "Number of sections:", 2, 0 );
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+
+			sourceDirectory = gd.getNextString();
+			numSections = gd.getNextNumber();
+
+			for( sec = 1; sec <= numSections; sec++ )
+	{
+		if( (new File ( sourceDirectory + "/W009" + "_Sec" + sec + "_Montage" )).exists() == false)
+			continue;
+						
+			IJ.log(sourceDirectory + "/W009"  + "_Sec" + sec + "_Montage" + "/StageStitched_W009_sec" + sec + ".tif");
+	}
+
+	

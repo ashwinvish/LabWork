@@ -1,0 +1,39 @@
+import ij.*;
+import ij.process.*;
+import ij.plugin.filter.*;
+import ij.measure.Measurements;
+import ini.trakem2.display.*;
+
+
+// parameters
+newVar = 64.0;
+newMean = 144.0;
+
+
+
+p = Display.getFront().getActive();
+//ip = p.getImageProcessor()
+
+imp = p.getImagePlus();
+ip = imp.getProcessor();
+
+stats = ImageStatistics.getStatistics( ip, Measurements.MEAN + Measurements.STD_DEV, null);
+
+fp = ip.convertToFloat();
+
+	// subtract mean
+	fp.subtract(stats.mean);
+	
+	// divide by std dev
+	fp.multiply(1.0 / stats.stdDev);
+
+	// multiply by the new variance
+	fp.multiply( newVar );
+
+	// add the new mean
+	fp.add( newMean );
+
+	// convert to byte
+	ip2 = fp.convertToByte( false );
+
+imp.setProcessor( ip2 );	

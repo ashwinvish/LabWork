@@ -1,0 +1,49 @@
+fileName = "/Users/ashwin/Desktop/Leif_Alex/Test_WholeSection_10X_Air_1024/MATL_Mosaic.log";
+dim = 3;
+
+IJ.log("# Define the number of dimensions we are working on");
+IJ.log("dim = " + dim);
+IJ.log("# Define the image coordinates");
+
+// Open file for reading
+fr = new FileReader(fileName);
+br = new BufferedReader(fr);
+
+xpos = 0;
+ypos = 0;
+name = "";
+
+// Read line by line
+while ((line = br.readLine()) != null) 
+{
+	// Clean zero spaces and tabs
+	line = line.trim();
+	//IJ.log(line);		
+	
+	if( line.startsWith("<XPos>") )
+	{
+		i1 = line.indexOf(">");
+		i2 = line.indexOf("<", i1);
+		
+		xpos = Float.parseFloat(line.substring(i1+1, i2))/1.242;
+		//IJ.log(" " + xpos);
+	}
+	if( line.startsWith("<YPos>") )
+	{
+		i1 = line.indexOf(">");
+		i2 = line.indexOf("<", i1);
+		
+		ypos = Float.parseFloat(line.substring(i1+1, i2))/1.242;
+		//IJ.log(" " + ypos);
+	}
+	if( line.startsWith("<Filename>") )
+	{
+		i1 = line.indexOf(">");
+	//	i1 = line.indexOf("\\");
+		i2 = line.indexOf("<", i1);
+		
+		name = line.substring(i1+11, i2);
+		IJ.log(name + "_Channel1" + "; ; ("+ xpos + ", " + ypos + ", 0.0)");
+	}
+}
+fr.close();

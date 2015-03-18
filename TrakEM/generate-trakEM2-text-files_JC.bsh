@@ -1,0 +1,45 @@
+// Generate text file that can be imported into trakEM2
+
+import fiji.util.gui.GenericDialogPlus;
+
+// Create dialog        
+gd = new GenericDialogPlus("Generate TrakEM2 text file");
+         
+gd.addDirectoryField( "Input directory", "/", 50);	
+gd.addNumericField( "Number of sections:", 2, 0 );	
+gd.addNumericField( "Number of rows:", 2, 0 );	
+gd.addNumericField( "Number of columns:", 2, 0 );	
+gd.addNumericField( "Tile width:", 2048, 0 );	
+gd.addNumericField( "Tile height:", 2048, 0 );	
+
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+				
+sourceDirectory = gd.getNextString();
+numSections = gd.getNextNumber();
+numRows = gd.getNextNumber();
+numColumns = gd.getNextNumber();
+width = gd.getNextNumber();
+height = gd.getNextNumber();
+overlap = gd.getNextNumber();
+
+width = width-(width*overlap);
+nLayer = 1;
+
+	for( sec = 1; sec <= numSections; sec++ )
+	{	
+		if( (new File ( sourceDirectory + "/S2-W006" + "_Sec" + sec + "_Montage" )).exists() == false)
+			continue;
+		for( row = 1; row <= numRows; row++ )
+			for( col = 1; col <= numColumns; col ++ )
+			{
+				IJ.log(sourceDirectory + "/S2-W006"  + "_Sec" + sec + "_Montage" + "/Tile_r" 
+					+ row + "-c" + col + "_S2-W006" + "_sec" + sec + ".tif " + ((col-1) * width ) 
+					+ " " + ((row-1) * height) + " " + nLayer);
+				
+			}
+		nLayer ++;
+	}
+	

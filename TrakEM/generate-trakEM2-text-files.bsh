@@ -1,0 +1,51 @@
+import fiji.util.gui.GenericDialogPlus;
+
+// Create dialog        
+gd = new GenericDialogPlus( "Generate TrakEM2 text file" );
+         
+
+gd.addDirectoryField("Input directory", "/", 50);
+gd.addNumericField( "Number of stripes:", 2, 0 );	
+gd.addNumericField( "Number of sections:", 2, 0 );	
+gd.addNumericField( "Number of rows:", 2, 0 );	
+gd.addNumericField( "Number of columns:", 2, 0 );	
+gd.addNumericField( "Tile width:", 2048, 0 );	
+gd.addNumericField( "Tile height:", 2048, 0 );	
+
+gd.showDialog();		// Exit when canceled
+if (gd.wasCanceled()) 
+	return;
+				
+sourceDirectory = gd.getNextString();
+numStripes = gd.getNextNumber();
+numSections = gd.getNextNumber();
+numRows = gd.getNextNumber();
+numColumns = gd.getNextNumber();
+width = gd.getNextNumber();
+height = gd.getNextNumber();
+
+//IJ.log("Source directory: " + sourceDirectory);
+//IJ.log("# stripes  = " + numStripes);
+//IJ.log("# sections = " + numSections);
+//IJ.log("# rows     = " + numRows);
+//IJ.log("# columns  = " + numColumns);
+
+nLayer = 1;
+for( str = 1; str <= numStripes; str++ )
+	for( sec = 1; sec <= numSections; sec++ )	
+	{
+		if( (new File ( 	sourceDirectory + "/st" + str + "_s" + sec )).exists() == false)
+			continue;
+		for( row = 1; row <= numRows; row++ )
+			for( col = 1; col <= numColumns; col ++ )
+			{
+				IJ.log(sourceDirectory + "/st" + str + "_s" + sec + "/Tile_r" 
+					+ row + "-c" + col + "_st" + str + "_s" + sec + ".tif " + ((col-1) * width ) 
+					+ " " + ((row-1) * height) + " " + nLayer);
+				
+			}
+		nLayer ++;
+	}
+	
+				
+		
