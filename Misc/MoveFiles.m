@@ -26,9 +26,3 @@ for i = 1:length(OriginalFolderAttributes)
         disp(str);
     end
 end
-
-
-
-        
-        
-

@@ -1,11 +1,11 @@
-function [] = threeView( volume, cmap , trans)
+function [] = threeView( volume, cmap)
 %threeView will genetrate the three view of a volume
 %   To generate the three views of a volume XY, XZ, YZ. 
 
 %plot XY
 tempXY = max(volume,[],3);
 h1 = imagesc(0,90,imrotate(tempXY,-90));
-set(h1,'AlphaData', trans);
+%set(h1,'AlphaData', trans);
 set(gca,'YDir','normal'); 
 colormap(cmap);
 hold on;
@@ -17,7 +17,7 @@ for i = 1:size(tempXZ,3)
     B(:,i) = tempXZ(:,:,i);
 end
 h2 = imagesc(0,0,imrotate(B,-90));
-set(h2,'AlphaData',trans);
+%set(h2,'AlphaData',trans);
 colormap(cmap);
 axis image;
 
@@ -27,7 +27,7 @@ for i = 1:size(tempYZ,3)
     C(i,:) = tempYZ(:,:,i);
 end
 h3 = imagesc(160,90,imrotate(C,-90));
-set(h3,'AlphaData',trans);
+%set(h3,'AlphaData',trans);
 set(gca,'YDir','normal'); 
 colormap(cmap);
 axis image

@@ -79,9 +79,18 @@ axis([60000 250000 -30000 0]);
 view([0,0]);camroll(90); 
 
 %% Plot all Soma with Time Constants
+for kk = 1 : length(allTrees)
+    thisCellSoma = allTrees{1,kk}{1,1}{1,4}{1};
+    cellSoma{kk} = thisCellSoma;
+end
+temp = cell2mat(cellSoma);
+CellSoma = vec2mat(temp,3);
+CellSoma(:,[1,2,3]) = CellSoma(:,[2,1,3]);
+% time constants and persistence measure
 tau = [7.16323454600000,6.23690945500000,9.88816223500000,17.7411357900000,5.48599643300000,10.1172859600000,7.51255049400000,18.1882559300000,57.0990589000000,100,38.7012773800000,11.6985985200000,11.0576103400000,1.44892223200000,19.5401836000000,100,16.5597699400000,10.3971051900000,26.7744003700000,7.92791676600000,6.10909614600000,5.21884052300000];
 rho = [0.5207986709, 0.6661018539, 0.6648735491, 0.8190294252, 0.6370840437, 0.3520511176, 0.6180659652, 0.7770252108, 0.8445793478, 0.5048882377, 0.6169858888, 0.4693437009, 0.7319155263 ...
 0.2311146742, 0.5600555905, 0.69884915, 0.8217790613, 0.5105536878, 0.8749909893, 0.3470572669, 0.5251032841, 0.5768530374];
+
 figure(8);
 scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdgeColor', 'k');
 grid off;
@@ -104,13 +113,6 @@ view([0,0]);camroll(90); % yz view
 
 %% Get cell Somas and plot pairwise distances
 % All soma locations
-for kk = 1 : length(allTrees)
-    thisCellSoma = allTrees{1,kk}{1,1}{1,4}{1};
-    cellSoma{kk} = thisCellSoma;
-end
-temp = cell2mat(cellSoma);
-CellSoma = vec2mat(temp,3);
-CellSoma(:,[1,2,3]) = CellSoma(:,[2,1,3]);
 [Y,I] = sort(rho);
 CellSomaSort = CellSoma(I,:);
 tempdist = pdist(CellSomaSort);
@@ -247,7 +249,7 @@ for kk = 1:length(cellIDs)
             volPost(round(allPost{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,2)/res) + (-ksize/2:ksize/2),round(allPost{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2))  + K3D;
     end
     subplot(3,8,kk);
-    threeView(volPost);
+    threeView(volPost,jet);
     title(cellIDs{kk});
 
     %plot XZ soma location
@@ -294,7 +296,7 @@ for kk = 1:length(cellIDs)
         end
         
         subplot(3,8,i);
-        threeView(volPre);
+        threeView(volPre, jet);
         title(cellIDs{kk});
         %plot XY
         plot(160-(CellSoma(kk,2))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w'); 
@@ -337,6 +339,8 @@ for i = 1:length(cellIDs)
     end
    % text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
 end
+xlabel('Lenght to peak post synapse density');
+ylabel('rho');
 %PrePeakDensity
 figure(17);
 for i = 1:length(cellIDs)
@@ -350,9 +354,8 @@ for i = 1:length(cellIDs)
     end
    % text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
 end
-
-
-
+xlabel('Lenght to peak pre synapse density');
+ylabel('rho')
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Distribution of Synapse onto Cells
