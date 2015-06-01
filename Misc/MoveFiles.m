@@ -7,10 +7,10 @@ clear all;
 
 % get folder
 
-%originalFolder = uigetdir();
-originalFolder = ('/local_data/Talmo/Zfish/W009/HighResImages_fine_5nm_120apa_W009_2ndPass/');
-%NewFolder = uigetdir();
-NewFolder = ('/local_data/Talmo/Zfish/W009/');
+originalFolder = uigetdir();
+%originalFolder = ('/local_data/Talmo/Zfish/W009/HighResImages_Fine_5nm_120apa_W009_2ndPass/');
+NewFolder = uigetdir();
+%NewFolder = ('/local_data/Talmo/Zfish/W009/');
 
 OriginalFolderAttributes = dir(originalFolder);
 
@@ -22,7 +22,7 @@ for i = 1:length(OriginalFolderAttributes)
     else
         cd (OriginalFolderAttributes(i).name);
         movefile('Tile*.tif', fullfile(NewFolder,OriginalFolderAttributes(i).name));
-        str = sprintf('Finished moving files in %s',OriginalFolderAttributes(i).name);
+        str = sprintf('Finished moving files to %s',OriginalFolderAttributes(i).name);
         disp(str);
     end
 end
