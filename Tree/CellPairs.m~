@@ -1,0 +1,20 @@
+A = 22;
+B = 22;
+clear temp1;
+clear temp2;
+temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+treeVisualizer(allTrees{A}, [1],[],[{temp2} {temp1}],false,{[1,0.5,0]}, 1:numel(allTrees{A}), false); 
+% temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+% treeVisualizer(allTrees{B}, [1],[],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 
+
+%%
+
+
+A = 22;
+B = 22;
+clear temp1;
+clear temp2;
+temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+TreeConvexHull(allTrees{A}, [1],[],[{temp2} {temp1}],false,{[1,0.5,0]}, 1:numel(allTrees{A}), false); 
+temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+TreeConvexHull(allTrees{B}, [1],[],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 

@@ -1,0 +1,13 @@
+[Tree1_2, rawlength,temp] = generateIrreducibleDoubleLinkedTree_WithDim('Int1_2 [treeline] #259296.swc',[-1:10],6,true);
+treeVisualizer(Tree1_2,[1],[],[],false,{[rand rand rand]}, 1:numel(Tree1_2), false)
+
+
+D = dir('*.swc'); % choose all .swc files in the current directory
+for i = 1:length(D)
+    [path,name,ext] = fileparts(D(i).name);
+    fname = name(1:11);
+    [fname,rawlength,temp] = generateIrreducibleDoubleLinkedTree_WithDim([name,ext],[-1:10],6,true);
+    allTrees{i} = fname; allNames{i} = name;
+    treeVisualizer(allTrees{i},[1],[],[],false,{[rand rand rand]}, 1:numel(allTrees{i}), false)
+end
+

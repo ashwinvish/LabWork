@@ -1,12 +1,18 @@
-function treeVisualizer(tree,highlightedNodes,inducingNodes,specialNodes,newFigure,colorString,validNodes,pixelUnits)
+function [ ConHull,X,Y,Z,tempx ] = TreeConvexHull(tree,highlightedNodes,inducingNodes,specialNodes,newFigure,colorString,HullColor,validNodes,pixelUnits )
+%UNTITLED5 Summary of this function goes here
+%   Detailed explanation goes here
 relativeRes = [5 5 45]; % in nm
 rndclr = colorString;
+
 symCell={'o','s','v','x','d','*'};
 synapseColor = {'g', 'r'}; % red - presynaptic; g- postsynaptic
-if nargin < 8
+
+if nargin < 9
     pixelUnits = false;
-    if nargin < 7
+    if nargin < 8
         validNodes = [1:numel(tree)];
+        if nargin <7
+            HullColor= 'cyan';
         if nargin < 6
             rndclr = colorString;
             if nargin < 5
@@ -21,17 +27,16 @@ if nargin < 8
         end
     end
 end
+
 if newFigure
     figure;hold;
-   % h = gcf;
-   % OuterPos = [83 , 37, 1023, 1538];
-   % set(h, 'Position',OuterPos);
 else
     hold on;
-    %h = gcf;
-    %OuterPos = [83 , 37, 1023, 1538];
-    %set(h, 'Position',OuterPos);
 end
+
+X = [];
+Y = [];
+Z = [];
 
 for kk=1:numel(tree)
     children = tree{kk}{2};
@@ -45,18 +50,20 @@ for kk=1:numel(tree)
             tempy=[tree{children(mm)}{3}(2); tree{children(mm)}{4}{1}(:,2); tree{kk}{3}(2)];
             tempz=-[tree{children(mm)}{3}(3); tree{children(mm)}{4}{1}(:,3); tree{kk}{3}(3)];
         end
+        
         if ismember(kk,inducingNodes) && ismember(children(mm),inducingNodes)
             plot3(tempy,tempx,tempz,'color', [1,0.3,0]);
         else
             if ismember(kk,validNodes)
-                %plot3(tempy,tempx,tempz,colorString);
-                %plot3(tempy,tempx,tempz,'Visible','off');
-                 plot3(tempy,tempx,tempz,'color', rndclr{1});
-               % h.Color(4) = 0.5;
+                plot3(tempy,tempx,tempz,'color', rndclr{1});
             end
         end
     end
+    X = vertcat(X,tempx); Y= vertcat(Y,tempy); Z = vertcat(Z,tempz);
 end
+ConHull = convhull(X,Y,Z);
+trimesh(ConHull,Y,X,Z,'faceColor',HullColor,'FaceAlpha',0.2,'EdgeColor','black','EdgeAlpha',0.1);        
+
 
 for kk=1:numel(highlightedNodes)
     if pixelUnits
@@ -65,8 +72,6 @@ for kk=1:numel(highlightedNodes)
         plot3(tree{highlightedNodes(kk)}{3}(2),tree{highlightedNodes(kk)}{3}(1),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize' , 10,  'MarkerFaceColor',rndclr{1},'MarkerEdgeColor' , 'k' )
     end
 end
-
-
 
 for mm = 1: numel(specialNodes)
     for kk=1:size(specialNodes{mm}, 1)
@@ -78,9 +83,11 @@ for mm = 1: numel(specialNodes)
     end
 end
 
-daspect([1 1 1]);
-%axis([60000 250000 20000 140000 -60000 0]);
-%plot([240000, 240000], [120000, 140000], '-k' ) % insert 20um sclaebar
-%view([90,90]); % xy view
 
+
+daspect([1 1 1]);
+axis([60000 250000 20000 140000 -60000 0]);
+plot([240000, 240000], [120000, 140000], '-k' ) % insert 20um sclaebar
+view([270,90]); % xy view
+end
 
