@@ -263,17 +263,107 @@ for i = 1:length(cellIDs)
     title(cellIDs{i})
 end
 
-%%
-[nodes,edges,radii,nodeType,temp2] = newReadSWCfile([cellIDs{21} , '_WithTags.swc'],[-1:10]);
+%% plot the adjacency Matrix for all trees
 
-cellMat = zeros(length(nodes));
-
-for i = 1:1:length(edges)
-    temp = edges(i,:);
-    cellMat(temp(1),temp(2)) = 1;
+for i=1:numel(allTrees)
+    adjMat{i} = AdjMat(allTrees{i});
 end
 
-  
+for i=1:numel(allTrees)
+    subplot(3,8,i)
+    imagesc(adjMat{i})
+    axis square
+end
+
+%%
+
+figure();
+for i = 1:length(cellIDs)
+    hold on
+    if ismember(cellIDs{i},cellIDsAlx)==1
+        plot(sum(TreeBranches(allTrees{i})),rho(i),'Marker', '*','Color',[1 0.5 0]);
+    elseif ismember(cellIDs{i},cellIDsDbx)==1
+        plot(sum(TreeBranches(allTrees{i})),rho(i),'Marker', '*','Color',[1 0 1]);
+    else
+        plot(sum(TreeBranches(allTrees{i})),rho(i),'Marker', '*','Color',[0 0.5 1]);
+    end 
+end
+%line([0,300], [0,1]);
+title('Rho vs. Number of Branches');
+ylabel('Persistence measure Rho' );
+xlabel('Number of Branches');
+
+%%
+
+for ii = 1:length(cellIDs)
+    [B,T] = TreeBranches(allTrees{ii});
+    T = find(T);
+    TerminalNodes = zeros(length(T),3);
+    for i = 1:length(T)
+        TerminalNodes(i,:) = allTrees{ii}{1,T(i)}{1,3};
+    end
+    termPathLength{ii} = findPathLength([cellIDs{ii} , '_WithTags.swc'],[5,5,45],TerminalNodes);
+end
+
+%% What % of of dendrite is where
+
+figure();
+radius = 10000;
+
+for i = 1:1
+    tree{i} = load_tree([cellIDs{i} , '_WithTags.swc']);
+    shollIntersections= sholl_tree(tree{i},radius); % concentric circles every radius nm
+    EucDistPost{i} = pdist2(allTrees{i}{1}{3},allPost{i}(:,:))';
+    
+    [B,T] = TreeBranches(allTrees{i});
+    B = find(B);
+    for kk = 1:length(B)
+        BranchPoints(kk,:) = allTrees{i}{B(kk)}{3};
+    end
+    EucDistBranch{i} = (allTrees{i}{1}{3},BranchPoints(:,:))';
+    
+    for jj = 1:length(shollIntersections)
+        [Y,I] = find(EucDistPost{i}>(jj-1)*radius & EucDistPost{i}<(jj)*radius);
+        count(jj+1) = length(I);
+        
+        [Y2,I2] = find(EucDistBranch{i}>(jj-1)*radius & EucDistBranch{i}<(jj)*radius);
+        count2(jj+1) = length(I2);
+    end
+    figure(1)
+    subplot(3,8,i);
+    title(cellIDs{i});
+    plot(1:radius/1000:radius*length(shollIntersections) / 1000,shollIntersections/sum(shollIntersections),'-g*', 1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*');
+    legend('ShollInteresctions', 'PostSynapticSites');
+    
+    figure(2)
+    %title('Dendritic Branching % vs Number of PostSynaptic Sites')
+    subplot(3,8,i);
+    title(cellIDs{i});
+    plot(1:radius/1000:radius*length(count2) /1000,count2/sum(count2), '-g*',1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*' );
+    legend('Dendrite','PostSynapticSites');
+    
+end
+
+
+%%
+
+for i = 1:length(cellIDs)
+    lin{i} = lineage(allTrees{i},1,1); 
+    for ii = 1:length(lin{i})
+        IntersectionNodes(ii,:) = allTrees{i}{lin{i}(ii)}{1,3};
+    end
+    plength{i} = findPathLength([cellIDs{i} , '_WithTags.swc'], [5 5 45], IntersectionNodes);  
+    plength{i} = plength{i}/1000; % convert from nm to um
+end
+
+%% Distrubution of path length of all nodes and distrubution of pathlength of all post synapses
+
+for i = 1:length(cellIDs)
+    subplot(3,8,i)
+    histogram(plength{i},'BinWidth', 50, 'Normalization','probability');
+    hold on;
+    histogram(allLengthToPostNode{i}/1000,'BinWidth', 50, 'Normalization','probability');
+end
 
 
 

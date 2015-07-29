@@ -3,19 +3,27 @@
 %Int1_1 = none;1
 %Int1_2 = [15 5 6 40];
 %Int1_3 = [1 71];
-%Int1_4 = [39 46 47 48 52 49 50 51 53 54 55 56 57 58 59 60 62 63 64 65 66 61]; 
-%Int1_5 = [56 75 91 93 104 105 106 107 108 109 110 111 112 114 115 116 113 ];
-%Int1_6 = [11 17 20 26 82 95 96 97 98 133 138 143 147 149 150 156 154 148 151 152 122 125 127 132 128 130 134 140 142 153 165 139 141 155 157 159 160 163 162 158 164 166 131 117 119 120 135 145 161 167 168 169 170 171 172 129 136 144 146 137 56 66 68 72 75 83 117 86 99];
-%Int1_7 = [9 30 70 71 76 92 105 109 113 103 104 106 107 110 111 112];
+%Int1_4 = [30 32 36 39 42 43 44 45 46 47 48 41 52 49 50 51 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74];
+%Int1_5 = [56 75 91 93 104 106 107 108 109 110 111 112 114 115 116 113 159 160 161 162 163 164 165 166 167 169 170 171 168 77 80 81 82 84 86 87 85 92 99 100 103 115 117 123 125 126 137 139 150 151 153 127 124 128 131 132 134 140 143 152 154 155 156 157 158 136 138 141 142 144 106 110 114 116 133 135 145 146 147 148 149 ];
+%Int1_6 = [11 20 26 82 95 96 97 98 133 138 143 147 149 150 156 154 148 151 152 122 123 125 127 126 132 128 129 130 134 140 142 153 165 139 141 155 157 159 160 163 162 158 164 166 131 117 119 120 135 145 161 167 168 169 170 171 172 129 136 144 146 137 56 74 118 72 75 117 86 99];
+%Int1_7 = [9 30 75 81 99 115 120 128 110 114 116 117 121 122 123 76 92 103 104 106 107]; need to update
 %Int2_1 = [2 5 7 14 15 25 26 73];
 %Int2_2 = [5 84];
 %Int2_3 = [3 67];
 %Int2_4 = [2 101];
 %Int2_5 = [6 64 65 66 67 69];
+%Int2_6 = none;
+%Int2_7 = none
 %Int2_8 = [10 12 22 64];
-%Int3_5 = [1 91 34 52 80 82 83 86 88 90 103 104 107 111 112 113 114 115 92 81 84 87 89 95 96 98 99 100 93 94 101 102]; 
+%Int2_9 = [7 17 43 47 55 66 67 78 79 80 82 83 84 85 86 87 88 81];
+%Int3_1 = none
+%Int3_2 = none
+%Int3_3 = none
+%Int3_4 = none
+%Int3_5 = [1 91 34 52 80 82 83 86 88 90 103 104 107 111 112 113 114 115 92 81 84 87 89 95 96 98 99 100 93 94 101 102 105 106 108 109 110];
+%Int3_6 = [5 29 37 39 42 52 53 5];
 
-clc; 
+clc;
 clear all;
 % all the cell IDS
 cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };
@@ -24,7 +32,7 @@ cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','In
 % all bdx1b cells
 cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8','Int3_5'};
 % all barhl1 cells
-cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'}; 
+cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};
 
 
 for kk = 1: numel(cellIDs)
@@ -34,50 +42,21 @@ for kk = 1: numel(cellIDs)
     [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true);
     allTrees{kk} = thisTree; allPreSynapse{kk} = thisPreSynapse; allPostSynapse{kk} = thisPostSynapse;allSpine{kk} = thisSpine;
     allRawLength(kk) = rawLength; allPost{kk} = vertcat(thisPostSynapse, thisSpine);
-   % subplot(3,8,kk);
+    % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        treeVisualizer(thisTree, [1],[],[{thisPostSynapse} {thisPreSynapse}],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
+        treeVisualizer(thisTree, [1],[],[{thisPostSynapse} {thisPreSynapse}],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        treeVisualizer(thisTree, [1],[],[{thisPostSynapse} {thisPreSynapse}],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
+        treeVisualizer(thisTree, [1],[],[{thisPostSynapse} {thisPreSynapse}],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for contraxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
     else
-        treeVisualizer(thisTree, [1],[],[{thisPostSynapse} {thisPreSynapse}],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
+        treeVisualizer(thisTree, [1],[],[{thisPostSynapse} {thisPreSynapse}],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for 
         %treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
     end
-    daspect([1 1 1]);
-    
-    %view([-50,40]);
-    % box on;
-    %grid on;
-    %daspect([1 1 1]);
-    % axis vis3d;
-    %XColor = [1,1,1]; YColor = [1,1,1];
-    %h = gcf;
-    %set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
-    %view([-90,90]);
-    %title(cellIDs{kk});
-    %saveas(h,[cellIDs{kk},'.png'],'png');
 end
-% daspect([1 1 1]);
-h1 = gcf;
-box on;
-XColor = [1,1,1]; YColor = [1,1,1];
-set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
-%view([-50,40]);
-view([-90,90]);
-%XZ view
-h2 = figure(2);
-copyobj(get(h1,'children'),h2);
-%axis([-0 30000 20000 140000]);
-view([-90, 0]); 
-daspect([2 1 2]);
-% YZ view
-h3 = figure(3);
-copyobj(get(h1,'children'),h3);
-%axis([60000 250000 -30000 0]);
-view([0,0]);camroll(90); 
 
+h1 = gcf;
+h2 = PlotViews(h1);
 %% Plot all Soma with Time Constants
 for kk = 1 : length(allTrees)
     thisCellSoma = allTrees{1,kk}{1,1}{1,4}{1};
@@ -85,32 +64,25 @@ for kk = 1 : length(allTrees)
 end
 temp = cell2mat(cellSoma);
 CellSoma = vec2mat(temp,3);
-CellSoma(:,[1,2,3]) = CellSoma(:,[2,1,3]); %  x,y,z
+
 %time constants and persistence measure
 tau = [7.16323454600000,6.23690945500000,9.88816223500000,17.7411357900000,5.48599643300000,10.1172859600000,7.51255049400000,18.1882559300000,57.0990589000000,100,38.7012773800000,11.6985985200000,11.0576103400000,1.44892223200000,19.5401836000000,100,16.5597699400000,10.3971051900000,26.7744003700000,7.92791676600000,6.10909614600000,5.21884052300000];
 rho = [0.5207986709, 0.6661018539, 0.6648735491, 0.8190294252, 0.6370840437, 0.3520511176, 0.6180659652, 0.7770252108, 0.8445793478, 0.5048882377, 0.6169858888, 0.4693437009, 0.7319155263 ...
-0.2311146742, 0.5600555905, 0.69884915, 0.8217790613, 0.5105536878, 0.8749909893, 0.3470572669, 0.5251032841, 0.5768530374];
+    0.2311146742, 0.5600555905, 0.69884915, 0.8217790613, 0.5105536878, 0.8749909893, 0.3470572669, 0.5251032841, 0.5768530374];
 
 figure(8);
 scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdgeColor', 'k');
-grid on;
+
+axis vis3d;
+axis([20000 140000 60000 250000]); % fixed to show the orientation of the animal
 daspect([1 1 1]);
-axis([60000 250000 20000 140000]);
-box on;
-view([-90,90]);
-XColor = [1,1,1]; YColor = [1,1,1];
-hold on;
-plot([240000, 240000], [120000, 140000], '-k' );
-text(CellSoma(:,1)+50,CellSoma(:,2)+50,cellIDs);
-% to plot the other views
-h1 = gcf;
-set (gca, 'XTick',[], 'YTick',[],'ZTick', []);
-h2 = figure(9);
-copyobj(get(h1,'children'),h2);
-view([-90, 0]); % xz view
-h3 = figure(10);
-copyobj(get(h1,'children'),h3);
-view([0,0]);camroll(90); % yz view
+box off;
+set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+view([-180,90]);
+
+figHandle = gcf;
+PlotViews(figHandle);
+
 
 %% Get cell Somas and plot pairwise distances
 % All soma locations
@@ -124,7 +96,7 @@ colormap gray;
 axis square;
 
 Links = linkage(tempdist);
-figure(5); 
+figure(5);
 dendrogram(Links,'Labels',cellIDs) % dendrogram of cell distances
 
 h = figure(6);
@@ -135,7 +107,7 @@ for kk = 1 : length(allTrees)
         X = allPostSynapse{kk}(n,1);
         Y = allPostSynapse{kk}(n,2);
         Z = allPostSynapse{kk}(n,3);
-        PostSynapse(n,:) = horzcat(Y,X,Z);
+        PostSynapse(n,:) = horzcat(X,Y,Z);
     end
     allPostSynapseSwapped{kk} = PostSynapse;
     clear PostSynapse;
@@ -150,25 +122,25 @@ end
 %Pairwise Eucledian distnace of Presynapse
 figure(7);
 clear kk; clear n;
-for kk = 1 : length(allPreSynapse) 
+for kk = 1 : length(allPreSynapse)
     if cellfun('isempty',allPreSynapse(1,kk)) == 1
         continue;
     else
-    for n = 1:size(allPreSynapse{kk},1)
-        X = allPreSynapse{kk}(n,1);
-        Y = allPreSynapse{kk}(n,2);
-        Z = allPreSynapse{kk}(n,3);
-        PreSynapse(n,:) = horzcat(Y,X,Z);
-    end
-    allPreSynapseSwapped{kk} = PreSynapse;
-    clear PreSynapse;
-    temp  = pdist(allPreSynapseSwapped{kk});
-    subplot(3,8,kk);
-    imagesc(squareform(temp));
-    colormap(hsv);
-    axis square
-    str = sprintf('%f %s', rho(kk),cellIDs{kk});
-    title(str);
+        for n = 1:size(allPreSynapse{kk},1)
+            X = allPreSynapse{kk}(n,1);
+            Y = allPreSynapse{kk}(n,2);
+            Z = allPreSynapse{kk}(n,3);
+            PreSynapse(n,:) = horzcat(X,Y,Z);
+        end
+        allPreSynapseSwapped{kk} = PreSynapse;
+        clear PreSynapse;
+        temp  = pdist(allPreSynapseSwapped{kk});
+        subplot(3,8,kk);
+        imagesc(squareform(temp));
+        colormap(hsv);
+        axis square
+        str = sprintf('%f %s', rho(kk),cellIDs{kk});
+        title(str);
     end
 end
 
@@ -184,7 +156,7 @@ for i = 1:length(cellIDs)
     else
         plot(length(allPost{i}),rho(i),'Marker', '*','Color',[0 0.5 1]);
     end
-    text(length(allPost{i})+10,rho(i)+0.01,cellIDs{i});   
+    text(length(allPost{i})+10,rho(i)+0.01,cellIDs{i});
 end
 %line([0,300], [0,1]);
 title('Rho vs. Number of post synapses');
@@ -233,56 +205,29 @@ xlabel('Post synaptic density ( number of synapses/raw length)');
 clear vol;
 res =1000; % resolution of image
 ksize = 18; % size of Kernel
-Gwin = gausswin(ksize+1);
-K = Gwin*Gwin';
-
-for i = 1:(ksize+1)
-    K3D(:,:,i) = K(:,:)*Gwin(i);
-end
 
 % plot heat map of Postsynaptic sites
 figure(14);
 for kk = 1:length(cellIDs)
-    volPost = zeros((15e4-0)/res,(2.6e5-0)/res,(8e4-0)/res); 
-    % add 10000/res pixels to the zaxis to avoid edge effects
-    for n = 1:length(allPost{kk});
-        volPost(round(allPost{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,2)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2)) = ...
-            volPost(round(allPost{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPost{kk}(n,2)/res) + (-ksize/2:ksize/2),round(allPost{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2))  + K3D;
-    end
     subplot(3,8,kk);
-    threeView(volPost,jet);
-    title(cellIDs{kk});
-
-    %plot XZ soma location
-    plot(160-(CellSoma(kk,2))/res, 80 -(CellSoma(kk,3))/res,'Marker','o', 'MarkerFaceColor','w');
-    %plot XY soma location
-    plot(160-(CellSoma(kk,2))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w');
-    %plot YZ soma location
-    plot(160+(CellSoma(kk,3))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w');
- 
-    axis off
-    axis vis3d
-
-    
-    [m,I] = max(volPost(:));
+    [volPost{kk},m, I] = HeatMapFish(ksize, res, allPost{kk},CellSoma(kk,:), cellIDs{kk});
     maxDesnity(kk) = m;
-    [x,y,z] = ind2sub(size(volPost),I);
+    [x,y,z] = ind2sub(size(volPost{kk}),I);
     XPost(kk) = x; YPost(kk) = y; ZPost(kk) = z-10000/res;
+    suptitle(cellIDs{kk});
 end
 
 hold off;
-PostDensityPeak = [YPost'*res,XPost'*res,ZPost'*res];
+%PostDensityPeak = [YPost'*res,XPost'*res,ZPost'*res];
+PostDensityPeak = [XPost'*res,YPost'*res,ZPost'*res];
 
-for i = 1:size(cellIDs,2) 
-    lengthToPostPeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[1,1,1],PostDensityPeak(i,:),[-1:10]);
+for i = 1:size(cellIDs,2)
+    lengthToPostPeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],PostDensityPeak(i,:));
 end
 
 %%
 %Presynapse Heatmap
 
-clear volPre;
-clear('tempXY','tempXZ','tempYZ');
-clear ('B','C');
 figure(15);
 i = 0;
 for kk = 1:length(cellIDs)
@@ -290,39 +235,24 @@ for kk = 1:length(cellIDs)
         continue;
     else
         i = i+1;
-        volPre = zeros((15e4-0)/res,(2.6e5-0)/res,(8e4-0)/res);
-        for n = 1:size(allPreSynapse{kk},1);
-            volPre(round(allPreSynapse{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPreSynapse{kk}(n,2)/res) + (-ksize/2:ksize/2), round(allPreSynapse{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2)) = ...
-                volPre(round(allPreSynapse{kk}(n,1)/res) + (-ksize/2:ksize/2), round(allPreSynapse{kk}(n,2)/res) + (-ksize/2:ksize/2),round(allPreSynapse{kk}(n,3)/res + 10000/res)+ (-ksize/2:ksize/2))  + K3D;
-        end
-        
         subplot(3,8,i);
-        threeView(volPre, jet);
-        title(cellIDs{kk});
-        %plot XY
-        plot(160-(CellSoma(kk,2))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w'); 
-        %plot XZ
-        plot(160-(CellSoma(kk,2))/res, 80 - (CellSoma(kk,3))/res,'Marker','o', 'MarkerFaceColor','w');
-        %plot yz
-        plot(160+(CellSoma(kk,3))/res, 90 + (CellSoma(kk,1))/res,'Marker','o', 'MarkerFaceColor','w');   
+        [volPre{kk},m, I] = HeatMapFish(ksize, res, allPreSynapse{kk},CellSoma(kk,:), cellIDs{kk});
+        suptitle(cellIDs{kk});
     end
-    
-    axis off
-    axis vis3d
-    
-    [m,I] = max(volPre(:));
+
     maxPreDesnity(kk) = m;
-    [x,y,z] = ind2sub(size(volPre),I);
+    [x,y,z] = ind2sub(size(volPre{kk}),I);
     XPre(kk) = x; YPre(kk) = y; ZPre(kk) = z-10000/res;
-      
+    
 end
-PreDensityPeak = [YPre'*res,XPre'*res,ZPre'*res];
+%PreDensityPeak = [YPre'*res,XPre'*res,ZPre'*res];
+PreDensityPeak = [XPre'*res,YPre'*res,ZPre'*res];
 
 for i = 1:size(cellIDs,2)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
-        lengthToPrePeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[1,1,45],PreDensityPeak(i,:),[-1:10]);
+        lengthToPrePeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],PreDensityPeak(i,:));
     end
 end
 
@@ -338,7 +268,7 @@ for i = 1:length(cellIDs)
     else
         plot(lengthToPostPeakNode(i),rho(i),'Marker', '*','Color',[0 0.5 1]);
     end
-   % text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
+     text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
 end
 xlabel('Lenght to peak post synapse density');
 ylabel('rho');
@@ -353,7 +283,7 @@ for i = 1:length(cellIDs)
     else
         plot(lengthToPrePeakNode(i),rho(i),'Marker', '*','Color',[0 0.5 1]);
     end
-   % text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
+    % text(lengthToPostPeakNode(i),rho(i)+0.05,cellIDs{i});
 end
 xlabel('Lenght to peak pre synapse density');
 ylabel('rho')
@@ -374,43 +304,43 @@ for i = 1:length(cellIDs)
     scatter(1:size(allPost{i},1),sort(lengthToPostNode)/allRawLength(i));
     title(cellIDs{i})
 end
- figure(19);
- for i = 1:length(cellIDs)
- subplot(3,8,i);
- hist(sort(allLengthToPostNode{i})/allRawLength(i), length(allPost{i}));title(cellIDs{i});
- 
- end
- 
- % distribution of presynaptic sites
- figure(20);
- for i = 1:length(cellIDs)
-      if cellfun('isempty',allPreSynapse(1,i)) == 1
-        continue;
-    else
-    lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i},[-1:10]);
-    allLengthToPreNode{i} = lengthToPreNode ;
+
+figure(19);
+for i = 1:length(cellIDs)
     subplot(3,8,i);
-    scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/allRawLength(i));
-    title(cellIDs{i})
-      end
+    hist(sort(allLengthToPostNode{i})/allRawLength(i), length(allPost{i}));title(cellIDs{i});
 end
- figure(21);
- for i = 1:length(cellIDs)
-     if cellfun('isempty',allPreSynapse(1,i)) == 1
+
+% distribution of presynaptic sites
+figure(20);
+for i = 1:length(cellIDs)
+    if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
- subplot(3,8,i);
- hist(sort(allLengthToPreNode{i})/allRawLength(i), length(allPreSynapse{i}));
- title(cellIDs{i});
-     end
- end
+        lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i},[-1:10]);
+        allLengthToPreNode{i} = lengthToPreNode ;
+        subplot(3,8,i);
+        scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/allRawLength(i));
+        title(cellIDs{i})
+    end
+end
+figure(21);
+for i = 1:length(cellIDs)
+    if cellfun('isempty',allPreSynapse(1,i)) == 1
+        continue;
+    else
+        subplot(3,8,i);
+        hist(sort(allLengthToPreNode{i})/allRawLength(i), length(allPreSynapse{i}));
+        title(cellIDs{i});
+    end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Misc. plots
 % plot emperical CDFs for all cells
 for i = 1:22
-p = ((1:size(allLengthToPostNode{i},1))-0.5)'./size(allLengthToPostNode{i},1);
-stairs(sort(allLengthToPostNode{i})/allRawLength(i),p);
-hold on;
+    p = ((1:size(allLengthToPostNode{i},1))-0.5)'./size(allLengthToPostNode{i},1);
+    stairs(sort(allLengthToPostNode{i})/allRawLength(i),p);
+    hold on;
 end
 
 % plot rawLength vs. number of PostSynapses

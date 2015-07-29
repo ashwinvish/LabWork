@@ -1,22 +1,113 @@
-A = 22;
-B = 22;
+%figure();
+A = 4;
+%B = 22;
 clear temp1;
+
 clear temp2;
 temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
-treeVisualizer(allTrees{A}, [1],[],[{temp2} {temp1}],false,{[1,0.5,0]}, 1:numel(allTrees{A}), false); 
-% temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
-% treeVisualizer(allTrees{B}, [1],[],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 
+treeVisualizer(allTrees{A}, [1,50],[],[{temp2} {temp1}],true,{[0.5,0.5,0.5]}, 1:numel(allTrees{A}), false); 
+%  temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+%  treeVisualizer(allTrees{B}, [1],[],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 
+% h1 = gcf;
+% PlotViews(h1);
+
 
 %%
 %for i=1:numel(allTrees)
+%cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
+%cellIDsAlx = [4,5,6,7,13,19,21,22];
+
+
+% for i = 1:length(cellIDs)
+%   if  ismember(cellIDs{i},cellIDsAlx)==1
+overlap = zeros(size(cellIDs,2));
+overlapNormalized = zeros(size(cellIDs,2));
+for i = 1:size(cellIDs,2)
     
-    A = 1;
-    B = 6;
-    %subplot(3,8,i);
-    clear temp1;
-    clear temp2;
-    temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
-    [C1] = TreeConvexHull(allTrees{A}, [1],[],[{temp2} {temp1}],false,{[rand,rand,rand]},'green',1:numel(allTrees{A}));
-    temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
-    [C2] = TreeConvexHull(allTrees{B}, [1],[],[{temp4} {temp3}],false,{[rand,rand,rand]},'red',1:numel(allTrees{B}));
-%end
+    if ismember(cellIDs{i},cellIDsAlx)==1
+        figure();
+        title(cellIDs{i});
+        
+        for j = 1:size(cellIDs,2)
+            subplot(3,8,j);
+            B = j;
+            clear temp3;
+            clear temp4;
+            clear temp1;
+            clear temp2;
+            A = i;
+            temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+            [C1,CV1,x1,y1,z1,htri1] = TreeConvexHull(allTrees{A},[1],[],[{temp2} {temp1}],false,{[rand,rand,rand]},'green',1:numel(allTrees{A}));
+            
+            temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+            [C2,CV2,x2,y2,z2] = TreeConvexHull(allTrees{B},[1],[],[{temp4} {temp3}],false,{[rand,rand,rand]},'red',1:numel(allTrees{B}));
+            
+            % to calculate if point cloud of B is inside A
+            in = inpolyhedron(htri1.Faces,htri1.Vertices,[x2 y2 z2]);
+            if size([x2(in) y2(in) z2(in)],1) == 0
+                Vint = 0;
+                overlap(i,j) = Vint;
+            else if ~size([x2(in) y2(in) z2(in)],1) == 0
+                    [Cint,Vint] = convhull(x2(in),y2(in),z2(in));
+                    hold on;
+                    trimesh(Cint,x2(in),y2(in),z2(in),'FaceColor','b','FaceAlpha',0.5,'EdgeColor','black','EdgeAlpha',0.1);
+                    overlap(i,j) = Vint/1e+9; % overlap volume in um3
+                end
+            end
+        end
+    else
+        continue;
+    end
+end
+
+figure;
+imagesc(overlap);
+axis square;
+
+for i = 1:size(cellIDs,2)
+    overlapNormalized (i,:) = overlap(i,:)/max(overlap(i,:));
+end
+figure; imagesc(overlapNormalized); axis square;
+
+%%
+
+A = 16;
+B = 15;
+clear temp3;
+clear temp4;
+clear temp1;
+clear temp2;
+
+temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+[C1,CV1,x1,y1,z1,htri1] = TreeConvexHull(allTrees{A},[1],[],[{temp2} {temp1}],false,{[rand,rand,rand]},'green',1:numel(allTrees{A}));
+
+temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+[C2,CV2,x2,y2,z2] = TreeConvexHull(allTrees{B},[1],[],[{temp4} {temp3}],false,{[rand,rand,rand]},'red',1:numel(allTrees{B}));
+in = inpolyhedron(htri1.Faces,htri1.Vertices,[x2 y2 z2]);
+if size([x2(in) y2(in) z2(in)],1) == 0
+    disp ('no overlap');
+else
+    [Cint,Vint] = convhull(x2(in),y2(in),z2(in));
+    trimesh(Cint,x2(in),y2(in),z2(in),'FaceColor','b','FaceAlpha',0.5,'EdgeColor','black','EdgeAlpha',0.1);
+end
+
+h1 = gcf;
+PlotViews(h1);
+
+
+%%
+
+for i = 1:size(cellIDs,2)
+    if ismember(cellIDs{i},cellIDsAlx)==1
+        figure;
+        for ii = 1:size(cellIDs,2)
+            subplot(3,8,ii);
+            dotVol(volPre{i},volPost{ii},CellSoma(i,:),CellSoma(ii,:),res);
+        end
+        
+    else
+        continue;
+    end
+    str = sprintf('Presynaptic Cell: %s',cellIDs{i});
+    figtitle(str);
+end

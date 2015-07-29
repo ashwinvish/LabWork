@@ -256,9 +256,154 @@ end
 
 
 for i = 1:length(cellIDs)
-    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[1,1,1],allPost{i},[-1:10]);
+    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i},[-1:10]);
     allLengthToPostNode{i} = lengthToPostNode ;
     subplot(3,8,i);
-    scatter(1:size(allPost{i},1),sort(lengthToPostNode)/allRawLength(i));
+    scatter(1:size(allPost{i},1),(lengthToPostNode)/allRawLength(i));
     title(cellIDs{i})
 end
+
+%% plot the adjacency Matrix for all trees
+
+for i=1:numel(allTrees)
+    adjMat{i} = AdjMat(allTrees{i});
+end
+
+for i=1:numel(allTrees)
+    subplot(3,8,i)
+    imagesc(adjMat{i})
+    axis square
+end
+
+%%
+
+figure();
+for i = 1:length(cellIDs)
+    hold on
+    if ismember(cellIDs{i},cellIDsAlx)==1
+        plot(sum(TreeBranches(allTrees{i})),rho(i),'Marker', '*','Color',[1 0.5 0]);
+    elseif ismember(cellIDs{i},cellIDsDbx)==1
+        plot(sum(TreeBranches(allTrees{i})),rho(i),'Marker', '*','Color',[1 0 1]);
+    else
+        plot(sum(TreeBranches(allTrees{i})),rho(i),'Marker', '*','Color',[0 0.5 1]);
+    end 
+end
+%line([0,300], [0,1]);
+title('Rho vs. Number of Branches');
+ylabel('Persistence measure Rho' );
+xlabel('Number of Branches');
+
+%%
+
+for ii = 1:length(cellIDs)
+    [B,T] = TreeBranches(allTrees{ii});
+    T = find(T);
+    TerminalNodes = zeros(length(T),3);
+    for i = 1:length(T)
+        TerminalNodes(i,:) = allTrees{ii}{1,T(i)}{1,3};
+    end
+    termPathLength{ii} = findPathLength([cellIDs{ii} , '_WithTags.swc'],[5,5,45],TerminalNodes);
+end
+
+%% What % of of dendrite is where
+
+figure();
+radius = 10000;
+
+for i = 1:1
+    tree{i} = load_tree([cellIDs{i} , '_WithTags.swc']);
+    shollIntersections= sholl_tree(tree{i},radius); % concentric circles every radius nm
+    EucDistPost{i} = pdist2(allTrees{i}{1}{3},allPost{i}(:,:))';
+    
+    [B,T] = TreeBranches(allTrees{i});
+    B = find(B);
+    for kk = 1:length(B)
+        BranchPoints(kk,:) = allTrees{i}{B(kk)}{3};
+    end
+    EucDistBranch{i} = (allTrees{i}{1}{3},BranchPoints(:,:))';
+    
+    for jj = 1:length(shollIntersections)
+        [Y,I] = find(EucDistPost{i}>(jj-1)*radius & EucDistPost{i}<(jj)*radius);
+        count(jj+1) = length(I);
+        
+        [Y2,I2] = find(EucDistBranch{i}>(jj-1)*radius & EucDistBranch{i}<(jj)*radius);
+        count2(jj+1) = length(I2);
+    end
+    figure(1)
+    subplot(3,8,i);
+    title(cellIDs{i});
+    plot(1:radius/1000:radius*length(shollIntersections) / 1000,shollIntersections/sum(shollIntersections),'-g*', 1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*');
+    legend('ShollInteresctions', 'PostSynapticSites');
+    
+    figure(2)
+    %title('Dendritic Branching % vs Number of PostSynaptic Sites')
+    subplot(3,8,i);
+    title(cellIDs{i});
+    plot(1:radius/1000:radius*length(count2) /1000,count2/sum(count2), '-g*',1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*' );
+    legend('Dendrite','PostSynapticSites');
+    
+end
+
+
+
+
+
+
+%%
+
+for i = 1:length(cellIDs)
+    lin{i} = lineage(allTrees{i},1,1); 
+    for ii = 1:length(lin{i})
+        IntersectionNodes(ii,:) = allTrees{i}{lin{i}(ii)}{1,3};
+    end
+    plength{i} = findPathLength([cellIDs{i} , '_WithTags.swc'], [5 5 45], IntersectionNodes);  
+    plength{i} = plength{i}/1000; % convert from nm to um
+end
+
+%% Distrubution of path length of all nodes and distrubution of pathlength of all post synapses
+
+for i = 1:length(cellIDs)
+    subplot(3,8,i)
+    histogram(plength{i},'BinWidth', 50, 'Normalization','probability');
+    hold on;
+    histogram(allLengthToPostNode{i}/1000,'BinWidth', 50, 'Normalization','probability');
+end
+
+%%
+
+h1 = gcf;
+
+%Z view
+h2 = figure(2);
+copyobj(get(h1,'children'),h2);
+view([0,0]);camroll(90);
+
+
+% XZ view
+h3 = figure(3);
+copyobj(get(h1,'children'),h3);
+view([-90, 0]);
+
+h4 = figure(4);
+ax = zeros(3,1);
+ax(1) = subplot(2,2,1);
+set(ax(1),'Position', [0.05    0.1100    0.7750    0.8150]);
+ax(2) = subplot(2,2,2);
+set(ax(2),'Position', [0.85    0.1100    0.7750    0.8150]);
+ax(3) = subplot(2,2,3);
+set(ax(3),'Position', [0.05    0.05    0.7750    0.8150]);
+
+for i = 1:3
+    figure(i)
+    h = get(gcf,'Children');
+    newh = copyobj(h,4)
+    for j = 1:3
+        %posnewh = get(newh(j),'Position');
+        %possub  = get(ax(i),'Position');
+        set(newh,'Position',ax(j).Position)
+    end
+    delete(ax(i));
+end
+newh1 = copyobj(get(h1,'children'),h4);
+set(newh1,'Position',[0.01    0.1100    0.7750    0.8150]);
+
