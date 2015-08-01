@@ -16,7 +16,6 @@ end
 vol = zeros((15e4-0)/res ,(2.6e5-0)/res ,(8e4-0)/res); % size of volume is prefixed
 
 
-
 % add 10000/res pixels to the zaxis to avoid edge effects
 for n = 1:size(PointCloud,1);
     vol(round(PointCloud(n,1)/res) + (-ksize/2:ksize/2), round(PointCloud(n,2)/res) + (-ksize/2:ksize/2), round(PointCloud(n,3)/res + 10000/res)+ (-ksize/2:ksize/2)) = ...

@@ -40,8 +40,8 @@ for kk=1:numel(tree)
             tempz=-[tree{children(mm)}{3}(3); tree{children(mm)}{4}{1}(:,3); tree{kk}{3}(3)];
         end
         if ismember(kk,inducingNodes) && ismember(children(mm),inducingNodes)
-            h  =   plot3(tempx,tempy,tempz,'color',rndclr{1},'lineWidth',2);
-            h.Color(4) = 0.3; % 30% transparent
+            h  =   plot3(tempx,tempy,tempz,'color',rndclr{1},'lineWidth',3);
+            h.Color(4) = 0.125; % 30% transparent
         else
             if ismember(kk,validNodes)
                 plot3(tempx,tempy,tempz,'color', rndclr{1});
@@ -73,6 +73,7 @@ end
 
 daspect([1 1 1]); % make aspect ratio [1 1 1]
 axis vis3d;
+box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');

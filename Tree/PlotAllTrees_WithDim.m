@@ -3,8 +3,8 @@ clc;
 clear all;
 %Inducing nodes
 Int1_1_axon = [];
-Int1_2_axon = [15 5 6 40];
-Int1_3_axon = [1 71];
+Int1_2_axon = [];%[15 5 6 40]
+Int1_3_axon = [];
 Int1_4_axon = [30 32 36 39 42 43 44 45 46 47 48 41 52 49 50 51 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74];
 Int1_5_axon = [56 75 91 93 104 106 107 108 109 110 111 112 114 115 116 113 159 160 161 162 163 164 165 166 167 169 170 171 168 77 80 81 82 84 86 87 85 92 99 100 103 115 117 123 125 126 137 139 150 151 153 127 124 128 131 132 134 140 143 152 154 155 156 157 158 136 138 141 142 144 106 110 114 116 133 135 145 146 147 148 149 ];
 Int1_6_axon = [11 20 26 82 95 96 97 98 133 138 143 147 149 150 156 154 148 151 152 122 123 125 127 126 132 128 129 130 134 140 142 153 165 139 141 155 157 159 160 163 162 158 164 166 131 117 119 120 135 145 161 167 168 169 170 171 172 129 136 144 146 137 56 74 118 72 75 117 86 99];
@@ -28,9 +28,9 @@ Int3_6_axon = [5 29 37 39 42 52 53 5];
 % all the cell IDS
 cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };
 % all the alx cells
-cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
+cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_9','Int3_5','Int3_6'};
 % all bdx1b cells
-cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8','Int3_5'};
+cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_6','Int2_8','Int3_5'};
 % all barhl1 cells
 cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};
 
@@ -44,13 +44,13 @@ for kk = 1: numel(cellIDs)
     allRawLength(kk) = rawLength; allPost{kk} = vertcat(thisPostSynapse, thisSpine);
     % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        treeVisualizer(thisTree, [1],[[cellIDs{kk},'_axon']],[{thisPostSynapse} {thisPreSynapse}],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
+        treeVisualizer(thisTree, [1],[eval([cellIDs{kk},'_axon'])],[{thisPostSynapse} {thisPreSynapse}],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        treeVisualizer(thisTree, [1],[[cellIDs{kk},'_axon']],[{thisPostSynapse} {thisPreSynapse}],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for contraxon
+        treeVisualizer(thisTree, [1],[eval([cellIDs{kk},'_axon'])],[{thisPostSynapse} {thisPreSynapse}],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for contraxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
     else
-        treeVisualizer(thisTree, [1],[[cellIDs{kk},'_axon']],[{thisPostSynapse} {thisPreSynapse}],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for 
+        treeVisualizer(thisTree, [1],[eval([cellIDs{kk},'_axon'])],[{thisPostSynapse} {thisPreSynapse}],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for 
         %treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
     end
 end
@@ -76,7 +76,7 @@ scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdg
 axis vis3d;
 axis([20000 140000 60000 250000]); % fixed to show the orientation of the animal
 daspect([1 1 1]);
-box off;
+box on;
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 view([-180,90]);
 
@@ -90,6 +90,7 @@ PlotViews(figHandle);
 CellSomaSort = CellSoma(I,:);
 tempdist = pdist(CellSoma);
 EucDist = squareform(tempdist);
+
 figure(4);
 imagesc(EucDist);
 colormap gray;
@@ -160,7 +161,7 @@ for i = 1:length(cellIDs)
 end
 %line([0,300], [0,1]);
 title('Rho vs. Number of post synapses');
-ylabel('Persistence measure Rho' );
+ylabel('Persistence measure \rho' );
 xlabel('Number of postsynaptic sites');
 
 % Rho Vs Law pathlength of neuron
@@ -178,7 +179,7 @@ for i = 1:length(cellIDs)
 end
 %line([0,12e5],[0,1]);
 title('Raw length of neuron vs. Rho');
-ylabel('Persistence measure Rho');
+ylabel('Persistence measure \rho');
 xlabel('Raw neuron length in nm');
 
 % Rho vs synaptic density (number of synapses/raw length)
@@ -195,8 +196,8 @@ for i = 1:length(cellIDs)
     text(length(allPost{i})/allRawLength(1,i),rho(i)+0.05,cellIDs{i});
 end
 title('Synaptic density of neuron vs. Rho');
-ylabel('Persistence measure Rho');
-xlabel('Post synaptic density ( number of synapses/raw length)');
+ylabel('Persistence measure \rho');
+xlabel('Post synaptic density (number of synapses/raw length)');
 
 %% Gaussian Kernel
 % axis([60000 250000 20000 140000 -60000 0]);
@@ -204,7 +205,7 @@ xlabel('Post synaptic density ( number of synapses/raw length)');
 
 clear vol;
 res =1000; % resolution of image
-ksize = 18; % size of Kernel
+ksize = 32; % size of Kernel
 
 % plot heat map of Postsynaptic sites
 figure(14);
@@ -214,7 +215,6 @@ for kk = 1:length(cellIDs)
     maxDesnity(kk) = m;
     [x,y,z] = ind2sub(size(volPost{kk}),I);
     XPost(kk) = x; YPost(kk) = y; ZPost(kk) = z-10000/res;
-    suptitle(cellIDs{kk});
 end
 
 hold off;
@@ -237,7 +237,6 @@ for kk = 1:length(cellIDs)
         i = i+1;
         subplot(3,8,i);
         [volPre{kk},m, I] = HeatMapFish(ksize, res, allPreSynapse{kk},CellSoma(kk,:), cellIDs{kk});
-        suptitle(cellIDs{kk});
     end
 
     maxPreDesnity(kk) = m;
@@ -290,15 +289,11 @@ ylabel('rho')
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Distribution of Synapse onto Cells
-%figure();
-%[m,Index] = sort(rho);
-%cellIDsSorted = cellIDs(Index);
-%allPostSorted = allPost(Index);
-%allRawLengthSorted = allRawLength(Index);
+
 % distribution of postsynaptic sites
 figure(18);
 for i = 1:length(cellIDs)
-    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i},[-1:10]);
+    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
     subplot(3,8,i);
     scatter(1:size(allPost{i},1),sort(lengthToPostNode)/allRawLength(i));
@@ -317,7 +312,7 @@ for i = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
-        lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i},[-1:10]);
+        lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
         subplot(3,8,i);
         scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/allRawLength(i));
@@ -384,5 +379,26 @@ for i = 1:length(cellIDs)
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
 end
 
+%% Synaptic Length statistics
+allPostSynapticLength = [];
+allPreSynapticLength = [];
 
+for i = 1:size(cellIDs,2)
+allPostSynapticLength = [allPostSynapticLength;allLengthToPostNode{i}];
+end
 
+for i = 1:size(cellIDs,2)
+allPreSynapticLength = [allPreSynapticLength;allLengthToPreNode{i}];
+end
+
+figure;
+subplot(121);
+histogram(allPostSynapticLength/1000); % dimensions in microns
+title('Distribution of Postsynaptic pathlenght');
+xlabel('Postsynaptic pathlenght in \mum');
+ylabel('count');
+subplot(122);
+histogram(allPreSynapticLength/1000); % dimensions in microns
+title('Distribution of Presynaptic pathlenght');
+xlabel('Presynaptic pathlenght in \mum');
+ylabel('count');

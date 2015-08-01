@@ -1,4 +1,4 @@
-function [area] = threeView( volume, cmap , varargin)
+function [tempXY,tempXZ,tempYZ] = threeView( volume, cmap , varargin)
 %threeView will genetrate the three view of a volume
 %   volume is the 3D array
 %   cmap is the colormap, e.g. jet
@@ -8,9 +8,7 @@ function [area] = threeView( volume, cmap , varargin)
 
 if nargin == 2
     %plot XY
-    tempXY = max(volume,[],3);
-    [m,n] = size(tempXY);
-    
+    tempXY = sum(volume,[],3);
     h1 = imagesc(0,90,imrotate(tempXY,-90));
     %set(h1,'AlphaData', trans);
     set(gca,'YDir','normal');
@@ -19,7 +17,7 @@ if nargin == 2
     axis image;
     
     %plot XZ
-    tempXZ = max(volume,[],2);
+    tempXZ = m(volume,[],2);
     for i = 1:size(tempXZ,3)
         B(:,i) = tempXZ(:,:,i);
     end
@@ -75,8 +73,6 @@ else if nargin> 2
         
         axis off;
         axis vis3d;
-        
-        area = sum(tempXY(:));
 
     end
 end
