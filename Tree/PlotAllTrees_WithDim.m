@@ -104,15 +104,7 @@ h = figure(6);
 clear kk; clear n;
 % Pairwise Eucledian distance of postsynapses
 for kk = 1 : length(allTrees)
-    for n = 1:size(allPostSynapse{kk},1)
-        X = allPostSynapse{kk}(n,1);
-        Y = allPostSynapse{kk}(n,2);
-        Z = allPostSynapse{kk}(n,3);
-        PostSynapse(n,:) = horzcat(X,Y,Z);
-    end
-    allPostSynapseSwapped{kk} = PostSynapse;
-    clear PostSynapse;
-    temp  = pdist(allPostSynapseSwapped{kk});
+    temp  = pdist(allPostSynapse{kk});
     subplot(3,8,kk);
     imagesc(squareform(temp));
     colormap(hsv);
@@ -127,15 +119,7 @@ for kk = 1 : length(allPreSynapse)
     if cellfun('isempty',allPreSynapse(1,kk)) == 1
         continue;
     else
-        for n = 1:size(allPreSynapse{kk},1)
-            X = allPreSynapse{kk}(n,1);
-            Y = allPreSynapse{kk}(n,2);
-            Z = allPreSynapse{kk}(n,3);
-            PreSynapse(n,:) = horzcat(X,Y,Z);
-        end
-        allPreSynapseSwapped{kk} = PreSynapse;
-        clear PreSynapse;
-        temp  = pdist(allPreSynapseSwapped{kk});
+        temp  = pdist(allPreSynapse{kk});
         subplot(3,8,kk);
         imagesc(squareform(temp));
         colormap(hsv);
@@ -204,14 +188,14 @@ xlabel('Post synaptic density (number of synapses/raw length)');
 % Generate 3D gaussian Kernel
 
 clear vol;
-res =1000; % resolution of image
-ksize = 32; % size of Kernel
+res = 1000; % downsampling factor
+ksize = 32000; % size of Kernel in nm
 
 % plot heat map of Postsynaptic sites
 figure(14);
 for kk = 1:length(cellIDs)
     subplot(3,8,kk);
-    [volPost{kk},m, I] = HeatMapFish(ksize, res, allPost{kk},CellSoma(kk,:), cellIDs{kk});
+    [volPost{kk},m, I] = HeatMapFish(ksize, res, allPost{kk},CellSoma(kk,:), cellIDs{kk},true);
     maxDesnity(kk) = m;
     [x,y,z] = ind2sub(size(volPost{kk}),I);
     XPost(kk) = x; YPost(kk) = y; ZPost(kk) = z-10000/res;
@@ -236,7 +220,7 @@ for kk = 1:length(cellIDs)
     else
         i = i+1;
         subplot(3,8,i);
-        [volPre{kk},m, I] = HeatMapFish(ksize, res, allPreSynapse{kk},CellSoma(kk,:), cellIDs{kk});
+        [volPre{kk},m, I] = HeatMapFish(ksize, res, allPreSynapse{kk},CellSoma(kk,:), cellIDs{kk}, true);
     end
 
     maxPreDesnity(kk) = m;
@@ -379,7 +363,7 @@ for i = 1:length(cellIDs)
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
 end
 
-%% Synaptic Length statistics
+%% Distribution of pre and post synaptic path lenghts
 allPostSynapticLength = [];
 allPreSynapticLength = [];
 
@@ -402,3 +386,44 @@ histogram(allPreSynapticLength/1000); % dimensions in microns
 title('Distribution of Presynaptic pathlenght');
 xlabel('Presynaptic pathlenght in \mum');
 ylabel('count');
+
+%% Distribution of inter-synaptic distance
+
+clear PostSynapticDistance;
+PostSynapticDistance = [];
+figure;
+subplot(1,2,1);
+ for ii = 1:size(cellIDs,2)
+     [y,I] = sort(allLengthToPostNode{ii});
+     for i = 2:length(I)
+         tempPost(ii,i-1) = abs(allLengthToPostNode{ii}(I(i-1)) - allLengthToPostNode{ii}(I(i)));
+     end
+      PostSynapticDistance = [PostSynapticDistance;tempPost(ii,:)'];
+ end
+ histogram(find(PostSynapticDistance>0)/1000);
+ title('Inter-postsynaptic distance');
+ xlabel('Distance in \mum');
+ ylabel('Count');
+ 
+ clear PreSynapticDistance;
+ PreSynapticDistance = [];
+ tempPre =[];
+ subplot(1,2,2);
+ index =1;
+ for ii = 1:size(cellIDs,2)
+     if ~isempty(allLengthToPreNode{ii})==1 & size(allLengthToPreNode{ii},1)>1
+         [y,I] = sort(allLengthToPreNode{ii});
+         for i = 2:length(I)
+             tempPre(ii,i-1) = abs(allLengthToPreNode{ii}(I(i-1)) - allLengthToPreNode{ii}(I(i)));
+         end
+         PreSynapticDistance = [PreSynapticDistance;tempPre(index,:)'];
+         index = index+1;
+     else
+         index = index+1;
+         continue;
+     end
+ end
+ histogram(find(PreSynapticDistance>0)/1000);
+ title('Inter-presynaptic distance');
+ xlabel('Distance in \mum');
+ ylabel('Count');

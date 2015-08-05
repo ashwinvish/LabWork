@@ -1,13 +1,13 @@
 %figure();
-A = 15;
-%B = 22;
+A = 5;
+B = 22;
 clear temp1;
 
 clear temp2;
 temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
 treeVisualizer(allTrees{A}, [1],[eval([cellIDs{A},'_axon'])],[{temp2} {temp1}],true,{[rand rand rand]}, 1:numel(allTrees{A}), false); 
-%  temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
-%  treeVisualizer(allTrees{B}, [1],[],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 
+  temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+  treeVisualizer(allTrees{B}, [1],[eval([cellIDs{B},'_axon'])],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 
  h1 = gcf;
  PlotViews(h1);
 
@@ -97,12 +97,16 @@ PlotViews(h1);
 
 %%
 
+
 for i = 1:size(cellIDs,2)
     if ismember(cellIDs{i},cellIDsAlx)==1
         figure;
         for ii = 1:size(cellIDs,2)
-            subplot(3,8,ii);
+            h = subplot(3,8,ii);
             [area] = dotVol(volPre{i},volPost{ii},CellSoma(i,:),CellSoma(ii,:),res); 
+            if area == 0 
+                delete (h);
+            end
             IntArea18(i,ii) = area;
             str = sprintf('Presynaptic cell (red): %s \nPostSynaptic cell (green): %s',cellIDs{i},cellIDs{ii});
             title(str,'FontSize',5);
