@@ -1,12 +1,11 @@
 %figure();
 A = 5;
-B = 22;
+B = 4;
 clear temp1;
 
 clear temp2;
 temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
-treeVisualizer(allTrees{A}, [1],[eval([cellIDs{A},'_axon'])],[{temp2} {temp1}],true,{[rand rand rand]}, 1:numel(allTrees{A}), false); 
-  temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+treeVisualizer(allTrees{A}, [1],[eval([cellIDs{A},'_axon']) ],[{temp2} {temp1}],true,{[rand rand rand]}, 1:numel(allTrees{A}), false);    temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
   treeVisualizer(allTrees{B}, [1],[eval([cellIDs{B},'_axon'])],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false); 
  h1 = gcf;
  PlotViews(h1);
