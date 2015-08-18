@@ -51,13 +51,13 @@ end
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
+        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPostSynapse(kk) allPost(kk)],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for contraxon
+        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPostSynapse(kk) allPost(kk)],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for contraxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
     else
-        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for neither
+        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPostSynapse(kk) allPost(kk)],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for neither
         %treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
     end
 end
@@ -116,19 +116,20 @@ figure();
 plot(cellClass,cellfun(@length,allPost),'o');
 hold on;
 meanCellPost = [mean(IpsiPost(find(IpsiPost))), mean(ContraPost(find(ContraPost))), mean(UnknownPost(find(UnknownPost))) ];
-SdCellPost = [std(IpsiPost(find(IpsiPost))), std(ContraPost(find(ContraPost))), std(UnknownPost(find(UnknownPost)))];
+SdCellPost = [std(IpsiPost(find(IpsiPost))), std(ContraPost(find(ContraPost))), std(UnknownPost(find(UnknownPost)))]
 errorbar(meanCellPost,SdCellPost,'ok');
 xlabel('CellGroups');
 ylabel('Number of postsynaptic sites');
 
 figure();
-plot(cellClass,cell2mat(allRawLength)/1000,'o');
+plot(cellClass,cell2mat(allRawLength),'o');
 hold on;
-meanCellLength = [mean(IpsiLength(find(IpsiLength)))/1000, mean(ContraLength(find(ContraLength)))/1000, mean(UnknownLength(find(UnknownLength)))/1000 ]; % in um
-SdCellLength = [std(IpsiLength(find(IpsiLength))/1000), std(ContraLength(find(ContraLength))/1000), std(UnknownLength(find(UnknownLength))/1000)];
+meanCellLength = [mean(IpsiLength(find(IpsiLength)))/, mean(ContraLength(find(ContraLength))), mean(UnknownLength(find(UnknownLength))) ];
+SdCellLength = [std(IpsiLength(find(IpsiLength))), std(ContraLength(find(ContraLength))), std(UnknownLength(find(UnknownLength)))]
 errorbar(meanCellLength,SdCellLength,'ok');
 xlabel('CellGroups');
 ylabel('Neuronal length in \mum');
+
 
 
 %% Get cell Somas and plot pairwise distances
@@ -151,7 +152,7 @@ h = figure(6);
 clear kk; clear n;
 % Pairwise Eucledian distance of postsynapses
 for kk = 1 : length(allTrees)
-    temp  = pdist(allPost{kk});
+    temp  = pdist(allPostSynapse{kk});
     subplot(3,8,kk);
     imagesc(squareform(temp));
     colormap(hsv);
@@ -200,13 +201,13 @@ figure(12)
 for i = 1:length(cellIDs)
     hold on
     if ismember(cellIDs{i},cellIDsAlx)==1
-        plot(cell2mat(allRawLength(1,i)),rho(i),'Marker', '*','Color',[1 0.5 0]);
+        plot(allRawLength(1,i),rho(i),'Marker', '*','Color',[1 0.5 0]);
     elseif ismember(cellIDs{i},cellIDsDbx)==1
-        plot(cell2mat(allRawLength(1,i)),rho(i),'Marker', '*','Color',[1 0 1]);
+        plot(allRawLength(1,i),rho(i),'Marker', '*','Color',[1 0 1]);
     else
-        plot(cell2mat(allRawLength(1,i)),rho(i),'Marker', '*','Color',[0 0.5 1]);
+        plot(allRawLength(1,i),rho(i),'Marker', '*','Color',[0 0.5 1]);
     end
-    text(cell2mat(allRawLength(1,i))+1000,rho(i)+0.01,cellIDs{i});
+    text(allRawLength(1,i)+1000,rho(i)+0.01,cellIDs{i});
 end
 %line([0,12e5],[0,1]);
 title('Raw length of neuron vs. Rho');
@@ -218,13 +219,13 @@ figure(13);
 for i = 1:length(cellIDs)
     hold on;
     if ismember(cellIDs{i},cellIDsAlx)==1
-        plot(length(allPost{i})/cell2mat(allRawLength(1,i)),rho(i),'Marker', '*','Color',[1 0.5 0]);
+        plot(length(allPost{i})/allRawLength(1,i),rho(i),'Marker', '*','Color',[1 0.5 0]);
     elseif ismember(cellIDs{i},cellIDsDbx)==1
-        plot(length(allPost{i})/cell2mat(allRawLength(1,i)),rho(i),'Marker', '*','Color',[1 0 1]);
+        plot(length(allPost{i})/allRawLength(1,i),rho(i),'Marker', '*','Color',[1 0 1]);
     else
-        plot(length(allPost{i})/cell2mat(allRawLength(1,i)),rho(i),'Marker', '*','Color',[0 0.5 1]);
+        plot(length(allPost{i})/allRawLength(1,i),rho(i),'Marker', '*','Color',[0 0.5 1]);
     end
-    text(length(allPost{i})/cell2mat(allRawLength(1,i)),rho(i)+0.05,cellIDs{i});
+    text(length(allPost{i})/allRawLength(1,i),rho(i)+0.05,cellIDs{i});
 end
 title('Synaptic density of neuron vs. Rho');
 ylabel('Persistence measure \rho');
@@ -327,14 +328,14 @@ for i = 1:length(cellIDs)
     lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
     subplot(3,8,i);
-    scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
+    scatter(1:size(allPost{i},1),sort(lengthToPostNode)/allRawLength(i));
     title(cellIDs{i})
 end
 
 figure(19);
 for i = 1:length(cellIDs)
     subplot(3,8,i);
-    hist(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)), length(allPost{i}));title(cellIDs{i});
+    hist(sort(allLengthToPostNode{i})/allRawLength(i), length(allPost{i}));title(cellIDs{i});
 end
 
 % distribution of presynaptic sites
@@ -346,7 +347,7 @@ for i = 1:length(cellIDs)
         lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
         subplot(3,8,i);
-        scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
+        scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/allRawLength(i));
         title(cellIDs{i})
     end
 end
@@ -356,7 +357,7 @@ for i = 1:length(cellIDs)
         continue;
     else
         subplot(3,8,i);
-        hist(sort(allLengthToPreNode{i})/cell2mat(allRawLength(i)), length(allPreSynapse{i}));
+        hist(sort(allLengthToPreNode{i})/allRawLength(i), length(allPreSynapse{i}));
         title(cellIDs{i});
     end
 end
