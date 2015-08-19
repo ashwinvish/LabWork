@@ -47,6 +47,42 @@ for kk = 1: numel(cellIDs)
     allTrees{kk} = thisTree; allPreSynapse{kk} = thisPreSynapse; allPostSynapse{kk} = thisPostSynapse;allSpine{kk} = thisSpine;
     allRawLength{kk} = rawLength; allPost{kk} = vertcat(thisPostSynapse, thisSpine);
 end
+
+% control cells
+cellControl = {'C1','C2','C3','C4','C5','C6','C7'};
+TreeC1 = generateIrreducibleDoubleLinkedTree_WithDim('C1 [treeline] #317070.swc',[-1:10],5,true);
+TreeC2 = generateIrreducibleDoubleLinkedTree_WithDim('C2 [treeline] #317065.swc',[-1:10],5,true);
+TreeC3 = generateIrreducibleDoubleLinkedTree_WithDim('C3 [treeline] #317067.swc',[-1:10],5,true);
+TreeC4 = generateIrreducibleDoubleLinkedTree_WithDim('C4 [treeline] #317072.swc',[-1:10],5,true);
+TreeC5 = generateIrreducibleDoubleLinkedTree_WithDim('C5 [treeline] #317049.swc',[-1:10],5,true);
+TreeC6 = generateIrreducibleDoubleLinkedTree_WithDim('C6 [treeline] #317054.swc',[-1:10],5,true);
+TreeC7 = generateIrreducibleDoubleLinkedTree_WithDim('C7 [treeline] #316984.swc',[-1:10],5,true);
+
+%% Display Control Cells
+
+treeVisualizer(TreeC1, [1],[],[],true,{[rand rand rand]}, 1:numel(TreeC1), false);
+ControlCellSoma(1,:) =  TreeC1{1,1}{1,3};
+treeVisualizer(TreeC2, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC2), false);
+ControlCellSoma(2,:) =  TreeC2{1,1}{1,3};
+treeVisualizer(TreeC3, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC3), false);
+ControlCellSoma(3,:) =  TreeC3{1,1}{1,3};
+treeVisualizer(TreeC4, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC4), false);
+ControlCellSoma(4,:) =  TreeC4{1,1}{1,3};
+
+hold on;
+stripe1 = [ControlCellSoma(1,:);ControlCellSoma(2,:);ControlCellSoma(3,:);ControlCellSoma(4,:)];
+line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');
+
+treeVisualizer(TreeC5, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC5), false);
+ControlCellSoma(5,:) =  TreeC5{1,1}{1,3};
+treeVisualizer(TreeC6, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC6), false);
+ControlCellSoma(6,:) =  TreeC6{1,1}{1,3};
+treeVisualizer(TreeC7, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC7), false);
+ControlCellSoma(7,:) =  TreeC7{1,1}{1,3};
+
+ stripe2 = [ControlCellSoma(7,:);ControlCellSoma(5,:);ControlCellSoma(6,:)];
+ line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');
+
 %%
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
@@ -63,6 +99,8 @@ for kk = 1:numel(cellIDs)
 end
 hold on;
 scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--'); % stripe1
+line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--'); % stripe2
 
 h1 = gcf;
 h2 = PlotViews(h1); % plots the three views of the figure handle h1
@@ -256,8 +294,7 @@ for i = 1:size(cellIDs,2)
     lengthToPostPeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],PostDensityPeak(i,:));
 end
 
-%%
-%Presynapse Heatmap
+%% Presynapse Heatmap
 
 figure(15);
 i = 0;
@@ -283,6 +320,26 @@ for i = 1:size(cellIDs,2)
         continue;
     else
         lengthToPrePeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],PreDensityPeak(i,:));
+    end
+end
+
+%% dotProduct of two intersecting volumes
+
+for i = 1:size(cellIDs,2)
+    if ~cellfun('isempty',allPreSynapse(1,i)) == 1
+        figure;
+        for ii = 1:size(cellIDs,2)
+            h = subplot(3,8,ii);
+            [area] = dotVol(volPre{i},volPost{ii},CellSoma(i,:),CellSoma(ii,:),res); 
+            if area == 0 
+                delete (h);
+            end
+            IntArea(i,ii) = area;
+            str = sprintf('Presynaptic cell (red): %s \nPostSynaptic cell (green): %s',cellIDs{i},cellIDs{ii});
+            title(str,'FontSize',5);
+        end
+    else
+        continue;
     end
 end
 
@@ -365,7 +422,7 @@ end
 % plot emperical CDFs for all cells
 for i = 1:22
     p = ((1:size(allLengthToPostNode{i},1))-0.5)'./size(allLengthToPostNode{i},1);
-    stairs(sort(allLengthToPostNode{i})/allRawLength(i),p);
+    stairs(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)),p);
     hold on;
 end
 
@@ -373,11 +430,11 @@ end
 
 for i = 1:length(cellIDs)
     if ismember(cellIDs{i},cellIDsAlx)==1
-        plot(allRawLength(i),length(allPost{i}),'*','Color',[1 0.5 0]);
+        plot(cell2mat(allRawLength(i)),length(allPost{i}),'*','Color',[1 0.5 0]);
     elseif ismember(cellIDs{i},cellIDsDbx)==1
-        plot(allRawLength(i),length(allPost{i}),'*','Color',[1 0 1]);
+        plot(cell2mat(allRawLength(i)),length(allPost{i}),'*','Color',[1 0 1]);
     else
-        plot(allRawLength(i),length(allPost{i}),'*','Color',[0 0.5 1]);
+        plot(cell2mat(allRawLength(i)),length(allPost{i}),'*','Color',[0 0.5 1]);
     end
     hold on;
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
@@ -399,12 +456,12 @@ end
 
 for i = 1:length(cellIDs)
     if ismember(cellIDs{i},cellIDsAlx)==1
-        plot(i,mean(allLengthToPostNode{i}/allRawLength(i)) ,'*','Color',[1 0.5 0]);
+        plot(i,mean(allLengthToPostNode{i}/cell2mat(allRawLength(i))) ,'*','Color',[1 0.5 0]);
         
     elseif ismember(cellIDs{i},cellIDsDbx)==1
-        plot(i,mean(allLengthToPostNode{i}/allRawLength(i)) ,'*','Color',[1 0 1]);
+        plot(i,mean(allLengthToPostNode{i}/cell2mat(allRawLength(i))) ,'*','Color',[1 0 1]);
     else
-        plot(i,mean(allLengthToPostNode{i}/allRawLength(i)) ,'*','Color',[0 0.5 1]);
+        plot(i,mean(allLengthToPostNode{i}/cell2mat(allRawLength(i))) ,'*','Color',[0 0.5 1]);
     end
     hold on;
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
