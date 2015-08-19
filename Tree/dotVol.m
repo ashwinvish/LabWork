@@ -13,7 +13,7 @@ tempyz = dot(vol1,vol2,1);
 
 if ~(isempty(find((tempxy>0))& isempty(find(tempxz>0))& isempty(find(tempyz>0)))>0)
     area = threeView([],Soma,jet,tempxy,tempxz,tempyz);
-    area = area*10e6;
+    area = area*10e6; % back to scale
 else
     area = 0;
 end

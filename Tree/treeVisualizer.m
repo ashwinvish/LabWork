@@ -76,8 +76,8 @@ axis vis3d;
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
-%set (gca,'Ydir','reverse');
-set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+set (gca,'Ydir','reverse');
+%set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 view([-180,90]); % xy view
 
 

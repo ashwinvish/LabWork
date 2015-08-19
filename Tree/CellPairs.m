@@ -1,7 +1,7 @@
 %figure();
 
 %B = 12;
-A = 16;
+A = 15;
 clear temp1;
 clear temp2;
 temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
@@ -96,8 +96,7 @@ h1 = gcf;
 PlotViews(h1);
 
 
-%%
-
+%% dotProduct of two intersecting volumes
 
 for i = 1:size(cellIDs,2)
     if ismember(cellIDs{i},cellIDsAlx)==1
