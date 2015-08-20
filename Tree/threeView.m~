@@ -36,7 +36,7 @@ if nargin == 3
     %plot YZ soma location
     plot(130+Soma(1,3), 10 + Soma(1,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','K');
     
-    axis off ;
+    axis on ;
     
 else if nargin> 3
         vol = 0;

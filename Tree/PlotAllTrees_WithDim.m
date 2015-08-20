@@ -3,6 +3,9 @@
 clc;
 clear all;
 
+%pathName = '/usr/people/ashwinv/Dropbox/Scripts/Tree';
+%addpath(pathName.name);
+%addpath(genpath('/usr/people/ashwinv/Dropbox/Scripts'));
 % Axonal nodes for all the cells
 Int1_1_axon = [];
 Int1_2_axon = [];%[15 5 6 40]
@@ -26,19 +29,15 @@ Int3_3_axon = [];
 Int3_4_axon = [];
 Int3_5_axon = [34 52 80 82 83 86 88 90 103 104 107 111 112 113 114 115 92 81 84 87 89 95 96 98 99 100 93 94 101 102 105 106 108 109 110];
 Int3_6_axon = [5 29 37 39 42 52 53 5];
-MauthnerCell = [5*14474,5*49530,-45*448]; % cartesian coordinates for the center of the Mauthner cell
+MauthnerCell = [5*14474,5*49530,-45*448];  								% cartesian coordinates for the center of the Mauthner cell
 
-% all the cell IDS
-cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };
-% all the alx cells
-cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
-% all bdx1b cells
-cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8'};
-% all barhl1 cells
-cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};
+						
+cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };								      % all CellIDS
+cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};			% all the alx cells	
+cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8'};			% all bdx1b cells
+cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};				% all barhl1 cells
 
-% Convert from .swc file to tree structre with presynapses,postsynapses,
-% rawlegth
+													% Convert from .swc file to tree structre with presynapses,postsynapses,
 for kk = 1: numel(cellIDs)
     disp([cellIDs{kk} , '_WithTags.swc']);
     [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true);
@@ -70,7 +69,7 @@ treeVisualizer(TreeC4, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC4), fals
 ControlCellSoma(4,:) =  TreeC4{1,1}{1,3};
 
 hold on;
-stripe1 = [ControlCellSoma(1,:);ControlCellSoma(2,:);ControlCellSoma(3,:);ControlCellSoma(4,:)];
+stripe1 = [ControlCellSoma(1,:);ControlCellSoma(2,:);ControlCellSoma(3,:);ControlCellSoma(4,:)];	%stripe1, corresponds with alx transcription factor	
 line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');
 
 treeVisualizer(TreeC5, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC5), false);
@@ -80,12 +79,12 @@ ControlCellSoma(6,:) =  TreeC6{1,1}{1,3};
 treeVisualizer(TreeC7, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC7), false);
 ControlCellSoma(7,:) =  TreeC7{1,1}{1,3};
 
- stripe2 = [ControlCellSoma(7,:);ControlCellSoma(5,:);ControlCellSoma(6,:)];
- line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');
+stripe2 = [ControlCellSoma(7,:);ControlCellSoma(5,:);ControlCellSoma(6,:)];				%stripe2, corresponds with dbx transcription factor
+line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');
 
-%%
+%% Plot all Cells in three axes
 for kk = 1:numel(cellIDs)
-    % subplot(3,8,kk);
+    % subplot(3,8,kk);                                        
     if ismember(cellIDs{kk},cellIDsAlx)==1
         treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
@@ -99,11 +98,12 @@ for kk = 1:numel(cellIDs)
 end
 hold on;
 scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
-line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--'); % stripe1
-line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--'); % stripe2
+line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--'); 				% stripe1
+line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--'); 				% stripe2
 
 h1 = gcf;
-h2 = PlotViews(h1); % plots the three views of the figure handle h1
+h2 = PlotViews(h1);											% plots the three views of the figure handle h1
+
 %% Plot all Soma with Time Constants
 for kk = 1 : length(allTrees)
     CellSoma(kk,:) =  allTrees{1,kk}{1,1}{1,4}{1};
@@ -120,7 +120,7 @@ scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdg
 hold on;
 scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
 
-axis([20000 140000 60000 250000]); % fixed to show the orientation of the animal
+axis([20000 140000 60000 250000]); 									% fixed to show the orientation of the animal
 daspect([1 1 1]);
 axis vis3d
 box on;
@@ -168,22 +168,20 @@ errorbar(meanCellLength,SdCellLength,'ok');
 xlabel('CellGroups');
 ylabel('Neuronal length in \mum');
 
-
 %% Get cell Somas and plot pairwise distances
 % All soma locations
 [Y,I] = sort(rho);
-CellSomaSort = CellSoma(I,:);
-tempdist = pdist(CellSoma);
-EucDist = squareform(tempdist);
+CellSomaSort = CellSoma(I,:);								% sorted cell somas
+EucDist = squareform(pdist(CellSoma));                      % pairwise Euclidean distance between somas
 
 figure(4);
-imagesc(EucDist);
+imagesc(EucDist);                                           % plot pairwise euclidean distance
 colormap gray;
 axis square;
 
-Links = linkage(tempdist);
+Links = linkage(pdist(CellSoma));
 figure(5);
-dendrogram(Links,'Labels',cellIDs) % dendrogram of cell distances
+dendrogram(Links,'Labels',cellIDs) 							% dendrogram of cell distances based on pairwise Euclidean distance
 
 h = figure(6);
 clear kk; clear n;
@@ -268,13 +266,12 @@ title('Synaptic density of neuron vs. Rho');
 ylabel('Persistence measure \rho');
 xlabel('Post synaptic density (number of synapses/raw length)');
 
-%% Gaussian Kernel
-% axis([60000 250000 20000 140000 -60000 0]);
-% Generate 3D gaussian Kernel
+%% Plot heat map of the density of synapses 
 
+% Generate 3D gaussian Kernel
 clear vol;
-res = 1000; % downsampling factor
-ksize = 32000; % size of Kernel in nm
+res = 1000;                                                                 % downsampling factor
+ksize = 32000;                                                              % size of Kernel in nm
 
 % plot heat map of Postsynaptic sites
 figure(14);
@@ -283,11 +280,10 @@ for kk = 1:length(cellIDs)
     [volPost{kk},m, I] = HeatMapFish(ksize, res, allPost{kk},CellSoma(kk,:), cellIDs{kk},true);
     maxDesnity(kk) = m;
     [x,y,z] = ind2sub(size(volPost{kk}),I);
-    XPost(kk) = x; YPost(kk) = y; ZPost(kk) = z-10000/res;
+    XPost(kk) = x; YPost(kk) = y; ZPost(kk) = z;                  % check this line again??
 end
 
 hold off;
-%PostDensityPeak = [YPost'*res,XPost'*res,ZPost'*res];
 PostDensityPeak = [XPost'*res,YPost'*res,ZPost'*res];
 
 for i = 1:size(cellIDs,2)
@@ -309,7 +305,7 @@ for kk = 1:length(cellIDs)
 
     maxPreDesnity(kk) = m;
     [x,y,z] = ind2sub(size(volPre{kk}),I);
-    XPre(kk) = x; YPre(kk) = y; ZPre(kk) = z-10000/res;
+    XPre(kk) = x; YPre(kk) = y; ZPre(kk) = z;
     
 end
 %PreDensityPeak = [YPre'*res,XPre'*res,ZPre'*res];
@@ -323,10 +319,61 @@ for i = 1:size(cellIDs,2)
     end
 end
 
-%% dotProduct of two intersecting volumes
+%% calculate the convexhull volume of two intersecting point clouds
+overlap = zeros(size(cellIDs,2));
+overlapNormalized = zeros(size(cellIDs,2));
+for i = 1:size(cellIDs,2)
+    
+    if ismember(cellIDs{i},cellIDsAlx)==1
+        figure();
+        title(cellIDs{i});
+        
+        for j = 1:size(cellIDs,2)
+            subplot(3,8,j);
+            B = j;
+            clear temp3;
+            clear temp4;
+            clear temp1;
+            clear temp2;
+            A = i;
+            temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+            [C1,CV1,x1,y1,z1,htri1] = TreeConvexHull(allTrees{A},[1],[],[{temp2} {temp1}],false,{[rand,rand,rand]},'green',1:numel(allTrees{A}));
+            
+            temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
+            [C2,CV2,x2,y2,z2] = TreeConvexHull(allTrees{B},[1],[],[{temp4} {temp3}],false,{[rand,rand,rand]},'red',1:numel(allTrees{B}));
+            
+            % to calculate if point cloud of B is inside A
+            in = inpolyhedron(htri1.Faces,htri1.Vertices,[x2 y2 z2]);
+            if size([x2(in) y2(in) z2(in)],1) == 0
+                Vint = 0;
+                overlap(i,j) = Vint;
+            else if ~size([x2(in) y2(in) z2(in)],1) == 0
+                    [Cint,Vint] = convhull(x2(in),y2(in),z2(in));
+                    hold on;
+                    trimesh(Cint,x2(in),y2(in),z2(in),'FaceColor','b','FaceAlpha',0.5,'EdgeColor','black','EdgeAlpha',0.1);
+                    overlap(i,j) = Vint/1e+9; % overlap volume in um3
+                end
+            end
+        end
+    else
+        continue;
+    end
+end
+
+figure;
+imagesc(overlap);
+axis square;
 
 for i = 1:size(cellIDs,2)
-    if ~cellfun('isempty',allPreSynapse(1,i)) == 1
+    overlapNormalized (i,:) = overlap(i,:)/max(overlap(i,:));
+end
+figure; imagesc(overlapNormalized); axis square;
+
+ 
+%% DotProduct of two intersecting volumes
+
+for i = 1:size(cellIDs,2)
+    if ~cellfun('isempty',allPreSynapse(1,i)) == 1					% do only for cells that have presynaptic sites
         figure;
         for ii = 1:size(cellIDs,2)
             h = subplot(3,8,ii);
