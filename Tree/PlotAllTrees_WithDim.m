@@ -86,13 +86,13 @@ line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);                                        
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for ipsiaxon
+        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1,0.5,0] [1 0.4 0.4]}, 1:numel(thisTree), false); % Orange for ipsiaxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1,0.5,0]}, 1:numel(thisTree), false); % Orange for Alx
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for contraxon
+        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1, 0, 1] [0.6 0 1]}, 1:numel(thisTree), false); % Magenta for contraxon
         %treeVisualizer(thisTree, [1],[],[],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
     else
-        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for neither
+        treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[ 0.4588 0.7333 0.9922] [0.2941 0.3647 0.0863]}, 1:numel(thisTree), false); % Blue for neither
         %treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
     end
 end
@@ -101,6 +101,7 @@ scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceCo
 line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--'); 				% stripe1
 line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--'); 				% stripe2
 
+axis vis3d;
 h1 = gcf;
 h2 = PlotViews(h1);											% plots the three views of the figure handle h1
 
@@ -119,12 +120,15 @@ figure(8);
 scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdgeColor', 'k');
 hold on;
 scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
-
+box on;
 axis([20000 140000 60000 250000]); 									% fixed to show the orientation of the animal
 daspect([1 1 1]);
-axis vis3d
-box on;
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+
+axis vis3d
+
+line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--'); 				% stripe1
+line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--'); 				% stripe2                                                                    
 view([180,90]);
 
 figHandle = gcf;
@@ -269,9 +273,9 @@ xlabel('Post synaptic density (number of synapses/raw length)');
 %% Plot heat map of the density of synapses 
 
 % Generate 3D gaussian Kernel
-clear vol;
+clear volPost;
 res = 1000;                                                                 % downsampling factor
-ksize = 32000;                                                              % size of Kernel in nm
+ksize = 2000;                                                              % size of Kernel in nm
 
 % plot heat map of Postsynaptic sites
 figure(14);
@@ -293,6 +297,7 @@ end
 %% Presynapse Heatmap
 
 figure(15);
+clear volPre
 i = 0;
 for kk = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,kk)) == 1
@@ -426,44 +431,44 @@ ylabel('rho')
 %Distribution of Synapse onto Cells
 
 % distribution of postsynaptic sites
-figure(18);
-for i = 1:length(cellIDs)
+%figure(18);
+parfor i = 1:length(cellIDs)
     lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
-    subplot(3,8,i);
-    scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
-    title(cellIDs{i})
+    %subplot(3,8,i);
+    %scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
+    %title(cellIDs{i})
 end
 
-figure(19);
-for i = 1:length(cellIDs)
-    subplot(3,8,i);
-    hist(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)), length(allPost{i}));title(cellIDs{i});
-end
+% figure(19);
+% for i = 1:length(cellIDs)
+%     subplot(3,8,i);
+%     hist(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)), length(allPost{i}));title(cellIDs{i});
+% end
 
 % distribution of presynaptic sites
-figure(20);
-for i = 1:length(cellIDs)
+%figure(20);
+parfor i = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
         lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
-        subplot(3,8,i);
-        scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
-        title(cellIDs{i})
+ %       subplot(3,8,i);
+  %      scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
+   %     title(cellIDs{i})
     end
 end
-figure(21);
-for i = 1:length(cellIDs)
-    if cellfun('isempty',allPreSynapse(1,i)) == 1
-        continue;
-    else
-        subplot(3,8,i);
-        hist(sort(allLengthToPreNode{i})/cell2mat(allRawLength(i)), length(allPreSynapse{i}));
-        title(cellIDs{i});
-    end
-end
+% figure(21);
+% for i = 1:length(cellIDs)
+%     if cellfun('isempty',allPreSynapse(1,i)) == 1
+%         continue;
+%     else
+%         subplot(3,8,i);
+%         hist(sort(allLengthToPreNode{i})/cell2mat(allRawLength(i)), length(allPreSynapse{i}));
+%         title(cellIDs{i});
+%     end
+% end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Misc. plots
 % plot emperical CDFs for all cells
@@ -515,6 +520,7 @@ for i = 1:length(cellIDs)
 end
 
 %% Distribution of pre and post synaptic path lenghts
+
 allPostSynapticLength = [];
 allPreSynapticLength = [];
 

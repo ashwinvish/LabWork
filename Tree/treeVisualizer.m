@@ -2,7 +2,7 @@ function treeVisualizer(tree,highlightedNodes,inducingNodes,specialNodes,newFigu
 %relativeRes = [5 5 45]; % in nm
 rndclr = colorString;
 symCell={'o','s','v','x','d','*'};
-synapseColor = {'g', 'r'}; % red - presynaptic; g- postsynaptic
+synapseColor = {[0 0.4 0.4], [0.2 0 0.8]}; % red - presynaptic; g- postsynaptic [1 0.2 0.2]
 if nargin < 8
     pixelUnits = false;
     if nargin < 7
@@ -22,7 +22,9 @@ if nargin < 8
     end
 end
 if newFigure
-    figure;hold;
+    figure;
+    %figure('units','normalized','outerposition',[0 0 1 1]);
+    hold;
 else
     hold on;
 end
@@ -40,11 +42,11 @@ for kk=1:numel(tree)
             tempz=-[tree{children(mm)}{3}(3); tree{children(mm)}{4}{1}(:,3); tree{kk}{3}(3)];
         end
         if ismember(kk,inducingNodes) && ismember(children(mm),inducingNodes)
-            h  =   plot3(tempx,tempy,tempz,'color',rndclr{1},'lineWidth',2);
-            h.Color(4) = 0.2; %  transparency 0-1
+            h  =   plot3(tempx,tempy,tempz,'color',rndclr{2},'lineWidth',0.5);
+            %h.Color(4) = 0.4; %  transparency 0-1
         else
             if ismember(kk,validNodes)
-                plot3(tempx,tempy,tempz,'color', rndclr{1},'lineWidth',2);
+                plot3(tempx,tempy,tempz,'color', rndclr{1},'lineWidth',0.5);
                 % h.Color(4) = 0.5;
             end
         end
@@ -55,7 +57,7 @@ for kk=1:numel(highlightedNodes)
     if pixelUnits
         plot3(tree{highlightedNodes(kk)}{3}(1)*relativeRes(1),tree{highlightedNodes(kk)}{3}(2)*relativeRes(2),-tree{highlightedNodes(kk)}{3}(3)* relativeRes(3),'Marker','o','MarkerSize',10 , 'MarkerFaceColor',rndclr{1},'MarkerEdgeColor','k' )
     else
-        plot3(tree{highlightedNodes(kk)}{3}(1),tree{highlightedNodes(kk)}{3}(2),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize' , 10,  'MarkerFaceColor',rndclr{1},'MarkerEdgeColor' , 'k' )
+        plot3(tree{highlightedNodes(kk)}{3}(1),tree{highlightedNodes(kk)}{3}(2),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize' , 10, 'LineWidth', 0.1, 'MarkerFaceColor',rndclr{1},'MarkerEdgeColor' , 'k' )
     end
 end
 
@@ -66,18 +68,18 @@ for mm = 1: numel(specialNodes)
         if pixelUnits
             plot3(specialNodes{mm}(kk,1)*relativeRes(1),specialNodes{mm}(kk,2)*relativeRes(2),-specialNodes{mm}(kk,3)*relativeRes(3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 3,  'MarkerFaceColor', synapseColor{mm} , 'MarkerEdgeColor' , 'none');  
         else
-            plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 3,  'MarkerFaceColor', synapseColor{mm} , 'MarkerEdgeColor' , 'none');
+            plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 3, 'LineWidth', 0.1 , 'MarkerFaceColor', synapseColor{mm} , 'MarkerEdgeColor' , 'none' );
         end
     end
 end
 
-daspect([1 1 1]); % make aspect ratio [1 1 1]
-axis vis3d;
+%axis vis3d;
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
-set (gca,'Ydir','reverse');
-%set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+daspect([1 1 1]); % make aspect ratio [1 1 1]
+%set (gca,'Ydir','reverse');
+set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 view([-180,90]); % xy view
 
 

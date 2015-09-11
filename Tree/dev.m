@@ -185,7 +185,8 @@ errorbar(MeanPairDVEucDist,SynDiffMean,SynDiffSE,'o');
 xlabel('Pairwise DV Eucledian distance in nm');
 ylabel('Pairwise difference in postsynaptic sites ');
 
-%%
+%% plot convexhull of a tree and display, does not display cell
+
 tree = allTrees{21};
 for kk = 1:numel(tree)
     children = tree{kk}{2};
@@ -254,12 +255,11 @@ for i = 1:size(cellIDs,2)
 end
 %%
 
-
 for i = 1:length(cellIDs)
     lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i},[-1:10]);
     allLengthToPostNode{i} = lengthToPostNode ;
     subplot(3,8,i);
-    scatter(1:size(allPost{i},1),(lengthToPostNode)/allRawLength(i));
+    scatter(1:size(allPost{i},1),(lengthToPostNode)/allRawLength{i});
     title(cellIDs{i})
 end
 
@@ -275,7 +275,7 @@ for i=1:numel(allTrees)
     axis square
 end
 
-%%
+%% Plots the number of treeBranches for each cell
 
 figure();
 for i = 1:length(cellIDs)
@@ -293,7 +293,7 @@ title('Rho vs. Number of Branches');
 ylabel('Persistence measure Rho' );
 xlabel('Number of Branches');
 
-%%
+%% Number of terminal nodes for each cell
 
 for ii = 1:length(cellIDs)
     [B,T] = TreeBranches(allTrees{ii});
@@ -320,7 +320,7 @@ for i = 1:1
     for kk = 1:length(B)
         BranchPoints(kk,:) = allTrees{i}{B(kk)}{3};
     end
-    EucDistBranch{i} = (allTrees{i}{1}{3},BranchPoints(:,:))';
+    EucDistBranch{i} = pdist2(allTrees{i}{1}{3},BranchPoints(:,:))';
     
     for jj = 1:length(shollIntersections)
         [Y,I] = find(EucDistPost{i}>(jj-1)*radius & EucDistPost{i}<(jj)*radius);
@@ -345,7 +345,7 @@ for i = 1:1
 end
 
 
-%%
+%% find intersecting nodes; 
 
 for i = 1:length(cellIDs)
     lin{i} = lineage(allTrees{i},1,1);

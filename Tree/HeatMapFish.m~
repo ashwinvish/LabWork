@@ -1,4 +1,4 @@
-function [vol,m,I] = HeatMapFish( ksize,res, PointCloud, Soma, CellID ,figure )
+function [plotVol,m,I] = HeatMapFish( ksize,res, PointCloud, Soma, CellID ,figure )
 %HeatMap used to plot the heatmap of a PointCloud for a CellID 
 
 %   PointCloud [X Y Z]  is the points of cloud over which the density is computed,
@@ -31,19 +31,19 @@ for n = 1:size(PointCloud,1);
         vol(round(PointCloud(n,1)/res + ksize/2) + (-ksize/2:ksize/2), round(PointCloud(n,2)/res + ksize/2) + (-ksize/2:ksize/2),round(PointCloud(n,3)/res + ksize/2 +1)+ (-ksize/2:ksize/2))  + K3D;
 end
 
-% remove padding from the edges and return vol to predefined size
-vol = vol(20+ksize/2 : 140+ksize/2, 60+ksize/2 : 250+ksize/2, ksize/2:60+ksize/2);
-% normalize volume to compare different trees
-NormVol = vol./max(vol(:));
+% normalize volume
+vol = vol./max(vol(:));
+% remove padding from the edges
+plotVol = vol(20+ksize/2 : 140+ksize/2, 60+ksize/2 : 250+ksize/2, ksize/2:60+ksize/2);
 
 % display only Normalized volume plots
 if figure == true
-    threeView(NormVol,Soma, jet);
+    threeView(plotVol,Soma, jet);
     title(CellID);
-    [m,I] = max(NormVol(:));
+    [m,I] = max(plotVol(:));
     
 else
-    [m,I] = max(NormVol(:));
+    [m,I] = max(plotVol(:));
 end
 
 end
