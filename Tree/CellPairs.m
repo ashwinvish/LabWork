@@ -13,39 +13,28 @@
 %     text(0.5,0.98,cellIDs{A(i)},'Units','normalized');
 %     export_fig(sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/%s_WithTags.eps', cellIDs{A(i)}));
 % end
-A = [22]%,5,6,7,16,21,22];
+
+[y,I] = sort(rho);
+map = colormap(parula(22));
+
+for i = 1:22;
+A = i%,5,6,7,16,21,22];
 temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
-treeVisualizer(allTrees{A}, [1],[eval([cellIDs{A},'_axon'])],[{temp2} {temp1}],true,{[1,0.5,0] [1 0.4 0.4] }, 1:numel(allTrees{A}), false);
+treeVisualizer(allTrees{A}, [1],[],[],false,{map(I(i),:)}, 1:numel(allTrees{A}), false);
 hold on;
-text(0.5,0.98,cellIDs{A},'Units','normalized');
-
-for i = 1:length(cellIDs)
-    for j = 1:length(allPost{1,i})
-        plot3(allPost{1,i}(j,1),allPost{1,i}(j,2),-allPost{1,i}(j,3), 'Marker','o', 'MarkerSize' , 3, 'LineWidth', 0.1 , 'MarkerFaceColor', [0 0.4 0.4] , 'MarkerEdgeColor' , 'none' );
-    end
+%text(0.5,0.98,cellIDs{A},'Units','normalized');
+%text(0.1,0.1,cellIDs{A});
 end
-view (-140,18);
 
-export_fig(sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/%s_WithAllSynapses.eps', cellIDs{A}));
-
-% for kk = 1:numel(cellIDs)
-%     subplot(3,8,kk);
-%     if ismember(cellIDs{kk},cellIDsDbx)==1
-%         treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1, 0, 1] [0.6 0 1]}, 1:numel(allTrees{kk}), false); % Magenta for contraxon
-%         treeVisualizer(thisTree, [1],[],[],false,{[1, 0, 1]}, 1:numel(thisTree), false); % Magenta for Dbx
-%     else
-%         ismember(cellIDs{kk},cellIDsL)==1
-%         treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[ 0.4588 0.7333 0.9922] [0.2941 0.3647 0.0863]}, 1:numel(allTrees{kk}), false); % Blue for neither
-%         treeVisualizer(thisTree, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(thisTree), false); % Blue for lateral
+% for i = 1:length(cellIDs)
+%     for j = 1:length(allPost{1,i})
+%         plot3(allPost{1,i}(j,1),allPost{1,i}(j,2),-allPost{1,i}(j,3), 'Marker','o', 'MarkerSize' , 3, 'LineWidth', 0.1 , 'MarkerFaceColor', [0 0.4 0.4] , 'MarkerEdgeColor' , 'none' );
 %     end
-%     text(0.5,0.98,cellIDs{kk},'Units','normalized');
-%     
 % end
-% axis vis3d;
-% h1 = gcf;
-% h2 = PlotViews(h1);
+% view (-140,18);
 
-%export_fig(sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/%s_WithTags.eps', cellIDs{kk}));
+%export_fig(sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/%s_WithAllSynapses.eps', cellIDs{A}));
+
 
 %%
 %for i=1:numel(allTrees)
@@ -178,7 +167,7 @@ for i = 1:size(cellIDs,2)
         continue
     end
 end
-export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/PairwiseSynapseDistrubution', '-eps');
+%export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/PairwiseSynapseDistrubution', '-eps');
 
 % plot the minimum synaptic distance between trees
 figure();
@@ -188,7 +177,7 @@ title('Minimum synaptic distance between trees in \mum');
 xlabel('PostSynaptic cell');
 ylabel('PreSynaptic cell');
 axis square;
-export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance','-eps');
+%export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance','-eps');
 
 % plot only those synapses pairs that are within 1000nm of each other
 figure();
@@ -203,7 +192,7 @@ title('Synapses 1\mum apart');
 xlabel('PostSynaptic cell');
 ylabel('PreSynaptic cell');
 axis square;
-export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance1000', '-eps');
+%export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance1000', '-eps');
 
 
 

@@ -79,14 +79,10 @@ for i = 1:size(cellIDs,2)
         continue;
     end
 end
-denLength = allRawLength-axLength;
+denLength = cell2mat(allRawLength)-axLength;
 sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength))
 
 %% ratio of dendritic length/ axonal length v2
-
-
-
-
 
 %% Euclidean distance from Mauthner Cell
 

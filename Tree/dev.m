@@ -310,7 +310,7 @@ end
 figure();
 radius = 10000;
 
-for i = 1:1
+for i = 1:size(cellIDs,2)
     tree{i} = load_tree([cellIDs{i} , '_WithTags.swc']);
     shollIntersections= sholl_tree(tree{i},radius); % concentric circles every radius nm
     EucDistPost{i} = pdist2(allTrees{i}{1}{3},allPost{i}(:,:))';

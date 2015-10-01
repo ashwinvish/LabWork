@@ -82,9 +82,6 @@ ControlCellSoma(7,:) =  TreeC7{1,1}{1,3};
 stripe2 = [ControlCellSoma(7,:);ControlCellSoma(5,:);ControlCellSoma(6,:)];                     	%stripe2, corresponds with dbx transcription factor
 line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');
 
-axis vis3d
-PlotViews(gcf);
-
 %% Plot all Cells in three axes
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
@@ -100,9 +97,9 @@ for kk = 1:numel(cellIDs)
     end
 end
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
-line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                 	% stripe1
-line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                     % stripe2
+% scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+% line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                 	% stripe1
+% line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                     % stripe2
 
 axis vis3d;
 h1 = gcf;
@@ -590,6 +587,8 @@ ylabel('Count');
 
 %% plot number of synapses per cell
 
+
+
 [y,I] = sort(cellfun(@length,allPost));
 calx = [1,0.5,0];
 cdbx = [1, 0, 1];
@@ -617,29 +616,11 @@ title('Number of synpapse for population');
 
 figure();
 [ax,h1,h2] = plotyy(1:22 ,y, 1:22,(y./denLength(I)) * 1000,'bar', 'plot');
-h1.FaceColor =  [0,0.4,1];
-h2.Color =  'r';
-h2.Marker = 'o';
-set(ax(1),'xcolor','k');
-set(ax(1),'ycolor',[0,0.4,1]);
-set(ax(2),'ycolor','r');
-xlabel('Neuron #');
+h1.FaceColor =  [0.2 0.8 1]);
+set(h2,'color','r','Marker','o');
+xlable('Neuron #');
 ylabel(ax(1),'Number of postsynaptic sites');
 ylabel(ax(2),'Synapse density (#/\mum)');
-box off;
 
-[y,I] = sort(cellfun(@length,allPreSynapse));
-figure()
-[ax,h1,h2] = plotyy(1:22 ,y, 1:22,(y./axLength(I)) * 1000,'bar', 'plot');
-h1.FaceColor =  [0.5,0.9,0];
-h2.Color =  'r';
-h2.Marker = 'o';
-set(ax(1),'xcolor','k');
-set(ax(1),'ycolor',[0.5,0.9,0]);
-set(ax(2),'ycolor','r');
-xlabel('Neuron #');
-ylabel(ax(1),'Number of presynaptic sites');
-ylabel(ax(2),'Synapse density (#/\mum)');
-box off;
 
 

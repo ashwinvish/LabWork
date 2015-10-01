@@ -27,8 +27,8 @@ newh3 = copyobj(get(h3,'children'),h4);
 set(newh3,'Units','Normalized','Position',[0.3 -0.05 0.3250 0.8150]);
 pbaspect([1 1 1]);
 
-% close(h1);
-% close(h2);
-% close(h3);
+ %close(h1);
+ %close(h2);
+ %close(h3);
 end
 
