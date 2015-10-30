@@ -101,8 +101,6 @@ clear MeanPairEucDist;
 clear RhoRatio;
 clear RhoRatioSD
 
-PairEucDist= squareform(pdist(CellSoma));
-
 index = 1;
 steps = 1:10000:max(PairEucDist(:));
 for i = 1:length(steps)-1
@@ -406,7 +404,7 @@ radius = 10000;
 
 for i = 1:size(cellIDs,2)
     tree{i} = load_tree([cellIDs{i} , '_WithTags.swc']);
-    shollIntersections{i}= sholl_tree(tree{i},radius); % concentric circles every radius nm
+    shollIntersections= sholl_tree(tree{i},radius); % concentric circles every radius nm
     EucDistPost{i} = pdist2(allTrees{i}{1}{3},allPost{i}(:,:))';
     
     [B,T] = TreeBranches(allTrees{i});
@@ -423,18 +421,18 @@ for i = 1:size(cellIDs,2)
         [Y2,I2] = find(EucDistBranch{i}>(jj-1)*radius & EucDistBranch{i}<(jj)*radius);
         count2(jj+1) = length(I2);
     end
-%     figure(1)
-%     subplot(3,8,i);
-%     title(cellIDs{i});
-%     plot(1:radius/1000:radius*length(shollIntersections) / 1000,shollIntersections/sum(shollIntersections),'-g*', 1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*');
-%     legend('ShollInteresctions', 'PostSynapticSites');
-%     
-%     figure(2)
-%     %title('Dendritic Branching % vs Number of PostSynaptic Sites')
-%     subplot(3,8,i);
-%     title(cellIDs{i});
-%     plot(1:radius/1000:radius*length(count2) /1000,count2/sum(count2), '-g*',1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*' );
-%     legend('Dendrite','PostSynapticSites');
+    figure(1)
+    subplot(3,8,i);
+    title(cellIDs{i});
+    plot(1:radius/1000:radius*length(shollIntersections) / 1000,shollIntersections/sum(shollIntersections),'-g*', 1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*');
+    legend('ShollInteresctions', 'PostSynapticSites');
+    
+    figure(2)
+    %title('Dendritic Branching % vs Number of PostSynaptic Sites')
+    subplot(3,8,i);
+    title(cellIDs{i});
+    plot(1:radius/1000:radius*length(count2) /1000,count2/sum(count2), '-g*',1:radius/1000:radius*length(count) /1000,count/sum(count), '-r*' );
+    legend('Dendrite','PostSynapticSites');
     
 end
 

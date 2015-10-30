@@ -1,82 +1,29 @@
+%% 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;
-clc;
-clear all;
-
-%pathName = '/usr/people/ashwinv/Dropbox/Scripts/Tree';
-%addpath(pathName.name);
-%addpath(genpath('/usr/people/ashwinv/Dropbox/Scripts'));
-% Axonal nodes for all the cells
-Int1_1_axon = [];
-Int1_2_axon = [];%[15 5 6 40]
-Int1_3_axon = [];
-Int1_4_axon = [30 42 43 44 45 47 48 41 52 49 50 51 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74];
-Int1_5_axon = [56 106 107 109 110 114 115 116 159 160 161 162 163 164 165 166 167 169 170 171 168 77 80 81 82 84 86 87 85 92 99 100 103 115 117 123 125 126 137 139 150 151 153 127 124 128 131 132 134 140 143 152 154 155 156 157 158 136 138 141 142 144 106 110 114 116 133 135 145 146 147 148 149 ];
-Int1_6_axon = [20 82  96 97 98 133 138 143 147 149 150 156 154 148 151 152 123  126 132 128 129 130 134 140 142 153 165 139 141 155 157 159 160 163 162 158 164 166 131 120 135 145 161 167 168 169 170 171 172 129 136 144 146 137 74 118 99];
-Int1_7_axon = [9 30 75 81 99 115 120 128 110 114 116 117 121 122 123 76 107];
-Int2_1_axon = [];%[2 5 7 14 15 25 26 73];
-Int2_2_axon = [];%[5 84];
-Int2_3_axon = [];%[3 67];
-Int2_4_axon = [];%[2 101];
-Int2_5_axon = [];%[6 64 65 66 67 69];
-Int2_6_axon = [];
-Int2_7_axon = [];
-Int2_8_axon = [];%[10 12 22 64];
-Int2_9_axon = [7 17 43 47 55 66 67 78 79 80 82 83 84 85 86 87 88 81];
-Int3_1_axon = [];
-Int3_2_axon = [];
-Int3_3_axon = [];
-Int3_4_axon = [];
-Int3_5_axon = [34 52 80 82 83 86 88 90 103 104 107 111 112 113 114 115 92 81 84 87 89 95 96 98 99 100 93 94 101 102 105 106 108 109 110];
-Int3_6_axon = [5 29 37 39 42 52 53 5];
-MauthnerCell = [5*14474,5*49530,-45*448];                                                       % cartesian coordinates for the center of the Mauthner cell
-
-
-cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };								      % all CellIDS
-cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};			% all the alx cells
-cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5','Int2_8'};			% all bdx1b cells
-cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};                        % all barhl1 cells
-
-% Convert from .swc file to tree structre with presynapses,postsynapses,
-for kk = 1: numel(cellIDs)
-    disp([cellIDs{kk} , '_WithTags.swc']);
-    [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true);
-    [thisTree,rawLength,thisPostSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],5, true);
-    [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true);
-    allTrees{kk} = thisTree; allPreSynapse{kk} = thisPreSynapse; allPostSynapse{kk} = thisPostSynapse;allSpine{kk} = thisSpine;
-    allRawLength{kk} = rawLength; allPost{kk} = vertcat(thisPostSynapse, thisSpine);
-end
-
-% control cells
-cellControl = {'C1','C2','C3','C4','C5','C6','C7'};
-TreeC1 = generateIrreducibleDoubleLinkedTree_WithDim('C1 [treeline] #317070.swc',[-1:10],5,true);
-TreeC2 = generateIrreducibleDoubleLinkedTree_WithDim('C2 [treeline] #317065.swc',[-1:10],5,true);
-TreeC3 = generateIrreducibleDoubleLinkedTree_WithDim('C3 [treeline] #317067.swc',[-1:10],5,true);
-TreeC4 = generateIrreducibleDoubleLinkedTree_WithDim('C4 [treeline] #317072.swc',[-1:10],5,true);
-TreeC5 = generateIrreducibleDoubleLinkedTree_WithDim('C5 [treeline] #317049.swc',[-1:10],5,true);
-TreeC6 = generateIrreducibleDoubleLinkedTree_WithDim('C6 [treeline] #317054.swc',[-1:10],5,true);
-TreeC7 = generateIrreducibleDoubleLinkedTree_WithDim('C7 [treeline] #316984.swc',[-1:10],5,true);
+loadTrees; % Load all data
 
 %% Display Control Cells
 
-treeVisualizer(TreeC1, [1],[],[],true,{[rand rand rand]}, 1:numel(TreeC1), false);
+DisplayTree(TreeC1,true);
+DisplayTree(TreeC2,false);
+DisplayTree(TreeC3,false);
+DisplayTree(TreeC4,false);
+
 ControlCellSoma(1,:) =  TreeC1{1,1}{1,3};
-treeVisualizer(TreeC2, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC2), false);
 ControlCellSoma(2,:) =  TreeC2{1,1}{1,3};
-treeVisualizer(TreeC3, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC3), false);
 ControlCellSoma(3,:) =  TreeC3{1,1}{1,3};
-treeVisualizer(TreeC4, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC4), false);
 ControlCellSoma(4,:) =  TreeC4{1,1}{1,3};
 
 hold on;
 stripe1 = [ControlCellSoma(1,:);ControlCellSoma(2,:);ControlCellSoma(3,:);ControlCellSoma(4,:)];	%stripe1, corresponds with alx transcription factor
 line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');
 
-treeVisualizer(TreeC5, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC5), false);
+DisplayTree(TreeC5,false);
+DisplayTree(TreeC6,false);
+DisplayTree(TreeC7,false);
+
 ControlCellSoma(5,:) =  TreeC5{1,1}{1,3};
-treeVisualizer(TreeC6, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC6), false);
 ControlCellSoma(6,:) =  TreeC6{1,1}{1,3};
-treeVisualizer(TreeC7, [1],[],[],false,{[rand rand rand]}, 1:numel(TreeC7), false);
 ControlCellSoma(7,:) =  TreeC7{1,1}{1,3};
 
 stripe2 = [ControlCellSoma(7,:);ControlCellSoma(5,:);ControlCellSoma(6,:)];                     	%stripe2, corresponds with dbx transcription factor
@@ -89,53 +36,143 @@ PlotViews(gcf);
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        %treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1,0.5,0] [1 0.4 0.4]}, 1:numel(thisTree), false); % Orange for ipsiaxon
-        treeVisualizer(allTrees{kk}, [1],[],[],false,{[1,0.5,0]}, 1:numel(allTrees{kk}), false); % Orange for Alx
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
+        %DisplayTree(allTrees{kk},[1],true,[1 0.5 0.3]);                              % plot without hilighting axon
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        %treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[1, 0, 1] [0.6 0 1]}, 1:numel(thisTree), false); % Magenta for contraxon
-        treeVisualizer(allTrees{kk}, [1],[],[],false,{[1, 0, 1]}, 1:numel(allTrees{kk}), false); % Magenta for Dbx
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1], allPreSynapse{kk}, allPost{kk});
+        %DisplayTree(allTrees{kk},[1],true,[1 0.3 0.1]);
     else
-        %treeVisualizer(allTrees{kk}, [1],[eval([cellIDs{kk},'_axon'])],[allPost(kk) allPreSynapse(kk)],false,{[0, 0.5, 1 ] [0.2941 0.3647 0.0863]}, 1:numel(thisTree), false); % Blue for neither
-        treeVisualizer(allTrees{kk}, [1],[],[],false,{[0, 0.5, 1]}, 1:numel(allTrees{kk}), false); % Blue for lateral
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1], allPreSynapse{kk}, allPost{kk});
+        %DisplayTree(allTrees{kk},[1],true,[0.3 0.5 1]);
     end
 end
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
-line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                 	% stripe1
-line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                     % stripe2
+ scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+%  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','-', 'color','k');                  	% stripe1
+%  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','-','color','k' );                      % stripe2
 
 axis vis3d;
-h1 = gcf;
-h2 = PlotViews(h1);                                                                                 % plots the three views of the figure handle h1
+%h1 = gcf;
+%h2 = PlotViews(h1);                                                                                             % plots the three views of the figure handle h1
 
-%% Plot all Soma with Time Constants
-for kk = 1 : length(allTrees)
-    CellSoma(kk,:) =  allTrees{1,kk}{1,1}{1,4}{1};
+%% Plot all alx cells
+index = 0;
+clear ha;
+%pause(2);
+ha = tight_subplot(2,5,[.05 .05],[.05 .1],[.01 .01]);
+for kk = 1:numel(cellIDs)
+    if ismember(cellIDs{kk},cellIDsAlx)==1
+        index = index+1;
+        axes(ha(index));
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3],allPreSynapse{kk}, allPost{kk});
+        %DisplayTree(allTrees{4},[1],true,[1 0.5 0.3]);
+        view(-150,35);
+        title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+    else
+        continue;
+    end
 end
 
-%time constants and persistence measure
-tau = [7.16323454600000,6.23690945500000,9.88816223500000,17.7411357900000,5.48599643300000,10.1172859600000,7.51255049400000,18.1882559300000,57.0990589000000,100,38.7012773800000,11.6985985200000 ...
-    11.0576103400000,1.44892223200000,19.5401836000000,100,16.5597699400000,10.3971051900000,26.7744003700000,7.92791676600000,6.10909614600000,5.21884052300000];
-rho = [0.5207986709, 0.6661018539, 0.6648735491, 0.8190294252, 0.6370840437, 0.3520511176, 0.6180659652, 0.7770252108, 0.8445793478, 0.5048882377, 0.6169858888, 0.4693437009, 0.7319155263 ...
-    0.2311146742, 0.5600555905, 0.69884915, 0.8217790613, 0.5105536878, 0.8749909893, 0.3470572669, 0.5251032841, 0.5768530374];
+set(ha(1:10),'BoxStyle','full');
+set(ha(1:10),'XColor',[0.831, 0.816, 0.784]);
+set(ha(1:10),'YColor',[0.831, 0.816, 0.784]);
+set(ha(1:10),'ZColor',[0.831, 0.816, 0.784]);
+title(sprintf('CellID %s', cellIDs{kk}));
+set(gcf,'color','w');
+%figtitle('All ipsilateral projecting cells','FontName','Arial', 'FontWeight','Bold');
 
-figure(8);
-scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 50, rho, 'fill', 'MarkerEdgeColor', 'k');
+%% Plot all dbx1b cells
+index = 0;
+clear ha;
+ha = tight_subplot(2,4,[.05 .05],[.05 .1],[.01 .01]);
+for kk = 1:numel(cellIDs)
+    if ismember(cellIDs{kk},cellIDsDbx)==1
+        index = index+1;
+        axes(ha(index));
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1]);
+        %DisplayTree(allTrees{kk},[1].true,[1 0.3 0.1]);
+        view(-150,35);
+        title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+    else
+        continue;
+    end
+end
+set(ha(1:8),'BoxStyle','full');
+set(ha(1:8),'XColor',[0.831, 0.816, 0.784]);
+set(ha(1:8),'YColor',[0.831, 0.816, 0.784]);
+set(ha(1:8),'ZColor',[0.831, 0.816, 0.784]);
+title(sprintf('CellID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+set(gcf,'color','w');
+%figtitle('All contralateral projecting cells','FontName','Arial', 'FontWeight','Bold');
+
+%% Plot all barhl1 cells
+
+index = 0;
+clear ha;
+ha = tight_subplot(2,3,[.05 .05],[.05 .1],[.01 .01]);
+for kk = 1:numel(cellIDs)
+    if ismember(cellIDs{kk},cellIDsL)==1
+        index = index+1;
+        axes(ha(index));
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1]);
+        %DisplayTree(allTrees{kk},[1],true,[0.3 0.5 1]);
+        view(-150,35);      
+        title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+    else
+        continue;
+    end
+end
+set(ha(1:6),'BoxStyle','full');
+set(ha(1:6),'XColor',[0.831, 0.816, 0.784]);
+set(ha(1:6),'YColor',[0.831, 0.816, 0.784]);
+set(ha(1:6),'ZColor',[0.831, 0.816, 0.784]);
+set(gcf,'color','w');
+%figtitle('All unknown projecting cells','FontName','Arial', 'FontWeight','Bold');
+
+%% Plot all Soma with Time Constants
+
+CellSoma = zeros(length(cellIDs),3);
+for kk = 1 : length(allTrees)
+    CellSoma(kk,1:3) =  allTrees{1,kk}{1,1}{1,4}{1};
+end
+
+%figure();
+scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, rho, 'fill', 'Marker','o', 'MarkerEdgeColor', [0.5 0.5 0.5]);
+%scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, 'red', 'fill', 'Marker','o' ,'LineWidth', 2,'MarkerEdgeColor', 'k');
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 150,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+
 box on;
-axis([20000 140000 60000 250000]);                                                                  % fixed to show the orientation of the animal
-daspect([1 1 1]);
+axis([ 20000 140000 60000 250000 -60000 0]);
+plot( [120000, 140000], [70000, 70000],'-k' ) % insert 20um sclaebar
+daspect([1 1 1]); % make aspect ratio [1 1 1]
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+view([-180,90]); % xy view
 
-axis vis3d
-
-line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                       % stripe1
-line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                       % stripe2
+%  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                       % stripe1
+%  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                       % stripe2
 view([180,90]);
+axis vis3d;
 
-figHandle = gcf;
-PlotViews(figHandle);
+%  figHandle = gcf;
+%  PlotViews(figHandle);
+%%
+
+figure();
+map = colormap(parula(22));
+
+for i = 1:length(cellIDs);
+A = i;
+temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+cellNo = find(rho(i) == sort(rho));
+DisplayTree(allTrees{i},false,[], map(cellNo,:));
+end
+h = colorbar;
+h.Limits = [min(rho) max(rho)];
+h.Location = 'manual';
+h.Position = [0.6730    0.1100    0.0117    0.8150];
+set(gcf,'color','w');
+
 %% ipsi,contra,unkown stats.
 
 for kk = 1:numel(cellIDs)
@@ -158,36 +195,35 @@ end
 
 % bar plot of number of Postsynapses
 figure();
-plot(cellClass,cellfun(@length,allPost),'o');
+plot(cellClass,cellfun(@length,allPost),'o', 'MarkerFaceColor','b');
 hold on;
 meanCellPost = [mean(IpsiPost(find(IpsiPost))), mean(ContraPost(find(ContraPost))), mean(UnknownPost(find(UnknownPost))) ];
 SdCellPost = [std(IpsiPost(find(IpsiPost))), std(ContraPost(find(ContraPost))), std(UnknownPost(find(UnknownPost)))];
-errorbar(meanCellPost,SdCellPost,'ok');
+errorbar(meanCellPost,SdCellPost,'ok', 'MarkerFaceColor','k');
 xlabel('CellGroups');
 ylabel('Number of postsynaptic sites');
 
 figure();
-plot(cellClass,cell2mat(allRawLength)/1000,'o');
+plot(cellClass,cell2mat(allRawLength)/1000,'o', 'MarkerFaceColor', 'b');
 hold on;
 meanCellLength = [mean(IpsiLength(find(IpsiLength)))/1000, mean(ContraLength(find(ContraLength)))/1000, mean(UnknownLength(find(UnknownLength)))/1000 ]; % in um
 SdCellLength = [std(IpsiLength(find(IpsiLength))/1000), std(ContraLength(find(ContraLength))/1000), std(UnknownLength(find(UnknownLength))/1000)];
-errorbar(meanCellLength,SdCellLength,'ok');
+errorbar(meanCellLength,SdCellLength,'ok', 'MarkerFaceColor','k');
 xlabel('CellGroups');
 ylabel('Neuronal length in \mum');
 
 %% Get cell Somas and plot pairwise distances
 % All soma locations
-[Y,I] = sort(rho);
-CellSomaSort = CellSoma(I,:);                                                                       % sorted cell somas
+
 EucDist = squareform(pdist(CellSoma));                                                              % pairwise Euclidean distance between somas
 
-figure(4);
+figure();
 imagesc(EucDist);                                                                                   % plot pairwise euclidean distance
 colormap gray;
 axis square;
 
 Links = linkage(pdist(CellSoma));
-figure(5);
+figure();
 dendrogram(Links,'Labels',cellIDs)                                                                  % dendrogram of cell distances based on pairwise Euclidean distance
 
 h = figure(6);
@@ -278,7 +314,7 @@ xlabel('Post synaptic density (number of synapses/raw length)');
 % Generate 3D gaussian Kernel
 clear volPost;
 res = 1000;                                                                                          % downsampling factor
-ksize = 2000;                                                                                        % size of Kernel in nm
+ksize = 12000;                                                                                        % size of Kernel in nm
 
 % plot heat map of Postsynaptic sites
 figure(14);
@@ -370,12 +406,14 @@ end
 
 figure;
 imagesc(overlap);
+title('Convexhull volume');
 axis square;
 
 for i = 1:size(cellIDs,2)
     overlapNormalized (i,:) = overlap(i,:)/max(overlap(i,:));
 end
 figure; imagesc(overlapNormalized); axis square;
+title('Normalized convexhull volume');
 
 
 %% DotProduct of two intersecting volumes
@@ -475,14 +513,17 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Misc. plots
 % plot emperical CDFs for all cells
+figure()
 for i = 1:22
     p = ((1:size(allLengthToPostNode{i},1))-0.5)'./size(allLengthToPostNode{i},1);
     stairs(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)),p);
     hold on;
 end
 
-% plot rawLength vs. number of PostSynapses
+title('Emperical CDF for all cells');
 
+% plot rawLength vs. number of PostSynapses
+figure();
 for i = 1:length(cellIDs)
     if ismember(cellIDs{i},cellIDsAlx)==1
         plot(cell2mat(allRawLength(i)),length(allPost{i}),'*','Color',[1 0.5 0]);
@@ -494,9 +535,12 @@ for i = 1:length(cellIDs)
     hold on;
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
 end
+xlabel('Rawlength (nm)');
+ylabel('Number of postsynaptic sites');
+
 
 % plot cellDepth vs. Rho
-
+figure();
 for i = 1:length(cellIDs)
     if ismember(cellIDs{i},cellIDsAlx)==1
         plot(CellSoma(i,3),rho(i),'*','Color',[1 0.5 0]);
@@ -509,6 +553,11 @@ for i = 1:length(cellIDs)
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
 end
 
+xlabel('cell depth (nm)');
+ylabel('Persistance measure \rho');
+
+%
+figure();
 for i = 1:length(cellIDs)
     if ismember(cellIDs{i},cellIDsAlx)==1
         plot(i,mean(allLengthToPostNode{i}/cell2mat(allRawLength(i))) ,'*','Color',[1 0.5 0]);
@@ -521,6 +570,18 @@ for i = 1:length(cellIDs)
     hold on;
     %text(allRawLength(i),length(allPost{i}),cellIDs{i});
 end
+
+xlabel(' cell #');
+ylabel('ratio of mean(allLengthToPostNode{i}/cell2mat(allRawLength(i))) ');
+
+
+figure();
+[y,I] = sort(CellSoma(:,3));
+scatter(1:22,y,50,rho(I),'filled', 'MarkerEdgeColor','k');
+set(gca,'YDir','reverse');
+xlabel('Cell#');
+ylabel('Depth in nm');
+title('Persistence measure \rho Vs. cell depth');
 
 %% Distribution of pre and post synaptic path lenghts
 
@@ -538,12 +599,12 @@ end
 figure;
 subplot(121);
 histogram(allPostSynapticLength/1000); % dimensions in microns
-title('Distribution of Postsynaptic pathlenght');
+title('Distribution of Postsynaptic pathlength');
 xlabel('Postsynaptic pathlenght in \mum');
 ylabel('count');
 subplot(122);
 histogram(allPreSynapticLength/1000); % dimensions in microns
-title('Distribution of Presynaptic pathlenght');
+title('Distribution of Presynaptic pathlength');
 xlabel('Presynaptic pathlenght in \mum');
 ylabel('count');
 
@@ -588,6 +649,24 @@ title('Inter-presynaptic distance');
 xlabel('Distance in \mum');
 ylabel('Count');
 
+
+
+%% ratio of dendritic length/ axonal length
+axLength = [];
+clear temp;
+for i = 1:size(cellIDs,2)
+    if eval([cellIDs{i},'_axon'])>0
+           temp(1:size(allLengthToPreNode{i},1)-1,i) = diff(sort(allLengthToPreNode{i}));
+           axLength = [axLength,sum(temp(:,i))];
+    else
+        axLength = [axLength,0];
+        continue;
+    end
+end
+denLength = cell2mat(allRawLength)-axLength;
+sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength))
+
+
 %% plot number of synapses per cell
 
 [y,I] = sort(cellfun(@length,allPost));
@@ -601,7 +680,7 @@ for i = 1:length(cellIDs)
         BarCMap = calx;
     elseif ismember(cellIDs(I(i)),cellIDsDbx) == 1
         BarCMap = cdbx;
-    else 
+    else
         BarCMap= cbarhl;
     end
     
@@ -616,7 +695,7 @@ ylabel('Number of post synapses');
 title('Number of synpapse for population');
 
 figure();
-[ax,h1,h2] = plotyy(1:22 ,y, 1:22,(y./denLength(I)) * 1000,'bar', 'plot');
+[ax,h1,h2] = plotyy(1:22 ,y, 1:22,(y./denLength(I)) * 1000, 'bar', 'plot');
 h1.FaceColor =  [0,0.4,1];
 h2.Color =  'r';
 h2.Marker = 'o';
@@ -625,6 +704,19 @@ set(ax(1),'ycolor',[0,0.4,1]);
 set(ax(2),'ycolor','r');
 xlabel('Neuron #');
 ylabel(ax(1),'Number of postsynaptic sites');
+ylabel(ax(2),'Synapse density (#/\mum)');
+box off;
+
+figure();
+[ax,h1,h2] = plotyy(1:22 ,y./sort(cellfun(@sum,Branches)-rs), 1:22,(y./denLength(I)) * 1000, 'bar', 'plot');
+h1.FaceColor =  [0,0.4,1];
+h2.Color =  'r';
+h2.Marker = 'o';
+set(ax(1),'xcolor','k');
+set(ax(1),'ycolor',[0,0.4,1]);
+set(ax(2),'ycolor','r');
+xlabel('Neuron #');
+ylabel(ax(1),' No. of postsynaptic sites/ No. of branches');
 ylabel(ax(2),'Synapse density (#/\mum)');
 box off;
 
@@ -641,5 +733,36 @@ xlabel('Neuron #');
 ylabel(ax(1),'Number of presynaptic sites');
 ylabel(ax(2),'Synapse density (#/\mum)');
 box off;
+
+figure();
+h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
+for i =1:length(cellIDs)
+    [Branches{i}, Terminals{i}, BranchOrder{i}] = TreeBranches(allTrees{i});
+    axes(h(i));
+    title(sprintf('Cell ID %s', cellIDs{i}));
+    BranchOrderVisualizer(allTrees{i},[1],[BranchOrder{i}]);
+end
+figtitle('Branch Order visualization');
+
+figure();
+h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
+for i =1:length(cellIDs)
+    axes(h(i));
+    histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]); 
+    title(sprintf('Cell ID %s', cellIDs{i}));
+end
+
+figtitle('Branch order distribution for all cells');
+
+figure();
+[rs,cs] = cellfun(@size,allSpine);
+bar(sort(cellfun(@sum,Branches)-rs));
+xlabel('neuron#');
+ylabel('Number of branches per cell');
+
+
+
+
+
 
 

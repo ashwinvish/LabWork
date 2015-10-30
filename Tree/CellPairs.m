@@ -1,57 +1,38 @@
-%figure();
-
-% %B = 12;
-% A = [4,5,6,7,16,21,22];
-% clear temp1;
-% clear temp2;
-% for i = 1:size(A,2)
-%     temp1 = allPreSynapse{A(i)}; temp2 = allPostSynapse{A(i)};
-%     %subplot(3,3,i);
-%     treeVisualizer(allTrees{A(i)}, [1],[eval([cellIDs{A(i)},'_axon'])],[{temp2} {temp1}],true,{[1,0.5,0] [1 0.4 0.4] }, 1:numel(allTrees{A(i)}), false);
-%     %temp3 = allPreSynapse{B}; temp4 = allPostSynapse{B};
-%     % treeVisualizer(allTrees{B}, [1],[eval([cellIDs{B},'_axon'])],[{temp4} {temp3}],false,{[1,0.5,0]}, 1:numel(allTrees{B}), false);
-%     text(0.5,0.98,cellIDs{A(i)},'Units','normalized');
-%     export_fig(sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/%s_WithTags.eps', cellIDs{A(i)}));
-% end
-
-[y,I] = sort(rho);
+% plot all trees colored with their rho value respectively
 map = colormap(parula(22));
+%[sortedRho,I] = sort(rho);
+index = [];
 
 for i = 1:22;
-A = i%,5,6,7,16,21,22];
+A = i;
 temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
-treeVisualizer(allTrees{A}, [1],[],[],false,{map(I(i),:)}, 1:numel(allTrees{A}), false);
+index = find(rho(i)==sort(rho));
+%treeVisualizer(allTrees{A}, [1],[],[],false,{map(i,:)}, 1:numel(allTrees{A}), false);
+%DisplayTree(AxnTree,false,eval([cellIDs{A},'_axon']),map(I(i),:), allPreSynapse{A}, allPostSynapse{A}); % with synapses
+DisplayTree(allTrees{A},false,[],map(index,:));                                                          % without synapses
 hold on;
 %text(0.5,0.98,cellIDs{A},'Units','normalized');
 %text(0.1,0.1,cellIDs{A});
 end
-
-% for i = 1:length(cellIDs)
-%     for j = 1:length(allPost{1,i})
-%         plot3(allPost{1,i}(j,1),allPost{1,i}(j,2),-allPost{1,i}(j,3), 'Marker','o', 'MarkerSize' , 3, 'LineWidth', 0.1 , 'MarkerFaceColor', [0 0.4 0.4] , 'MarkerEdgeColor' , 'none' );
-%     end
-% end
-% view (-140,18);
-
-%export_fig(sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/%s_WithAllSynapses.eps', cellIDs{A}));
-
-
-%%
-%for i=1:numel(allTrees)
-%cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
-%cellIDsAlx = [4,5,6,7,13,19,21,22];
+axis vis3d;
+set(gcf,'color','w');
+set(gca,'CLim',[min(rho) max(rho)]);
+colorbar('eastoutside');
+%PlotViews(gcf);
+% h = colorbar;
+% h.Limits = [min(rho) max(rho)];
+% h.Location = 'manual';
+% h.Position = [0.6730    0.1100    0.0117    0.8150];
 
 
-% for i = 1:length(cellIDs)
-%   if  ismember(cellIDs{i},cellIDsAlx)==1
+%% plot all ipsi cells and overlaping convex hulls
+
 overlap = zeros(size(cellIDs,2));
 overlapNormalized = zeros(size(cellIDs,2));
 for i = 1:size(cellIDs,2)
-    
     if ismember(cellIDs{i},cellIDsAlx)==1
         figure();
         title(cellIDs{i});
-        
         for j = 1:size(cellIDs,2)
             subplot(3,8,j);
             B = j;
@@ -86,14 +67,18 @@ end
 
 figure;
 imagesc(overlap);
+title('Overalap of convexhull volumes');
 axis square;
 
 for i = 1:size(cellIDs,2)
     overlapNormalized (i,:) = overlap(i,:)/max(overlap(i,:));
 end
-figure; imagesc(overlapNormalized); axis square;
+figure;
+imagesc(overlapNormalized);
+axis square;
+title('Overlap of normalized convex hull volumes');
 
-%%
+%% plot 3 views of convexhull overlaps of any cell pairs
 
 A = 16;
 B = 15;
@@ -140,6 +125,7 @@ for i = 1:size(cellIDs,2)
 end
 
 %% Minimum distance between synapses between trees
+
 index =0;
 k=0;
 figure();
@@ -160,7 +146,7 @@ for i = 1:size(cellIDs,2)
         hist(PairwiseSynapticDistance(a,i)./1000); % report in microns
         xlim([0 5]);
         title(cellIDs{i});
-        figtitle('Synaptic pairs <5\mum apart');
+        figtitle('Synaptic pairs <5 \mum apart');
         clear a;
         clear b;
     else
@@ -193,7 +179,3 @@ xlabel('PostSynaptic cell');
 ylabel('PreSynaptic cell');
 axis square;
 %export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance1000', '-eps');
-
-
-
-
