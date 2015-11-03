@@ -21,7 +21,7 @@ end
 
 inducingNodes = eval([cellIDs{AxonTree},'_axon']);
 axonTree = [];
-jitterRadius = 20*1000 ; % in nm
+jitterRadius = 10*1000 ; % in nm
 jitterXYZ = [rand*jitterRadius, rand*jitterRadius, -1*rand*jitterRadius];
 axonTreeJitter = [];
 
@@ -65,7 +65,3 @@ end
 
 
 end
-
-
-
-

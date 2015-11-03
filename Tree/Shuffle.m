@@ -1,13 +1,16 @@
 % shuffle axon tree
 
-AxonTree = 5,
+for i = 1:numel(cellIDs)
+    if ismember(cellIDs(i), cellIDsAlx) == 1
+        AxonTree = i
+        
 Shuffles = 1000;
 
 [A,B] =  UniqueSites(allTrees,cellIDs,AxonTree,false,true);
 axonTree = zeros(size(A,1),3,Shuffles);
 axonTreeJitter = zeros(size(A,1),3,Shuffles);
 
-for i = 1:1:1000  
+for i = 1:1:Shuffles;
 [axonTree(1:size(A,1),1:3,i), axonTreeJitter(1:size(A,1),1:3,i)]= UniqueSites(allTrees,cellIDs,AxonTree,false,true);
 end
 
@@ -18,7 +21,7 @@ remTrees = 1:numel(cellIDs);
 remTrees(AxonTree) = [];
 denTree = [];
 hold on;
-
+% 
 for ii = 1:numel(remTrees)
     DenTree = allTrees{remTrees(ii)};                % iterating through all trees
     validNodes =  eval([cellIDs{ii},'_axon']);       % keeping track of axonal nodes
@@ -73,6 +76,10 @@ end
 
 
 % unique locations on axon
+clear diffUniq;
+clear temp3;
+clear uniquer;
+clear uniquec;
 
 for i = 1:1:Shuffles
     if ~isempty(r(:,i))
@@ -83,20 +90,20 @@ for i = 1:1:Shuffles
         if ~isempty(diffUniq)
             uniquec(1:size( unique(c(:,i)),1),i) = unique(c(:,i));
             uniquer(1:size(unique(r(:,i)),1),i) = unique(r(:,i));
-            %         s1 = scatter3(axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3),'Marker','o','MarkerFaceColor',[0 0 1],'MarkerEdgeColor','k');
-            %         drawnow;
-            %         s1Markers = s1.MarkerHandle;
-            %         s1Markers.FaceColorData = uint8(255*[0;0;1;0.5]);  % Alpha=0.3 => 70% transparent red
-            %         s1.SizeData = 50;
-        end
-        %unqSites(:,1:3,i) = [axonTreeJitter(uniquer(diffUniq(:,i)),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3)];
+            %s1 = scatter3(axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3),'Marker','o','MarkerFaceColor',[0 0 1],'MarkerEdgeColor','k');
+        end  
     else
         %sprintf('no unique sites')
         uniquec(1,i) = 0;
         uniquer(1,i) = 0;
+        diffUniq(1:size(temp3,1),i) = [];
     end
     i
 end
+
+Pot.(sprintf('JitteredPotSynapse_%s_10um',cell2mat(cellIDs(AxonTree)))) = size(diffUniq(diffUniq~=0));
+
+%save /Users/admin/Desktop/JitteredPotSynapse3_6_10um.mat;
 
 %unqSites = [axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3)];
 
@@ -106,3 +113,5 @@ set (gca,'XTick',[], 'YTick',[],'ZTick', [],'Ydir','reverse');
 view([-180,90]);
 axis vis3d;
 text(0.5,0.98,cellIDs{AxonTree},'Units','normalized');
+    end
+end

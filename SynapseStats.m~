@@ -26,30 +26,39 @@ MeanPost = [mean(AlxPost), mean(DbxPost), mean(BarhlPost)];
 StdPost = [std(AlxPost), std(DbxPost), std(BarhlPost)];
 MeanPre = mean(AlxPre);
 StdPre = std(AlxPre);
+hold on;
 
-[ax,h1,h2] = plotyy([ones(length(AlxPost),1)' , 2*ones(length(DbxPost),1)',3*ones(length(BarhlPost),1)'] , [AlxPost,DbxPost,BarhlPost], 1.2*ones(length(AlxPost),1)', AlxPre) ; % 'o', );
+
+
+[ax,h1,h2] = plotyy([ones(length(AlxPost),1)' , 2*ones(length(DbxPost),1)',3*ones(length(BarhlPost),1)'] , [AlxPost,DbxPost,BarhlPost], 1.2*ones(length(AlxPre),1)', AlxPre) ; % 'o', );
 h1.Marker = 'o';
-h1.MarkerFaceColor =  [0.7,0.7,0.7];
+h1.MarkerFaceColor =  [0.7,0,0];
 h1.MarkerEdgeColor = 'none';
 h1.MarkerSize =  25 ;
 h1.LineStyle = 'none';
 h2.Marker = 'o';
-h2.MarkerFaceColor =  [0.9,0.9,0.9];
+h2.MarkerFaceColor =  [0,0.7,0];
 h2.MarkerEdgeColor = 'none';
 h2.MarkerSize =  25;
 h2.LineStyle = 'none';
-hold on;
+
+
+
+h3 = plot(1.2,MeanPre,'o', 'MarkerFaceColor', calx, 'MarkerEdgeColor','none', 'MarkerSize', 25 );
+h4 = plot([1.2;1.2], [MeanPre-StdPre;MeanPre+StdPre], 'Color','k','LineWidth',2);
+
+
 plot(1,MeanPost(1), 'o', 'MarkerFaceColor', calx, 'MarkerEdgeColor','none', 'MarkerSize', 25 );
 plot(2,MeanPost(2), 'o', 'MarkerFaceColor', cdbx, 'MarkerEdgeColor','none', 'MarkerSize', 25 );
 plot(3,MeanPost(3), 'o', 'MarkerFaceColor', cbarhl, 'MarkerEdgeColor','none', 'MarkerSize', 25 );
 plot([1:3;1:3], [MeanPost-StdPost;MeanPost+StdPost], 'Color','k','LineWidth',2);
 
-plot(1.2,MeanPre,'o', 'MarkerFaceColor', calx, 'MarkerEdgeColor','none', 'MarkerSize', 25 );
-h3 = plot([1.2;1.2], [MeanPre-StdPre;MeanPre+StdPre], 'Color','k','LineWidth',2);
-uistack(h3,'top');
 
-set(ax(1),'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'},'XLim', [0.5 3.5], 'FontName', 'Arial', 'FontSize', 20, 'Ycolor','k');
-set(ax(2),'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'XLim', [0.5 3.5],'FontName', 'Arial', 'FontSize', 20, 'Ycolor' , 'k');
+
+%uistack(h3,'top');
+
+set(ax(1),'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'},'XLim', [0.5 3.5], 'FontName', 'Arial', 'FontSize', 20, 'Ycolor', [0.7,0,0]);
+set(ax(2),'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'XLim', [0.5 3.5],'FontName', 'Arial', 'FontSize', 20, 'Ycolor' , [0,0.7,0]);
 
 
 set(h1,'color','w');
@@ -112,6 +121,91 @@ set(gca, 'FontName', 'Arial', 'FontSize', 20);
 box off;
 set(gcf,'color','w');
 axis square
+%% Distribution of pre and post synaptic path lenghts
 
-%%
+allPostSynapticLength = [];
+allPreSynapticLength = [];
+
+for i = 1:size(cellIDs,2)
+    allPostSynapticLength = [allPostSynapticLength;allLengthToPostNode{i}];
+end
+
+for i = 1:size(cellIDs,2)
+    allPreSynapticLength = [allPreSynapticLength;allLengthToPreNode{i}];
+end
+
+figure();
+histogram(allPostSynapticLength/1000,'FaceColor',[0.5,0.5,0.5]); % dimensions in microns
+xlabel('Postsynaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 20);
+ylabel('Count', 'FontName', 'Arial', 'FontSize', 20);
+set(gca, 'FontName', 'Arial', 'FontSize', 20);
+box off;
+set(gcf,'color','w');
+axis square
+
+figure();
+histogram(allPreSynapticLength/1000,'FaceColor',[0.5,0.5,0.5]); % dimensions in microns
+%title('Distribution of Presynaptic pathlength');
+xlabel('Presynaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 20);
+ylabel('Count', 'FontName', 'Arial', 'FontSize', 20);
+set(gca, 'FontName', 'Arial', 'FontSize', 20);
+box off;
+set(gcf,'color','w');
+axis square
+
+%% Minimum Distance between trees
+
+index =0;
+k=0;
+figure();
+for i = 1:size(cellIDs,2)
+    if size(allPreSynapse{i},1)>0
+        for j = 1:size(cellIDs,2)
+            sz = 0;
+            [MinDistance{i,j}] = MinSynapticDistance(allPreSynapse{i},allPost{j});
+            sz = sz + sum(size(MinDistance{i,j},1)*size(MinDistance{i,j},2));
+            minDistance(i,j) = min(min(MinDistance{i,j}));
+            PairwiseSynapticDistance(index+1:index+sz,i) = [reshape(MinDistance{i,j},[],1)];
+            index = sz;
+        end
+        clear temp;
+        k=k+1;
+        subplot(3,3,k);
+        [a,b] = find(PairwiseSynapticDistance(:,i)>0 & PairwiseSynapticDistance(:,i)<5000);
+        hist(PairwiseSynapticDistance(a,i)./1000); % report in microns
+        xlim([0 5]);
+        title(cellIDs{i});
+        figtitle('Synaptic pairs <5 \mum apart');
+        clear a;
+        clear b;
+    else
+        continue
+    end
+end
+%export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/PairwiseSynapseDistrubution', '-eps');
+
+% plot the minimum synaptic distance between trees
+figure();
+imagesc(minDistance/1000); % in microns
+colorbar;
+%title('Minimum synaptic distance between trees in \mum');
+xlabel('PostSynaptic cell', 'FontName', 'Arial', 'FontSize', 20);
+ylabel('PreSynaptic cell', 'FontName', 'Arial', 'FontSize', 20);
+axis square;
+%export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance','-eps');
+
+% plot only those synapses pairs that are within 1000nm of each other
+figure();
+[r,c] = find(minDistance>0 & minDistance<1000); % find synapses that are atleast 1000nm close to each other
+minDistance1000 = zeros(size(cellIDs,2));
+for i = 1:size(r,1)
+    minDistance1000(r(i),c(i)) = minDistance(r(i),c(i));
+end
+imagesc(minDistance1000/1000); % in microns
+colorbar;
+title('Synapses 1\mum apart');
+xlabel('PostSynaptic cell');
+ylabel('PreSynaptic cell');
+axis square;
+%export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance1000', '-eps');
 

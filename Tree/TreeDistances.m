@@ -6,7 +6,7 @@ hold on;
 
 % Presynaptic Cell
 
-A = [7]; 
+A = [5]; 
 
 AxnTree = allTrees{A};
 
@@ -92,6 +92,7 @@ if ~isempty(r)
         uniquer = unique(r);
        % s1 = scatter3(denTree(uniquec(diffUniq),1),denTree(uniquec(diffUniq),2),denTree(uniquec(diffUniq),3),'Marker','o','MarkerFaceColor',[0 0 1],'MarkerEdgeColor','k');
         s1 = scatter3(axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3),'Marker','o','MarkerFaceColor',[0 0 1],'MarkerEdgeColor','k');
+        uniqueTree = [axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2), axonTree(uniquer(diffUniq),3) ]
         drawnow;
         s1Markers = s1.MarkerHandle;
         s1Markers.FaceColorData = uint8(255*[0;0;1;0.5]);  % Alpha=0.3 => 70% transparent red
