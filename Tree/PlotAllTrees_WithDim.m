@@ -1,5 +1,5 @@
 %% 
-
+clear all;
 loadTrees; % Load all data
 
 %% Display Control Cells

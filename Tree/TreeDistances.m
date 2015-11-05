@@ -12,7 +12,7 @@ AxnTree = allTrees{A};
 
 % Plot the presynaptic cell
 
- %DisplayTree(AxnTree,[1],false,eval([cellIDs{A},'_axon']),[1 0.5 0.3], allPreSynapse{A}, allPostSynapse{A});
+ DisplayTree(AxnTree,[1],true,eval([cellIDs{A},'_axon']),[1 0.5 0.3], allPreSynapse{A}, allPostSynapse{A});
 
 % consider only axon of the tree
 

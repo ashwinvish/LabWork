@@ -111,13 +111,13 @@ if ~isempty(r)
         %sprintf('Number of unique locations on the axon:%d \n Number of unique locations on dendrites: %d', length(unique(r)), length(unique(c)))
         uniquec = unique(c);
         uniquer = unique(r);
-        s1 = scatter3(axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3),'Marker','o','MarkerFaceColor',[0 0 1],'MarkerEdgeColor','k');
+        %s1 = scatter3(axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2),axonTree(uniquer(diffUniq),3),'Marker','o','MarkerFaceColor',[0 0 1],'MarkerEdgeColor','k');
         uniqueTree = [axonTree(uniquer(diffUniq),1),axonTree(uniquer(diffUniq),2), axonTree(uniquer(diffUniq),3)];
-        drawnow;
-        s1Markers = s1.MarkerHandle;
-        s1Markers.FaceColorData = uint8(255*[0;0;1;0.5]);  % Alpha=0.3 => 70% transparent red
-        s1.SizeData = 50;
-        title(sprintf('Potential Synapses %d', size(uniqueTree,1)));
+        %drawnow;
+        %s1Markers = s1.MarkerHandle;
+        %s1Markers.FaceColorData = uint8(255*[0;0;1;0.5]);  % Alpha=0.3 => 70% transparent red
+        %s1.SizeData = 50;
+        %title(sprintf('Potential Synapses %d', size(uniqueTree,1)));
         
     else
         %sprintf('no unique sites')

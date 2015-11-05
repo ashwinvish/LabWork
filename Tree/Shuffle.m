@@ -1,36 +1,48 @@
-% shuffle axon tree
+
+function [Pot] = Shuffle(allTrees, cellIDs, cellIDsAlx, jitterRadius, Shuffles )
+%SHUFFLE shuffles a trees axon with respect to all other dendrites from
+%remaining trees in the datset
+%   allTrees is a cell with all the tress in the datset
+%   cellIDS is a cell containign IDs of all cells as strings
+%   cellIDsAlx is the Ids of a unique population from CellIDs
+%   jitterRadius is radius by which a tree should be translated in a random
+%   orinetation
+%   Shuffles is the number of times the tree should be moved.
+
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs(i), cellIDsAlx) == 1
         AxonTree = i
-        
-        Shuffles = 1000;
-        
-        [A,B] =  UniqueSites(allTrees,cellIDs,AxonTree,false,true);
+        [A,B] =  UniqueSites(allTrees,cellIDs,AxonTree,false,true, jitterRadius);
         axonTree = zeros(size(A,1),3,Shuffles);
         axonTreeJitter = zeros(size(A,1),3,Shuffles);
         
         for j = 1:1:Shuffles;
-            [axonTree(1:size(A,1),1:3,j), axonTreeJitter(1:size(A,1),1:3,j)]= UniqueSites(allTrees,cellIDs,AxonTree,false,true);
+            [axonTree(1:size(A,1),1:3,j), axonTreeJitter(1:size(A,1),1:3,j)]= UniqueSites(allTrees,cellIDs,AxonTree,false,true, jitterRadius);
         end
         
+        if isempty(axonTree)
+            diffUniq = [];
+            return
+        end
+        
+        load CellAxons.mat
         
         % consider dendritic trees of all remaining cells
         
         remTrees = 1:numel(cellIDs);
         remTrees(AxonTree) = [];
         denTree = [];
-        hold on;
         
         for ii = 1:numel(remTrees)
-            DenTree = allTrees{remTrees(ii)};                % iterating through all trees
-            validNodes =  eval([cellIDs{ii},'_axon']);       % keeping track of axonal nodes
-            if isempty(validNodes)                           % if no aoxon check
+            DenTree = allTrees{remTrees(ii)};                                % iterating through all trees
+            validNodes =  eval([cellIDs{ii},'_axon']);                       % keeping track of axonal nodes
+            if isempty(validNodes)                                           % if no aoxon check
                 validNodes = 1:numel(DenTree);
-            end                                             % if no axon then iterate through all nodes
+            end                                                              % if no axon then iterate through all nodes
             for jj = 1:numel(DenTree)
-                children = DenTree{jj}{2};                   % Consider childern of jj node
-                for nn = 1:numel(children)                   % iterate over all children
+                children = DenTree{jj}{2};                                   % Consider childern of jj node
+                for nn = 1:numel(children)                                   % iterate over all children
                     DnTempx = [DenTree{children(nn)}{3}(1); DenTree{children(nn)}{4}{1}(:,1)];
                     DnTempy = [DenTree{children(nn)}{3}(2); DenTree{children(nn)}{4}{1}(:,2)];
                     DnTempz = -[DenTree{children(nn)}{3}(3); DenTree{children(nn)}{4}{1}(:,3)];
@@ -49,10 +61,11 @@ for i = 1:numel(cellIDs)
         % calculate euclidean distance between axTree and denTree
         
         clear Dist;
-        distThreshold = 1000; % set threshold for distance
+        distThreshold = 1000;                                                % set threshold for distance
+        Dist = zeros(size(axonTreeJitter(:,:,1),1), size(denTree,1));
         
         for kk = 1:1:Shuffles
-            Dist(:,:,kk) = pdist2(axonTreeJitter(:,:,kk), denTree);
+            Dist = pdist2(axonTreeJitter(:,:,kk), denTree);
             [temp1,temp2] = find(Dist>0 & Dist<distThreshold);
             r(1:size(temp1,1),kk) = temp1;
             c(1:size(temp2,1),kk) = temp2;
@@ -60,8 +73,7 @@ for i = 1:numel(cellIDs)
             clear temp2;
             sprintf('Jitter iteration: %d',kk)
         end
-        
-        
+
         % find unique locations on axon
         clear diffUniq;
         clear temp3;
@@ -77,12 +89,13 @@ for i = 1:numel(cellIDs)
             else
                 diffUniq(1:size(temp3,1),ll) = [];
             end
-            i
+            ll
         end
-        
+        %str =  sprintf('JitteredPotSynapse_%s_20um',cell2mat(cellIDs(AxonTree)));
         for mm = 1:1:Shuffles
-            Pot.(sprintf('JitteredPotSynapse_%s_10um',cell2mat(cellIDs(AxonTree))))(mm) = size(diffUniq((diffUniq(:,mm)~=0)),1);
+            Pot(AxonTree,mm) = size(diffUniq((diffUniq(:,mm)~=0)),1);
         end
-        
+        % save('10umJitter.mat', 'Pot');
     end
+end
 end

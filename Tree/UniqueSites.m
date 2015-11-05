@@ -1,19 +1,26 @@
-function [axonTree, axonTreeJitter] = UniqueSites(  AllTrees, cellIDs, AxonTree, DisplayTree, jitter)
-%UNTITLED23 Summary of this function goes here
-%   Detailed explanation goes here
+function [axonTree, axonTreeJitter] = UniqueSites(AllTrees, cellIDs, AxonTree, DisplayTree, jitter, jitterRadius)
+%UNIQUESITES give the number of unique sites on the axon of a tree that are
+%withing a certain radius of the other trees
+%   Alltrees is a cell with node representation of all trees
+%   cellIDs is a cell with IDs as strings for all cells in the datset
+%   AxonTree is a scalar of the trees whose axon is being considered
+%   DisplayTree ture or false to display the tree
+%   jitter true or false to jitter or not in a random orientation
+%   jitterRadius is the radius wihthin which to jitter the tree.
+
+
 load CellAxons.mat
 
-% Plot axon of presynaptic cells and dendrites of all postsynaptic cells
 
-allTrees = AllTrees;
+ % Presynaptic Cell
+AxnTree = AllTrees{AxonTree};
 
-% Presynaptic Cell
-AxnTree = allTrees{AxonTree};
-
-% Plot the presynaptic cell
+% Plot the presynaptic cell ( not working )
 
 if DisplayTree == true
-    DisplayTree(AxnTree,[1],false,eval([cellIDs{AxonTree},'_axon']),[1 0.5 0.3], allPreSynapse{AxonTree}, allPostSynapse{AxonTree});
+    hold on;
+    DisplayTree(AxnTree,[1],true,eval([cellIDs{AxonTree},'_axon']),[1 0.5 0.3]);
+    %DisplayTree(AxnTree,[1],true,eval([cellIDs{AxonTree},'_axon']),[1 0.5 0.3]);
 end
 
 
@@ -21,7 +28,6 @@ end
 
 inducingNodes = eval([cellIDs{AxonTree},'_axon']);
 axonTree = [];
-jitterRadius = 10*1000 ; % in nm
 jitterXYZ = [rand*jitterRadius, rand*jitterRadius, -1*rand*jitterRadius];
 axonTreeJitter = [];
 
@@ -38,6 +44,7 @@ for kk=1:numel(AxnTree)
                 hold on;
             end
             axonTree = [axonTree; Axtempx Axtempy Axtempz];
+            
             if jitter == true
                 AxtempxJitter = Axtempx+jitterXYZ(1);
                 AxtempyJitter = Axtempy+jitterXYZ(2);
@@ -61,7 +68,6 @@ if DisplayTree == true
     plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
     daspect([1 1 1]); % make aspect ratio [1 1 1]
 end
-
 
 
 end
