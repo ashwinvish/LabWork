@@ -4,6 +4,12 @@ if nargin<3; newFigure=true; end;
 if nargin<2; colorString='k'; end;
 [nodes,edges,radii,nodeTypes,abort] = newReadSWCfile(fileName,validNodeTypes);
 if newFigure; figure;hold; end;
+
+nodes(:,1) = nodes(:,1) * 0.36; % xresolution in nm
+nodes(:,2) = nodes(:,2) * 0.36; % yresolution in nm
+nodes(:,3) = nodes(:,3) * 2; % zresolition in nm
+
+
 for kk=1:size(edges,1)
  plot3([nodes(edges(kk,1),2); nodes(edges(kk,2),2)],[nodes(edges(kk,1),1); nodes(edges(kk,2),1)],[nodes(edges(kk,1),3); nodes(edges(kk,2),3)],colorString);
 end

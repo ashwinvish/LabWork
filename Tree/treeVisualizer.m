@@ -43,8 +43,10 @@ for kk=1:numel(tree)
             tempy=[tree{children(mm)}{3}(2); tree{children(mm)}{4}{1}(:,2); tree{kk}{3}(2)];
             tempz=-[tree{children(mm)}{3}(3); tree{children(mm)}{4}{1}(:,3); tree{kk}{3}(3)];
         end
-        if ismember(kk,inducingNodes) && ismember(children(mm),inducingNodes) % hilight all axonal nodes or all inducing nodes
+        if ismember(kk,inducingNodes) && ismember(children(mm),inducingNodes) % highlight all axonal nodes or all inducing nodes
             h =  plot3(tempx,tempy,tempz,'color',rndclr{2},'lineWidth',2);
+           % str = sprintf('%d',kk);
+            %text(tempx(1),tempy(1),tempz(1), str);
             %h.Color(4) = 0.4; %  transparency 0-1
         else
             if ismember(kk,validNodes)

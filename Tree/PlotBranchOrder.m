@@ -1,21 +1,21 @@
 % plot Branching order of all cells
-% 
-% figure();
-% h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
-% for i =1:length(cellIDs)
-%     [Branches{i}, Terminals{i}, BranchOrder{i}] = TreeBranches(allTrees{i});
-%     axes(h(i));
-%     title(sprintf('Cell ID %s', cellIDs{i}));
-%     BranchOrderVisualizer(allTrees{i},[1],[BranchOrder{i}]);
-% end
-% 
-% figure();
-% h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
-% for i =1:length(cellIDs)
-%     axes(h(i));
-%     histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]); 
-%     title(sprintf('Cell ID %s', cellIDs{i}));
-% end
+
+figure();
+h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
+for i =1:length(cellIDs)
+    [Branches{i}, Terminals{i}, BranchOrder{i}] = TreeBranches(allTrees{i});
+    axes(h(i));
+    title(sprintf('Cell ID %s', cellIDs{i}));
+    BranchOrderVisualizer(allTrees{i},[1],[BranchOrder{i}]);
+end
+
+figure();
+h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
+for i =1:length(cellIDs)
+    axes(h(i));
+    histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]); 
+    title(sprintf('Cell ID %s', cellIDs{i}));
+end
 
 figure();
 [rs,cs] = cellfun(@size,allSpine);

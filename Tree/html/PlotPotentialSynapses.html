@@ -1,0 +1,229 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>PlotPotentialSynapses</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-06"><meta name="DC.source" content="PlotPotentialSynapses.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Potentail Synapse Analysis</span>
+
+PotSites = [];
+PotSitesTemp = [];
+<span class="comment">%PotentialStites = [];</span>
+index = 1;
+index2 = 1
+cellIDAlxSparse = {<span class="string">'Int1_4'</span>,<span class="string">'Int1_5'</span>,<span class="string">'Int1_6'</span>,<span class="string">'Int1_7'</span>,<span class="string">'Int2_9'</span>,<span class="string">'Int3_5'</span>,<span class="string">'Int3_6'</span>};
+
+<span class="keyword">for</span> i = 1:numel(cellIDs)
+    <span class="keyword">if</span> ismember(cellIDs(i),cellIDAlxSparse) == 1
+        <span class="comment">%figure;</span>
+        myCell{index} = [];
+        <span class="keyword">for</span> j = 1:numel(cellIDs)
+            <span class="comment">%subplot(3,8,j);</span>
+            [PotSitesTemp]= PotentialSites(allTrees, cellIDs, i,j,false,false);
+            <span class="keyword">if</span> ~isempty(PotSitesTemp)
+                plot(index2,length(PotSitesTemp),<span class="string">'ko'</span>, <span class="string">'MarkerSize'</span> , 20, <span class="string">'MarkerFaceColor'</span>,<span class="string">'k'</span>);
+                hold <span class="string">on</span>;
+            <span class="keyword">end</span>
+            <span class="comment">%[PotSites] = [PotSitesTemp; PotSites];</span>
+            myCell{index}{j} = PotSitesTemp;
+            pause (1);
+        <span class="keyword">end</span>
+        <span class="comment">%suptitle(cellIDs(i));</span>
+        plot(index2, sum(cellfun(@length,myCell{1,i}))/ length(find(cellfun(@length,myCell{1,i})~=0)),<span class="string">'o'</span>, <span class="string">'MarkerSize'</span> , 10, <span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+        ActualMeanPotSynapse(index2) = sum(cellfun(@length,myCell{1,i}))/ length(find(cellfun(@length,myCell{1,i})~=0));
+        index2 = index2+1
+    <span class="keyword">end</span>
+    <span class="comment">%    PotentialStites{index} = PotSites;</span>
+
+    index = index+1
+<span class="keyword">end</span>
+axis <span class="string">square</span>;
+box <span class="string">off</span>;
+ylabel(<span class="string">'Number of potential Synapses'</span>, <span class="string">'FontName'</span>, <span class="string">'Arial'</span>, <span class="string">'FontSize'</span>, 20);
+xlabel(<span class="string">'Cell number'</span>, <span class="string">'FontName'</span>, <span class="string">'Arial'</span>, <span class="string">'FontSize'</span>, 20);
+set(gca, <span class="string">'FontName'</span>, <span class="string">'Arial'</span>, <span class="string">'FontSize'</span>, 20);
+set(gcf,<span class="string">'color'</span>,<span class="string">'w'</span>);
+set(gca,<span class="string">'YLim'</span>,[0 10]);
+</pre><pre class="codeoutput error">Error: File: /usr/people/ashwinv/seungmount/research/Ashwin/Scripts/Tree/PlotPotentialSynapses.m Line: 47 Column: 33
+Expression or statement is incorrect--possibly unbalanced (, {, or [.
+</pre><pre class="codeinput">figure();
+
+jitter5 = load(<span class="string">'5umJitter.mat'</span>,
+jitter10 = load(<span class="string">'10umJitter.mat'</span>,<span class="string">'Pot'</span>);
+jitter20 = load(<span class="string">'20umJitter.mat'</span>,<span class="string">'Pot'</span>);
+jitter30 = load(<span class="string">'30umJitter.mat'</span>,<span class="string">'Pot'</span>);
+
+
+meanJitter10 = [mean(jitter10.Pot(4,:)), mean(jitter10.Pot(5,:)), mean(jitter10.Pot(6,:)) <span class="keyword">...</span>
+    mean(jitter10.Pot(7,:)), mean(jitter10.Pot(16,:)), mean(jitter10.Pot(21,:)) <span class="keyword">...</span>
+    mean(jitter10.Pot(22,:))];
+
+meanJitter20 = [mean(jitter20.Pot(4,:)), mean(jitter20.Pot(5,:)), mean(jitter20.Pot(6,:)) <span class="keyword">...</span>
+    mean(jitter20.Pot(7,:)), mean(jitter20.Pot(16,:)), mean(jitter20.Pot(21,:)) <span class="keyword">...</span>
+    mean(jitter20.Pot(22,:))];
+
+meanJitter30 = [mean(jitter30.Pot(4,:)), mean(jitter30.Pot(5,:)), mean(jitter30.Pot(6,:)) <span class="keyword">...</span>
+    mean(jitter30.Pot(7,:)), mean(jitter30.Pot(16,:)), mean(jitter30.Pot(21,:)) <span class="keyword">...</span>
+    mean(jitter30.Pot(22,:))];
+
+plot(1:7, meanJitter10, <span class="string">'-or'</span>,  <span class="string">'MarkerSize'</span> , 20, <span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>, <span class="string">'LineWidth'</span>,2 );
+hold <span class="string">on</span>;
+plot(1:7, meanJitter20, <span class="string">'-og'</span>,  <span class="string">'MarkerSize'</span> , 20, <span class="string">'MarkerFaceColor'</span>,<span class="string">'g'</span> , <span class="string">'LineWidth'</span>,2);
+plot(1:7, meanJitter30, <span class="string">'-ob'</span>,  <span class="string">'MarkerSize'</span> , 20, <span class="string">'MarkerFaceColor'</span>,<span class="string">'b'</span> , <span class="string">'LineWidth'</span>,2);
+plot(1:7, ActualMeanPotSynapse, <span class="string">'-ok'</span>, <span class="string">'MarkerSize'</span> , 20, <span class="string">'MarkerFaceColor'</span>,<span class="string">'k'</span> , <span class="string">'LineWidth'</span>,2);
+
+
+axis <span class="string">square</span>;
+box <span class="string">off</span>;
+ylabel(<span class="string">'Number of potential Synapses'</span>, <span class="string">'FontName'</span>, <span class="string">'Arial'</span>, <span class="string">'FontSize'</span>, 20);
+xlabel(<span class="string">'Cell number'</span>, <span class="string">'FontName'</span>, <span class="string">'Arial'</span>, <span class="string">'FontSize'</span>, 20);
+set(gca, <span class="string">'FontName'</span>, <span class="string">'Arial'</span>, <span class="string">'FontSize'</span>, 20);
+set(gcf,<span class="string">'color'</span>,<span class="string">'w'</span>);
+<span class="comment">%set(gca,'YLim',[0 10);</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Potentail Synapse Analysis
+
+PotSites = [];
+PotSitesTemp = [];
+%PotentialStites = [];
+index = 1;
+index2 = 1
+cellIDAlxSparse = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_9','Int3_5','Int3_6'};
+
+for i = 1:numel(cellIDs)
+    if ismember(cellIDs(i),cellIDAlxSparse) == 1
+        %figure;
+        myCell{index} = [];
+        for j = 1:numel(cellIDs)
+            %subplot(3,8,j);
+            [PotSitesTemp]= PotentialSites(allTrees, cellIDs, i,j,false,false);
+            if ~isempty(PotSitesTemp)
+                plot(index2,length(PotSitesTemp),'ko', 'MarkerSize' , 20, 'MarkerFaceColor','k');
+                hold on;
+            end
+            %[PotSites] = [PotSitesTemp; PotSites];
+            myCell{index}{j} = PotSitesTemp;
+            pause (1);
+        end
+        %suptitle(cellIDs(i));
+        plot(index2, sum(cellfun(@length,myCell{1,i}))/ length(find(cellfun(@length,myCell{1,i})~=0)),'o', 'MarkerSize' , 10, 'MarkerFaceColor','r');
+        ActualMeanPotSynapse(index2) = sum(cellfun(@length,myCell{1,i}))/ length(find(cellfun(@length,myCell{1,i})~=0));
+        index2 = index2+1
+    end
+    %    PotentialStites{index} = PotSites;
+    
+    index = index+1
+end
+axis square;
+box off;
+ylabel('Number of potential Synapses', 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Cell number', 'FontName', 'Arial', 'FontSize', 20);
+set(gca, 'FontName', 'Arial', 'FontSize', 20);
+set(gcf,'color','w');
+set(gca,'YLim',[0 10]);
+
+
+%%
+
+figure();
+
+jitter5 = load('5umJitter.mat', 
+jitter10 = load('10umJitter.mat','Pot');
+jitter20 = load('20umJitter.mat','Pot');
+jitter30 = load('30umJitter.mat','Pot');
+
+
+meanJitter10 = [mean(jitter10.Pot(4,:)), mean(jitter10.Pot(5,:)), mean(jitter10.Pot(6,:)) ...
+    mean(jitter10.Pot(7,:)), mean(jitter10.Pot(16,:)), mean(jitter10.Pot(21,:)) ...
+    mean(jitter10.Pot(22,:))];
+
+meanJitter20 = [mean(jitter20.Pot(4,:)), mean(jitter20.Pot(5,:)), mean(jitter20.Pot(6,:)) ...
+    mean(jitter20.Pot(7,:)), mean(jitter20.Pot(16,:)), mean(jitter20.Pot(21,:)) ...
+    mean(jitter20.Pot(22,:))];
+
+meanJitter30 = [mean(jitter30.Pot(4,:)), mean(jitter30.Pot(5,:)), mean(jitter30.Pot(6,:)) ...
+    mean(jitter30.Pot(7,:)), mean(jitter30.Pot(16,:)), mean(jitter30.Pot(21,:)) ...
+    mean(jitter30.Pot(22,:))];
+
+plot(1:7, meanJitter10, '-or',  'MarkerSize' , 20, 'MarkerFaceColor','r', 'LineWidth',2 );
+hold on;
+plot(1:7, meanJitter20, '-og',  'MarkerSize' , 20, 'MarkerFaceColor','g' , 'LineWidth',2);
+plot(1:7, meanJitter30, '-ob',  'MarkerSize' , 20, 'MarkerFaceColor','b' , 'LineWidth',2);
+plot(1:7, ActualMeanPotSynapse, '-ok', 'MarkerSize' , 20, 'MarkerFaceColor','k' , 'LineWidth',2);
+
+
+axis square;
+box off;
+ylabel('Number of potential Synapses', 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Cell number', 'FontName', 'Arial', 'FontSize', 20);
+set(gca, 'FontName', 'Arial', 'FontSize', 20);
+set(gcf,'color','w');
+%set(gca,'YLim',[0 10);
+
+
+
+##### SOURCE END #####
+--></body></html>

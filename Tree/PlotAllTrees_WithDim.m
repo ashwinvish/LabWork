@@ -36,7 +36,7 @@ PlotViews(gcf);
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
+        DisplayTDiree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
         %DisplayTree(allTrees{kk},[1],true,[1 0.5 0.3]);                              % plot without hilighting axon
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
         DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1], allPreSynapse{kk}, allPost{kk});

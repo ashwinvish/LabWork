@@ -7,6 +7,7 @@ function DisplayTree( tree, visualNodes, newFig, axonHighlight, color, presynaps
 %   presynapses are the presynaptic locations
 %   postsynapses are the postsynaptic locations
 
+load CellAxons.mat;
 
 
 if nargin < 7

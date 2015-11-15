@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;
 clc;
 clear all;
+resolution= [5,5,45];
 
 % Axonal nodes for all the cells
 Int1_1_axon = [];
@@ -9,7 +10,7 @@ Int1_3_axon = [1,73];
 Int1_4_axon = [30 42 43 44 45 47 48 41 52 49 50 51 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74];
 Int1_5_axon = [56 106 107 109 110 114 115 116 159 160 161 162 163 164 165 166 167 169 170 171 168 77 80 81 82 84 86 87 85 92 99 100 103 115 117 123 125 126 137 139 150 151 153 127 124 128 131 132 134 140 143 152 154 155 156 157 158 136 138 141 142 144 106 110 114 116 133 135 145 146 147 148 149 ];
 Int1_6_axon = [20 82  96 97 98 133 138 143 147 149 150 156 154 148 151 152 123  126 132 128 129 130 134 140 142 153 165 139 141 155 157 159 160 163 162 158 164 166 131 120 135 145 161 167 168 169 170 171 172 129 136 144 146 137 74 118 99];
-Int1_7_axon = [9 30 75 81 99 115 120 128 110 114 116 117 121 122 123 76 107];
+Int1_7_axon = [9 30 75 81 99 115 120 128 110 114 116 117 121 122 123 129 76 107];
 Int2_1_axon = [2 5 7 14 15 25 26 73];
 Int2_2_axon = [5 84];
 Int2_3_axon = [3 67];
@@ -35,22 +36,22 @@ cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};        
 % Convert from .swc file to tree structre with presynapses,postsynapses,
 for kk = 1: numel(cellIDs)
     disp([cellIDs{kk} , '_WithTags.swc']);
-    [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true);
-    [thisTree,rawLength,thisPostSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],5, true);
-    [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true);
+    [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true, resolution);
+    [thisTree,rawLength,thisPostSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],5, true, resolution);
+    [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true, resolution);
     allTrees{kk} = thisTree; allPreSynapse{kk} = thisPreSynapse; allPostSynapse{kk} = thisPostSynapse;allSpine{kk} = thisSpine;
     allRawLength{kk} = rawLength; allPost{kk} = vertcat(thisPostSynapse, thisSpine);
 end
 
 % control cells
 cellControl = {'C1','C2','C3','C4','C5','C6','C7'};
-TreeC1 = generateIrreducibleDoubleLinkedTree_WithDim('C1 [treeline] #317070.swc',[-1:10],5,true);
-TreeC2 = generateIrreducibleDoubleLinkedTree_WithDim('C2 [treeline] #317065.swc',[-1:10],5,true);
-TreeC3 = generateIrreducibleDoubleLinkedTree_WithDim('C3 [treeline] #317067.swc',[-1:10],5,true);
-TreeC4 = generateIrreducibleDoubleLinkedTree_WithDim('C4 [treeline] #317072.swc',[-1:10],5,true);
-TreeC5 = generateIrreducibleDoubleLinkedTree_WithDim('C5 [treeline] #317049.swc',[-1:10],5,true);
-TreeC6 = generateIrreducibleDoubleLinkedTree_WithDim('C6 [treeline] #317054.swc',[-1:10],5,true);
-TreeC7 = generateIrreducibleDoubleLinkedTree_WithDim('C7 [treeline] #316984.swc',[-1:10],5,true);
+TreeC1 = generateIrreducibleDoubleLinkedTree_WithDim('C1 [treeline] #317070.swc',[-1:10],5,true, resolution);
+TreeC2 = generateIrreducibleDoubleLinkedTree_WithDim('C2 [treeline] #317065.swc',[-1:10],5,true, resolution);
+TreeC3 = generateIrreducibleDoubleLinkedTree_WithDim('C3 [treeline] #317067.swc',[-1:10],5,true, resolution);
+TreeC4 = generateIrreducibleDoubleLinkedTree_WithDim('C4 [treeline] #317072.swc',[-1:10],5,true, resolution);
+TreeC5 = generateIrreducibleDoubleLinkedTree_WithDim('C5 [treeline] #317049.swc',[-1:10],5,true, resolution);
+TreeC6 = generateIrreducibleDoubleLinkedTree_WithDim('C6 [treeline] #317054.swc',[-1:10],5,true, resolution);
+TreeC7 = generateIrreducibleDoubleLinkedTree_WithDim('C7 [treeline] #316984.swc',[-1:10],5,true, resolution);
 
 % load anatomical features
 
