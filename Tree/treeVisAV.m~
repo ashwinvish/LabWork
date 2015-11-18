@@ -3,7 +3,7 @@ function [ tree ] = treeVisAV( swcPath )
 %   Detailed explanation goes here
 
 [tree, rawLength,SpecialPositions]= generateIrreducibleDoubleLinkedTree_WithDim(swcPath,[-1,0,2,3,4],2,true,[0.36,0.36,2]);
-validNodes = [1:numel(tree)]; colorString = 'red'; newFigure = false; inducingNodes = []; highlightedNodes = [1];
+validNodes = [1:numel(tree)]; colorString = 'red'; newFigure = false; inducingNodes = [2]; highlightedNodes = [1];
 %figure;
 hold on;
 
@@ -28,7 +28,7 @@ for kk=1:numel(highlightedNodes)
 end
 
 for kk=1:size(SpecialPositions,1)
-    plot3(SpecialPositions(kk,2),SpecialPositions(kk,1),-SpecialPositions(kk,3),'Marker','o','MarkerSize',2,'Color','blue');
+    plot3(SpecialPositions(kk,2),SpecialPositions(kk,1),-SpecialPositions(kk,3),'-');
 end
 
 view(-180,90);
