@@ -2,9 +2,9 @@
 % plot Trees
 
 DisplayTree(allTrees{5},[1],true,eval([cellIDs{5},'_axon']),[1 0.5 0.3])    % 1_5
-DisplayTree(allTrees{2},[1],false,[],[1 0.3 1]);                            % 1_2
-DisplayTree(allTrees{9},[1],false,[],[1 0.3 1])                             % 2_2
-DisplayTree(allTrees{22},[1],false,[],[1 0.5 0.3])                          % 3_6
+DisplayTree(allTrees{2},[1],false,eval([cellIDs{2},'_axon']),[1 0.3 1]);                            % 1_2
+DisplayTree(allTrees{9},[1],false,eval([cellIDs{9},'_axon']),[1 0.3 1])                             % 2_2
+DisplayTree(allTrees{22},[1],false,eval([cellIDs{22},'_axon']),[1 0.5 0.3])                          % 3_6
 
 hold on;
 

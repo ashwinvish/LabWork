@@ -1,9 +1,16 @@
-function [ tree ] = treeVisAV( swcPath )
+function [ tree, SpecialPositions ] = treeVisAV( swcPath, highlightedNodes )
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
-[tree, rawLength,SpecialPositions]= generateIrreducibleDoubleLinkedTree_WithDim(swcPath,[-1,0,2,3,4],2,true,[0.36,0.36,2]);
-validNodes = [1:numel(tree)]; colorString = 'red'; newFigure = false; inducingNodes = []; highlightedNodes = [1];
+if strcmp(swcPath,'fish3075_118-axons.swc') == 1
+    resolution = [0.36,0.36,1];
+else
+    resolution = [0.36,0.36,2];
+end
+
+
+[tree, rawLength,SpecialPositions]= generateIrreducibleDoubleLinkedTree_WithDim(swcPath,[-1,0,2,3,4],2,true,resolution);
+validNodes = [1:numel(tree)]; colorString = 'red'; newFigure = false; inducingNodes = []; 
 %figure;
 hold on;
 
@@ -18,13 +25,16 @@ for kk=1:numel(tree)
         else
             if ismember(kk,validNodes)
                 plot3(tempy,tempx,tempz,'black');
+                %plot3(tempy,tempx,tempz, 'Marker','o','MarkerSize',2,'Color','black');
             end
         end
     end
 end
 
 for kk=1:numel(highlightedNodes)
-    plot3(tree{highlightedNodes(kk)}{3}(2),tree{highlightedNodes(kk)}{3}(1),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize',5,'Color','r')
+    plot3(tree{highlightedNodes(kk)}{3}(2),tree{highlightedNodes(kk)}{3}(1),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize',5,'Color','r', 'MarkerFaceColor','r')
+    str = sprintf('%d', highlightedNodes(kk));
+    text(tree{highlightedNodes(kk)}{3}(2),tree{highlightedNodes(kk)}{3}(1),-tree{highlightedNodes(kk)}{3}(3),str);
 end
 
 for kk=1:size(SpecialPositions,1)
@@ -32,6 +42,7 @@ for kk=1:size(SpecialPositions,1)
 end
 
 view(-180,90);
+title(swcPath);
 % for ll=1:numel(tree)
 %     [x,y,z] =  [tree{1,ll}{3}(1),tree{1,ll}{3}(2),tree{1,ll}{3}(3)];
 %     scatter3(x,y,-z,'Marker','o','MarkerSize','5','MarkerFaceColor','b');

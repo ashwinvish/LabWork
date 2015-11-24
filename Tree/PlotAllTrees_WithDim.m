@@ -64,8 +64,8 @@ for kk = 1:numel(cellIDs)
     if ismember(cellIDs{kk},cellIDsAlx)==1
         index = index+1;
         axes(ha(index));
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3],allPreSynapse{kk}, allPost{kk});
-        %DisplayTree(allTrees{4},[1],true,[1 0.5 0.3]);
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3],allPreSynapse{kk}, allPost{kk});
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3]);
         view(-150,35);
         title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
     else

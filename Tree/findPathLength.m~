@@ -1,4 +1,4 @@
-function[lengthToNode] = findPathLength(fileName,resolution,queryNodes,validNodeTypes)
+function[lengthToNode] = findPathLength(fileName,resolution,synapticNodes,validNodeTypes)
 % Input synapticNodes need to be in pixel coordinates ONLY
 
 if nargin < 4
@@ -10,12 +10,12 @@ nodes(:,1) = nodes(:,1)*resolution(1);
 nodes(:,2) = nodes(:,2)*resolution(2);
 nodes(:,3) = nodes(:,3)*resolution(3);
 
-%specialPositions = nodes(ismember(nodeType,validNodeTypes),:);
+specialPositions = nodes(ismember(nodeType,SpecialNodeType),:);
 
-for i =  1:size(queryNodes,1)
-    tempx = nodes(:,1) - queryNodes(i,1);
-    tempy = nodes(:,2) - queryNodes(i,2);
-    tempz = nodes(:,3) - queryNodes(i,3);
+for i =  1:size(synapticNodes,1)
+    tempx = nodes(:,1) - synapticNodes(i,1);
+    tempy = nodes(:,2) - synapticNodes(i,2);
+    tempz = nodes(:,3) - synapticNodes(i,3);
     
     %TempDiff = abs([tempx,tempy,tempz]);
     TempDiff = sqrt(tempx.^2+tempy.^2+tempz.^2);

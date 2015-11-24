@@ -43,7 +43,7 @@ for i = 1:numel(cellIDs)
             
             for ii = 1:numel(cellIDs)
                 denTree = [];
-                DenTree = allTrees{ii};                                % iterating through all trees
+                DenTree = allTrees{ii};                                         % iterating through all trees
                 validNodes =  eval([cellIDs{ii},'_axon']);                       % keeping track of axonal nodes
                 if isempty(validNodes)                                           % if no axon check
                     validNodes = 1:numel(DenTree);
