@@ -1,12 +1,26 @@
-[tree3003,SpecialPositions3003] = treeVis('fish3003_ch1-exported-000.swc',1);
-lin3003 = lineage(tree3003,1,1);
+function [LMPathlen] = LMPathLengths(swcPath,rootNode, NodeType)
+% LMPATHLENGTHS returns the pathlength of all nodes of type NodeType
+%   swcPath is the path to the .swc file
+%   rootNode is the location of the first node in the tree, usally 1
+%   NodeType is the nodes for which pathlength is required, e.g 2 for axon
+
+[tree,SpecialPositions] = treeVisAV(swcPath,rootNode);
 index = 1;
-for i = 1:numel(tree3003)
-    NodeCoords(i,:) = tree3003{i}{3};
-    if ismember(NodeCoords(i,:),SpecialPositions3003,'rows')
-        NodeCoordsAxon(index,:) = tree3003{i}{3};
+NodeCoords = zeros(numel(tree),3);
+for i = 1:numel(tree)
+    NodeCoords(i,:) = tree{i}{3};
+    if ismember(NodeCoords(i,:),SpecialPositions,'rows')
+        NodeCoordsAxon(index,:) = tree{i}{3};
         index = index+1;
     end
 end
 
-    length3003 = findPathLength('fish3003_ch1-exported-000.swc',[0.36,0.36,2],NodeCoordAxon,2);
+
+if strcmp(swcPath,'fish3075_118-axons.swc') == 1
+    resolution = [0.36,0.36,1];
+else
+    resolution = [0.36,0.36,2];
+end
+
+
+LMPathlen = findPathLength(swcPath,tree,resolution,NodeCoordsAxon,NodeType);

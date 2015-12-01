@@ -1,6 +1,11 @@
-function treeVis(swcPath)
+function [tree] = treeVis(swcPath, displyFigure)
+% TREEVIS is to visualize a tree, given an .swc file
+%		swcPath is the path to the .swc file
+%		displayFigure, ture or false
+
 [nodes,edges,radii,nodeTypes,abort] = newReadSWCfile(swcPath,[-1 0 1 2 3 4 5]);
-resolution = [0.36,0.36,2];
+%resolution = [0.36,0.36,2]; LM resolution
+resolution = [5,5,45];
 
 nodes(:,1) = nodes(:,1) * resolution(1); % xresolution in nm
 nodes(:,2) = nodes(:,2) * resolution(2); % yresolution in nm
@@ -9,6 +14,7 @@ nodes(:,3) = nodes(:,3) * resolution(3); % zresolition in nm
 
 tree = generateIrreducibleDoubleLinkedTree(nodes,edges,pi*radii.^2);
 validNodes = [1:numel(tree)]; colorString = 'red'; newFigure = true; inducingNodes = []; highlightedNodes = [];
+if displayFigure == true
 figure;hold;
 for kk=1:numel(tree)
     children = tree{kk}{2};
@@ -28,6 +34,7 @@ end
 for kk=1:numel(highlightedNodes)
     plot3(tree{highlightedNodes(kk)}{3}(2),tree{highlightedNodes(kk)}{3}(1),tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize',5,'Color','r')
     %plot3(tree{highlightedNodes(kk)}{3}(2)/0.397,tree{highlightedNodes(kk)}{3}(1)/0.397,-tree{highlightedNodes(kk)}{3}(3)/0.5,'Marker','o','MarkerSize',5,'Color','r')
+end
 end
 
 function tree = generateIrreducibleDoubleLinkedTree(nodes,edges,areas)

@@ -1,11 +1,11 @@
-function [lengthToNode ] = findPathLength(fileName,tree,resolution,queryNodes,validNodeTypes)
+function [lengthToNode ] = findPathLengthNew(fileName,tree,resolution,queryNodes,validNodeTypes)
 %FINDPATHLENGTH is to determine the pathlength of the queriedNodes
 %   fileName is the .swc file for the tree
 %   tree is the tree structre associated with the fileName
 %   resolution is the resolution of each pixel [5,5,45]
 %   queryNodes are the cartesian coordinated for the nodes that are being
 %   queried
-%   validNodeTypes legacy param
+%   validNodeTypes legacy 
 
 if nargin < 5
     validNodeTypes = [0 2 3 4];

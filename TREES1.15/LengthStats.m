@@ -59,6 +59,31 @@ hold off;
 
 %% Plot length of trees
 
+% axLength = [];
+% clear temp;
+% 
+% for i = 1:size(cellIDs,2)
+%     if eval([cellIDs{i},'_axon'])>0
+%         for jj = 1:numel(eval([cellIDs{i},'_axon']))
+%             AxnNodes = eval([cellIDs{i},'_axon']);
+%             treeNodes(jj,1:3) = allTrees{i}{AxnNodes(jj)}{3};
+%         end
+%         lengthToPreNodeTest = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],treeNodes);
+%         allLengthToPreNodeTest{i} = lengthToPreNodeTest;
+%         treeNodes = [];
+%         temp(1:size(allLengthToPreNodeTest{i},1)-1,i) = diff(sort(allLengthToPreNodeTest{i}));
+%         axLength = [axLength,sum(temp(:,i))];
+%         
+%     else
+%         axLength = [axLength,0];
+%         continue;
+%     end
+% end
+% denLength = cell2mat(allRawLength)-axLength;
+% sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength));
+
+
+%%
 axLength = [];
 clear temp;
 
@@ -68,10 +93,10 @@ for i = 1:size(cellIDs,2)
             AxnNodes = eval([cellIDs{i},'_axon']);
             treeNodes(jj,1:3) = allTrees{i}{AxnNodes(jj)}{3};
         end
-        lengthToPreNodeTest = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],treeNodes);
+        lengthToPreNodeTest = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],treeNodes);
         allLengthToPreNodeTest{i} = lengthToPreNodeTest;
         treeNodes = [];
-        temp(1:size(allLengthToPreNodeTest{i},1)-1,i) = diff(sort(allLengthToPreNodeTest{i}));
+         temp(1:size(allLengthToPreNodeTest{i},1)-1,i) = diff(sort(allLengthToPreNodeTest{i}));
         axLength = [axLength,sum(temp(:,i))];
         
     else
@@ -81,6 +106,7 @@ for i = 1:size(cellIDs,2)
 end
 denLength = cell2mat(allRawLength)-axLength;
 sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength));
+
 
 %%
 

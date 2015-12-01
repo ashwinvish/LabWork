@@ -1,0 +1,30 @@
+% plot all LM traces in same orintation with axon in blue, dendrtic tree is
+% not complete, so in some cases the root node is misleading.
+
+ha = tight_subplot(2,3,[.05 .05],[.05 .1],[.01 .01]);
+
+treetreeVisAV('fish3003_ch1-exported-000.swc',1);
+PathLen{1} = LMPathLengths('fish3003_ch1-exported-000.swc',1,2)
+axes(ha(1));
+
+treeVisAV('fish2017_ch2.swc',1);
+PathLen{2} = LMPathLengths('fish2017_ch2.swc',1,2)
+axes(ha(2));
+
+treeVisAV('fish1059_ch2-axons.swc',1);
+PathLen{3} = LMPathLengths('fish1059_ch2-axons.swc',1,2)
+axes(ha(3));
+
+treeVisAV('fish3075_118-axons.swc',1);
+PathLen{4} = LMPathLengths('fish3075_118-axons.swc',1,2)
+axes(ha(4));
+
+treeVisAV('fish1006-axon.swc',1);
+PathLen{5} = LMPathLengths('fish1006-axon.swc',1,2)
+axes(ha(5));
+
+treeVisAV('fish1013_ch2.swc',1);
+PathLen{6} = LMPathLengths('fish1013_ch2.swc',1,2)
+axes(ha(6));
+
+  

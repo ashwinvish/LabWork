@@ -9,7 +9,6 @@ function DisplayTree( tree, visualNodes, newFig, axonHighlight, color, presynaps
 
 load CellAxons.mat;
 
-
 if nargin < 7
     postsynapses = [];
     if nargin < 6

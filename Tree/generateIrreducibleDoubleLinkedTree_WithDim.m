@@ -45,7 +45,8 @@ for kk = 2:numelNodes
         tmpParent = newTmpParent;
     end
     path = [path; nodes(tmpParent,:)]; rawPathLengths = sqrt(sum(diff(path,1,1).^2,2)); rawLength = rawLength + sum(rawPathLengths);
-    tree{kk}{1} = tmpParent; tree{tmpParent}{2} = [tree{tmpParent}{2} kk];
+    tree{kk}{1} = tmpParent; 
+    tree{tmpParent}{2} = [tree{tmpParent}{2} kk];
     tree{kk}{3} = nodes(kk,:);
     tree{kk}{4}{1} = path; tree{kk}{4}{2} = rawPathLengths; tree{kk}{4}{4} = pathAreas;
 end

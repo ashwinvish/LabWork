@@ -184,10 +184,10 @@ switch format,
             dA (ward, idpar (ward)) = 1;
         end
         tree.dA = dA;
-        tree.X  =            swc (:, 3)* 5;     % X-locations of nodes on tree
-        tree.Y  =            swc (:, 4)* 5;     % Y-locations of nodes on tree
-        tree.Z  =            swc (:, 5)* 45;     % Z-locations of nodes on tree
-        tree.D  =            swc (:, 6) * 2; % local diameter values of nodes on tree
+        tree.X  =            swc (:, 3)%* 5;     % X-locations of nodes on tree
+        tree.Y  =            swc (:, 4)%* 5;     % Y-locations of nodes on tree
+        tree.Z  =            swc (:, 5)%* 45;     % Z-locations of nodes on tree
+        tree.D  =            swc (:, 6) %* 2; % local diameter values of nodes on tree
         [i1 i2 i3] = unique (swc (:, 2));
         tree.R  = i3;
         tree.rnames = cellstr (num2str (i1))';%{};
