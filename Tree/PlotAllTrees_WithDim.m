@@ -36,18 +36,18 @@ PlotViews(gcf);
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        DisplayTDiree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
-        %DisplayTree(allTrees{kk},[1],true,[1 0.5 0.3]);                              % plot without hilighting axon
+        %DisplayTDiree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
+        DisplayTree(allTrees{kk},[1],false,[],[1 0.5 0.3]);                              % plot without hilighting axon
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1], allPreSynapse{kk}, allPost{kk});
-        %DisplayTree(allTrees{kk},[1],true,[1 0.3 0.1]);
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1], allPreSynapse{kk}, allPost{kk});
+        DisplayTree(allTrees{kk},[1],false,[],[1 0.3 1]);
     else
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1], allPreSynapse{kk}, allPost{kk});
-        %DisplayTree(allTrees{kk},[1],true,[0.3 0.5 1]);
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1], allPreSynapse{kk}, allPost{kk});
+        DisplayTree(allTrees{kk},[1],false,[],[0.3 0.5 1]);
     end
 end
 hold on;
- scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 50,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+ scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','-', 'color','k');                  	% stripe1
 %  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','-','color','k' );                      % stripe2
 
@@ -137,10 +137,10 @@ for kk = 1 : length(allTrees)
 end
 
 %figure();
-scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, rho, 'fill', 'Marker','o', 'MarkerEdgeColor', [0.5 0.5 0.5]);
+scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500, rho, 'fill', 'Marker','o', 'MarkerEdgeColor', [0.5 0.5 0.5]);
 %scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, 'red', 'fill', 'Marker','o' ,'LineWidth', 2,'MarkerEdgeColor', 'k');
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 150,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
 
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
@@ -474,7 +474,7 @@ ylabel('rho')
 % distribution of postsynaptic sites
 %figure(18);
 parfor i = 1:length(cellIDs)
-    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPost{i});
+    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
     %subplot(3,8,i);
     %scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
@@ -493,7 +493,7 @@ parfor i = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
-        lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],allPreSynapse{i});
+        lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
         %       subplot(3,8,i);
         %      scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));

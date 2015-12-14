@@ -49,12 +49,12 @@ plot(2,MeanBranch(2), 'o', 'MarkerFaceColor', cdbx, 'MarkerEdgeColor','none', 'M
 plot(3,MeanBranch(3), 'o', 'MarkerFaceColor', cbarhl, 'MarkerEdgeColor','none', 'MarkerSize', 35 );
 plot([1:3;1:3], [MeanBranch-SdBranch;MeanBranch+SdBranch], 'Color','k','LineWidth',2);
 
- set(gca,'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'FontName', 'Arial', 'FontSize', 40);
- set(gca, 'XLim', [0.5 3.5], 'FontName', 'Arial', 'FontSize', 40);
- set(gcf,'color','w');
- ylabel('Number of branches', 'FontName', 'Arial', 'FontSize', 40);
- axis square;
- box off;
+set(gca,'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim', [0.5 3.5], 'FontName', 'Arial', 'FontSize', 40);
+set(gcf,'color','w');
+ylabel('Number of branches', 'FontName', 'Arial', 'FontSize', 40);
+axis square;
+box off;
 hold off;
 
 %% Plot length of trees

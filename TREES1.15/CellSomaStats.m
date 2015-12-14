@@ -16,15 +16,15 @@ for i = 1:length(steps)-1
     MeanRCEucDist(index) = mean(RCpdist(tempRC));
     index = index+1;
     figure(1);
-    plot(MeanRCEucDist(i)./1000,tempdiffRC,'o', 'MarkerEdgeColor', [0.7,0.7,0.7], 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 20 );
+    plot(MeanRCEucDist(i)./1000,tempdiffRC,'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25 );
     hold on;
 end
 figure(1);
-plot(MeanRCEucDist./1000,RhoDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 20 );
+plot(MeanRCEucDist./1000,RhoDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 35 );
 plot([MeanRCEucDist./1000;MeanRCEucDist./1000], [RhoDiffRC-RhoDiffRC_SD; RhoDiffRC+RhoDiffRC_SD], 'Color','k','LineWidth',2);
-xlabel('Pairwise RC Eucledian distance in \mum', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Pairwise difference in persistence measure \rho', 'FontName', 'Arial', 'FontSize', 20);
-set(gca, 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Pairwise RC distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Difference in persistence measure', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 box off;
 
@@ -35,7 +35,7 @@ b = X\y;
 yCalc2 = X*b;
 Rsq2 = 1 - sum((y - yCalc2).^2)/sum((y - mean(y)).^2);
 plot(MeanRCEucDist'./1000,yCalc2,'-r','LineWidth',2);
-text(max(MeanRCEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2), 'FontName', 'Arial', 'FontSize', 20 );
+text(max(MeanRCEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2), 'FontName', 'Arial', 'FontSize', 40 );
 axis square;
 clear temp;
 
@@ -59,15 +59,15 @@ for i = 1:length(steps)-1
     MeanDVEucDist(index) = mean(DVpdist(tempDV));
     index = index+1;
     figure(2);
-    plot(MeanDVEucDist(i)./1000,tempdiffDV,'o', 'MarkerEdgeColor', [0.7,0.7,0.7], 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 20   );
+    plot(MeanDVEucDist(i)./1000,tempdiffDV,'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25);
     hold on;
 end
 figure (2);
-plot(MeanDVEucDist./1000,RhoDiffDV,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 20 );
+plot(MeanDVEucDist./1000,RhoDiffDV,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 35 );
 set(gca,'XLim',[0 23]);
 plot([MeanDVEucDist./1000 ; MeanDVEucDist./1000], [RhoDiffDV-RhoDiffDV_SD; RhoDiffDV+RhoDiffDV_SD], 'Color','k','LineWidth',2);
-xlabel('Pairwise DV Eucledian distance in \mum', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Pairwise difference in persistence measure \rho', 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Pairwise DV distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Difference in persistence measure', 'FontName', 'Arial', 'FontSize', 40);
 box off
 
 X = [ones(length(MeanDVEucDist./1000),1) MeanDVEucDist'./1000];
@@ -76,8 +76,8 @@ b = X\y;
 yCalc2 = X*b;
 Rsq2 = 1 - sum((y - yCalc2).^2)/sum((y - mean(y)).^2);
 plot(MeanDVEucDist'./1000,yCalc2,'-r','LineWidth',2);
-text(max(MeanDVEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2) , 'FontName', 'Arial', 'FontSize', 20);
-set(gca, 'FontName', 'Arial', 'FontSize', 20);
+text(max(MeanDVEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2) , 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 axis square;
 clear temp;
@@ -106,35 +106,47 @@ for i = 1:length(cellIDs)
         RhoBarhl = [RhoBarhl,rho(I(i))];
     end
     
-    h = plot(i,rho(I(i)),'o','MarkerSize',20, 'MarkerFaceColor',BarCMap, 'MarkerEdgeColor','none');
+    h = plot(i,rho(I(i)),'o','MarkerSize',25, 'MarkerFaceColor',BarCMap, 'MarkerEdgeColor','none');
     %set(h, 'FaceColor', BarCMap);
     hold on;
     
 end
 
-xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 20);
-set(gca, 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'XLim',[0 25], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 axis square;
 box off
 
 
 figure();
-MeanRhos = [mean(RhoAlx); mean(RhoDbx); mean(RhoBarhl)];
+MeanRhos = [mean(RhoAlx), mean(RhoDbx), mean(RhoBarhl)];
+StdRhos = [std(RhoAlx), std(RhoDbx), std(RhoBarhl)];
 Colors = [calx;cdbx;cbarhl];
- for i = 1:3 
-    h =  bar(i,MeanRhos(i));
-    set(h,'FaceColor',Colors(i,:));
-    hold on;
- end
+hold on;
+
+plot(ones(1,size(RhoAlx,2)), RhoAlx, 'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25);
+plot(2*ones(1,size(RhoDbx,2)), RhoDbx, 'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25);
+plot(3*ones(1,size(RhoBarhl,2)), RhoBarhl, 'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25);
+plot(1,MeanRhos(1),'o', 'MarkerFaceColor', Colors(1,:),'MarkerSize',35);
+plot(2,MeanRhos(2),'o', 'MarkerFaceColor', Colors(2,:),'MarkerSize',35);
+plot(3,MeanRhos(3),'o', 'MarkerFaceColor', Colors(3,:),'MarkerSize',35);
+plot([1:3;1:3], [MeanRhos+StdRhos; MeanRhos-StdRhos], 'Color','k','LineWidth',2);
+
+%  for i = 1:3 
+%     h =  bar(i,MeanRhos(i));
+%     set(h,'FaceColor',Colors(i,:));
+%     hold on;
+%  end
+
+ 
+ set(gca,'XLim', [0 4], 'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'FontName', 'Arial', 'FontSize', 40);
+ ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 40);
+ set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+ set(gcf,'color','w');
  box off
  axis square
- 
- set(gca,'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'FontName', 'Arial', 'FontSize', 20);
- set(gca, 'FontName', 'Arial', 'FontSize', 20);
- set(gcf,'color','w');
- ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 20);
  
 
 

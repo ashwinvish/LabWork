@@ -208,7 +208,7 @@ imagesc(minDistance1000/1000); % in microns
 colorbar;
 
 xlabel('Postsynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
-ylabel('Presynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('PreSynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'FontName', 'Arial', 'FontSize', 40), 'LineWidth',2;
 box off;
 set(gcf,'color','w');

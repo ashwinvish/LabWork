@@ -46,7 +46,7 @@ for kk=1:numel(tree)
         if ismember(kk,inducingNodes) && ismember(children(mm),inducingNodes) % highlight all axonal nodes or all inducing nodes
             h =  plot3(tempx,tempy,tempz,'color',rndclr{2},'lineWidth',2);
             str = sprintf('%d',kk);
-            text(tempx(1),tempy(1),tempz(1), str);
+            % text(tempx(1),tempy(1),tempz(1), str);
             %h.Color(4) = 0.4; %  transparency 0-1
         else
             if ismember(kk,validNodes)
@@ -66,41 +66,41 @@ for kk=1:numel(highlightedNodes)
 end
 
 if ~isempty(specialNodes) % special nodes to be marked and hilighted
-
-for mm = 1
-    for kk=1:size(specialNodes{mm}, 1)
-        if pixelUnits
-            hSyn1 = plot3(specialNodes{mm}(kk,1)*relativeRes(1),specialNodes{mm}(kk,2)*relativeRes(2),-specialNodes{mm}(kk,3)*relativeRes(3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 4,  'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
-%              drawnow;
-%              hMarkers = hSyn1.MarkerHandle;
-%              hMarkers.FaceColorData = uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent 
-        else
-            hSyn1 = plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 5, 'LineWidth', 0.1 , 'MarkerFaceColor',synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
-%               drawnow;
-%               hMarkers = hSyn1.MarkerHandle;
-%               hMarkers.FaceColorData =  uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent red
-        end
-    end
-end
-
-for mm = 2
-    for kk=1:size(specialNodes{mm}, 1)
-        if pixelUnits
-            hSyn2 = plot3(specialNodes{mm}(kk,1)*relativeRes(1),specialNodes{mm}(kk,2)*relativeRes(2),-specialNodes{mm}(kk,3)*relativeRes(3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 4,  'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
-%              drawnow;
-%              hMarkers = hSyn2.MarkerHandle;
-%              hMarkers.FaceColorData = uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent 
-        else
-            hSyn2 = plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 5, 'LineWidth', 0.1 , 'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
-%              drawnow;
-%              hMarkers = hSyn2.MarkerHandle;
-%              hMarkers.FaceColorData =  uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent red
-                   uistack(hSyn2,'top');
+    
+    for mm = 1
+        for kk=1:size(specialNodes{mm}, 1)
+            if pixelUnits
+                hSyn1 = plot3(specialNodes{mm}(kk,1)*relativeRes(1),specialNodes{mm}(kk,2)*relativeRes(2),-specialNodes{mm}(kk,3)*relativeRes(3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 4,  'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
+                %              drawnow;
+                %              hMarkers = hSyn1.MarkerHandle;
+                %              hMarkers.FaceColorData = uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent
+            else
+                hSyn1 = plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 5, 'LineWidth', 0.1 , 'MarkerFaceColor',synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
+                %               drawnow;
+                %               hMarkers = hSyn1.MarkerHandle;
+                %               hMarkers.FaceColorData =  uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent red
+            end
         end
     end
     
-end
-
+    for mm = 2
+        for kk=1:size(specialNodes{mm}, 1)
+            if pixelUnits
+                hSyn2 = plot3(specialNodes{mm}(kk,1)*relativeRes(1),specialNodes{mm}(kk,2)*relativeRes(2),-specialNodes{mm}(kk,3)*relativeRes(3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 4,  'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
+                %              drawnow;
+                %              hMarkers = hSyn2.MarkerHandle;
+                %              hMarkers.FaceColorData = uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent
+            else
+                hSyn2 = plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 5, 'LineWidth', 0.1 , 'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
+                %              drawnow;
+                %              hMarkers = hSyn2.MarkerHandle;
+                %              hMarkers.FaceColorData =  uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent red
+                uistack(hSyn2,'top');
+            end
+        end
+        
+    end
+    
 end
 
 %axis vis3d;

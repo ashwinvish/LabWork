@@ -53,27 +53,31 @@ end
 
 clear axonNodes;
 clear colPathLengthTemp;
+
+%%
+tree4colPathLength = 0;
+
 %%
 %fish1013_ch2.swc
 
-tree6col{1} = [31, 54]
-tree6col{2} =[30,53]
-tree6col{3} =[29,52]
-tree6col{4} =[28,47]
-tree6col{5} =[27,51]
-tree6col{6} =[26,50]
-tree6col{7} =[25,19]
-tree6col{8} =[48,63]
-tree6col{9} =[11,12]
-tree6col{10} =[33,55]
-tree6col{11} =[34,58]
-tree6col{12} =[35,36]
-tree6col{13} =[56,57]
+tree5col{1} = [31, 54]
+tree5col{2} =[30,53]
+tree5col{3} =[29,52]
+tree5col{4} =[28,47]
+tree5col{5} =[27,51]
+tree5col{6} =[26,50]
+tree5col{7} =[25,19]
+tree5col{8} =[48,63]
+tree5col{9} =[11,12]
+tree5col{10} =[33,55]
+tree5col{11} =[34,58]
+tree5col{12} =[35,36]
+tree5col{13} =[56,57]
 
-for i = 1:numel(tree6col)
-    axonNodes = AxonQueryNodes(tree{6},tree6col{i});
-    colPathLengthTemp{i} = findPathLength('fish1013_ch2.swc',tree{6},[0.36,0.36,2],axonNodes);
-    tree6colPathLength{i} = sum(diff(sort(colPathLengthTemp{i})));
+for i = 1:numel(tree5col)
+    axonNodes = AxonQueryNodes(tree{5},tree5col{i});
+    colPathLengthTemp{i} = findPathLength('fish1013_ch2.swc',tree{5},[0.36,0.36,2],axonNodes);
+    tree5colPathLength{i} = sum(diff(sort(colPathLengthTemp{i})));
 end
 
 clear axonNodes;
@@ -81,21 +85,22 @@ clear colPathLengthTemp;
 
 %%
 
-meanLMAxonColPathLengths = [mean(cell2mat(tree1colPathLength)), mean(cell2mat(tree2colPathLength)), mean(cell2mat(tree3colPathLength)), mean(cell2mat(tree6colPathLength))];
-SDLMAxonColPathLengths = [std(cell2mat(tree1colPathLength)), std(cell2mat(tree2colPathLength)), std(cell2mat(tree3colPathLength)), std(cell2mat(tree6colPathLength))];
+meanLMAxonColPathLengths = [mean(cell2mat(tree1colPathLength)), mean(cell2mat(tree2colPathLength)), mean(cell2mat(tree3colPathLength)), 0, mean(cell2mat(tree5colPathLength))];
+SDLMAxonColPathLengths = [std(cell2mat(tree1colPathLength)), std(cell2mat(tree2colPathLength)), std(cell2mat(tree3colPathLength)),0, std(cell2mat(tree5colPathLength))];
 
-x = 1:4;
+x = 1:5;
 hold on;
 
 plot(repmat(x(1),1,size(cell2mat(tree1colPathLength),2)), cell2mat(tree1colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
 plot(repmat(x(2),1,size(cell2mat(tree2colPathLength),2)), cell2mat(tree2colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
 plot(repmat(x(3),1,size(cell2mat(tree3colPathLength),2)), cell2mat(tree3colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(repmat(x(4),1,size(cell2mat(tree6colPathLength),2)), cell2mat(tree6colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(x(4),tree4colPathLength, 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(5),1,size(cell2mat(tree5colPathLength),2)), cell2mat(tree5colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
 
-plot(1:4 , meanLMAxonColPathLengths, 'Marker','o','MarkerSize',20 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
-plot([1:4;1:4], [(meanLMAxonColPathLengths-SDLMAxonColPathLengths) ; (meanLMAxonColPathLengths+SDLMAxonColPathLengths)], 'Color','k','LineWidth',2);
+plot(1:5 , meanLMAxonColPathLengths, 'Marker','o','MarkerSize',20 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
+plot([1:5;1:5], [(meanLMAxonColPathLengths-SDLMAxonColPathLengths) ; (meanLMAxonColPathLengths+SDLMAxonColPathLengths)], 'Color','k','LineWidth',2);
 
-set(gca,'XLim', [1 4] , 'XTick', 1:6, 'FontName', 'Arial', 'FontSize', 20);
+set(gca,'XLim', [1 5] , 'XTick', 1:6, 'FontName', 'Arial', 'FontSize', 20);
 set(gcf,'color','w');
 xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 20);
 ylabel('Collateral Path Length in \mum', 'FontName', 'Arial', 'FontSize', 20);

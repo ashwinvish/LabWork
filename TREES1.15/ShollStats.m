@@ -1,8 +1,7 @@
-
 radius = 10000;
 
 for i = 1:size(cellIDs,2)
-    tree{i} = load_tree([cellIDs{i} , '_WithTags.swc']);
+    tree{i} = load_tree([cellIDs{i} , '_WithTags.swc']); % all values are in nm
     shollIntersections{i}= sholl_tree(tree{i},radius); % concentric circles every radius nm
     plot(1:radius:radius*length(shollIntersections{i}), shollIntersections{i});
     hold on;
@@ -67,10 +66,14 @@ for i = 1:size(ShollBarhlIntersections,1)
     plot(1:radius:radius*length(mean(ShollBarhlIntersections)), mean(ShollBarhlIntersections),'color', cbarhl, 'LineWidth', 2);
     hold on;
 end
+shadedErrorBar((1:radius:radius*length(mean(ShollAlxIntersections))),ShollAlxIntersections,{@mean,@std},{'-','color',calx,'markerfacecolor',calx,'LineWidth',2},1);
+shadedErrorBar((1:radius:radius*length(mean(ShollDbxIntersections))),ShollDbxIntersections,{@mean,@std},{'-','color',cdbx,'markerfacecolor',cdbx,'LineWidth',2},1);
+shadedErrorBar((1:radius:radius*length(mean(ShollBarhlIntersections))),ShollBarhlIntersections,{@mean,@std},{'-','color',cbarhl,'markerfacecolor',cbarhl,'LineWidth',2},1);
 
-set(gca, 'FontSize',20, 'FontName', 'Arial');
-xlabel('Lenght in \mum', 'FontSize',20, 'FontName', 'Arial');
-ylabel('Mean Sholl intersetcions', 'FontSize',20, 'FontName', 'Arial'); 
+
+set(gca, 'FontSize',40, 'FontName', 'Arial','LineWidth',2);
+xlabel('Lenght in \mum', 'FontSize',40, 'FontName', 'Arial');
+ylabel('Mean Sholl intersetcions', 'FontSize',40, 'FontName', 'Arial'); 
 set(gca,'XLim', [0 220]);
 set(gcf,'color','w');
 axis square

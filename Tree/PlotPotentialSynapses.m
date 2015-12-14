@@ -70,16 +70,16 @@ for i = 1:numel(myCell)
 end
 
 [i,j,s] = find(sizeOfMyCell);
-plot(i,s,'o', 'MarkerSize' , 20, 'MarkerFaceColor','k', 'MarkerEdgeColor', 'none');
+plot(i,s,'o', 'MarkerSize' , 25, 'MarkerFaceColor','k', 'MarkerEdgeColor', 'none');
 hold on;
 meanNoJitter = sumOfPotentialSynapses./nonZeroElements;
 meanNoJitter(1) = 0;
-plot(1:7,meanNoJitter, '-o', 'MarkerSize' , 15, 'MarkerFaceColor','r', 'MarkerEdgeColor', 'none', 'LineWidth',2);
+plot(1:7,meanNoJitter, '-o', 'MarkerSize' , 35, 'MarkerFaceColor','r', 'MarkerEdgeColor', 'none', 'LineWidth',2);
 axis square;
 box off;
-ylabel('Potential Synapses', 'FontName', 'Arial', 'FontSize', 20);
-xlabel('Cell number', 'FontName', 'Arial', 'FontSize', 20);
-set(gca,'XLim',[1,7], 'FontName', 'Arial', 'FontSize', 20);
+ylabel('Potential synapses', 'FontName', 'Arial', 'FontSize', 40);
+xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'XLim',[1,7], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 
 %% Plot mean of all potential synapses at different jitter radius
@@ -235,28 +235,28 @@ hold off;
 
 figure;
 hold on
-plot(1:7, mean1(cellsOfInterest), '-or',  'MarkerSize' , 20, 'MarkerFaceColor','r' , 'LineWidth',2);
-plot(1:7, mean5(cellsOfInterest), '-og',  'MarkerSize' , 20, 'MarkerFaceColor','g' , 'LineWidth',2);
-plot(1:7, mean10(cellsOfInterest), '-ob',  'MarkerSize' , 20, 'MarkerFaceColor','b' , 'LineWidth',2);
-plot(1:7, mean15(cellsOfInterest), '-om',  'MarkerSize' , 20, 'MarkerFaceColor','m' , 'LineWidth',2);
-plot(1:7, mean20(cellsOfInterest), '-oc',  'MarkerSize' , 20, 'MarkerFaceColor','c' , 'LineWidth',2);
+plot(1:7, mean1(cellsOfInterest), '-or',  'MarkerSize' , 35, 'MarkerFaceColor','r' , 'LineWidth',2);
+plot(1:7, mean5(cellsOfInterest), '-og',  'MarkerSize' , 35, 'MarkerFaceColor','g' , 'LineWidth',2);
+plot(1:7, mean10(cellsOfInterest), '-ob',  'MarkerSize' , 35, 'MarkerFaceColor','b' , 'LineWidth',2);
+plot(1:7, mean15(cellsOfInterest), '-om',  'MarkerSize' , 35, 'MarkerFaceColor','m' , 'LineWidth',2);
+plot(1:7, mean20(cellsOfInterest), '-oc',  'MarkerSize' , 35, 'MarkerFaceColor','c' , 'LineWidth',2);
 %plot(1:7, meanNoJitter, '-ok', 'MarkerSize' , 20, 'MarkerFaceColor','k', 'LineWidth',2);
-plot(1:7, sumOfPotentialSynapses, '-ok', 'MarkerSize' , 20, 'MarkerFaceColor','k', 'LineWidth',2);
+plot(1:7, sumOfPotentialSynapses, '-ok', 'MarkerSize' , 35, 'MarkerFaceColor','k', 'LineWidth',2);
 
-legend('1\mum Jitter','5\mum Jitter','10\mum Jitter','15\mum Jitter', '20\mum Jitter', 'No Jitter', 'FontName', 'Arial', 'FontSize', 20);
+legend('1\mum Jitter','5\mum Jitter','10\mum Jitter','15\mum Jitter', '20\mum Jitter', 'No Jitter', 'FontName', 'Arial', 'FontSize', 40);
 
-plot([1:7;1:7], [mean1(cellsOfInterest)-stDev1(cellsOfInterest); mean1(cellsOfInterest)+stDev1(cellsOfInterest)], 'Color','r','LineWidth',1);
-plot([1:7;1:7], [mean5(cellsOfInterest)-stDev5(cellsOfInterest); mean5(cellsOfInterest)+stDev5(cellsOfInterest)], 'Color','g','LineWidth',1);
-plot([1:7;1:7], [mean10(cellsOfInterest)-stDev10(cellsOfInterest); mean10(cellsOfInterest)+stDev10(cellsOfInterest)], 'Color','b','LineWidth',1);
-plot([1:7;1:7], [mean15(cellsOfInterest)-stDev15(cellsOfInterest); mean15(cellsOfInterest)+stDev15(cellsOfInterest)], 'Color','m','LineWidth',1);
-plot([1:7;1:7], [mean20(cellsOfInterest)-stDev20(cellsOfInterest); mean20(cellsOfInterest)+stDev20(cellsOfInterest)], 'Color','c','LineWidth',1);
+plot([1:7;1:7], [mean1(cellsOfInterest)-stDev1(cellsOfInterest); mean1(cellsOfInterest)+stDev1(cellsOfInterest)], 'Color','r','LineWidth',2);
+plot([1:7;1:7], [mean5(cellsOfInterest)-stDev5(cellsOfInterest); mean5(cellsOfInterest)+stDev5(cellsOfInterest)], 'Color','g','LineWidth',2);
+plot([1:7;1:7], [mean10(cellsOfInterest)-stDev10(cellsOfInterest); mean10(cellsOfInterest)+stDev10(cellsOfInterest)], 'Color','b','LineWidth',2);
+plot([1:7;1:7], [mean15(cellsOfInterest)-stDev15(cellsOfInterest); mean15(cellsOfInterest)+stDev15(cellsOfInterest)], 'Color','m','LineWidth',2);
+plot([1:7;1:7], [mean20(cellsOfInterest)-stDev20(cellsOfInterest); mean20(cellsOfInterest)+stDev20(cellsOfInterest)], 'Color','c','LineWidth',2);
 
 
 axis square;
 box off;
-ylabel('Potential Synapses', 'FontName', 'Arial', 'FontSize', 20);
-xlabel('Cell number', 'FontName', 'Arial', 'FontSize', 20);
-set(gca,'XLim',[1,7], 'FontName', 'Arial', 'FontSize', 20);
+ylabel('Potential synapses', 'FontName', 'Arial', 'FontSize', 40);
+xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'XLim',[1,7], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 
 

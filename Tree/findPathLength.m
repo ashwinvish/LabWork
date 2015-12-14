@@ -12,15 +12,12 @@ if nargin < 5
 end
 
 [nodes,edges,radii,nodeType] = newReadSWCfile(fileName,validNodeTypes);
+h = hist(edges(:,2),[1:size(nodes,1)]);
+irreducibleNodes = union(find(h~=1),1); % 1 is the root node
 
 nodes(:,1) = nodes(:,1)*resolution(1);
 nodes(:,2) = nodes(:,2)*resolution(2);
 nodes(:,3) = nodes(:,3)*resolution(3);
-
-
-h = hist(edges(:,2),[1:size(nodes,1)]);
-irreducibleNodes = union(find(h~=1),1); % 1 is the root node
-
 
 for i =  1:size(queryNodes,1)
     tempx = nodes(:,1) - queryNodes(i,1);
