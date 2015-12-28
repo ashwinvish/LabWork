@@ -4,10 +4,10 @@ loadTrees; % Load all data
 
 %% Display Control Cells
 
-DisplayTree(TreeC1,[1],true);
-DisplayTree(TreeC2,[1],false);
-DisplayTree(TreeC3,[1],false);
-DisplayTree(TreeC4,[1],false);
+DisplayTree(TreeC1,true);
+DisplayTree(TreeC2,false);
+DisplayTree(TreeC3,false);
+DisplayTree(TreeC4,false);
 
 ControlCellSoma(1,:) =  TreeC1{1,1}{1,3};
 ControlCellSoma(2,:) =  TreeC2{1,1}{1,3};
@@ -18,9 +18,9 @@ hold on;
 stripe1 = [ControlCellSoma(1,:);ControlCellSoma(2,:);ControlCellSoma(3,:);ControlCellSoma(4,:)];	%stripe1, corresponds with alx transcription factor
 line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');
 
-DisplayTree(TreeC5,[1],false);
-DisplayTree(TreeC6,[1],false);
-DisplayTree(TreeC7,[1],false);
+DisplayTree(TreeC5,false);
+DisplayTree(TreeC6,false);
+DisplayTree(TreeC7,false);
 
 ControlCellSoma(5,:) =  TreeC5{1,1}{1,3};
 ControlCellSoma(6,:) =  TreeC6{1,1}{1,3};
@@ -36,14 +36,14 @@ PlotViews(gcf);
 for kk = 1:numel(cellIDs)
     % subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3]);                              % plot without hilighting axon
+        %DisplayTDiree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
+        DisplayTree(allTrees{kk},[1],false,[],[1 0.5 0.3]);                              % plot without hilighting axon
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
         %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1], allPreSynapse{kk}, allPost{kk});
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1]);
+        DisplayTree(allTrees{kk},[1],false,[],[1 0.3 1]);
     else
         %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1], allPreSynapse{kk}, allPost{kk});
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1]);
+        DisplayTree(allTrees{kk},[1],false,[],[0.3 0.5 1]);
     end
 end
 hold on;
@@ -144,7 +144,7 @@ scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceC
 
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
-plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
+plot( [120000, 140000], [70000, 70000],'-k' ) % insert 20um sclaebar
 daspect([1 1 1]); % make aspect ratio [1 1 1]
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 view([-180,90]); % xy view
@@ -314,7 +314,7 @@ xlabel('Post synaptic density (number of synapses/raw length)');
 % Generate 3D gaussian Kernel
 clear volPost;
 res = 1000;                                                                                          % downsampling factor
-ksize = 12000;                                                                                        % size of Kernel in nm
+ksize = 32000;                                                                                        % size of Kernel in nm
 
 % plot heat map of Postsynaptic sites
 figure(14);
@@ -472,44 +472,44 @@ ylabel('rho')
 %Distribution of Synapse onto Cells
 
 % distribution of postsynaptic sites
-%figure(18);
-parfor i = 1:length(cellIDs)
+figure(18);
+for i = 1:length(cellIDs)
     lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
-    %subplot(3,8,i);
-    %scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
-    %title(cellIDs{i})
+    subplot(3,8,i);
+    scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
+    title(cellIDs{i})
 end
 
-% figure(19);
-% for i = 1:length(cellIDs)
-%     subplot(3,8,i);
-%     hist(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)), length(allPost{i}));title(cellIDs{i});
-% end
+figure(19);
+for i = 1:length(cellIDs)
+    subplot(3,8,i);
+    hist(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)), length(allPost{i}));title(cellIDs{i});
+end
 
 % distribution of presynaptic sites
-%figure(20);
-parfor i = 1:length(cellIDs)
+figure(20);
+for i = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
         lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
-        %       subplot(3,8,i);
-        %      scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
-        %     title(cellIDs{i})
+              subplot(3,8,i);
+             scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
+            title(cellIDs{i})
     end
 end
-% figure(21);
-% for i = 1:length(cellIDs)
-%     if cellfun('isempty',allPreSynapse(1,i)) == 1
-%         continue;
-%     else
-%         subplot(3,8,i);
-%         hist(sort(allLengthToPreNode{i})/cell2mat(allRawLength(i)), length(allPreSynapse{i}));
-%         title(cellIDs{i});
-%     end
-% end
+figure(21);
+for i = 1:length(cellIDs)
+    if cellfun('isempty',allPreSynapse(1,i)) == 1
+        continue;
+    else
+        subplot(3,8,i);
+        hist(sort(allLengthToPreNode{i})/cell2mat(allRawLength(i)), length(allPreSynapse{i}));
+        title(cellIDs{i});
+    end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Misc. plots
 % plot emperical CDFs for all cells
@@ -537,6 +537,22 @@ for i = 1:length(cellIDs)
 end
 xlabel('Rawlength (nm)');
 ylabel('Number of postsynaptic sites');
+
+figure();
+
+for i = 1:length(cellIDs)
+    if ismember(cellIDs{i},cellIDsAlx)==1
+        plot(cell2mat(allRawLength(i)),rho(i),'*','Color',[1 0.5 0]);
+    elseif ismember(cellIDs{i},cellIDsDbx)==1
+        plot(cell2mat(allRawLength(i)),rho(i),'*','Color',[1 0 1]);
+    else
+        plot(cell2mat(allRawLength(i)),rho(i),'*','Color',[0 0.5 1]);
+    end
+    hold on;
+    %text(allRawLength(i),length(allPost{i}),cellIDs{i});
+end
+xlabel('Rawlength (nm)');
+ylabel('Rho');
 
 
 % plot cellDepth vs. Rho
@@ -577,7 +593,7 @@ ylabel('ratio of mean(allLengthToPostNode{i}/cell2mat(allRawLength(i))) ');
 
 figure();
 [y,I] = sort(CellSoma(:,3));
-scatter(1:22,y,50,rho(I),'filled', 'MarkerEdgeColor','k');
+scatter(1:22,y,80,rho(I),'filled', 'MarkerEdgeColor','k');
 set(gca,'YDir','reverse');
 xlabel('Cell#');
 ylabel('Depth in nm');
@@ -654,23 +670,17 @@ ylabel('Count');
 %% ratio of dendritic length/ axonal length
 axLength = [];
 clear temp;
-
 for i = 1:size(cellIDs,2)
     if eval([cellIDs{i},'_axon'])>0
-        AxnNodes = eval([cellIDs{i},'_axon']);
-        tempLength = 0;
-        for jj = 1:numel(eval([cellIDs{i},'_axon']))
-            tempLength = tempLength + sum(allTrees{i}{AxnNodes(jj)}{1,4}{1,2});
-        end
-        axLength = [axLength,tempLength];
-        
+           temp(1:size(allLengthToPreNode{i},1)-1,i) = diff(sort(allLengthToPreNode{i}));
+           axLength = [axLength,sum(temp(:,i))];
     else
         axLength = [axLength,0];
         continue;
     end
 end
 denLength = cell2mat(allRawLength)-axLength;
-sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength));
+sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength))
 
 
 %% plot number of synapses per cell
@@ -702,93 +712,69 @@ title('Number of synpapse for population');
 
 figure();
 [ax,h1,h2] = plotyy(1:22 ,y, 1:22,(y./denLength(I)) * 1000, 'bar', 'plot');
-h1.FaceColor =  [0.7,0.7,0.7];
-h2.Color =  'k';
+h1.FaceColor =  [0,0.4,1];
+h2.Color =  'r';
 h2.Marker = 'o';
-h2.MarkerFaceColor = 'k'
 set(ax(1),'xcolor','k');
-set(ax(1),'ycolor',[0.7,0.7,0.7]);
-set(ax(2),'ycolor','k');
-set(gca,'FontName', 'Arial', 'FontSize', 40);
-set(ax(1), 'XLim',[0,23],  'LineWidth', 2);
-set(ax(2), 'XLim', [0,23],  'LineWidth', 2);
-xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
-ylabel(ax(1),'Number of postsynaptic sites', 'FontName', 'Arial', 'FontSize', 40);
-ylabel(ax(2),'Synapse density (#/\mum)', 'FontName', 'Arial', 'FontSize', 40);
-set(ax(2),'FontName', 'Arial', 'FontSize', 40,  'LineWidth', 2);
+set(ax(1),'ycolor',[0,0.4,1]);
+set(ax(2),'ycolor','r');
+xlabel('Neuron #');
+ylabel(ax(1),'Number of postsynaptic sites');
+ylabel(ax(2),'Synapse density (#/\mum)');
 box off;
-set(gcf,'color','w');
-axis (ax(1),'square');
-axis(ax(2),'square');
 
 figure();
 [ax,h1,h2] = plotyy(1:22 ,y./sort(cellfun(@sum,Branches)-rs), 1:22,(y./denLength(I)) * 1000, 'bar', 'plot');
-h1.FaceColor = [0.7,0.7,0.7];
-h2.Color =  'k';
+h1.FaceColor =  [0,0.4,1];
+h2.Color =  'r';
 h2.Marker = 'o';
-h2.MarkerFaceColor = 'k';
 set(ax(1),'xcolor','k');
-set(ax(1),'ycolor',[0.7,0.7,0.7]);
-set(ax(2),'ycolor','k');
+set(ax(1),'ycolor',[0,0.4,1]);
+set(ax(2),'ycolor','r');
 xlabel('Neuron #');
-ylabel(ax(1),' No. of postsynaptic sites/ No. of branches', 'FontName', 'Arial', 'FontSize', 40);
-ylabel(ax(2),'Synapse density (#/\mum)','FontName', 'Arial', 'FontSize', 40);
-set(gca,'FontName', 'Arial', 'FontSize', 40);
-set(ax(1), 'XLim',[0,23],  'LineWidth', 2);
-set(ax(2), 'XLim', [0,23],  'LineWidth', 2);
-set(ax(2), 'FontName', 'Arial', 'FontSize', 40,  'LineWidth', 2);
+ylabel(ax(1),' No. of postsynaptic sites/ No. of branches');
+ylabel(ax(2),'Synapse density (#/\mum)');
 box off;
-set(gcf,'color','w');
-axis (ax(1),'square');
-axis(ax(2),'square');
 
 [y,I] = sort(cellfun(@length,allPreSynapse));
 figure()
 [ax,h1,h2] = plotyy(1:22 ,y, 1:22,(y./axLength(I)) * 1000,'bar', 'plot');
-h1.FaceColor =  [0.7,0.7,0.7];
-h2.Color =  'k';
+h1.FaceColor =  [0.5,0.9,0];
+h2.Color =  'r';
 h2.Marker = 'o';
-h2.MarkerFaceColor = 'k';
 set(ax(1),'xcolor','k');
-set(ax(1),'ycolor',[0.7,0.7,0.7]);
-set(ax(2),'ycolor','k');
+set(ax(1),'ycolor',[0.5,0.9,0]);
+set(ax(2),'ycolor','r');
 xlabel('Neuron #');
-ylabel(ax(1),'Number of presynaptic sites','FontName', 'Arial', 'FontSize', 40);
-ylabel(ax(2),'Synapse density (#/\mum)','FontName', 'Arial', 'FontSize', 40);
-set(ax(1), 'XLim',[0,23],  'LineWidth', 2);
-set(ax(2), 'XLim', [0,23],  'LineWidth', 2);
-set(ax(2), 'FontName', 'Arial', 'FontSize', 40,  'LineWidth', 2);
-set(gca,'FontName', 'Arial', 'FontSize', 40);
+ylabel(ax(1),'Number of presynaptic sites');
+ylabel(ax(2),'Synapse density (#/\mum)');
 box off;
-set(gcf,'color','w');
-axis (ax(1),'square');
-axis(ax(2),'square');
 
-% figure();
-% h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
-% for i =1:length(cellIDs)
-%     [Branches{i}, Terminals{i}, BranchOrder{i}] = TreeBranches(allTrees{i});
-%     axes(h(i));
-%     title(sprintf('Cell ID %s', cellIDs{i}));
-%     BranchOrderVisualizer(allTrees{i},[1],[BranchOrder{i}]);
-% end
-% figtitle('Branch Order visualization');
-% 
-% figure();
-% h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
-% for i =1:length(cellIDs)
-%     axes(h(i));
-%     histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]); 
-%     title(sprintf('Cell ID %s', cellIDs{i}));
-% end
+figure();
+h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
+for i =1:length(cellIDs)
+    [Branches{i}, Terminals{i}, BranchOrder{i}] = TreeBranches(allTrees{i});
+    axes(h(i));
+    title(sprintf('Cell ID %s', cellIDs{i}));
+    BranchOrderVisualizer(allTrees{i},[1],[BranchOrder{i}]);
+end
+figtitle('Branch Order visualization');
 
-% figtitle('Branch order distribution for all cells');
-% 
-% figure();
-% [rs,cs] = cellfun(@size,allSpine);
-% bar(sort(cellfun(@sum,Branches)-rs));
-% xlabel('neuron#');
-% ylabel('Number of branches per cell');
+figure();
+h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
+for i =1:length(cellIDs)
+    axes(h(i));
+    histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]); 
+    title(sprintf('Cell ID %s', cellIDs{i}));
+end
+
+figtitle('Branch order distribution for all cells');
+
+figure();
+[rs,cs] = cellfun(@size,allSpine);
+bar(sort(cellfun(@sum,Branches)-rs));
+xlabel('neuron#');
+ylabel('Number of branches per cell');
 
 
 

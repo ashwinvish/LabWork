@@ -47,15 +47,10 @@ h3 = plot(1.2,MeanPre,'o', 'MarkerFaceColor', calx, 'MarkerEdgeColor','none', 'M
 h4 = plot([1.2;1.2], [MeanPre-StdPre;MeanPre+StdPre], 'Color','k','LineWidth',2);
 %uistack(h4,'top');
 
-
-
 plot(1,MeanPost(1), 'o', 'MarkerFaceColor', calx, 'MarkerEdgeColor','none', 'MarkerSize', 35 );
 plot(2,MeanPost(2), 'o', 'MarkerFaceColor', cdbx, 'MarkerEdgeColor','none', 'MarkerSize', 35 );
 plot(3,MeanPost(3), 'o', 'MarkerFaceColor', cbarhl, 'MarkerEdgeColor','none', 'MarkerSize', 35 );
 plot([1:3;1:3], [MeanPost-StdPost;MeanPost+StdPost], 'Color','k','LineWidth',2);
-
-
-
 
 set(ax(1),'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'},'XLim', [0.5 3.5], 'FontName', 'Arial', 'FontSize', 40, 'Ycolor', [0.7,0,0], 'LineWidth',2);
 set(ax(2),'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'XLim', [0.5 3.5],'FontName', 'Arial', 'FontSize', 40, 'Ycolor' , [0,0.7,0],'LineWidth',2);
