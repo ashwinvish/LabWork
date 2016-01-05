@@ -18,6 +18,8 @@ for i = 1:length(steps)-1
     figure(1);
     plot(MeanRCEucDist(i)./1000,tempdiffRC,'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25 );
     hold on;
+    clear m;
+    clear n;
 end
 figure(1);
 plot(MeanRCEucDist./1000,RhoDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 35 );
@@ -28,7 +30,8 @@ set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 box off;
 
-
+% spearmans pval
+[rRC,pRC] = corr(MeanRCEucDist',RhoDiffRC','type','spearman');
 X = [ones(length(MeanRCEucDist./1000),1) MeanRCEucDist'./1000];
 y =RhoDiffRC';
 b = X\y;
@@ -61,6 +64,8 @@ for i = 1:length(steps)-1
     figure(2);
     plot(MeanDVEucDist(i)./1000,tempdiffDV,'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25);
     hold on;
+    clear m;
+    clear n;
 end
 figure (2);
 plot(MeanDVEucDist./1000,RhoDiffDV,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 35 );
@@ -70,6 +75,7 @@ xlabel('Pairwise DV distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Difference in persistence measure', 'FontName', 'Arial', 'FontSize', 40);
 box off
 
+[rDV,pDV] = corr(MeanDVEucDist',RhoDiffDV','type','spearman');
 X = [ones(length(MeanDVEucDist./1000),1) MeanDVEucDist'./1000];
 y =RhoDiffDV';
 b = X\y;

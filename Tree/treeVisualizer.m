@@ -3,8 +3,8 @@ function treeVisualizer(tree,highlightedNodes,inducingNodes,specialNodes,newFigu
 rndclr = colorString;
 symCell={'o','s','v','x','d','*'};
 %synapseColor = [[0 0.4 0.4]; [0.2 0 0.8]]; % red - presynaptic; g- postsynaptic [1 0.2 0.2]
-synapseColor = [[0.9,0,0]; [0,0.8,0]];
-MEdgeColor = [[0.5,0,0]; [0,0.5,0]];
+synapseColor = [[0.9,0,0]; [0,0.8,0]; [0,0,0.5]];
+MEdgeColor = [[0.5,0,0]; [0,0.5,0]; [0,0.5,0]];
 if nargin < 8
     pixelUnits = false;
     if nargin < 7
@@ -96,6 +96,24 @@ if ~isempty(specialNodes) % special nodes to be marked and hilighted
                 %              hMarkers = hSyn2.MarkerHandle;
                 %              hMarkers.FaceColorData =  uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent red
                 uistack(hSyn2,'top');
+            end
+        end
+        
+    end
+    
+    for mm = 3
+        for kk=1:size(specialNodes{mm}, 1)
+            if pixelUnits
+                hSyn3 = plot3(specialNodes{mm}(kk,1)*relativeRes(1),specialNodes{mm}(kk,2)*relativeRes(2),-specialNodes{mm}(kk,3)*relativeRes(3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 4,  'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
+                %              drawnow;
+                %              hMarkers = hSyn2.MarkerHandle;
+                %              hMarkers.FaceColorData = uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent
+            else
+                hSyn3 = plot3(specialNodes{mm}(kk,1),specialNodes{mm}(kk,2),-specialNodes{mm}(kk,3),'Marker',symCell{rem(mm-1,numel(symCell))+1}, 'MarkerSize' , 5, 'LineWidth', 0.1 , 'MarkerFaceColor', synapseColor(mm,:) , 'MarkerEdgeColor' , MEdgeColor(mm,:));
+                %              drawnow;
+                %              hMarkers = hSyn2.MarkerHandle;
+                %              hMarkers.FaceColorData =  uint8(255*[synapseColor(mm,:),0.5])';  % Alpha=0.5 => 50% transparent red
+                uistack(hSyn3,'top');
             end
         end
         

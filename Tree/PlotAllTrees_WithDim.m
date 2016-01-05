@@ -330,7 +330,7 @@ hold off;
 PostDensityPeak = [XPost'*res,YPost'*res,ZPost'*res];
 
 for i = 1:size(cellIDs,2)
-    lengthToPostPeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],PostDensityPeak(i,:));
+    lengthToPostPeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],PostDensityPeak(i,:));
 end
 
 %% Presynapse Heatmap
@@ -359,7 +359,7 @@ for i = 1:size(cellIDs,2)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
-        lengthToPrePeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],[5,5,45],PreDensityPeak(i,:));
+        lengthToPrePeakNode(i) = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],PreDensityPeak(i,:));
     end
 end
 
@@ -472,13 +472,13 @@ ylabel('rho')
 %Distribution of Synapse onto Cells
 
 % distribution of postsynaptic sites
-%figure(18);
-parfor i = 1:length(cellIDs)
+figure(18);
+for i = 1:length(cellIDs)
     lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
-    %subplot(3,8,i);
-    %scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
-    %title(cellIDs{i})
+    subplot(3,8,i);
+    scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
+    title(cellIDs{i})
 end
 
 % figure(19);
@@ -488,16 +488,16 @@ end
 % end
 
 % distribution of presynaptic sites
-%figure(20);
-parfor i = 1:length(cellIDs)
+figure(20);
+for i = 1:length(cellIDs)
     if cellfun('isempty',allPreSynapse(1,i)) == 1
         continue;
     else
         lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
-        %       subplot(3,8,i);
-        %      scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
-        %     title(cellIDs{i})
+              subplot(3,8,i);
+             scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
+            title(cellIDs{i})
     end
 end
 % figure(21);
@@ -608,6 +608,32 @@ title('Distribution of Presynaptic pathlength');
 xlabel('Presynaptic pathlenght in \mum');
 ylabel('count');
 
+figure();
+h = histogram(allPostSynapticLength/1000,'FaceColor','b', 'BinWidth', 10); % dimensions in microns
+childHandle = get(h,'Children');
+set(childHandle,'FaceAlpha',0.7); % 0 = transparent, 1 = opaque.
+hold on;
+histogram(allPreSynapticLength/1000,'FaceColor','g', 'BinWidth',10); % dimensions in microns
+axis square
+box off;
+ylabel('count');
+xlabel('Pathlength in \mum');
+set(gca,'XLim', [0,250],'FontName','Arial', 'FontSize', 40, 'LineWidth',2);
+
+figure();
+h1 = histogram(allPostSynapticLength/1000,'FaceColor','r'); % dimensions in microns
+h1.Normalization = 'probability';
+h1.BinWidth = 10;
+hold on;
+h2 = histogram(allPreSynapticLength/1000,'FaceColor','g'); % dimensions in microns
+h2.Normalization = 'probability';
+h2.BinWidth = 10;
+axis square
+box off;
+ylabel('Probability');
+xlabel('Pathlength in \mum');
+set(gca,'XLim', [0,250],'FontName','Arial', 'FontSize', 40, 'LineWidth',2);
+
 %% Distribution of inter-synaptic distance
 
 clear PostSynapticDistance;
@@ -621,7 +647,8 @@ for ii = 1:size(cellIDs,2)
     end
     PostSynapticDistance = [PostSynapticDistance;tempPost(ii,:)'];
 end
-histogram(find(PostSynapticDistance>0)/1000);
+%histogram(find(PostSynapticDistance>0)/1000);
+histogram(PostSynapticDistance(find(PostSynapticDistance>0))/1000, 'BinWidth',1);
 title('Inter-postsynaptic distance');
 xlabel('Distance in \mum');
 ylabel('Count');
@@ -644,7 +671,8 @@ for ii = 1:size(cellIDs,2)
         continue;
     end
 end
-histogram(find(PreSynapticDistance>0)/1000);
+%histogram(find(PreSynapticDistance>0)/1000);
+histogram(PreSynapticDistance(find(PreSynapticDistance>0))/1000, 'BinWidth', 1)
 title('Inter-presynaptic distance');
 xlabel('Distance in \mum');
 ylabel('Count');
