@@ -63,17 +63,17 @@ h = plot(repmat(1,1,size(totalLMAxonColPathLengths,2)),totalLMAxonColPathLengths
 % drawnow;
 % hMarkers = h.MarkerHandle;
 % hMarkers.FaceColorData =  uint8(255*[0,1,0,0.1])';  % Alpha=0.5 => 50% transparent red
-plot(0.5, mean(totalEMAxonColPathLengths/1000),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
-plot(1, mean(totalLMAxonColPathLengths),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','g','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(0.5, mean(totalEMAxonColPathLengths/1000),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','k','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(1, mean(totalLMAxonColPathLengths),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','k','MarkerEdgeColor','k', 'LineStyle','none' );
 plot([0.5;0.5], [ mean(totalEMAxonColPathLengths/1000) + std(totalEMAxonColPathLengths/1000); mean(totalEMAxonColPathLengths/1000) - std(totalEMAxonColPathLengths/1000)],'Color','k','LineWidth',2);
 plot([1;1], [ mean(totalLMAxonColPathLengths) + std(totalLMAxonColPathLengths);mean(totalLMAxonColPathLengths) - std(totalLMAxonColPathLengths)],'Color','k','LineWidth',2);
-
+pbaspect([1 2 1]);
 set(gca,'XLim', [0 1.5], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 set(gca,'XTick', [0.5,1],'XTickLabel', {'EM'; 'LM'}, 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Total collateral pathlength in \mum', 'FontName', 'Arial', 'FontSize', 40);
 box off;
-axis square;
+%axis square;
 hold off;
 
 
@@ -91,17 +91,18 @@ h1 = plot(repmat(1,1,size(TotaLMAxonPathLengths,2) ),TotaLMAxonPathLengths ,'Mar
 % drawnow;
 % h1Markers = h1.MarkerHandle;
 % h1Markers.FaceColorData =  uint8(255*[0,1,0,0.1])';  % Alpha=0.5 => 50% transparent red
-plot(0.5, mean(TotalEMAxonPathLengths),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
-plot(1, mean(TotaLMAxonPathLengths),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','g','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(0.5, mean(TotalEMAxonPathLengths),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','k','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(1, mean(TotaLMAxonPathLengths),'Marker','o','MarkerSize',35 ,'MarkerFaceColor','k','MarkerEdgeColor','k', 'LineStyle','none' );
 plot([0.5;0.5], [ mean(TotalEMAxonPathLengths) + std(TotalEMAxonPathLengths); mean(TotalEMAxonPathLengths) - std(TotalEMAxonPathLengths)],'Color','k','LineWidth',2);
 plot([1;1], [ mean(TotaLMAxonPathLengths) + std(TotaLMAxonPathLengths);mean(TotaLMAxonPathLengths) - std(TotaLMAxonPathLengths)],'Color','k','LineWidth',2);
+pbaspect([1 2 1]);
 
 set(gca,'XLim', [0 1.5], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 set(gca,'XTick', [0.5,1],'XTickLabel', {'EM'; 'LM'}, 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Total axonal pathlength in \mum', 'FontName', 'Arial', 'FontSize', 40);
 box off;
-axis square;
+%axis square;
 hold off;
 
 
@@ -114,17 +115,18 @@ NumberOfEMCollaterals =  [numel(Int1_4col), numel(Int1_5col), numel(Int1_6col), 
 
 plot(0.5*ones(1,size(NumberOfEMCollaterals,2)), NumberOfEMCollaterals, 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
 plot(ones(1,size(NumberOfLMCollaterals,2)),NumberOfLMCollaterals , 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(0.5, mean(NumberOfEMCollaterals), 'Marker','o','MarkerSize',35 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
-plot(1, mean(NumberOfLMCollaterals) , 'Marker','o','MarkerSize',35 ,'MarkerFaceColor','g','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(0.5, mean(NumberOfEMCollaterals), 'Marker','o','MarkerSize',35 ,'MarkerFaceColor','k','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(1, mean(NumberOfLMCollaterals) , 'Marker','o','MarkerSize',35 ,'MarkerFaceColor','k','MarkerEdgeColor','k', 'LineStyle','none' );
 plot([0.5;0.5], [mean(NumberOfEMCollaterals)+std(NumberOfEMCollaterals);mean(NumberOfEMCollaterals)-std(NumberOfEMCollaterals)], 'Color','k','LineWidth',2);
 plot([1;1], [mean(NumberOfLMCollaterals)+std(NumberOfLMCollaterals);mean(NumberOfLMCollaterals)-std(NumberOfLMCollaterals)], 'Color','k','LineWidth',2);
+pbaspect([1 2 1]);
 
 set(gca,'XLim', [0 1.5], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 set(gca,'XTick', [0.5,1],'XTickLabel', {'EM'; 'LM'}, 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Total number of collaterals', 'FontName', 'Arial', 'FontSize', 40);
 box off;
-axis square;
+%axis square;
 hold off;
 
 

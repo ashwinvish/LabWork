@@ -16,15 +16,15 @@ for i = 1:length(steps)-1
     MeanRCEucDist(index) = mean(RCpdist(tempRC));
     index = index+1;
     figure(1);
-    plot(MeanRCEucDist(i)./1000,tempdiffRC,'o', 'MarkerEdgeColor', [0.7,0.7,0.7], 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 20 );
+    plot(MeanRCEucDist(i)./1000,tempdiffRC,'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.9,0.9,0.9], 'MarkerSize', 25 );
     hold on;
 end
 figure(1);
-plot(MeanRCEucDist./1000,RhoDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 20 );
+plot(MeanRCEucDist./1000,RhoDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 35 );
 plot([MeanRCEucDist./1000;MeanRCEucDist./1000], [RhoDiffRC-RhoDiffRC_SD; RhoDiffRC+RhoDiffRC_SD], 'Color','k','LineWidth',2);
-xlabel('Pairwise RC Eucledian distance in \mum', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Pairwise difference in persistence measure \rho', 'FontName', 'Arial', 'FontSize', 20);
-set(gca, 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Pairwise RC distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Pairwise persistence difference \rho', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 box off;
 
@@ -35,7 +35,8 @@ b = X\y;
 yCalc2 = X*b;
 Rsq2 = 1 - sum((y - yCalc2).^2)/sum((y - mean(y)).^2);
 plot(MeanRCEucDist'./1000,yCalc2,'-r','LineWidth',2);
-text(max(MeanRCEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2), 'FontName', 'Arial', 'FontSize', 20 );
+%text(max(MeanRCEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2), 'FontName', 'Arial', 'FontSize', 20 );
+[PearsonsCoeffRC, PvalRC] = corr(MeanRCEucDist',RhoDiffRC');
 axis square;
 clear temp;
 
@@ -59,15 +60,15 @@ for i = 1:length(steps)-1
     MeanDVEucDist(index) = mean(DVpdist(tempDV));
     index = index+1;
     figure(2);
-    plot(MeanDVEucDist(i)./1000,tempdiffDV,'o', 'MarkerEdgeColor', [0.7,0.7,0.7], 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 20   );
+    plot(MeanDVEucDist(i)./1000,tempdiffDV,'o', 'MarkerEdgeColor', 'k', 'MarkerFaceColor',[0.7,0.7,0.7], 'MarkerSize', 25   );
     hold on;
 end
 figure (2);
-plot(MeanDVEucDist./1000,RhoDiffDV,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 20 );
+plot(MeanDVEucDist./1000,RhoDiffDV,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 35);
 set(gca,'XLim',[0 23]);
 plot([MeanDVEucDist./1000 ; MeanDVEucDist./1000], [RhoDiffDV-RhoDiffDV_SD; RhoDiffDV+RhoDiffDV_SD], 'Color','k','LineWidth',2);
-xlabel('Pairwise DV Eucledian distance in \mum', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Pairwise difference in persistence measure \rho', 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Pairwise DV distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Pairwise persistence difference', 'FontName', 'Arial', 'FontSize', 40);
 box off
 
 X = [ones(length(MeanDVEucDist./1000),1) MeanDVEucDist'./1000];
@@ -76,11 +77,36 @@ b = X\y;
 yCalc2 = X*b;
 Rsq2 = 1 - sum((y - yCalc2).^2)/sum((y - mean(y)).^2);
 plot(MeanDVEucDist'./1000,yCalc2,'-r','LineWidth',2);
-text(max(MeanDVEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2) , 'FontName', 'Arial', 'FontSize', 20);
-set(gca, 'FontName', 'Arial', 'FontSize', 20);
+%text(max(MeanDVEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2) , 'FontName', 'Arial', 'FontSize', 20);
+[PearsonCoeffDV, PvalDV] = corr(MeanDVEucDist',RhoDiffDV');
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 axis square;
 clear temp;
+
+%%
+clear m;
+clear n;
+clear RCSoma;
+clear RCpdist;
+clear tempRC;
+clear tempdiffRC;
+
+RCSoma = [CellSoma(:,1),CellSoma(:,2)]; % considering only the x,y coordinates
+RCpdist = tril(squareform(pdist(RCSoma)),-1);
+
+% tempRC = find(RCpdist>1 & RCpdist< max(RCpdist(:)));
+
+tempRC = find(RCpdist>1 & RCpdist<20000);
+
+[m,n] = ind2sub(size(RCpdist),tempRC);
+tempdiffRC = abs(rho(m)-rho(n));
+corrcoef(RCpdist(tempRC)/1000,tempdiffRC)
+plot(RCpdist(tempRC)/1000,tempdiffRC,'o','MarkerSize',25, 'MarkerEdgeColor','k', 'MarkerFaceColor',[0.7,0.7,0.7]);
+box off;
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gcf,'color','w');
+axis square;
 
 %%
 

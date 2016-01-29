@@ -38,7 +38,7 @@ for i = 1:numel(cellIDs)
         % consider dendritic trees of all remaining cells
         
         for kk = 1:Shuffles
-            iteration = kk
+            iteration = kk;
             uniqSites = [];
             
             for ii = 1:numel(cellIDs)

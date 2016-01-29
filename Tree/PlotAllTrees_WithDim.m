@@ -146,7 +146,8 @@ box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
 daspect([1 1 1]); % make aspect ratio [1 1 1]
-set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+%set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+set(gca,'Ydir','reverse');
 view([-180,90]); % xy view
 
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                       % stripe1
@@ -609,11 +610,11 @@ xlabel('Presynaptic pathlenght in \mum');
 ylabel('count');
 
 figure();
-h = histogram(allPostSynapticLength/1000,'FaceColor','b', 'BinWidth', 10); % dimensions in microns
+h = histogram(allPostSynapticLength/1000,'FaceColor',[0.9,0,0], 'BinWidth', 10); % dimensions in microns
 childHandle = get(h,'Children');
 set(childHandle,'FaceAlpha',0.7); % 0 = transparent, 1 = opaque.
 hold on;
-histogram(allPreSynapticLength/1000,'FaceColor','g', 'BinWidth',10); % dimensions in microns
+histogram(allPreSynapticLength/1000,'FaceColor',[0,0.8,0], 'BinWidth',10); % dimensions in microns
 axis square
 box off;
 ylabel('count');
@@ -621,11 +622,11 @@ xlabel('Pathlength in \mum');
 set(gca,'XLim', [0,250],'FontName','Arial', 'FontSize', 40, 'LineWidth',2);
 
 figure();
-h1 = histogram(allPostSynapticLength/1000,'FaceColor','r'); % dimensions in microns
+h1 = histogram(allPostSynapticLength/1000,'FaceColor',[0.9,0,0]); % dimensions in microns
 h1.Normalization = 'probability';
 h1.BinWidth = 10;
 hold on;
-h2 = histogram(allPreSynapticLength/1000,'FaceColor','g'); % dimensions in microns
+h2 = histogram(allPreSynapticLength/1000,'FaceColor',[0,0.8,0]); % dimensions in microns
 h2.Normalization = 'probability';
 h2.BinWidth = 10;
 axis square

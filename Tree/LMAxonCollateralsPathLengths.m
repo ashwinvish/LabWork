@@ -91,19 +91,19 @@ SDLMAxonColPathLengths = [std(cell2mat(tree1colPathLength)), std(cell2mat(tree2c
 x = 1:5;
 hold on;
 
-plot(repmat(x(1),1,size(cell2mat(tree1colPathLength),2)), cell2mat(tree1colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(repmat(x(2),1,size(cell2mat(tree2colPathLength),2)), cell2mat(tree2colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(repmat(x(3),1,size(cell2mat(tree3colPathLength),2)), cell2mat(tree3colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(x(4),tree4colPathLength, 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(repmat(x(5),1,size(cell2mat(tree5colPathLength),2)), cell2mat(tree5colPathLength), 'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(1),1,size(cell2mat(tree1colPathLength),2)), cell2mat(tree1colPathLength), 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(2),1,size(cell2mat(tree2colPathLength),2)), cell2mat(tree2colPathLength), 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(3),1,size(cell2mat(tree3colPathLength),2)), cell2mat(tree3colPathLength), 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(x(4),tree4colPathLength, 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(5),1,size(cell2mat(tree5colPathLength),2)), cell2mat(tree5colPathLength), 'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
 
-plot(1:5 , meanLMAxonColPathLengths, 'Marker','o','MarkerSize',20 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(1:5 , meanLMAxonColPathLengths, 'Marker','o','MarkerSize',35 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
 plot([1:5;1:5], [(meanLMAxonColPathLengths-SDLMAxonColPathLengths) ; (meanLMAxonColPathLengths+SDLMAxonColPathLengths)], 'Color','k','LineWidth',2);
 
-set(gca,'XLim', [1 5] , 'XTick', 1:6, 'FontName', 'Arial', 'FontSize', 20);
+set(gca,'XLim', [1 5] , 'XTick', 1:6, 'FontName', 'Arial', 'FontSize', 40);
 set(gcf,'color','w');
-xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Collateral Path Length in \mum', 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Collateral Path Length in \mum', 'FontName', 'Arial', 'FontSize', 40);
 box off;
 axis square;
 hold off;

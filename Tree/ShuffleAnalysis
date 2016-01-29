@@ -1,0 +1,10 @@
+% Shuffle analysis
+clc;
+
+ShuffleSteps = [1,5,10,20];
+
+for i = 1:numel(ShuffleSteps)
+    PotSites  = Shuffle(allTrees,cellIDs,cellIDsAlx,false,ShuffleSteps(i),1000);
+    ShuffName = sprintf('Shuffle%d_%s.mat',ShuffleSteps(i),date);
+    save(ShuffName,PotSites);
+end

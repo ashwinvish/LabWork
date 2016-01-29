@@ -36,8 +36,8 @@ for i = 1:length(cellIDs)
     elseif ismember(cellIDs(I(i)),cellIDsTrans) == 1
         BarCMap = ctrans;
         ShollTrans = [ShollTrans,SortShollIntersetctions(i)];
-        ShollTransIntersections(indexTrans,1:length(shollIntersections{I(i)})) = shollIntersections{I(i)};
-        indexTrans= indexTrans+1;
+        ShollTransIntersections(indexTra,1:length(shollIntersections{I(i)})) = shollIntersections{I(i)};
+        indexDbx= indexDbx+1;
         
     elseif ismember(cellIDs(I(i)),cellIDsDbx) == 1
         BarCMap = cdbx;

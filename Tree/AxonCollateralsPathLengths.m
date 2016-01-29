@@ -31,11 +31,18 @@ clear colPathLengthTemp;
 
 %%
 % Int1_4
-Int1_4col{1} = [67,68,70]
-Int1_4col{2} = [62,65,66,68,71,72,73,74]
-Int1_4col{3} = [62,63,65,69]
-Int1_4col{4} = [48,49,56]
-Int1_4col{5} = [48,51]
+Int1_4col{1} = [63,74]
+%Int1_4col{1} = [67,68,70]
+Int1_4col{2} = [68, 69]
+%Int1_4col{2} = [62,65,66,68,71,72,73,74]
+Int1_4col{3} = [62 64]
+%Int1_4col{3} = [62,63,65,69]
+Int1_4col{4} = [105,106,108,109,110]
+%Int1_4col{4} = [48,49,56]
+Int1_4col{5} = [85 86 87 89 90 91 92 93]
+Int1_4col{6} = [80 83]
+Int1_4col{7} = [44 54 55 57 56 59]
+%Int1_4col{5} = [48,51]
 
 Int1_4LR_Rostral = [41,48]
 Int1_4LR_Caudal = [41,51,52,53,54,55,57,58,59,60,61]
@@ -164,22 +171,22 @@ clear colPathLengthTemp;
 x = 1:7;
 hold on;
 
-plot(repmat(x(1),1,size(cell2mat(Int1_4colPathLength),2)),cell2mat(Int1_4colPathLength)/1000,'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(repmat(x(2),1,size(cell2mat(Int1_5colPathLength),2)),cell2mat(Int1_5colPathLength)/1000,'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
-plot(repmat(x(3),1,size(cell2mat(Int1_6colPathLength),2)),cell2mat(Int1_6colPathLength)/1000,'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
-plot(repmat(x(4),1,size(cell2mat(Int1_7colPathLength),2)),cell2mat(Int1_7colPathLength)/1000,'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
-plot(repmat(x(5),1,size(cell2mat(Int2_9colPathLength),2)),cell2mat(Int2_9colPathLength)/1000,'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
-plot(repmat(x(6),1,size(cell2mat(Int3_5colPathLength),2)),cell2mat(Int3_5colPathLength)/1000,'Marker','o','MarkerSize',20 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
+plot(repmat(x(1),1,size(cell2mat(Int1_4colPathLength),2)),cell2mat(Int1_4colPathLength)/1000,'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(2),1,size(cell2mat(Int1_5colPathLength),2)),cell2mat(Int1_5colPathLength)/1000,'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k', 'LineStyle','none' );
+plot(repmat(x(3),1,size(cell2mat(Int1_6colPathLength),2)),cell2mat(Int1_6colPathLength)/1000,'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
+plot(repmat(x(4),1,size(cell2mat(Int1_7colPathLength),2)),cell2mat(Int1_7colPathLength)/1000,'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
+plot(repmat(x(5),1,size(cell2mat(Int2_9colPathLength),2)),cell2mat(Int2_9colPathLength)/1000,'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
+plot(repmat(x(6),1,size(cell2mat(Int3_5colPathLength),2)),cell2mat(Int3_5colPathLength)/1000,'Marker','o','MarkerSize',25 ,'MarkerFaceColor',[0.8,0.8,0.8],'MarkerEdgeColor','k' , 'LineStyle','none' );
 
 meanColPathLengths = [mean(cell2mat(Int1_4colPathLength)),mean(cell2mat(Int1_5colPathLength)), mean(cell2mat(Int1_6colPathLength)),mean(cell2mat(Int1_7colPathLength)),mean(cell2mat(Int2_9colPathLength)),mean(cell2mat(Int3_5colPathLength))];
 SDColPathLengths = [std(cell2mat(Int1_4colPathLength)),std(cell2mat(Int1_5colPathLength)), std(cell2mat(Int1_6colPathLength)),std(cell2mat(Int1_7colPathLength)),std(cell2mat(Int2_9colPathLength)),std(cell2mat(Int3_5colPathLength))];
-plot(1:6 , meanColPathLengths/1000, 'Marker','o','MarkerSize',20 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
+plot(1:6 , meanColPathLengths/1000, 'Marker','o','MarkerSize',35 ,'MarkerFaceColor','r','MarkerEdgeColor','k', 'LineStyle','none' );
 plot([1:6;1:6], [(meanColPathLengths-SDColPathLengths)/1000 ; (meanColPathLengths+SDColPathLengths)/1000], 'Color','k','LineWidth',2);  
 
-set(gca,'XLim', [1 6] , 'XTick', 1:6, 'YLim',[0 100], 'FontName', 'Arial', 'FontSize', 20);
+set(gca,'XLim', [1 6] , 'XTick', 1:6, 'YLim',[0 100], 'FontName', 'Arial', 'FontSize', 40);
 set(gcf,'color','w');
-xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Collateral Path Length in \mum', 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Collateral Path Length in \mum', 'FontName', 'Arial', 'FontSize', 40);
 box off;
 axis square;
 hold off;

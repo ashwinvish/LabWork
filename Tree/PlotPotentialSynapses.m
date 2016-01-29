@@ -2,7 +2,7 @@
 PotSites = [];
 PotSitesTemp = [];
 index = 1;
-cellIDAlxSparse = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_9','Int3_5','Int3_6'};
+cellIDAlxSparse = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs(i),cellIDAlxSparse) == 1
@@ -83,11 +83,11 @@ set(gcf,'color','w');
 
 %% Plot mean of all potential synapses at different jitter radius
 
-jitter1 = load('Jitter1um_New.mat','Pot1um');
-jitter5 = load('Jitter5um_New.mat', 'Pot5um');
-jitter10 = load('Jitter10_New.mat','Pot10');
-jitter15 = load('Jitter15um_New.mat','Pot15um');
-jitter20 = load('Jitter20um_New.mat','Pot20um');
+jitter1 = load('Shuffle1_14-Jan-2016.mat','PotSites');
+jitter5 = load('Shuffle5um_15-Jan-2016.mat', 'PotSites');
+jitter10 = load('Shuffle10um_15-Jan-2016.mat','PotSites');
+%jitter15 = load('Jitter15um_New.mat','Pot15um');
+jitter20 = load('Shuffle10um_15-Jan-2016.mat','PotSites');
 
 for i = 1:22
     %     mean5(i) = sum(jitter5.Pot5um(i,:))/numel(find(jitter5.Pot5um(i,:)));
@@ -95,36 +95,36 @@ for i = 1:22
     %     mean15(i) = sum(jitter15.Pot15um(i,:))/numel(find(jitter15.Pot15um(i,:)));
     %     mean20(i) = sum(jitter20.Pot20um(i,:))/numel(find(jitter20.Pot20um(i,:)));
     
-    temp1Index = find(jitter1.Pot1um(i,:));
-    temp1Points = jitter1.Pot1um(i,temp1Index);
+    temp1Index = find(jitter1.PotSites(i,:));
+    temp1Points = jitter1.PotSites(i,temp1Index);
     mean1(i) = mean(temp1Points);
     stDev1(i) = std(temp1Points);
     clear temp1Index;
     clear temp1Points;
     
-    temp5Index = find(jitter5.Pot5um(i,:));
-    temp5Points = jitter5.Pot5um(i,temp5Index);
+    temp5Index = find(jitter5.PotSites(i,:));
+    temp5Points = jitter5.PotSites(i,temp5Index);
     mean5(i) = mean(temp5Points);
     stDev5(i) = std(temp5Points);
     clear temp5Index;
     clear temp5Points;
     
-    temp10Index = find(jitter10.Pot10(i,:));
-    temp10Points = jitter10.Pot10(i,temp10Index);
+    temp10Index = find(jitter10.PotSites(i,:));
+    temp10Points = jitter10.PotSites(i,temp10Index);
     mean10(i) = mean(temp10Points);
     stDev10(i) = std(temp10Points);
     clear temp10Index;
     clear temp10Points;
     
-    temp15Index = find(jitter15.Pot15um(i,:));
-    temp15Points = jitter15.Pot15um(i,temp15Index);
-    mean15(i) = mean(temp15Points);
-    stDev15(i) = std(temp15Points);
-    clear temp15Index;
-    clear temp15Points;
+%     temp15Index = find(jitter15.Pot15um(i,:));
+%     temp15Points = jitter15.Pot15um(i,temp15Index);
+%     mean15(i) = mean(temp15Points);
+%     stDev15(i) = std(temp15Points);
+%     clear temp15Index;
+%     clear temp15Points;
     
-    temp20Index = find(jitter20.Pot20um(i,:));
-    temp20Points = jitter20.Pot20um(i,temp20Index);
+    temp20Index = find(jitter20.PotSites(i,:));
+    temp20Points = jitter20.PotSites(i,temp20Index);
     mean20(i) = mean(temp20Points);
     stDev20(i) = std(temp20Points);
     clear temp20Index;
@@ -139,16 +139,16 @@ mean1(4) = 0;
 figure();
 for j = 1:numel(cellsOfInterest)
     subplot(2,4,j);
-    histogram(jitter1.Pot1um(cellsOfInterest(j),:),'BinWidth',1);
-    set(gca,'XLim',[0, max(jitter1.Pot1um(cellsOfInterest(j),:))+1]);
+    histogram(jitter1.PotSites(cellsOfInterest(j),:),'BinWidth',1);
+    set(gca,'XLim',[0, max(jitter1.PotSites(cellsOfInterest(j),:))+1]);
     title(cellIDs(cellsOfInterest(j)));
     hold on;
 end
 subplot(2,4,8);
-plot(1:7, mean1(cellsOfInterest), '-or',  'MarkerSize' , 10, 'MarkerFaceColor','r' , 'LineWidth',2);
+plot(1:6, mean1(cellsOfInterest), '-or',  'MarkerSize' , 10, 'MarkerFaceColor','r' , 'LineWidth',2);
 hold on;
-plot(1:7,sumOfPotentialSynapses, '-ok', 'MarkerSize' , 10, 'MarkerFaceColor','k', 'LineWidth',2);
-plot([1:7;1:7], [mean1(cellsOfInterest)-stDev1(cellsOfInterest); mean1(cellsOfInterest)+stDev1(cellsOfInterest)], 'Color','r','LineWidth',1);
+plot(1:6,sumOfPotentialSynapses, '-ok', 'MarkerSize' , 10, 'MarkerFaceColor','k', 'LineWidth',2);
+plot([1:6;1:6], [mean1(cellsOfInterest)-stDev1(cellsOfInterest); mean1(cellsOfInterest)+stDev1(cellsOfInterest)], 'Color','r','LineWidth',1);
 ylabel('Average potential Synapses');
 xlabel('Cell number');
 set(gcf,'color','w');
@@ -158,8 +158,8 @@ hold off;
 figure();
 for j = 1:numel(cellsOfInterest)
     subplot(2,4,j);
-    histogram(jitter5.Pot5um(cellsOfInterest(j),:),'BinWidth',1);
-    set(gca,'XLim',[0, max(jitter5.Pot5um(cellsOfInterest(j),:))+1]);
+    histogram(jitter5.PotSites(cellsOfInterest(j),:),'BinWidth',1);
+    set(gca,'XLim',[0, max(jitter5.PotSites(cellsOfInterest(j),:))+1]);
     title(cellIDs(cellsOfInterest(j)));
     hold on;
 end
@@ -177,8 +177,8 @@ hold off;
 figure();
 for j = 1:numel(cellsOfInterest)
     subplot(2,4,j);
-    histogram(jitter10.Pot10(cellsOfInterest(j),:),'BinWidth',1);
-    set(gca,'XLim',[0, max(jitter10.Pot10(cellsOfInterest(j),:))+1]);
+    histogram(jitter10.PotSites(cellsOfInterest(j),:),'BinWidth',1);
+    set(gca,'XLim',[0, max(jitter10.PotSites(cellsOfInterest(j),:))+1]);
     title(cellIDs(cellsOfInterest(j)));
     hold on;
 end
@@ -193,30 +193,30 @@ set(gcf,'color','w');
 suptitle('JitterRadius 10\mum');
 hold off;
 
-figure();
-for j = 1:numel(cellsOfInterest)
-    subplot(2,4,j);
-    histogram(jitter15.Pot15um(cellsOfInterest(j),:),'BinWidth',1);
-    set(gca,'XLim',[0, max(jitter15.Pot15um(cellsOfInterest(j),:))+1]);
-    title(cellIDs(cellsOfInterest(j)));
-    hold on;
-end
-subplot(2,4,8);
-plot(1:7, mean15(cellsOfInterest), '-om',  'MarkerSize' , 10, 'MarkerFaceColor','m' , 'LineWidth',2);
-hold on;
-plot(1:7,sumOfPotentialSynapses, '-ok', 'MarkerSize' , 10, 'MarkerFaceColor','k', 'LineWidth',2);
-plot([1:7;1:7], [mean15(cellsOfInterest)-stDev15(cellsOfInterest); mean15(cellsOfInterest)+stDev15(cellsOfInterest)], 'Color','m','LineWidth',1);
-ylabel('Average potential Synapses');
-xlabel('Cell number');
-set(gcf,'color','w');
-suptitle('JitterRadius 15\mum');
-hold off;
+% figure();
+% for j = 1:numel(cellsOfInterest)
+%     subplot(2,4,j);
+%     histogram(jitter15.Pot15um(cellsOfInterest(j),:),'BinWidth',1);
+%     set(gca,'XLim',[0, max(jitter15.Pot15um(cellsOfInterest(j),:))+1]);
+%     title(cellIDs(cellsOfInterest(j)));
+%     hold on;
+% end
+% subplot(2,4,8);
+% plot(1:7, mean15(cellsOfInterest), '-om',  'MarkerSize' , 10, 'MarkerFaceColor','m' , 'LineWidth',2);
+% hold on;
+% plot(1:7,sumOfPotentialSynapses, '-ok', 'MarkerSize' , 10, 'MarkerFaceColor','k', 'LineWidth',2);
+% plot([1:7;1:7], [mean15(cellsOfInterest)-stDev15(cellsOfInterest); mean15(cellsOfInterest)+stDev15(cellsOfInterest)], 'Color','m','LineWidth',1);
+% ylabel('Average potential Synapses');
+% xlabel('Cell number');
+% set(gcf,'color','w');
+% suptitle('JitterRadius 15\mum');
+% hold off;
 
 figure();
 for j = 1:numel(cellsOfInterest)
     subplot(2,4,j);
-    histogram(jitter20.Pot20um(cellsOfInterest(j),:),'BinWidth',1);
-    set(gca,'XLim',[0, max(jitter20.Pot20um(cellsOfInterest(j),:))+1]);
+    histogram(jitter20.PotSites(cellsOfInterest(j),:),'BinWidth',1);
+    set(gca,'XLim',[0, max(jitter20.PotSites(cellsOfInterest(j),:))+1]);
     title(cellIDs(cellsOfInterest(j)));
     hold on;
 end

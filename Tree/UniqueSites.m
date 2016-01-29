@@ -45,7 +45,7 @@ for kk=1:numel(AxnTree)
                 AxtempyJitter = Axtempy+jitterXYZ(2);
                 AxtempzJitter = Axtempz+jitterXYZ(3);
                 if Display == true
-                    h1Jit = plot3(AxtempxJitter,AxtempyJitter,AxtempzJitter,'color',[0 1 0],'lineWidth',1);
+                    h1 = plot3(AxtempxJitter,AxtempyJitter,AxtempzJitter,'color',[0 1 0],'lineWidth',1);
                 end
                 axonTreeJitter = [axonTreeJitter; AxtempxJitter AxtempyJitter AxtempzJitter];
             end

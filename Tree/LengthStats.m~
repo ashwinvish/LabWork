@@ -53,7 +53,7 @@ for i = 1:numel(cellIDs)
     end
 end
 pbaspect([1 2 1]);
-h = set(gca,'YLim',[-100 750],'YTick',[],'YColor','w','XLim',[0 6],'XTick',[1 5],'XTickLabel',{'axon', 'dendrite'},'Color',[ctrans 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+h = set(gca,'YLim',[-100 750],'XLim',[0 6],'XTick',[1 5],'XTickLabel',{'axon', 'dendrite'},'Color',[ctrans 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 ylabel('Length in \mum', 'FontName', 'Arial', 'FontSize', 40);
 box off;
@@ -88,7 +88,8 @@ for i = 1:numel(cellIDs)
     end
 end
 pbaspect([1 2 1]);
-h = set(gca,'YLim',[-100 750],'YTick',[],'YColor','w','XLim',[0 6],'XTick',[1 5],'XTickLabel',{'axon', 'dendrite'},'Color',[cbarhl 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+h = set(gca,'YLim',[-100 750],'YTick',[],'YColor','w','XLim',[0 6],'XTick',[1 5],'XTickLabel',{'axon', 'dendrite'},'Color',[cdbx 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+
 set(gcf,'color','w');
 ylabel('Length in \mum', 'FontName', 'Arial', 'FontSize', 40);
 box off;

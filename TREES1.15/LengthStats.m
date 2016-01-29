@@ -202,33 +202,80 @@ hold off;
 
 
 figure();
-[ax,h1,h2] = plotyy(1:22,denLength(I)/1000,1:22,axLength(I)/1000, 'plot', 'plot');
+% [ax,h1,h2] = plotyy(1:22,denLength(I)/1000,1:22,axLength(I)/1000, 'plot', 'plot');
+% h1.Marker =  'o';
+% h1.MarkerFaceColor = 'b';
+% h1.MarkerSize = 25;
+% h1.LineStyle = 'none';
+% %h1.MarkerEdgeColor = 'none';
+% h2.Marker = 'o';
+% h2.MarkerFaceColor =  'r';
+% h2.MarkerEdgeColor = 'none';
+% h2.MarkerSize = 25;
+% h2.LineStyle = 'none';
+% set(ax(1),'xcolor','k',  'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+% set(ax(2),'xcolor','k',  'FontName', 'Arial', 'FontSize', 40,'LineWidth',2);
+% set(ax(1),'YLim', [0 500], 'YTick', [0,125,250,375,500]);
+% set(ax(2),'YLim', [0 1100], 'YTick',[0,250,500, 750,1100]);
+% set(ax(1),'ycolor','b');
+% set(ax(2),'ycolor','r');
+% xlabel('Neuron #',  'FontName', 'Arial', 'FontSize', 40);
+% ylabel(ax(1),'Dendritic length in \mum',  'FontName', 'Arial', 'FontSize', 40);
+% ylabel(ax(2),'Axonal length in \mum', 'FontName', 'Arial', 'FontSize', 40);
+% box off;
+% axis (ax(1), 'square');
+% axis (ax(2), 'square');
+% set(ax(1),'XLim',[1 23],'XTick', 1:5:22 );
+% set(ax(2),'XLim',[1 23],'XTick', 1:5:22);
+% set(gcf,'color','w');
+
+
+h1 = plot(1:22, denLength(I)/1000 );
 h1.Marker =  'o';
 h1.MarkerFaceColor = 'b';
 h1.MarkerSize = 25;
 h1.LineStyle = 'none';
-%h1.MarkerEdgeColor = 'none';
+hold on;
+h2 = plot(1:22 , axLength(I)/1000);
 h2.Marker = 'o';
 h2.MarkerFaceColor =  'r';
 h2.MarkerEdgeColor = 'none';
 h2.MarkerSize = 25;
 h2.LineStyle = 'none';
-set(ax(1),'xcolor','k',  'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-set(ax(2),'xcolor','k',  'FontName', 'Arial', 'FontSize', 40,'LineWidth',2);
-set(ax(1),'YLim', [0 500], 'YTick', [0,125,250,375,500]);
-set(ax(2),'YLim', [0 1100], 'YTick',[0,250,500, 750,1100]);
-set(ax(1),'ycolor','b');
-set(ax(2),'ycolor','r');
 xlabel('Neuron #',  'FontName', 'Arial', 'FontSize', 40);
-ylabel(ax(1),'Dendritic length in \mum',  'FontName', 'Arial', 'FontSize', 40);
-ylabel(ax(2),'Axonal length in \mum', 'FontName', 'Arial', 'FontSize', 40);
-box off;
-axis (ax(1), 'square');
-axis (ax(2), 'square');
-set(ax(1),'XLim',[1 23],'XTick', 1:5:22 );
-set(ax(2),'XLim',[1 23],'XTick', 1:5:22);
+ylabel('Length in \mum' , 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'XLim',[0,22],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
+axis square;
+box off;
 
+%%
+figure();
+for i = 1:1:6
+    plot([1,2], [denLength(I(i))/1000, axLength(I(i))], '-ko','MarkerSize',25, 'MarkerFaceColor', [0.7,0.7,0.7], 'LineWidth',2);
+    hold on;
+end
+plot([1,2], [mean(denLength(I(1:6)))/1000, mean(axLength(I(1:6)))/1000], '-ko','MarkerSize',35,'MarkerFaceColor', 'k');
+set(gca,'YLim', [0, 800], 'XLim', [0.5,2.5], 'XTick', [1,2],'XTickLabel',{'Dendrite','Axon'},'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+
+figure();
+for  j = 7:16
+    plot([1,2], [denLength(I(j))/1000, axLength(I(j))/1000], '-ko','MarkerSize',25, 'MarkerFaceColor', [0.7,0.7,0.7], 'LineWidth',2);
+    hold on;
+end
+plot([1,2], [mean(denLength(I(7:13)))/1000, mean(axLength(I(7:13)))/1000], '-ko','MarkerSize',35,'MarkerFaceColor', 'k');
+set(gca,'YLim', [0, 800], 'XLim', [0.5,2.5], 'XTick', [1,2],'XTickLabel',{'Dendrite','Axon'},'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2 );
+box off;  
+
+figure();
+for  k = 17:22
+    plot([1,2], [denLength(I(k))/1000, axLength(I(k))/1000], '-ko','MarkerSize',25, 'MarkerFaceColor', [0.7,0.7,0.7], 'LineWidth',2);
+    hold on;
+end
+plot([1,2], [mean(denLength(I(14:22)))/1000, mean(axLength(I(14:22)))/1000], '-ko','MarkerSize',35,'MarkerFaceColor', 'k');
+set(gca,'YLim', [0, 800], 'XLim', [0.5,2.5], 'XTick', [1,2],'XTickLabel',{'Dendrite','Axon'},'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2 );
+box off;
 
 
 
