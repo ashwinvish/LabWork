@@ -1,4 +1,4 @@
-%% 
+%%
 clear all;
 loadTrees; % Load all data
 
@@ -47,7 +47,7 @@ for kk = 1:numel(cellIDs)
     end
 end
 hold on;
- scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','-', 'color','k');                  	% stripe1
 %  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','-','color','k' );                      % stripe2
 
@@ -116,7 +116,7 @@ for kk = 1:numel(cellIDs)
         axes(ha(index));
         DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1]);
         %DisplayTree(allTrees{kk},[1],true,[0.3 0.5 1]);
-        view(-150,35);      
+        view(-150,35);
         title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
     else
         continue;
@@ -137,16 +137,17 @@ for kk = 1 : length(allTrees)
 end
 
 %figure();
-scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500, rho, 'fill', 'Marker','o', 'MarkerEdgeColor', [0.5 0.5 0.5]);
+scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500, rho, 'fill', 'Marker','o', 'MarkerEdgeColor', 'k');
 %scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, 'red', 'fill', 'Marker','o' ,'LineWidth', 2,'MarkerEdgeColor', 'k');
 hold on;
 scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+caxis([0 1]);
 
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
-plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
+plot( [120000, 140000], [70000, 70000],'-k' ) % insert 20um sclaebar
 daspect([1 1 1]); % make aspect ratio [1 1 1]
-%set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 set(gca,'Ydir','reverse');
 view([-180,90]); % xy view
 
@@ -163,10 +164,10 @@ figure();
 map = colormap(parula(22));
 
 for i = 1:length(cellIDs);
-A = i;
-temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
-cellNo = find(rho(i) == sort(rho));
-DisplayTree(allTrees{i},false,[], map(cellNo,:));
+    A = i;
+    temp1 = allPreSynapse{A}; temp2 = allPostSynapse{A};
+    cellNo = find(rho(i) == sort(rho));
+    DisplayTree(allTrees{i},false,[], map(cellNo,:));
 end
 h = colorbar;
 h.Limits = [min(rho) max(rho)];
@@ -475,42 +476,28 @@ ylabel('rho')
 % distribution of postsynaptic sites
 figure(18);
 for i = 1:length(cellIDs)
-    lengthToPostNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPost{i});
+    [lengthToPostNode,PostDiff] = findPathLength_new([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPost{i});
     allLengthToPostNode{i} = lengthToPostNode ;
+    allPostDiff{i} = PostDiff;
     subplot(3,8,i);
     scatter(1:size(allPost{i},1),sort(lengthToPostNode)/cell2mat(allRawLength(i)));
     title(cellIDs{i})
 end
 
-% figure(19);
-% for i = 1:length(cellIDs)
-%     subplot(3,8,i);
-%     hist(sort(allLengthToPostNode{i})/cell2mat(allRawLength(i)), length(allPost{i}));title(cellIDs{i});
-% end
-
 % distribution of presynaptic sites
 figure(20);
 for i = 1:length(cellIDs)
-    if cellfun('isempty',allPreSynapse(1,i)) == 1
-        continue;
-    else
-        lengthToPreNode = findPathLength([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPreSynapse{i});
+    if ~cellfun('isempty',allPreSynapse(1,i)) == 1
+        i
+        [lengthToPreNode, PreDiff] = findPathLength_new([cellIDs{i} , '_WithTags.swc'],allTrees{i},[5,5,45],allPreSynapse{i});
         allLengthToPreNode{i} = lengthToPreNode ;
-              subplot(3,8,i);
-             scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
-            title(cellIDs{i})
+        allPreDiff{i} = PreDiff;
+        subplot(3,8,i);
+        scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
+        title(cellIDs{i})
     end
 end
-% figure(21);
-% for i = 1:length(cellIDs)
-%     if cellfun('isempty',allPreSynapse(1,i)) == 1
-%         continue;
-%     else
-%         subplot(3,8,i);
-%         hist(sort(allLengthToPreNode{i})/cell2mat(allRawLength(i)), length(allPreSynapse{i}));
-%         title(cellIDs{i});
-%     end
-% end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Misc. plots
 % plot emperical CDFs for all cells
@@ -599,12 +586,12 @@ end
 
 figure;
 subplot(121);
-histogram(allPostSynapticLength/1000); % dimensions in microns
+histogram(allPostSynapticLength/1000,'BinWidth',10); % dimensions in microns
 title('Distribution of Postsynaptic pathlength');
 xlabel('Postsynaptic pathlenght in \mum');
 ylabel('count');
 subplot(122);
-histogram(allPreSynapticLength/1000); % dimensions in microns
+histogram(allPreSynapticLength/1000,'BinWidth',10); % dimensions in microns
 title('Distribution of Presynaptic pathlength');
 xlabel('Presynaptic pathlenght in \mum');
 ylabel('count');
@@ -637,43 +624,36 @@ set(gca,'XLim', [0,250],'FontName','Arial', 'FontSize', 40, 'LineWidth',2);
 
 %% Distribution of inter-synaptic distance
 
-clear PostSynapticDistance;
-PostSynapticDistance = [];
+clear InterPostSynapticDistance;
+InterPostSynapticDistance = [];
 figure;
-subplot(1,2,1);
-for ii = 1:size(cellIDs,2)
-    [y,I] = sort(allLengthToPostNode{ii});
-    for i = 2:length(I)
-        tempPost(ii,i-1) = abs(allLengthToPostNode{ii}(I(i-1)) - allLengthToPostNode{ii}(I(i)));
-    end
-    PostSynapticDistance = [PostSynapticDistance;tempPost(ii,:)'];
-end
-%histogram(find(PostSynapticDistance>0)/1000);
-histogram(PostSynapticDistance(find(PostSynapticDistance>0))/1000, 'BinWidth',1);
-title('Inter-postsynaptic distance');
-xlabel('Distance in \mum');
-ylabel('Count');
+%subplot(1,2,1);
 
-clear PreSynapticDistance;
-PreSynapticDistance = [];
+for ii = 1:numel(cellIDs)
+    subplot(3,8,ii)
+    InterPostSynapticDistance = [InterPostSynapticDistance;nonzeros(allPostDiff{ii})];
+    histogram(nonzeros(allPostDiff{ii})/1000,'BinWidth',0.5);
+end
+% histogram(InterPostSynapticDistance/1000, 'BinWidth',0.5);
+% title('Inter-postsynaptic distance');
+% xlabel('Distance in \mum');
+% ylabel('Count');
+
+clear InterPreSynapticDistance;
+InterPreSynapticDistance = [];
 tempPre =[];
-subplot(1,2,2);
+figure();
+%subplot(1,2,2);
 index =1;
+
 for ii = 1:size(cellIDs,2)
-    if ~isempty(allLengthToPreNode{ii})==1 & size(allLengthToPreNode{ii},1)>1
-        [y,I] = sort(allLengthToPreNode{ii});
-        for i = 2:length(I)
-            tempPre(ii,i-1) = abs(allLengthToPreNode{ii}(I(i-1)) - allLengthToPreNode{ii}(I(i)));
-        end
-        PreSynapticDistance = [PreSynapticDistance;tempPre(index,:)'];
-        index = index+1;
-    else
-        index = index+1;
-        continue;
+    if ~isempty(allPreDiff{ii})
+        ii;
+        InterPreSynapticDistance = [InterPreSynapticDistance; nonzeros(allPreDiff{ii})];
     end
 end
-%histogram(find(PreSynapticDistance>0)/1000);
-histogram(PreSynapticDistance(find(PreSynapticDistance>0))/1000, 'BinWidth', 1)
+             
+histogram(InterPreSynapticDistance/1000, 'BinWidth', 0.5)
 title('Inter-presynaptic distance');
 xlabel('Distance in \mum');
 ylabel('Count');
@@ -687,6 +667,8 @@ clear temp;
 for i = 1:size(cellIDs,2)
     if eval([cellIDs{i},'_axon'])>0
         AxnNodes = eval([cellIDs{i},'_axon']);
+                AxnNodes = sort(AxnNodes);
+
         tempLength = 0;
         for jj = 1:numel(eval([cellIDs{i},'_axon']))
             tempLength = tempLength + sum(allTrees{i}{AxnNodes(jj)}{1,4}{1,2});
@@ -802,17 +784,17 @@ axis(ax(2),'square');
 %     BranchOrderVisualizer(allTrees{i},[1],[BranchOrder{i}]);
 % end
 % figtitle('Branch Order visualization');
-% 
+%
 % figure();
 % h = tight_subplot(3,8,[.05 .05],[.05 .1],[.01 .01]);
 % for i =1:length(cellIDs)
 %     axes(h(i));
-%     histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]); 
+%     histogram(BranchOrder{i},'BinLimits',[min(BranchOrder{i}), max(BranchOrder{i})]);
 %     title(sprintf('Cell ID %s', cellIDs{i}));
 % end
 
 % figtitle('Branch order distribution for all cells');
-% 
+%
 % figure();
 % [rs,cs] = cellfun(@size,allSpine);
 % bar(sort(cellfun(@sum,Branches)-rs));

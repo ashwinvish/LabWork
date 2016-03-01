@@ -1,4 +1,4 @@
-function [denTree,x,y] = DendriticTree(tree,treeno, cellIDs, col, Display)
+function [peak, denTree] = DendriticTree(tree,treeno, cellIDs, col, Display)
 % DENDRITICTREE is to extract all the nodes of the dendrites of a tree
 %   Tree is the tree whos dendrites are being extracted
 %   treeno is the ID associated with the tree
@@ -33,21 +33,31 @@ for jj = 1:numel(DenTree)
         denTree = [denTree; DnTempx DnTempy DnTempz];            % populate with all dendritic trees of all trees
     end
 end
-scatter3(denTree(1,1), denTree(1,2),denTree(1,3),500,'MarkerFaceColor',col,'MarkerEdgeColor','k');
-daspect([1,1,1]);
-view(-180,0);
-set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'ZLim',[-60000, -0],'XLim',[20000 , 140000]);
-box on;
 
-subplot(1,2,2)
-h = histogram(-1*denTree(:,3)/1000, 'BinWidth',1,'Orientation','horizontal','FaceColor',col);
- x= h.Values;
- y = h.BinEdges;
-% plot([0,x],y,'-','Color',col);
-pbaspect([2,1,1]);
-%plot(h.Values,1:2:60-1);
-hold on;
-set(gca,'YLim',[0 ,60],'YDir','reverse', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-set(gcf,'color','w');
-box off;
+if Display == true
+    scatter3(denTree(1,1), denTree(1,2),denTree(1,3),500,'MarkerFaceColor',col,'MarkerEdgeColor','k');
+    daspect([1,1,1]);
+    view(-180,0);
+    set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'ZLim',[-60000, -0],'XLim',[20000 , 140000]);
+    box on;
+    
+    subplot(1,2,2)
+    %
+     histogram(-1*denTree(:,3)/1000, 'BinWidth',1,'Orientation','horizontal','FaceColor',col);
+    %plot([0,x],y,'-','Color',col);
+    pbaspect([2,1,1]);
+    %plot(h.Values,1:2:60-1);
+    hold on;
+    set(gca,'YLim',[0 ,60],'YTick', [0, 20, 40, 60], 'YDir','reverse', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+    set(gcf,'color','w');
+    box off;
+end;
+
+h = histogram(-1*denTree(:,3)/1000, 'BinWidth',1,'Orientation','horizontal','FaceColor',col,'Visible', 'off');
+x= h.Values;
+y = h.BinEdges;
+%histfit(x,60,'normal');
+[m,I] = max(x);
+peak = y(I);
+
 end

@@ -1,4 +1,4 @@
-function[lengthToNode] = findPathLength(fileName,resolution,queryNodes,validNodeTypes)
+function[lengthToNode] = findPathLength_old(fileName,resolution,queryNodes,validNodeTypes)
 % Input queryNodes need to be in pixel coordinates ONLY
 
 if nargin < 4
@@ -28,7 +28,7 @@ for i =  1:size(queryNodes,1)
     [lia,locb] = ismember(I,irreducibleNodes);
     
     for kk = 2:locb
-        tmpParent = edges(find(edges(:,1)==kk),2); % assume that the edges are ordered pairs: (child, parent)
+        tmpParent = edges(find(edges(:,1)==kk),2) % assume that the edges are ordered pairs: (child, parent)
         path = nodes(kk,:);
         while tmpParent > locb
             newTmpParent = edges(find(edges(:,1)==tmpParent),2);

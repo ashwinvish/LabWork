@@ -1,4 +1,4 @@
-function [ h4 ] = PlotViews( figureHandle )
+function [ h2,h3 ] = PlotViews( figureHandle )
 %PlotViews Plots the three views xy,xz,yz in a single figure window
 %   figureHandle is the handle for the figure, typically the input is the
 %   XY view
@@ -8,18 +8,18 @@ h1 = figureHandle;
 
 %YZ view
 h2 = figure(2);
-set(gcf,'color','w');
+set(gcf,'color','none', 'units','normalized','outerposition',[0 0 1 1]);
 copyobj(get(h1,'children'),h2);
 view([-90,0]); camroll(90);
 
 % XZ view
 h3 = figure(3);
-set(gcf,'color','w');
+set(gcf,'color','none', 'units','normalized','outerposition',[0 0 1 1]);
 copyobj(get(h1,'children'),h3);
 view([-180, 0]);
 
 h4 = figure(4);
-set(gcf,'color','w');
+set(gcf,'color','none');
 
 newh1 = copyobj(get(h1,'children'),h4);
 set(newh1,'Units','Normalized','Position',[0.3 0.3 0.3250 0.8150]);

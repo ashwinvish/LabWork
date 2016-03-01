@@ -253,22 +253,13 @@ hold off;
 
 %%
 
-plot(size(allPost{4},1),Int1_4colPreSynapses,'ko', 'MarkerSize',25,'MarkerFaceColor','k','MarkerEdgeColor','none');
+plot(size(allPreSynapse{4},1),Int1_4colPreSynapses,'o');
 hold on;
-plot(size(allPost{5},1),Int1_5colPreSynapses,'ko', 'MarkerSize',25,'MarkerFaceColor','k','MarkerEdgeColor','none');
-plot(size(allPost{6},1),Int1_6colPreSynapses,'ko', 'MarkerSize',25,'MarkerFaceColor','k','MarkerEdgeColor','none');
-plot(size(allPost{7},1),Int1_7colPreSynapses,'ko', 'MarkerSize',25,'MarkerFaceColor','k','MarkerEdgeColor','none');
-plot(size(allPost{16},1),Int2_9colPreSynapses,'ko', 'MarkerSize',25,'MarkerFaceColor','k','MarkerEdgeColor','none');
-plot(size(allPost{21},1),Int3_5colPreSynapses,'ko', 'MarkerSize',25,'MarkerFaceColor','k','MarkerEdgeColor','none');
-%line([0,150],[0,150],'LineWidth',2);
-set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-set(gcf,'color','w');
-xlabel('# postsynaptic sites', 'FontName', 'Arial', 'FontSize', 40);
-ylabel(' # presynaptic sites on collaterals', 'FontName', 'Arial', 'FontSize', 40);
-box off;
-axis square;
-hold off;
+plot(size(allPreSynapse{5},1),Int1_5colPreSynapses,'o');
+plot(size(allPreSynapse{6},1),Int1_6colPreSynapses,'o');
+plot(size(allPreSynapse{7},1),Int1_7colPreSynapses,'o');
+plot(size(allPreSynapse{16},1),Int2_9colPreSynapses,'o');
+plot(size(allPreSynapse{21},1),Int3_5colPreSynapses,'o');
 
-ColRatio = [Int1_4colPreSynapses/size(allPreSynapse{4},1),Int1_5colPreSynapses/size(allPreSynapse{5},1),Int1_6colPreSynapses/size(allPreSynapse{6},1),Int1_7colPreSynapses/size(allPreSynapse{7},1),Int2_9colPreSynapses/size(allPreSynapse{16},1),Int3_5colPreSynapses/size(allPreSynapse{21},1)];
-LocalSynapseRatio = [Int1_4colPreSynapses/size(allPost{4},1),Int1_5colPreSynapses/size(allPost{5},1),Int1_6colPreSynapses/size(allPost{6},1),Int1_7colPreSynapses/size(allPost{7},1),Int2_9colPreSynapses/size(allPost{16},1),Int3_5colPreSynapses/size(allPost{21},1)];
 
+ColRatio = [size(allPreSynapse{4},1)/Int1_4colPreSynapses,size(allPreSynapse{5},1)/Int1_5colPreSynapses,(size(allPreSynapse{6},1)/Int1_6colPreSynapses,size(allPreSynapse{7},1)/Int1_7colPreSynapses   ]

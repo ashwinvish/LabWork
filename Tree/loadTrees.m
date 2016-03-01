@@ -38,6 +38,7 @@ cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int2_6','Int2_9','Int3_6'};           
 cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5', 'Int2_8',};                                   % all bdx1b cells
 cellIDsTrans = {'Int1_7','Int3_5'};                                                                       % all cells with ipsi and contra projections            
 cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};                                            % all barhl1 cells
+cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
 
 
 
@@ -47,8 +48,14 @@ for kk = 1: numel(cellIDs)
     [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true, resolution);
     [thisTree,rawLength,thisPostSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],5, true, resolution);
     [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true, resolution);
-    allTrees{kk} = thisTree; allPreSynapse{kk} = thisPreSynapse; allPostSynapse{kk} = thisPostSynapse;allSpine{kk} = thisSpine;
-    allRawLength{kk} = rawLength; allPost{kk} = vertcat(thisPostSynapse, thisSpine);
+    [thisTree,rawLength,thisEnd] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],4, true, resolution);
+    allTrees{kk} = thisTree;
+    allPreSynapse{kk} = thisPreSynapse; 
+    allPostSynapse{kk} = thisPostSynapse;
+    allSpine{kk} = thisSpine;
+    allRawLength{kk} = rawLength;
+    allEnds{kk} = thisEnd;
+    allPost{kk} = vertcat(thisPostSynapse, thisSpine);
 end
 
 % control cells

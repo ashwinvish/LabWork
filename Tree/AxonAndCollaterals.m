@@ -1,6 +1,6 @@
 % plot all Colaterals of Int1_5
 %subplot(1,2,1);
-DisplayTree(allTrees{5},[1],true,eval([cellIDs{5},'_axon']),[1 0.5 0.3]);
+DisplayTree(allTrees{5},[1],true,eval([cellIDs{5},'_axon']),[1 0.5 0.3], allPreSynapse{5}, allPost{5});
 title('Complete axon of Int1_5');
 
 %subplot(1,2,2);

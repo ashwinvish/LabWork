@@ -1,6 +1,4 @@
-calx = [1,0.5,0];
-cdbx = [1, 0, 1];
-cbarhl = [0, 0.5, 1];
+
 AlxPostLength = [];
 DbxPostLength = [];
 BarhlPostLength = [];

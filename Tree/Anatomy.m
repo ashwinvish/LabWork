@@ -119,7 +119,7 @@ AnatomicalSpline(5*MauthnerAxon(:,1),5*MauthnerAxon(:,2),-45*MauthnerAxon(:,3), 
 
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
-plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
+%plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
 daspect([1 1 1]); % make aspect ratio [1 1 1]
 %set (gca,'Ydir','reverse');
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');

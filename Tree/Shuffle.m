@@ -1,4 +1,4 @@
-function [Pot] = Shuffle(allTrees, cellIDs, cellIDsAlx, Display, jitterRadius, Shuffles )
+function [Pot] = Shuffle(allTrees, cellIDs, cellIDsAxon, Display, jitterRadius, Shuffles )
 %SHUFFLE shuffles a trees axon with respect to all other dendrites from
 %remaining trees in the datset
 %   allTrees is a cell with all the tress in the datset
@@ -13,7 +13,7 @@ load CellAxons.mat
 
 for i = 1:numel(cellIDs)
     
-    if ismember(cellIDs(i), cellIDsAlx) == 1
+    if ismember(cellIDs(i), cellIDsAxon) == 1
         
         AxonTree = i
         thisAxonTree = allTrees{AxonTree};

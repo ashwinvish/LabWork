@@ -7,14 +7,20 @@ function [ h ] = PlotClass( cellClass, allTrees, cellIDs, col )
 
 load CellAxons.mat
 load LoadSynapses.mat
+colors = distinguishable_colors(numel(cellClass),col);
+index= 1;
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellClass) == 1 
-        DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],col, allPreSynapse{i}, allPost{i});
+        %DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:), allPreSynapse{i}, allPost{i});
+        DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:));
+        index = index+1;
     else
         continue
     end
 end
 
-end
+set(gca,'Color',[col, 0.2]);
+axis vis3d;
 
+end
