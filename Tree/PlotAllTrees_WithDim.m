@@ -137,23 +137,29 @@ for kk = 1 : length(allTrees)
 end
 
 %figure();
-scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500, rho, 'fill', 'Marker','o', 'MarkerEdgeColor', 'k');
+scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500,rho, 'fill', 'Marker','o', 'MarkerEdgeColor', 'k');
 %scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, 'red', 'fill', 'Marker','o' ,'LineWidth', 2,'MarkerEdgeColor', 'k');
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 1000,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+scatter3(Mid2C1(1,1),Mid2C1(1,2),Mid2C1(1,3), 500,'MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
+scatter3(Mid2C2(1,1),Mid2C2(1,2),Mid2C2(1,3), 500,'MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
+scatter3(Mid3C1(1,1),Mid3C1(1,2),Mid3C1(1,3), 500,'MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
+scatter3(Mid3C2(1,1),Mid3C2(1,2),Mid3C2(1,3), 500,'MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
+scatter3(CAD(1,1), CAD(1,2), CAD(1,3), 500,'MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
+scatter3(CAV(1,1), CAV(1,2), CAV(1,3), 500,'MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
 caxis([0 1]);
-
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [120000, 140000], [70000, 70000],'-k' ) % insert 20um sclaebar
 daspect([1 1 1]); % make aspect ratio [1 1 1]
 set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 set(gca,'Ydir','reverse');
-view([-180,90]); % xy view
-
+view([-128,32]); % xy view
+set(gca,'BoxStyle','full');
+CT = cbrewer('seq','OrRd',size(CellSoma,1));
+colormap(CT);
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                       % stripe1
 %  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                       % stripe2
-view([180,90]);
 axis vis3d;
 
 %  figHandle = gcf;
@@ -494,6 +500,7 @@ for i = 1:length(cellIDs)
         allPreDiff{i} = PreDiff;
         subplot(3,8,i);
         scatter(1:size(allPreSynapse{i},1),sort(lengthToPreNode)/cell2mat(allRawLength(i)));
+        %hold all;
         title(cellIDs{i})
     end
 end

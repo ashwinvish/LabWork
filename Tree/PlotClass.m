@@ -12,8 +12,8 @@ index= 1;
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellClass) == 1 
-        %DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:), allPreSynapse{i}, allPost{i});
-        DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:));
+        DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:), allPreSynapse{i}, allPost{i});
+        %DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:));
         index = index+1;
     else
         continue

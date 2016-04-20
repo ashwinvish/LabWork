@@ -37,7 +37,7 @@ if nargin < 9
     end
     
     X = [];  Y = []; Z = [];
-  
+    
     for kk=1:numel(tree)
         children = tree{kk}{2};
         for mm=1:numel(children)
@@ -65,7 +65,7 @@ if nargin < 9
     % plot convexhull of tree
     [ConHull ConVol] = convhull(X,Y,Z,'simplify', true);
     htri1 = trimesh(ConHull,X,Y,Z,'faceColor',HullColor,'FaceAlpha',0.2,'EdgeColor','black','EdgeAlpha',0.1);
-       
+    
     
     for kk=1:numel(highlightedNodes)
         if pixelUnits
@@ -84,17 +84,17 @@ if nargin < 9
             end
         end
     end
-
+    
     daspect([1 1 1]);
     axis vis3d;
     axis([20000 140000  60000 250000 -60000 0]);
-
+    
     plot( [20000, 40000], [70000, 70000],'-k' ) % insert 20um sclaebar
-
+    
     
     box off;
     XColor = [1,1,1]; YColor = [1,1,1];
     set (gca, 'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
-    view([-180,90]); 
+    view([-180,90]);
 end
 

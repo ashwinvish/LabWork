@@ -17,15 +17,16 @@ Dia(:,3) = -45*Diameter(:,3);
 
 % display diameters on the cells
 if Display == true
-    figure('units','normalized','outerposition',[0 0 1 1]);
-    subplot(1,2,1);
+    %figure('units','normalized','outerposition',[0 0 1 1]);
+    figure();
     DisplayTree(allTrees{cellNo},[1],false, [eval([cellIDs{cellNo},'_axon'])],[0.8,0.8,0.8]);
     hold on;
     scatter3(5*Diameter(:,1), 5*Diameter(:,2), -45*Diameter(:,3), 50, Diameter(:,4),'filled');
     colormap hot;
-    colorbar;
+    c = colorbar;
+    c.FontSize = 40;
+   
 end
-
 
 
 % get pathlenths to dendritic nodes
@@ -58,12 +59,21 @@ if isempty(axnTree)
     AxnDia = zeros(1,4);
 end
 
+% linear fits
+% axnfit
+
+% axnFitParam = [ones(length(AxnDia(:,4)),1), AxnDia(:,4)]\plengthAxon';
+% axnFit = [ones(length(AxnDia(:,4)),1),AxnDia(:,4)]*axnFitParam;
+
+axnFitParam = AxnDia(:,4)\plengthAxon';
+axnFit = AxnDia(:,4)*axnFitParam;
 
 
 if Display == true
-    subplot(1,2,2); %plot dendritic diameter and pathlength
+    figure(); %plot dendritic diameter and pathlength
     plot(plengthAxon/1000, AxnDia(:,4)./1000,'o', 'MarkerFaceColor',[0,0.8,0], 'MarkerEdgeColor','k', 'MarkerSize', 15);
     hold on;
+    %plot(plengthAxon/1000, sort(axnFit/1000),'-','Color',[0,0.8,0]);
     plot(plengthDia/1000, DenDia(:,4)./1000,'o', 'MarkerFaceColor',[0.9,0,0], 'MarkerEdgeColor','k', 'MarkerSize', 15);
     xlabel('Pathlength (\mum)', 'FontName', 'Arial', 'FontSize', 40);
     ylabel('Diameter (\mum)', 'FontName', 'Arial', 'FontSize', 40);
@@ -73,5 +83,10 @@ if Display == true
     box off
 end
 
+
+
+
 end
+
+
 

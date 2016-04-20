@@ -32,6 +32,12 @@ Int3_4_axon = [];
 Int3_5_axon = [1 34 52 80 82 83 86 88 90 103 104 107 111 112 113 114 115 91 92 81 84 87 89 95 96 98 99 100 93 94 101 102 105 106 108 109 110];
 Int3_6_axon = [5 29 37 39 42 52 53 5];
 MauthnerCell = [5*14474,5*49530,-45*448];                                                       % cartesian coordinates for the center of the Mauthner cell
+Mid2C1 = [5*9344,5*44812,-45*468];
+Mid2C2 = [5*10816,5*45268,-45*466];
+Mid3C1 = [5*13944,5*42036,-45*137];
+Mid3C2 = [5*13072,5*40892,-45*28];
+CAD = [5*6846,5*36655, -45*1 ];
+CAV = [5*6894,5*38023,-45*16];
 
 cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };								      % all CellIDS
 cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int2_6','Int2_9','Int3_6'};                                               % all the alx cells, Int2_8 , Int 3_5, Int 1_7
@@ -45,10 +51,10 @@ cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','I
 % Convert from .swc file to tree structre with presynapses,postsynapses,
 for kk = 1: numel(cellIDs)
     disp([cellIDs{kk} , '_WithTags.swc']);
-    [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true, resolution);
-    [thisTree,rawLength,thisPostSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],5, true, resolution);
-    [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true, resolution);
-    [thisTree,rawLength,thisEnd] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],4, true, resolution);
+    [thisTree,rawLength,thisPreSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],6, true, resolution); % 6 = presynaptic sites
+    [thisTree,rawLength,thisPostSynapse] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],5, true, resolution);% 5 = postsynapses
+    [thisTree,rawLength,thisSpine] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],9, true, resolution); % 9 = spines
+    [thisTree,rawLength,thisEnd] = generateIrreducibleDoubleLinkedTree_WithDim([cellIDs{kk} , '_WithTags.swc'],[-1:10],4, true, resolution);% 4 = exits thevolume
     allTrees{kk} = thisTree;
     allPreSynapse{kk} = thisPreSynapse; 
     allPostSynapse{kk} = thisPostSynapse;

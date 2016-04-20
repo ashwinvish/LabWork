@@ -64,7 +64,7 @@ for ii = 1:numel(cellIDs)
     InterPostSynapticDistance = [InterPostSynapticDistance;nonzeros(allPostDiff{ii})];
 end
 
-histogram(InterPostSynapticDistance/1000, 'FaceColor',[0.9,0,0],'BinWidth',500/1000, 'Normalization','pdf');
+histogram(InterPostSynapticDistance/1000, 'FaceColor',[0.9,0,0],'BinWidth',500/1000, 'Normalization','probability');
 hold on;
 xlabel('Inter postsynaptic distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Proabability', 'FontName', 'Arial', 'FontSize', 40);
@@ -119,6 +119,92 @@ set(gca, 'XTick',[0,5,10,15,20,25],'XLim',[-0.5,25],'FontName', 'Arial', 'FontSi
 set(gcf,'color','w');
 box off;
 axis square
+%%
+AlxInterPost = [];
+TransInterPost = [];
+DbxInterPost = [];
+BarhlInterPost = [];
+
+
+for i = 1:numel(cellIDs)
+    if ismember(cellIDs{i}, cellIDsAlx) ==1
+        AlxInterPost = [AlxInterPost; nonzeros(allPostDiff{i})];
+    elseif ismember(cellIDs{i}, cellIDsTrans) ==1
+        TransInterPost = [TransInterPost; nonzeros(allPostDiff{i})];
+    elseif ismember(cellIDs{i}, cellIDsDbx) ==1
+        DbxInterPost = [DbxInterPost; nonzeros(allPostDiff{i})];
+    else
+        BarhlInterPost = [BarhlInterPost; nonzeros(allPostDiff{i})];
+    end
+end
+
+
+
+
+AlxInterPre = [];
+TransInterPre = [];
+DbxInterPre = [];
+BarhlInterPre = [];
+
+
+for i = 1:numel(cellIDs)
+    if ismember(cellIDs{i}, cellIDsAlx) ==1
+        AlxInterPre = [AlxInterPre; nonzeros(allPreDiff{i})];
+    elseif ismember(cellIDs{i}, cellIDsTrans) ==1
+        TransInterPre = [TransInterPre; nonzeros(allPreDiff{i})];
+    elseif ismember(cellIDs{i}, cellIDsDbx) ==1
+        DbxInterPre = [DbxInterPre; nonzeros(allPreDiff{i})];
+    else
+        BarhlInterPre = [BarhlInterPre; nonzeros(allPreDiff{i})];
+    end
+end
+
+
+figure() 
+histogram(AlxInterPost/1000, 'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
+hold on;
+histogram(AlxInterPre/1000, 'FaceColor',[0,0.8,0],'BinWidth',0.5,'Normalization','probability');
+xlabel('Synaptic pathlenght (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[0, 25], 'YLim',[0,0.4],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[calx,0.2]);
+axis square;
+
+
+figure();
+histogram(TransInterPost/1000, 'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
+hold on;
+histogram(TransInterPre/1000,'FaceColor',[0,0.8,0],'BinWidth',0.5,'Normalization','probability');
+ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[0, 25],'YLim',[0,0.4],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[ctrans,0.2]);
+axis square;
+
+figure();
+histogram(DbxInterPost/1000,  'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
+ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[0, 25],'YLim',[0,0.4],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[cdbx,0.2]);
+axis square;
+
+figure();
+histogram(BarhlInterPost/1000, 'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
+ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[0, 25],'YLim',[0,0.4],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[cbarhl,0.2]);
+axis square;
+
+
+
+
 
 
 
@@ -161,7 +247,7 @@ axis square
 
 allAlxPostSynapticPathLength = [];
 allAlxPreSynapticPathLength = [];
-allTransPostSynapticPathLength = [];
+allTransPostSynapticPathLength = []; 
 allTransPreSynapticPathLength = [];
 allDbxPostSynapticPathLength = [];
 allBarhlPostSynapticPathLength = [];
@@ -183,9 +269,9 @@ end
 
 
 figure();
-histogram(allAlxPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',20,'Normalization','probability'); % dimensions in microns
+histogram(allAlxPostSynapticPathLength/1000, 'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
 hold on;
-histogram(allAlxPreSynapticPathLength/1000,'FaceColor',[0,0.9,0],'BinWidth',20,'Normalization','probability'); % dimensions in microns
+histogram(allAlxPreSynapticPathLength/1000, 'DisplayStyle','stairs','EdgeColor',[0,0.9,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
 xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0, 1200], 'YLim',[0,0.15],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
@@ -195,9 +281,9 @@ set(gca,'color',[calx,0.2]);
 axis square;
 
 figure();
-histogram(allTransPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',20,'Normalization','probability'); % dimensions in microns
+histogram(allTransPostSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
 hold on;
-histogram(allTransPreSynapticPathLength/1000,'FaceColor',[0,0.9,0],'BinWidth',20,'Normalization','probability'); % dimensions in microns
+histogram(allTransPreSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0,0.9,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
 %xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 %ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0, 1200],'YLim',[0,0.15],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
@@ -207,7 +293,7 @@ set(gca,'color',[ctrans,0.2]);
 axis square;
 
 figure();
-histogram(allDbxPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',20,'Normalization','probability'); % dimensions in microns
+histogram(allDbxPostSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
 %xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 %ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0, 1200],'YLim',[0,0.15],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
@@ -217,7 +303,7 @@ set(gca,'color',[cdbx,0.2]);
 axis square;
 
 figure();
-histogram(allBarhlPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',20,'Normalization','probability'); % dimensions in microns
+histogram(allBarhlPostSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
 %xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 %ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0, 1200],'YLim',[0,0.15],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
@@ -264,7 +350,8 @@ end
 figure();
 minDistance(all(~minDistance,2),:) = [];
 imagesc(minDistance/1000); % in microns
-colormap(hot);
+
+colormap(parula);
 c1 = colorbar;
 c1.Label.String = 'Distance(\mum)';
 %title('Minimum synaptic distance between trees in \mum');

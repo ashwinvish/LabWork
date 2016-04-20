@@ -1,6 +1,6 @@
 % all alx cells
 col = distinguishable_colors(numel(cellIDsAlx),calx);
-DisplayTree(allTrees{4},[1],false, [eval([cellIDs{4},'_axon'])],col(1,:),allPreSynapse{4}, allPostSynapse{4});
+DisplayTree(allTrees{4},[1],false, [eval([cellIDs{4},'_axon'])],col(2,:),allPreSynapse{4}, allPostSynapse{4});
 DisplayTree(allTrees{6},[1],false, [eval([cellIDs{6},'_axon'])],col(3,:),allPreSynapse{6}, allPostSynapse{6});
 set(gca,'color',[calx, 0.2]);
 set(gcf,'color','none', 'units','normalized','outerposition',[0 0 1 1]);

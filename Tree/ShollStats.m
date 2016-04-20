@@ -69,15 +69,16 @@ figure();
 %     plot(1:radius:radius*length(mean(ShollBarhlIntersections)), mean(ShollBarhlIntersections),'color', cbarhl, 'LineWidth', 2);
 
 
-shadedErrorBar((1:radius:radius*length(mean(ShollAlxIntersections))),ShollAlxIntersections,{@mean,@std},{'-','color',calx,'markerfacecolor',calx,'LineWidth',2},1);  
+shadedErrorBar((1:radius:radius*length(mean(ShollAlxIntersections))),ShollAlxIntersections,{@mean,@std},{'-','color',calx,'markerfacecolor',calx,'LineWidth',4},1);  
 hold on;
-shadedErrorBar((1:radius:radius*length(mean(ShollDbxIntersections))),ShollDbxIntersections,{@mean,@std},{'-','color',cdbx,'markerfacecolor',cdbx,'LineWidth',2},1);  
-shadedErrorBar((1:radius:radius*length(mean(ShollBarhlIntersections))),ShollBarhlIntersections,{@mean,@std},{'-','color',cbarhl,'markerfacecolor',cbarhl,'LineWidth',2},1);  
+shadedErrorBar((1:radius:radius*length(mean(ShollTransIntersections))),ShollTransIntersections,{@mean,@std},{'-','color',ctrans,'markerfacecolor',ctrans,'LineWidth',4},1);  
+shadedErrorBar((1:radius:radius*length(mean(ShollDbxIntersections))),ShollDbxIntersections,{@mean,@std},{'-','color',cdbx,'markerfacecolor',cdbx,'LineWidth',4},1);  
+shadedErrorBar((1:radius:radius*length(mean(ShollBarhlIntersections))),ShollBarhlIntersections,{@mean,@std},{'-','color',cbarhl,'markerfacecolor',cbarhl,'LineWidth',4},1);  
 
 
-set(gca, 'FontSize',20, 'FontName', 'Arial');
-xlabel('Lenght in \mum', 'FontSize',20, 'FontName', 'Arial');
-ylabel('Mean Sholl intersetcions', 'FontSize',20, 'FontName', 'Arial'); 
+set(gca, 'FontSize',40, 'FontName', 'Arial', 'LineWidth',2);
+xlabel('Length (\mum)', 'FontSize',40, 'FontName', 'Arial');
+ylabel('Mean Sholl intersetcions', 'FontSize',40, 'FontName', 'Arial'); 
 set(gca,'XLim', [0 220]);
 set(gcf,'color','w');
 axis square

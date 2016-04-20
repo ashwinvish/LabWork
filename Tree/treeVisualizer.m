@@ -1,10 +1,11 @@
 function treeVisualizer(tree,highlightedNodes,inducingNodes,specialNodes,newFigure,colorString,validNodes,pixelUnits)
 %relativeRes = [5 5 45]; % in nm
 rndclr = colorString;
-symCell={'o','s','v','x','d','*'};
+symCell={'o','o','v','x','d','*'};
 %synapseColor = [[0 0.4 0.4]; [0.2 0 0.8]]; % red - presynaptic; g- postsynaptic [1 0.2 0.2]
 synapseColor = [[0.9,0,0]; [0,0.7,0]; [0,0,0.5]];
-MEdgeColor = [[0.5,0,0]; [0,0.5,0]; [0,0.5,0]];
+%MEdgeColor = [[0.5,0,0]; [0,0.5,0]; [0,0.5,0]];
+MEdgeColor = [[0,0,0]; [0,0,0]; [0,0,0]];
 if nargin < 8
     pixelUnits = false;
     if nargin < 7

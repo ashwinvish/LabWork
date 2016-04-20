@@ -81,6 +81,20 @@ xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
 set(gca,'XLim',[1,8], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 
+
+figure;
+imagesc(sizeOfMyCell);
+CT = cbrewer('seq','Greys',50);
+colormap(parula);
+c1 = colorbar;
+c1.Label.String = 'Number of synapses';
+%title('Minimum synaptic distance between trees in \mum');
+xlabel('Postsynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Presynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gcf,'color','w');
+axis image;
+
 %% Plot mean of all potential synapses at different jitter radius
 
 jitter1 = load('Shuffle1000um_06-Feb-2016.mat','PotSites');

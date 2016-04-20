@@ -1,4 +1,4 @@
-function [peak, denTree] = DendriticTree(tree,treeno, cellIDs, col, Display)
+function [denTree, denXY, denYZ, denXZ, edge1, edge2, edge3] = DendriticTree(tree,treeno, cellIDs, col, Display)
 % DENDRITICTREE is to extract all the nodes of the dendrites of a tree
 %   Tree is the tree whos dendrites are being extracted
 %   treeno is the ID associated with the tree
@@ -24,40 +24,57 @@ for jj = 1:numel(DenTree)
             continue;
         else
             if Display == true
-                subplot(1,2,1)
-                h2 = plot3(DnTempx,DnTempy,DnTempz,'-','color',col);
+                h1 = subplot(2,2,1);
+                plot3(DnTempx,DnTempy,DnTempz,'-','color',col);
                 hold on;
-                %h2.Color(4) = 0.2;
             end
         end
         denTree = [denTree; DnTempx DnTempy DnTempz];            % populate with all dendritic trees of all trees
-    end
+    end 
 end
+% plot somata
+plot3(denTree(1,1), denTree(1,2),denTree(1,3),'o','MarkerSize',20,'MarkerFaceColor',col,'MarkerEdgeColor','k');
+hold on;
+
+denXZ = [];
+denYZ = [];
+denXY = [];
+
+edge1 = 0:5:60; % bins of 5um each along the Z axis
+[x1,y1] = histcounts(-1*denTree(:,3)/1000,edge1);
+denXZ =  [denXZ; [0,x1]];
+
+edge2 = 60:5:240; % bins of 5um each along the Y axis
+[x2,y2] = histcounts(denTree(:,2)/1000,edge2);
+denYZ =  [denYZ; [0,x2]];
+
+edge3 = 20:5:140; % bins of 5um each along the X axis
+[x3,y3] = histcounts(denTree(:,1)/1000,edge3);
+denXY =  [denXY; [0,x3]];
+
+
 
 if Display == true
-    scatter3(denTree(1,1), denTree(1,2),denTree(1,3),500,'MarkerFaceColor',col,'MarkerEdgeColor','k');
-    daspect([1,1,1]);
-    view(-180,0);
-    set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'ZLim',[-60000, -0],'XLim',[20000 , 140000]);
-    box on;
+    view(h1, -180,0);
+    axis(h1, 'normal');
+    set (h1,'XTick',[], 'YTick',[],'ZTick', [],'XColor','none','YColor','none', 'ZColor','none','ZLim',[-60000, -0],'XLim',[20000 , 140000]);
+    box(h1,'off');
     
-    subplot(1,2,2)
-    %
-     histogram(-1*denTree(:,3)/1000, 'BinWidth',1,'Orientation','horizontal','FaceColor',col);
-    %plot([0,x],y,'-','Color',col);
-    pbaspect([2,1,1]);
-    %plot(h.Values,1:2:60-1);
+    h2 = subplot(2,2,2);
+    pbaspect(h2,[0.38,0.38,0.38])
     hold on;
-    set(gca,'YLim',[0 ,60],'YTick', [0, 20, 40, 60], 'YDir','reverse', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-    set(gcf,'color','w');
-    box off;
+    plot(denXZ./ max(denXZ),y1, '-','Color',col, 'LineWidth',2);
+    set(h2, 'YLim',[0 60],'XTick',[0.5,1],'YDir','reverse','XDir','reverse','YTick',[0 20 40 60],'YAxisLocation','right','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2,'Position',[0.4,0.584,0.335,0.341]);
+    box(h2, 'off');
+    set(h2,'color','none');
+    
+    h3 = subplot(2,2,3);
+    hold on;
+    plot(y3,denXY./max(denXY),'-','Color',col, 'LineWidth',2);
+    set(h3, 'XLim',[20 140],'XDir','reverse','XTickLabel',[0,20,40,60,80,100,120],'YTick',[0.5,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2 , 'Position',[0.13,0.22,0.335,0.341])
+    box (h3, 'off');
+    set(h3,'Color','none');
 end;
 
-h = histogram(-1*denTree(:,3)/1000, 'BinWidth',1,'Orientation','horizontal','FaceColor',col,'Visible', 'off');
-x= h.Values;
-y = h.BinEdges;
-%histfit(x,60,'normal');
-[m,I] = max(x);
-peak = y(I);
 
 end

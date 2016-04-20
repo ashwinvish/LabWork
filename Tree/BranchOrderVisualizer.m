@@ -31,13 +31,13 @@ for kk=1:numel(tree)
         tempx=[tree{children(mm)}{3}(1); tree{children(mm)}{4}{1}(:,1); tree{kk}{3}(1)];
         tempy=[tree{children(mm)}{3}(2); tree{children(mm)}{4}{1}(:,2); tree{kk}{3}(2)];
         tempz=-[tree{children(mm)}{3}(3); tree{children(mm)}{4}{1}(:,3); tree{kk}{3}(3)];
-        h =  plot3(tempx,tempy,tempz,'color',rndclr(inducingNodes(kk)+1,:),'lineWidth',1);
+        h =  plot3(tempx,tempy,tempz,'color',rndclr(inducingNodes(kk)+1,:),'lineWidth',2);
     end
 end
 
 
 for kk=1:numel(highlightedNodes)
-    plot3(tree{highlightedNodes(kk)}{3}(1),tree{highlightedNodes(kk)}{3}(2),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize' , 10, 'LineWidth', 0.1, 'MarkerFaceColor','k','MarkerEdgeColor' , 'k' )
+    plot3(tree{highlightedNodes(kk)}{3}(1),tree{highlightedNodes(kk)}{3}(2),-tree{highlightedNodes(kk)}{3}(3),'Marker','o','MarkerSize' , 10, 'LineWidth', 3, 'MarkerFaceColor','k','MarkerEdgeColor' , 'k' )
 end
 
 if ~isempty(specialNodes) % special nodes to be marked and hilighted
