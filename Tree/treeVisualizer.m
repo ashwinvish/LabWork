@@ -1,5 +1,5 @@
 function treeVisualizer(tree,highlightedNodes,inducingNodes,specialNodes,newFigure,colorString,validNodes,pixelUnits)
-%relativeRes = [5 5 45]; % in nm
+res = [5 5 45]; % in nm
 rndclr = colorString;
 symCell={'o','o','v','x','d','*'};
 %synapseColor = [[0 0.4 0.4]; [0.2 0 0.8]]; % red - presynaptic; g- postsynaptic [1 0.2 0.2]
@@ -24,6 +24,9 @@ if nargin < 8
         end
     end
 end
+
+load CellSomata;
+
 if newFigure
     figure;
     %figure('units','normalized','outerposition',[0 0 1 1]);
@@ -124,6 +127,8 @@ if ~isempty(specialNodes) % special nodes to be marked and hilighted
     end
     
 end
+
+
 
 %axis vis3d;
 box on;

@@ -3,6 +3,9 @@ for i = 1:length(cellIDs)
     if ismember(cellIDs(i),cellIDsAlx) == 1
         BarCMap = calx;
         scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),500,'MarkerFaceColor',BarCMap, 'MarkerEdgeColor', 'k');
+    elseif ismember(cellIDs(i),cellIDsTrans) == 1
+        BarCMap = ctrans;
+        scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),500,'MarkerFaceColor',BarCMap, 'MarkerEdgeColor', 'k');
     elseif ismember(cellIDs(i),cellIDsDbx) == 1
         BarCMap = cdbx;
         scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),500,'MarkerFaceColor',BarCMap, 'MarkerEdgeColor', 'k');

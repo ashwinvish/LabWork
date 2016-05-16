@@ -122,7 +122,13 @@ hold off;
 %%
 figure();
 
-histogram(AllConVol./1e9, 'BinWidth', mean(AllConVol)/1e9);
+histogram(AllConVol./1e9, 'BinWidth', min(AllConVol)/1e9);
+ylabel('Count', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+xlabel('Dendritic convex hull volume \mum^3', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+axis square;
+box off;
+
 figure();
 [y,I] = sort(AllConVol);
 for i = 1:numel(cellIDs)

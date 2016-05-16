@@ -21,7 +21,11 @@ plot(2*ones(1, length(TransSpines)), TransSpines, 'o','MarkerFaceColor', ctrans,
 plot(3*ones(1, length(DbxSpines)), DbxSpines,'o','MarkerFaceColor', cdbx, 'MarkerSize', 25, 'MarkerEdgeColor', 'k');
 plot(4*ones(1, length(BarhlSpines)), BarhlSpines, 'o','MarkerFaceColor', cbarhl, 'MarkerSize', 25, 'MarkerEdgeColor', 'k');
 
-set(gca, 'XLim', [0.5, 4.5])
+set(gca, 'XLim', [0.5, 4.5],'XTick', [1,2,3,4], 'XTickLabel', {'Ipsi', 'Ipsi-Contra', 'Contra', 'Unknown'}, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth', 2);
+%xlabel({'Ipsi', 'Ipsi-Contra', 'Contra', 'Unknown'},  'FontName', 'Arial', 'FontSize', 40);
+ylabel('Number of spinules',  'FontName', 'Arial', 'FontSize', 40);
+box off;
+axis square;
 
 
 

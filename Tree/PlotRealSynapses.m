@@ -2,10 +2,15 @@
 % plot Trees
 
 col = distinguishable_colors(24);
-DisplayTree(allTrees{5},[1],true,eval([cellIDs{5},'_axon']),col(10,:))                            % 1_5
-DisplayTree(allTrees{2},[1],false,eval([cellIDs{2},'_axon']),col(8,:));                          % 1_2
-DisplayTree(allTrees{9},[1],false,eval([cellIDs{9},'_axon']),col(15,:))                           % 2_2
-DisplayTree(allTrees{22},[1],false,eval([cellIDs{22},'_axon']),col(17,:))                         % 3_6
+DisplayTree(allTrees{5},[],true,eval([cellIDs{5},'_axon']),col(5,:))                           % 1_5
+hold on;
+TreeSomata(5,col(5,:));
+DisplayTree(allTrees{2},[],false,eval([cellIDs{2},'_axon']),col(2,:));                     % 1_2
+TreeSomata(2,col(2,:));
+DisplayTree(allTrees{9},[],false,eval([cellIDs{9},'_axon']),col(9,:))    ;% 2_2
+TreeSomata(9,col(9,:));
+DisplayTree(allTrees{22},[],false,eval([cellIDs{22},'_axon']), col(22,:))                    % 3_6
+TreeSomata(22,col(22,:));
 
 hold on;
 

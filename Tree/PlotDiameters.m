@@ -10,16 +10,21 @@ for i = 1:length(cellIDs)
         else
             AxnDia{i} = D(:,4);
             DenDia{i} = E(:,4);
+            AxnPlength = B;
+            DenPlength = C;
         end
         AlxAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         AlxDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
+        AlxAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
+        AlxDenPlength(index,1:size(DenPlength,2)) = DenPlength;
         plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 25,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;
     end
 end
-plot([1,3],[mean(nonzeros(AlxAxnDia))/1000,mean(nonzeros(AlxDenDia))/1000],'-o','MarkerFaceColor','k','MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
 
+
+plot([1,3],[mean(nonzeros(AlxAxnDia))/1000,mean(nonzeros(AlxDenDia))/1000],'-o','MarkerFaceColor','k','MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
 %plot([1;1],[mean(nonzeros(AlxAxnDia))/1000 + std(nonzeros(AlxAxnDia))/(sqrt(size(nonzeros(AlxAxnDia),1))*1000) ; mean(nonzeros(AlxAxnDia))/1000 - std(nonzeros(AlxAxnDia))/(sqrt(size(nonzeros(AlxAxnDia),1))*1000)], 'Color','k','LineWidth',2);
 %plot([3;3],[mean(nonzeros(AlxDenDia))/1000 + std(nonzeros(AlxDenDia))/(sqrt(size(nonzeros(AlxDenDia),1))*1000); mean(nonzeros(AlxDenDia))/1000 - std(nonzeros(AlxDenDia))/(sqrt(size(nonzeros(AlxDenDia),1))*1000)], 'Color','k','LineWidth',2);
 pbaspect([1 2 1]);
@@ -41,10 +46,13 @@ for i = 1:length(cellIDs)
         else
             AxnDia{i} = D(:,4);
             DenDia{i} = E(:,4);
-            
+            AxnPlength = B;
+            DenPlength = C;
         end
         TransAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         TransDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
+        TransAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
+        TransDenPlength(index,1:size(DenPlength,2)) = DenPlength;
         plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index =index+1;
@@ -69,10 +77,13 @@ for  i = 1:length(cellIDs)
         else
             AxnDia{i} = D(:,4);
             DenDia{i} = E(:,4);
-            
+            AxnPlength = B;
+            DenPlength = C;
         end
         DbxAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         DbxDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
+        DbxAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
+        DbxDenPlength(index,1:size(DenPlength,2)) = DenPlength;
         plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;
@@ -100,10 +111,13 @@ for  i = 1:length(cellIDs)
         else
             AxnDia{i} = D(:,4);
             DenDia{i} = E(:,4);
-            
+            AxnPlength = B;
+            DenPlength = C;
         end
         BarhlAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         BarhlDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
+        BarhlAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
+        BarhlDenPlength(index,1:size(DenPlength,2)) = DenPlength;
         plot([1,3],[nan,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;
@@ -118,8 +132,19 @@ set(gcf,'color','w');
 box off;
 hold off;
 
+%%
 
-%% total number of 
+%alx taper
+subplot(2,2,1);
+GroupTaper(AlxAxonPlength,AlxDenPlength,AlxAxnDia,AlxDenDia);
+subplot(2,2,2)
+GroupTaper(TransAxonPlength,TransDenPlength,TransAxnDia,TransDenDia);
+subplot(2,2,3)
+GroupTaper(DbxAxonPlength,DbxDenPlength,DbxAxnDia,DbxDenDia);
+subplot(2,2,4)
+GroupTaper(BarhlAxonPlength, BarhlDenPlength, BarhlAxnDia, BarhlDenDia);
+    
+%% all diameters
 
 edges = repmat({logspace(0,1,100)},1,22);
 

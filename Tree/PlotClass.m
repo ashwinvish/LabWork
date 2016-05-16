@@ -12,7 +12,9 @@ index= 1;
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellClass) == 1 
-        DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:), allPreSynapse{i}, allPost{i});
+        DisplayTree(allTrees{i},[],false, [eval([cellIDs{i},'_axon'])],colors(index,:), allPreSynapse{i}, allPost{i});
+        hold on;
+        TreeSomata(i,colors(index,:)); 
         %DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:));
         index = index+1;
     else
@@ -21,6 +23,8 @@ for i = 1:numel(cellIDs)
 end
 
 set(gca,'Color',[col, 0.2]);
+%view(-150,60)
+set(gca,'BoxStyle', 'full');
 axis vis3d;
 
 end

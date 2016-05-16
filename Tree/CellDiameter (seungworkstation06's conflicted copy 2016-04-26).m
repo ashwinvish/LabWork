@@ -1,4 +1,4 @@
-function [Dia, plengthAxon, plengthDen, AxnDia, DenDia]= CellDiameter( cellNo, allTrees, cellIDs, Display )
+function [Dia, plength, axnTree, AxnDia, DenDia]= CellDiameter( cellNo, allTrees, cellIDs, Display )
 %CELLDIAMATER plots the cell of interest overlaid with the diameter at
 %random locations
 %   cellNo is the ID of the cell
@@ -17,16 +17,15 @@ Dia(:,3) = -45*Diameter(:,3);
 
 % display diameters on the cells
 if Display == true
-    figure('units','normalized','outerposition',[0 0 1 1]);
-    subplot(1,2,1);
+    %figure('units','normalized','outerposition',[0 0 1 1]);
+    figure();
     DisplayTree(allTrees{cellNo},[1],false, [eval([cellIDs{cellNo},'_axon'])],[0.8,0.8,0.8]);
     hold on;
     scatter3(5*Diameter(:,1), 5*Diameter(:,2), -45*Diameter(:,3), 50, Diameter(:,4),'filled');
-    colormap jet;
+    colormap hot;
     c = colorbar;
     c.FontSize = 40;
-    c.Location = 'southOutside'; 
-    c.Label.String = 'Diameter (nm)';
+   
 end
 
 
@@ -50,31 +49,33 @@ for i = 1:size(Dia,1)
         index1 = index1+1;
     else
         DenDia = [DenDia;Diameter(i,:)]; % dendritic node and diameter
-        plengthDen(index2) = plength(i);
+        plengthDia(index2) = plength(i);
         index2 = index2+1;
     end
 end
-% normalize pathlenght
-
 
 if isempty(axnTree)
     plengthAxon = 0;
     AxnDia = zeros(1,4);
 end
 
+% linear fits
+% axnfit
 
-plengthDen = plengthDen/max(plengthDen);
-plengthAxon = plengthAxon/max(plengthAxon);
+% axnFitParam = [ones(length(AxnDia(:,4)),1), AxnDia(:,4)]\plengthAxon';
+% axnFit = [ones(length(AxnDia(:,4)),1),AxnDia(:,4)]*axnFitParam;
 
+axnFitParam = AxnDia(:,4)\plengthAxon';
+axnFit = AxnDia(:,4)*axnFitParam;
 
 
 if Display == true
-    subplot(1,2,2); %plot dendritic diameter and pathlength
-    plot(plengthAxon/1000, AxnDia(:,4)./1000,'o', 'MarkerFaceColor','none', 'MarkerEdgeColor',[0,0.8,0], 'MarkerSize', 15, 'LineWidth',2);
+    figure(); %plot dendritic diameter and pathlength
+    plot(plengthAxon/1000, AxnDia(:,4)./1000,'o', 'MarkerFaceColor',[0,0.8,0], 'MarkerEdgeColor','k', 'MarkerSize', 15);
     hold on;
     %plot(plengthAxon/1000, sort(axnFit/1000),'-','Color',[0,0.8,0]);
-    plot(plengthDen/1000, DenDia(:,4)./1000,'o', 'MarkerFaceColor','none', 'MarkerEdgeColor',[0.9,0,0], 'MarkerSize', 15, 'LineWidth',2);
-    xlabel('Norm. pathlength (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+    plot(plengthDia/1000, DenDia(:,4)./1000,'o', 'MarkerFaceColor',[0.9,0,0], 'MarkerEdgeColor','k', 'MarkerSize', 15);
+    xlabel('Pathlength (\mum)', 'FontName', 'Arial', 'FontSize', 40);
     ylabel('Diameter (\mum)', 'FontName', 'Arial', 'FontSize', 40);
     set(gca,'LineWidth',2,  'FontName', 'Arial', 'FontSize', 40);
     legend({'Axon','Dendrite'});

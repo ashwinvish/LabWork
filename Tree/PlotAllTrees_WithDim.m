@@ -34,20 +34,26 @@ PlotViews(gcf);
 
 %% Plot all Cells in three axes
 for kk = 1:numel(cellIDs)
-    % subplot(3,8,kk);
+    %subplot(3,8,kk);
     if ismember(cellIDs{kk},cellIDsAlx)==1
-        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3], allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3]);                              % plot without hilighting axon
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),calx, allPreSynapse{kk}, allPost{kk}) % plot with axon hilighted
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3]);     % plot without hilighting axon
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[rand rand rand], allPreSynapse{kk}, allPost{kk}); 
+    elseif ismember(cellIDs{kk},cellIDsTrans)==1
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),ctrans, allPreSynapse{kk}, allPost{kk});
     elseif ismember(cellIDs{kk},cellIDsDbx)==1
-        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1], allPreSynapse{kk}, allPost{kk});
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1]);
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),cdbx, allPreSynapse{kk}, allPost{kk});
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1]);
+        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[rand rand rand], allPreSynapse{kk}, allPost{kk}); 
     else
-        %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1], allPreSynapse{kk}, allPost{kk});
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1]);
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),cbarhl, allPreSynapse{kk}, allPost{kk});
+       % DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1]);
+       % DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[rand rand rand], allPreSynapse{kk}, allPost{kk}); 
+
     end
 end
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'p','MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','-', 'color','k');                  	% stripe1
 %  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','-','color','k' );                      % stripe2
 
@@ -59,25 +65,25 @@ axis vis3d;
 index = 0;
 clear ha;
 %pause(2);
-ha = tight_subplot(2,5,[.05 .05],[.05 .1],[.01 .01]);
+%ha = tight_subplot(2,5,[.05 .05],[.05 .1],[.01 .01]);
 for kk = 1:numel(cellIDs)
     if ismember(cellIDs{kk},cellIDsAlx)==1
         index = index+1;
-        axes(ha(index));
+        %axes(ha(index));
         %DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3],allPreSynapse{kk}, allPost{kk});
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.5 0.3]);
-        view(-150,35);
-        title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),calx);
+       % view(-150,35);
+       %x title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
     else
         continue;
     end
 end
 
-set(ha(1:10),'BoxStyle','full');
-set(ha(1:10),'XColor',[0.831, 0.816, 0.784]);
-set(ha(1:10),'YColor',[0.831, 0.816, 0.784]);
-set(ha(1:10),'ZColor',[0.831, 0.816, 0.784]);
-title(sprintf('CellID %s', cellIDs{kk}));
+% set(ha(1:10),'BoxStyle','full');
+% set(ha(1:10),'XColor',[0.831, 0.816, 0.784]);
+% set(ha(1:10),'YColor',[0.831, 0.816, 0.784]);
+% set(ha(1:10),'ZColor',[0.831, 0.816, 0.784]);
+% title(sprintf('CellID %s', cellIDs{kk}));
 set(gcf,'color','w');
 %figtitle('All ipsilateral projecting cells','FontName','Arial', 'FontWeight','Bold');
 
@@ -89,7 +95,9 @@ for kk = 1:numel(cellIDs)
     if ismember(cellIDs{kk},cellIDsDbx)==1
         index = index+1;
         axes(ha(index));
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[1 0.3 1]);
+        DisplayTree(allTrees{kk},[],false,eval([cellIDs{kk},'_axon']),cdbx, allPreSynapse{kk}, allPost{kk});
+        hold on
+        TreeSomata(kk, cdbx);
         %DisplayTree(allTrees{kk},[1].true,[1 0.3 0.1]);
         view(-150,35);
         title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
@@ -109,23 +117,45 @@ set(gcf,'color','w');
 
 index = 0;
 clear ha;
-ha = tight_subplot(2,3,[.05 .05],[.05 .1],[.01 .01]);
+%ha = tight_subplot(2,3,[.05 .05],[.05 .1],[.01 .01]);
 for kk = 1:numel(cellIDs)
     if ismember(cellIDs{kk},cellIDsL)==1
         index = index+1;
-        axes(ha(index));
-        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),[0.3 0.5 1]);
+ %       axes(ha(index));
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),cbarhl);
         %DisplayTree(allTrees{kk},[1],true,[0.3 0.5 1]);
-        view(-150,35);
-        title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+ %       view(-150,35);
+ %       title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
     else
         continue;
     end
 end
-set(ha(1:6),'BoxStyle','full');
-set(ha(1:6),'XColor',[0.831, 0.816, 0.784]);
-set(ha(1:6),'YColor',[0.831, 0.816, 0.784]);
-set(ha(1:6),'ZColor',[0.831, 0.816, 0.784]);
+% set(ha(1:6),'BoxStyle','full');
+% set(ha(1:6),'XColor',[0.831, 0.816, 0.784]);
+% set(ha(1:6),'YColor',[0.831, 0.816, 0.784]);
+% set(ha(1:6),'ZColor',[0.831, 0.816, 0.784]);
+set(gcf,'color','w');
+%figtitle('All unknown projecting cells','FontName','Arial', 'FontWeight','Bold');
+%% Plot All Trans Cells
+index = 0;
+clear ha;
+%ha = tight_subplot(2,3,[.05 .05],[.05 .1],[.01 .01]);
+for kk = 1:numel(cellIDs)
+    if ismember(cellIDs{kk},cellIDsTrans)==1
+        index = index+1;
+ %       axes(ha(index));
+        DisplayTree(allTrees{kk},[1],false,eval([cellIDs{kk},'_axon']),ctrans);
+        %DisplayTree(allTrees{kk},[1],true,[0.3 0.5 1]);
+ %       view(-150,35);
+ %       title(sprintf('Cell ID %s', cellIDs{kk}),'FontName','Arial','FontWeight','normal' );
+    else
+        continue;
+    end
+end
+% set(ha(1:6),'BoxStyle','full');
+% set(ha(1:6),'XColor',[0.831, 0.816, 0.784]);
+% set(ha(1:6),'YColor',[0.831, 0.816, 0.784]);
+% set(ha(1:6),'ZColor',[0.831, 0.816, 0.784]);
 set(gcf,'color','w');
 %figtitle('All unknown projecting cells','FontName','Arial', 'FontWeight','Bold');
 
@@ -140,13 +170,13 @@ end
 scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500,rho, 'fill', 'Marker','o', 'MarkerEdgeColor', 'k');
 %scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, 'red', 'fill', 'Marker','o' ,'LineWidth', 2,'MarkerEdgeColor', 'k');
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 1000,'MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
-scatter3(Mid2C1(1,1),Mid2C1(1,2),Mid2C1(1,3), 500,'MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
-scatter3(Mid2C2(1,1),Mid2C2(1,2),Mid2C2(1,3), 500,'MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
-scatter3(Mid3C1(1,1),Mid3C1(1,2),Mid3C1(1,3), 500,'MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
-scatter3(Mid3C2(1,1),Mid3C2(1,2),Mid3C2(1,3), 500,'MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
-scatter3(CAD(1,1), CAD(1,2), CAD(1,3), 500,'MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
-scatter3(CAV(1,1), CAV(1,2), CAV(1,3), 500,'MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 1000,'p','MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
+scatter3(Mid2C1(1,1),Mid2C1(1,2),Mid2C1(1,3), 500,'p','MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
+scatter3(Mid2C2(1,1),Mid2C2(1,2),Mid2C2(1,3), 500,'p','MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
+scatter3(Mid3C1(1,1),Mid3C1(1,2),Mid3C1(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
+scatter3(Mid3C2(1,1),Mid3C2(1,2),Mid3C2(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
+scatter3(CAD(1,1), CAD(1,2), CAD(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
+scatter3(CAV(1,1), CAV(1,2), CAV(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
 caxis([0 1]);
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
@@ -156,8 +186,8 @@ set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 set(gca,'Ydir','reverse');
 view([-128,32]); % xy view
 set(gca,'BoxStyle','full');
-CT = cbrewer('seq','OrRd',size(CellSoma,1));
-colormap(CT);
+%CT = cbrewer('seq','OrRd',size(CellSoma,1));
+%colormap(CT);
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','--');                       % stripe1
 %  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','--');                       % stripe2
 axis vis3d;
@@ -675,9 +705,8 @@ for i = 1:size(cellIDs,2)
     if eval([cellIDs{i},'_axon'])>0
         AxnNodes = eval([cellIDs{i},'_axon']);
                 AxnNodes = sort(AxnNodes);
-
         tempLength = 0;
-        for jj = 1:numel(eval([cellIDs{i},'_axon']))
+        for jj = 1:numel(AxnNodes)
             tempLength = tempLength + sum(allTrees{i}{AxnNodes(jj)}{1,4}{1,2});
         end
         axLength = [axLength,tempLength];
@@ -694,22 +723,21 @@ sprintf('dendrite length / axon length = %d',sum(denLength)/sum(axLength));
 %% plot number of synapses per cell
 
 [y,I] = sort(cellfun(@length,allPost));
-calx = [1,0.5,0];
-cdbx = [1, 0, 1];
-cbarhl = [0, 0.5, 1];
 
 
 for i = 1:length(cellIDs)
     if ismember(cellIDs(I(i)),cellIDsAlx) == 1
-        BarCMap = calx;
+        BarCMap(i,:) = calx;
+    elseif ismember(cellIDs(I(i)),cellIDsTrans) == 1
+        BarCMap(i,:) = ctrans;
     elseif ismember(cellIDs(I(i)),cellIDsDbx) == 1
-        BarCMap = cdbx;
+        BarCMap(i,:) = cdbx;
     else
-        BarCMap= cbarhl;
+        BarCMap(i,:)= cbarhl;
     end
     
     h = bar(i,y(i));
-    set(h, 'FaceColor', BarCMap);
+    set(h, 'FaceColor', BarCMap(i,:));
     hold on;
     
 end

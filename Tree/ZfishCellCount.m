@@ -38,8 +38,9 @@ for i = 1:length(ZfishCellCounts{1,3})
     end
 end
 
-MarkerColors = repmat([0.9,0.9,0.9],length(ZfishSmallX),1);
-%hplot = scatter3( ZfishSmallX,ZfishSmallY,ZfishSmallZ ,50,MarkerColors,'filled','MarkerEdgeColor','k');
+%MarkerColors = repmat([0.9,0.9,0.9],length(ZfishSmallX),1);
+MarkerColors = repmat([0.1,0.1,0.1],length(ZfishSmallX),1);
+hplot = scatter3( ZfishSmallX,ZfishSmallY,ZfishSmallZ ,100,MarkerColors,'+','filled','MarkerEdgeColor','k');
 daspect([1,1,9]);
 axis vis3d;
 set(gca,'XDir','reverse');
@@ -135,32 +136,37 @@ Small(22,:) = [82	624	274];
 
 for i = 1:length(Small)
     if ismember(i,SmallAlx) ==1
-        hcell = scatter3(Small(i,1),Small(i,2),-1*Small(i,3),150, calx,'filled','MarkerEdgeColor','k');
+        hcell = scatter3(Small(i,1),Small(i,2),-1*Small(i,3),250, calx,'filled','MarkerEdgeColor','k');
         uistack(hcell,'top');
-       % MarkerColorMap(:,i) = calx';
+        pause(1);
+       MarkerColorMap(:,i) = calx';
     elseif ismember(i, SmallTrans) ==1
-       hcell =  scatter3(Small(i,1),Small(i,2),-1*Small(i,3),150, ctrans,'filled','MarkerEdgeColor','k');
+       hcell =  scatter3(Small(i,1),Small(i,2),-1*Small(i,3),250, ctrans,'filled','MarkerEdgeColor','k');
         uistack(hcell,'top');
-        %MarkerColorMap(:,i) = ctrans';
+         pause(1);
+        MarkerColorMap(:,i) = ctrans';
     elseif ismember( i, SmallDbx) ==1
-        hcell = scatter3(Small(i,1),Small(i,2),-1*Small(i,3),150, cdbx,'filled','MarkerEdgeColor','k');
+        hcell = scatter3(Small(i,1),Small(i,2),-1*Small(i,3),250, cdbx,'filled','MarkerEdgeColor','k');
          uistack(hcell,'top');
-        %MarkerColorMap(:,i) = cdbx';
+          pause(1);
+        MarkerColorMap(:,i) = cdbx';
     else
-        hcell = scatter3(Small(i,1),Small(i,2),-1*Small(i,3),150, cbarhl,'filled','MarkerEdgeColor','k');
+        hcell = scatter3(Small(i,1),Small(i,2),-1*Small(i,3),250, cbarhl,'filled','MarkerEdgeColor','k');
          uistack(hcell,'top');
-        %MarkerColorMap(:,i) = cbarhl';
+          pause(1);
+        MarkerColorMap(:,i) = cbarhl';
     end
 end
- CT = cbrewer('div','RdBu',size(CellSoma,1));
+% CT = cbrewer('div','Spectral',size(CellSoma,1));
 % %CT = parula(22);
- [y,I] = sort(rho);
- for i = 1:numel(cellIDs)
-     scatter3(Small(I(i),1), Small(I(i),2), Small(I(i),3), 250, CT(i,:), 'filled', 'MarkerEdgeColor','k');
- end
-% daspect([1,1,9]);
-% set(gca,'XDir','reverse');
-% colormap(CT);
+%  [y,I] = sort(rho);
+%  for i = 1:numel(cellIDs)
+%      scatter3(Small(I(i),1), Small(I(i),2), Small(I(i),3), 250, CT(i,:), 'filled', 'MarkerEdgeColor','k');
+%  end
+% colorbar;
+daspect([1,1,9]);
+set(gca,'XDir','reverse');
+%colormap(CT);
 %MarkerColorMap = [MarkerColorMap;repmat(1,1,22)];
 
 %% Density plot for cell bodies

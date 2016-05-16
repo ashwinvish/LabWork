@@ -111,10 +111,13 @@ axis square;
 %%
 
 %Distribution of Persistence times along axis
-calx = [1 0.5 0.3];
-cdbx = [1 0.3 1];
-cbarhl = [0.3 0.5 1];
+calx = [0.9655    0.6207    0.8621];%[1,0.5,0];
+cdbx = [1.0000    0.7586    0.5172];%[1, 0, 1];
+ctrans = [ 0.5517    0.6552    0.4828];%[0,1,0.5];
+cbarhl = [0.6207    0.7586    1.0000];%[0, 0.5, 1];
+
 RhoAlx = [];
+RhoTrans= []
 RhoDbx =[];
 RhoBarhl = [];
 [y,I] = sort(rho);
@@ -122,34 +125,38 @@ RhoBarhl = [];
 
 for i = 1:length(cellIDs)
     if ismember(cellIDs(I(i)),cellIDsAlx) == 1
-        BarCMap = calx;
+        BarCMap(i,:) = calx;
         RhoAlx = [RhoAlx,rho(I(i))];
+    elseif ismember(cellIDs(I(i)),cellIDsTrans) == 1
+        BarCMap(i,:) = ctrans;
+        RhoTrans = [RhoTrans,rho(I(i))];
+        
     elseif ismember(cellIDs(I(i)),cellIDsDbx) == 1
-        BarCMap = cdbx;
+        BarCMap(i,:) = cdbx;
         RhoDbx = [RhoDbx,rho(I(i))];
     else
-        BarCMap= cbarhl;
+        BarCMap(i,:) = cbarhl;
         RhoBarhl = [RhoBarhl,rho(I(i))];
     end
     
-    h = plot(i,rho(I(i)),'o','MarkerSize',20, 'MarkerFaceColor',BarCMap, 'MarkerEdgeColor','none');
+    h = plot(i,rho(I(i)),'o','MarkerSize',25, 'MarkerFaceColor',BarCMap(i,:), 'MarkerEdgeColor','k');
     %set(h, 'FaceColor', BarCMap);
     hold on;
     
 end
 
-xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 20);
-ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 20);
-set(gca, 'FontName', 'Arial', 'FontSize', 20);
+xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth', 2);
 set(gcf,'color','w');
 axis square;
 box off
 
 
 figure();
-MeanRhos = [mean(RhoAlx); mean(RhoDbx); mean(RhoBarhl)];
-Colors = [calx;cdbx;cbarhl];
- for i = 1:3 
+MeanRhos = [mean(RhoAlx); mean(RhoTrans); mean(RhoDbx); mean(RhoBarhl)];
+Colors = [calx;ctrans;cdbx;cbarhl];
+ for i = 1:4
     h =  bar(i,MeanRhos(i));
     set(h,'FaceColor',Colors(i,:));
     hold on;
@@ -157,7 +164,7 @@ Colors = [calx;cdbx;cbarhl];
  box off
  axis square
  
- set(gca,'XTick', [1:3],'XTickLabel', {'group1'; 'group2'; 'group3'}, 'FontName', 'Arial', 'FontSize', 20);
+ set(gca,'XTick', [1:4],'XTickLabel', {'Ipsi'; 'Ipsi-Contra';'Contra'; 'Unknown'}, 'FontName', 'Arial', 'FontSize', 20);
  set(gca, 'FontName', 'Arial', 'FontSize', 20);
  set(gcf,'color','w');
  ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 20);

@@ -11,6 +11,8 @@ function [vol,m,I] = HeatMapFish( ksize,res, PointCloud, Soma, CellID ,figure )
 %   figure, true or false if figure is needed
 
 % downsample the kernel size and the Soma coordinates
+
+
 ksize = ksize/res;
 Soma = Soma./res;
 
@@ -34,12 +36,14 @@ end
 % remove padding from the edges and return vol to predefined size
 vol = vol(20+ksize/2 : 140+ksize/2, 60+ksize/2 : 250+ksize/2, ksize/2:60+ksize/2);
 % normalize volume to compare different trees
-NormVol = vol./max(vol(:));
+NormVol = vol;%./max(vol(:));
 
 % display only Normalized volume plots
+
+cmap = cbrewer('seq','Reds', size(vol,1));
 if figure == true
-    threeView(NormVol,Soma, jet);
-    title(CellID);
+    threeView(NormVol,Soma, cmap);
+   % title(CellID);
     [m,I] = max(NormVol(:));
     
 else

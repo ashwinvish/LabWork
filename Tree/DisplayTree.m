@@ -8,6 +8,7 @@ function DisplayTree( tree, visualNodes, newFig, axonHighlight, color, presynaps
 %   postsynapses are the postsynaptic locations
 
 load CellAxons.mat;
+load CellSomata.mat;
 
 if nargin < 8
     spine = [];

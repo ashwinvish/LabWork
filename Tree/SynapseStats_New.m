@@ -31,19 +31,19 @@ MeanPre = [mean(AlxPre), mean(TransPre)];
 StdPre = [std(AlxPre), std(TransPre)];
 
 
-plot([ones(length(AlxPost),1)',2*ones(length(TransPost),1)', 3*ones(length(DbxPost),1)',4*ones(length(BarhlPost),1)'],[AlxPost,TransPost,DbxPost,BarhlPost], 'Marker', 'o', 'MarkerFaceColor', [0.7,0,0],'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor','k');
+plot([ones(length(AlxPost),1)',2*ones(length(TransPost),1)', 3*ones(length(DbxPost),1)',4*ones(length(BarhlPost),1)'],[AlxPost,TransPost,DbxPost,BarhlPost], 'Marker', 'o', 'MarkerFaceColor', [0.7,0,0],'MarkerSize',35,'LineStyle','none', 'MarkerEdgeColor','w');
 hold on;
-plot(1.2*ones(length(AlxPre),1)',AlxPre, 'Marker', 'o', 'MarkerFaceColor', [0,0.7,0],'MarkerSize',25,'LineStyle','none',  'MarkerEdgeColor','k');
-plot(2.2*ones(length(TransPre),1)',TransPre, 'Marker', 'o', 'MarkerFaceColor', [0,0.7,0],'MarkerSize',25,'LineStyle','none',  'MarkerEdgeColor','k' );
+plot(1.2*ones(length(AlxPre),1)',AlxPre, 'Marker', 'o', 'MarkerFaceColor', [0,0.7,0],'MarkerSize',35,'LineStyle','none',  'MarkerEdgeColor','w');
+plot(2.2*ones(length(TransPre),1)',TransPre, 'Marker', 'o', 'MarkerFaceColor', [0,0.7,0],'MarkerSize',35,'LineStyle','none',  'MarkerEdgeColor','w' );
 
-plot(1.2,MeanPre(1),'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 25 );
-plot(2.2,MeanPre(2),'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 25 );
+plot(1.2,MeanPre(1),'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','w', 'MarkerSize', 35 );
+plot(2.2,MeanPre(2),'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','w', 'MarkerSize', 35 );
 
 plot([1.2,2.2;1.2,2.2], [MeanPre-StdPre;MeanPre+StdPre], 'Color','k','LineWidth',2);
-plot(1,MeanPost(1), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 25 );
-plot(2,MeanPost(2), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 25 );
-plot(3,MeanPost(3), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','k', 'MarkerSize', 25 );
-plot(4,MeanPost(4), 'o', 'MarkerFaceColor',' k', 'MarkerEdgeColor','k', 'MarkerSize', 25 );
+plot(1,MeanPost(1), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','w', 'MarkerSize', 35 );
+plot(2,MeanPost(2), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','w', 'MarkerSize', 35 );
+plot(3,MeanPost(3), 'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','w', 'MarkerSize', 35 );
+plot(4,MeanPost(4), 'o', 'MarkerFaceColor',' k', 'MarkerEdgeColor','w', 'MarkerSize', 35 );
 plot([1:4;1:4], [MeanPost-StdPost;MeanPost+StdPost], 'Color','k','LineWidth',2);
 
 set(gca, 'XTick', [1:4],'XTickLabel', {'group1'; 'group2'; 'group3'; 'group4'},'XLim', [0.5 4.5], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
@@ -63,18 +63,12 @@ figure;
 for ii = 1:numel(cellIDs)
     InterPostSynapticDistance = [InterPostSynapticDistance;nonzeros(allPostDiff{ii})];
 end
-
+subplot(2,1,1)
 histogram(InterPostSynapticDistance/1000, 'FaceColor',[0.9,0,0],'BinWidth',500/1000, 'Normalization','probability');
 hold on;
-xlabel('Inter postsynaptic distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
-ylabel('Proabability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca,'XTick',[0,5,10,15],'XLim',[-0.5,15], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-axis square;
-% lognormal distribution
-pd1 = fitdist(InterPostSynapticDistance/1000,'lognormal');
-x_val =  min(InterPostSynapticDistance/1000):10/1000:max(InterPostSynapticDistance/1000);
-y_val = pdf(pd1,x_val);
-plot(x_val,y_val,'k','LineWidth',2);
+set(gca,'XTick',[0,5,10,15,20,25],'XLim',[-0.5,25], 'YLim', [-0.1 0.6],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+
+
 box off;
 set(gcf,'color','w');
 
@@ -84,36 +78,48 @@ clear y_val;
 clear InterPreSynapticDistance;
 InterPreSynapticDistance = [];
 tempPre =[];
-figure();
 
 for ii = 1:size(cellIDs,2)
     if ~isempty(allPreDiff{ii})
         InterPreSynapticDistance = [InterPreSynapticDistance; nonzeros(allPreDiff{ii})];
     end
 end
-
+subplot(2,1,2)
 histogram(InterPreSynapticDistance/1000, 'FaceColor',[0,0.8,0],'BinWidth',0.5, 'Normalization','Probability');
 hold on;
-xlabel('Inter presynaptic distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+xlabel('Inter synaptic distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XTick',[0,5,10,15,20,25],'XLim',[-0.5,25],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-
-
-%lognormal  distribution
-pd2 = fitdist(InterPreSynapticDistance/1000,'lognormal');
-x_val =  min(InterPreSynapticDistance/1000):10/1000:max(InterPreSynapticDistance/1000);
-y_val = pdf(pd2,x_val);
-plot(x_val,y_val,'k','LineWidth',2);
+set(gca, 'XTick',[0,5,10,15,20,25],'XLim',[-0.5,25], 'YLim', [-0.1 0.6],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
+
+figure();
+
+h1 = cdfplot(InterPostSynapticDistance/1000 );
+h1.Color = [0.9,0,0];
+h1.LineWidth = 2;
+hold on;
+h2 = cdfplot(InterPreSynapticDistance/1000);
+h2.Color = [0,0.8,0];
+h2.LineWidth = 2;
+legend({'Den.', 'Axon'},'FontName', 'Arial', 'FontSize', 40, 'Location','southeast' )
+xlabel('Inter synaptic distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('F(x)', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gcf,'color','w');
+box off;
+axis square
 
 
 figure();
 histogram(InterPostSynapticDistance/1000, 'FaceColor',[0.9,0.0,0],'BinWidth',0.5, 'Normalization','probability');
 hold on;
+line([mean(InterPostSynapticDistance/1000),mean(InterPostSynapticDistance/1000)], [0, 0.6], 'color', [0.9,0,0], 'LineWidth', 2)
 histogram(InterPreSynapticDistance/1000, 'FaceColor',[0,0.8,0],'BinWidth',0.5, 'Normalization','probability');
+line([mean(InterPreSynapticDistance/1000),mean(InterPreSynapticDistance/1000)], [0, 0.6], 'color', [0,0.8,0], 'LineWidth', 2)
+
 axis square;
-xlabel('Inter synaptic distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
+xlabel('Inter synaptic distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XTick',[0,5,10,15,20,25],'XLim',[-0.5,25],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
@@ -159,52 +165,111 @@ for i = 1:numel(cellIDs)
     end
 end
 
-
-figure() 
+figure(1);
+subplot(4,1,1);
 histogram(AlxInterPost/1000, 'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
 hold on;
 histogram(AlxInterPre/1000, 'FaceColor',[0,0.8,0],'BinWidth',0.5,'Normalization','probability');
-xlabel('Synaptic pathlenght (\mum)', 'FontName', 'Arial', 'FontSize', 40);
-ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 25], 'YLim',[0,0.4],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+%ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[5, 30], 'YLim',[-0.05,0.6],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[calx,0.2]);
 axis square;
 
 
-figure();
+subplot(4,1,2);
 histogram(TransInterPost/1000, 'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
 hold on;
 histogram(TransInterPre/1000,'FaceColor',[0,0.8,0],'BinWidth',0.5,'Normalization','probability');
 ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 25],'YLim',[0,0.4],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'XLim',[5, 30], 'YLim',[-0.05,0.6],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[ctrans,0.2]);
 axis square;
 
-figure();
+subplot(4,1,3);
 histogram(DbxInterPost/1000,  'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
-ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 25],'YLim',[0,0.4],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+%ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[5, 30], 'YLim',[-0.05,0.6],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[cdbx,0.2]);
 axis square;
 
-figure();
+subplot(4,1,4);
 histogram(BarhlInterPost/1000, 'FaceColor',[0.9,0,0], 'BinWidth',0.5, 'Normalization','probability');
-ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 25],'YLim',[0,0.4],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+xlabel('Synaptic pathlenght (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+%ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+set(gca, 'XLim',[5, 30], 'YLim',[-0.05,0.6],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[cbarhl,0.2]);
 axis square;
 
 
+figure(2);
+
+subplot(2,2,1);
+h1 = cdfplot(AlxInterPre/1000);
+h1.Color = [0,0.8,0];
+h1.LineWidth = 4;
+hold on;
+
+h1 = cdfplot(AlxInterPost/1000);
+h1.Color = [0.9,0,0];
+h1.LineWidth = 4;
+
+xlabel('Pathlength (\mum)','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+ylabel('Cumulative fraction', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca,'Color', [calx,0.2], 'XLim',[0, 40],'YTick',[0,0.2,0.4,0.6,0.8,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+axis square;
+box off;
 
 
+
+subplot(2,2,2);
+
+h2 = cdfplot(TransInterPre/1000);
+h2.Color = [0,0.8,0];
+h2.LineWidth = 4;
+hold on;
+
+h2 = cdfplot(TransInterPost/1000);
+h2.Color = [0.9,0,0];
+h2.LineWidth = 4;
+
+xlabel('Pathlength (\mum)','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+ylabel('Cumulative fraction', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca,'Color', [ctrans,0.2], 'XLim',[0, 40],'YTick',[0,0.2,0.4,0.6,0.8,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+axis square;
+box off;
+
+
+subplot(2,2,3);
+
+h3 = cdfplot(DbxInterPost/1000);
+h3.Color = [0.9,0,0];
+h3.LineWidth = 4;
+
+xlabel('Pathlength (\mum)','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+ylabel('Cumulative fraction', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca,'Color', [cdbx, 0.2], 'XLim',[0, 40],'YTick',[0,0.2,0.4,0.6,0.8,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+axis square;
+box off;
+
+
+subplot(2,2,4);
+h4 = cdfplot(BarhlInterPost/1000);
+h4.Color = [0.9,0,0];
+h4.LineWidth = 4;
+
+xlabel('Pathlength (\mum)','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+ylabel('Cumulative fraction', 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca,'Color', [cbarhl, 0.2], 'XLim',[0, 40],'YTick',[0,0.2,0.4,0.6,0.8,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+axis square;
+box off;
 
 
 
@@ -222,26 +287,21 @@ for i = 1:size(cellIDs,2)
 end
 
 figure();
-histogram(allPostSynapticLength/1000,'FaceColor',[0.8,0,0],'BinWidth',50,'Normalization','probability'); % dimensions in microns
-%xlabel('Postsynaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
-ylabel('Count', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
-box off;
-set(gcf,'color','w');
-axis square
-
+histogram(allPostSynapticLength/1000,'FaceColor',[0.9,0,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 hold on;
+line([mean(allPostSynapticLength/1000),mean(allPostSynapticLength/1000)], [0,0.1], 'Color',[0.9,0,0], 'LineWidth', 4);
+text(mean(allPostSynapticLength/1000)+10, 0.1, num2str(mean(allPostSynapticLength/1000)),'FontName', 'Arial', 'FontSize', 40 );
+histogram(allPreSynapticLength/1000,'FaceColor',[0,0.8,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
+line([mean(allPreSynapticLength/1000),mean(allPreSynapticLength/1000)], [0,0.1], 'Color',[0,0.8,0], 'LineWidth', 4);
+text(mean(allPreSynapticLength/1000)+10, 0.1, num2str(mean(allPreSynapticLength/1000)),'FontName', 'Arial', 'FontSize', 40 );
 
-
-histogram(allPreSynapticLength/1000,'FaceColor',[0,0.9,0],'BinWidth',50,'Normalization','probability'); % dimensions in microns
-%title('Distribution of Presynaptic pathlength');
-xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
-ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-legend({'PostSynapse','PreSynapse'}, 'box','off');
-set(gca,'XLim',[0,1250],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+%legend({'PostSynapse','PreSynapse'}, 'box','off');
+xlabel('Synaptic pathlenght (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Count', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'XLim',[0,350], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
-axis square
+axis square;
 
 %% Distribution of pre and post synaptic path lenghts by group
 
@@ -268,49 +328,49 @@ for i = 1:numel(cellIDs)
 end
 
 
-figure();
-histogram(allAlxPostSynapticPathLength/1000, 'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
+subplot(4,1,1);
+histogram(allAlxPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 hold on;
-histogram(allAlxPreSynapticPathLength/1000, 'DisplayStyle','stairs','EdgeColor',[0,0.9,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
+histogram(allAlxPreSynapticPathLength/1000, 'FaceColor',[0,0.9,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 1200], 'YLim',[0,0.15],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'XLim',[0, 400],'YLim',[0,0.2],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[calx,0.2]);
-axis square;
+%axis square;
 
-figure();
-histogram(allTransPostSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
+subplot(4,1,2);
+histogram(allTransPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 hold on;
-histogram(allTransPreSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0,0.9,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
+histogram(allTransPreSynapticPathLength/1000,'FaceColor',[0,0.9,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 %xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 %ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 1200],'YLim',[0,0.15],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'XLim',[0, 400],'YLim',[0,0.2],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[ctrans,0.2]);
-axis square;
+%axis square;
 
-figure();
-histogram(allDbxPostSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
+subplot(4,1,3);
+histogram(allDbxPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 %xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 %ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 1200],'YLim',[0,0.15],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'XLim',[0, 400],'YLim',[0,0.2],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[cdbx,0.2]);
-axis square;
+%axis square;
 
-figure();
-histogram(allBarhlPostSynapticPathLength/1000,'DisplayStyle','stairs','EdgeColor',[0.8,0,0],'BinWidth',20,'Normalization','probability','LineWidth',2); % dimensions in microns
+subplot(4,1,4);
+histogram(allBarhlPostSynapticPathLength/1000,'FaceColor',[0.8,0,0],'BinWidth',10,'Normalization','probability'); % dimensions in microns
 %xlabel('Synaptic pathlenght in \mum', 'FontName', 'Arial', 'FontSize', 40);
 %ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0, 1200],'YLim',[0,0.15],'XTickLabel',[],'YColor','none','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'XLim',[0, 400],'YLim',[0,0.2],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 box off;
 set(gcf,'color','w');
 set(gca,'color',[cbarhl,0.2]);
-axis square;
+%axis square;
 
 
 %% Minimum Distance between trees
@@ -379,11 +439,78 @@ c2 = colorbar;
 c2.Label.String = 'Distance(\mum)'
 xlabel('Postsynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Presynaptic cell', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'FontName', 'Arial', 'FontSize', 40), 'LineWidth',2;
+set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 axis image;
 %export_fig('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishFigures/MinimumSynapticDistance1000', '-eps');
 
-%% Some stats
+%% Euclidean Distances between soma and synaptic sites
+
+
+
+AlxPreEucDist = [];
+AlxPostEucDist = [];
+TransPreEucDist = [];
+TransPostEucDist = [];
+DbxPostEucDist = [];
+BarhlPostEucDist = [];
+
+
+for i= 1:numel(cellIDs)
+    i
+    if ismember(cellIDs{i}, cellIDsAlx) ==1
+        AlxPreEucDist =  [AlxPreEucDist; diag(pdist2(repmat(CellSoma(i,:),size(allPost{i},1),1),allPreSynapse{i}))];
+        AlxPostEucDist = [AlxPostEucDist; diag(pdist2(repmat(CellSoma(i,:),size(allPost{i},1),1),allPost{i}))];
+    elseif ismember(cellIDs{i}, cellIDsTrans) ==1
+        TransPreEucDist =  [TransPreEucDist; diag(pdist2(repmat(CellSoma(i,:),size(allPost{i},1),1),allPreSynapse{i}))];
+        TransPostEucDist = [TransPostEucDist; diag(pdist2(repmat(CellSoma(i,:),size(allPost{i},1),1),allPost{i}))];
+    elseif ismember(cellIDs{i}, cellIDsDbx) ==1
+        DbxPostEucDist = [DbxPostEucDist; diag(pdist2(repmat(CellSoma(i,:),size(allPost{i},1),1),allPost{i}))];
+    else
+        BarhlPostEucDist = [BarhlPostEucDist; diag(pdist2(repmat(CellSoma(i,:),size(allPost{i},1),1),allPost{i}))];
+    end
+end
+
+figure();
+subplot(2,2,1)
+histogram(AlxPostEucDist/1000,'FaceColor',[0.8,0,0],'BinWidth',2,'Normalization','probability'); % dimensions in microns
+hold on;
+histogram(AlxPreEucDist/1000, 'FaceColor',[0,0.9,0],'BinWidth',2,'Normalization','probability'); % dimensions in microns
+set(gca, 'XLim',[0, 120], 'YLim',[0,0.15],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[calx,0.2]);
+axis square;
+
+subplot(2,2,2)
+histogram(TransPostEucDist/1000,'FaceColor',[0.8,0,0],'BinWidth',2,'Normalization','probability'); % dimensions in microns
+hold on;
+histogram(TransPreEucDist/1000,'FaceColor',[0,0.9,0],'BinWidth',2,'Normalization','probability'); % dimensions in microns
+set(gca, 'XLim',[0, 120],'YLim',[0,0.15],'XTickLabel',[],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[ctrans,0.2]);
+axis square;
+
+subplot(2,2,3)
+histogram(DbxPostEucDist/1000,'FaceColor',[0.8,0,0],'BinWidth',2,'Normalization','probability'); % dimensions in microns
+set(gca, 'XLim',[0, 120],'YLim',[0,0.15],'XTickLabel',[],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[cdbx,0.2]);
+axis square;
+
+subplot(2,2,4)
+histogram(BarhlPostEucDist/1000,'FaceColor',[0.8,0,0],'BinWidth',2,'Normalization','probability'); % dimensions in microns
+set(gca, 'XLim',[0, 120],'YLim',[0,0.15],'XTickLabel',[],'YColor','k','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+box off;
+set(gcf,'color','w');
+set(gca,'color',[cbarhl,0.2]);
+axis square;
+xlabel('Euc. distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Probability', 'FontName', 'Arial', 'FontSize', 40);
+
+
+
 
 
