@@ -1,4 +1,4 @@
-function [x,y,z] = NodePoints(tree)
+function [TreeNodePoints] = NodePoints(tree)
 x = zeros(numel(tree),1);
 y = zeros(numel(tree),1);
 z = zeros(numel(tree),1);
@@ -10,6 +10,7 @@ for ll=1:numel(tree)
     x(ll,1) = tempx;
     y(ll,1) = tempy;
     z(ll,1) = tempz;
-    scatter3(tempy,tempx,-tempz,'Marker','o','MarkerFaceColor','b');
+    %scatter3(tempy,tempx,-tempz,'Marker','o','MarkerFaceColor','b');
 end
+TreeNodePoints = [x,y,z];
 end

@@ -23,18 +23,22 @@ PrimaryCilia = [allTrees{1}{1,2}{1,3};
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellIDsAlx) ==1    
+        subplot(221)
         h1 = compass(PrimaryCilia(i,1)-CellSoma(i,1), PrimaryCilia(i,2)-CellSoma(i,2));
         h1.LineWidth = 2;
         h1.Color = calx;
     elseif ismember(cellIDs{i}, cellIDsTrans) ==1
+        subplot(222)
         h2 = compass(PrimaryCilia(i,1)-CellSoma(i,1), PrimaryCilia(i,2)-CellSoma(i,2));
         h2.LineWidth = 2;
         h2.Color = ctrans;
     elseif ismember(cellIDs{i}, cellIDsDbx) ==1
+        subplot(223)
         h3 = compass(PrimaryCilia(i,1)-CellSoma(i,1), PrimaryCilia(i,2)-CellSoma(i,2));
         h3.LineWidth = 2;
         h3.Color = cdbx;    
     else
+        subplot(224)
         h4 = compass(PrimaryCilia(i,1)-CellSoma(i,1), PrimaryCilia(i,2)-CellSoma(i,2));
         h4.LineWidth = 2;
         h4.Color = cbarhl;

@@ -119,6 +119,8 @@ axis square;
 box off;
 hold off;
 
+%sum(AlxVol)/ (112*57*220*1e9) % total vol calculations
+
 %%
 figure();
 

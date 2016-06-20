@@ -6,7 +6,7 @@ function [area] = threeView(volume, Soma, cmap, varargin)
 %   varargin are the variable arguments, e.g specific planes to be plotted
 
 
-trans = 0.5 % if transparency is needed
+trans = 0.5; % if transparency is needed
 if nargin == 3
     %plot XY
     tempXY = max(volume,[],3);
@@ -77,7 +77,7 @@ else if nargin> 3
         axis vis3d;
         
         % calculate the overlap area in downsampled coordinates
-        area = sum(tempXY(:));
+        area = sum(tempXY(:)); % should be same for all planes.
         
         %plot XZ soma location
         plot(140-Soma(1,1), 60 -Soma(1,3),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');

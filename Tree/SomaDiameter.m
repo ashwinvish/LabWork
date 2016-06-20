@@ -25,7 +25,7 @@ MarkerColorMap = BarCMap;
 
 for i = 1:numel(cellIDs)
     figure(1);
-    plot(SomaDiameter(i), rho(i), 'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',25);
+    plot(SomaDiameter(i), rho(i), 'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',35);
     hold on;
 end
 
@@ -34,16 +34,28 @@ ylabel('Normalized perisistence \rho','FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0 max(SomaDiameter)], 'YLim',[0 1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off;
 
-X = [ones(length(SomaDiameter),1), SomaDiameter];
-b = X\rho';
-yCalc2 = X*b;
-plot( SomaDiameter,yCalc2,'-r');
+for i = 1:numel(cellIDs)
+    figure(2)
+    plot(CellSoma(i,3)/1000,SomaDiameter(i),'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',35);
+    hold on;
+end
 
-P = polyfit(SomaDiameter,rho',1)
-x1 = min(SomaDiameter):0.5:7;
-y1= polyval(P,x1);
-plot(x1,y1, '--k');
-hold off;
+xlabel('Soma depth (\mum)','FontName', 'Arial', 'FontSize', 40);
+ylabel('Soma diameter (\mum)','FontName', 'Arial', 'FontSize', 40);
+set(gca, 'YLim',[0 max(SomaDiameter)],'XLim',[0 max(CellSoma(:,3))/1000],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+axis square; box off;
+
+
+% X = [ones(length(SomaDiameter),1), SomaDiameter];
+% b = X\rho';
+% yCalc2 = X*b;
+% plot( SomaDiameter,yCalc2,'-r');
+% 
+% P = polyfit(SomaDiameter,rho',1)
+% x1 = min(SomaDiameter):0.5:7;
+% y1= polyval(P,x1);
+% plot(x1,y1, '--k');
+% hold off;
 
 
 
@@ -53,22 +65,51 @@ hold off;
 
 
 for i = 1:numel(cellIDs)
-    figure(2);
-    plot(i,rho(i),'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',25);
+    figure(3);
+    plot(i,rho(i),'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',35);
     hold on;
+    
 end
 xlabel('cell#','FontName', 'Arial', 'FontSize', 40);
 ylabel('Normalized perisistence','FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0 22], 'YLim',[0 1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off;
 
-figure;
+figure(4);
 
-plot(1:numel(cellIDs), sort(rho),'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none','MarkerSize',25);
+scatter(1:numel(cellIDs), sort(rho),1000, MarkerColorMap,'filled', 'MarkerEdgeColor','k');
 xlabel('cell#','FontName', 'Arial', 'FontSize', 40);
 ylabel('Perisistence','FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0 22], 'YLim',[0 1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off
+
+
+
+
+
+%%
+AlxSomaDia = [];
+TransSomaDia = [];
+DbxSomaDia = [];
+BarhlSomaDia = [];
+
+for i = 1:numel(cellIDs)
+    if ismember(cellIDs{i}, cellIDsAlx) ==1
+        AlxSomaDia = [AlxSomaDia; SomaDiameter(i)];
+        BarCMap(i,:) = calx;
+    elseif ismember( cellIDs{i}, cellIDsTrans) ==1
+        TransSomaDia = [TransSomaDia; SomaDiameter(i)];
+        BarCMap(i,:) = ctrans;
+    elseif ismember( cellIDs{i}, cellIDsDbx) ==1
+        DbxSomaDia = [DbxSomaDia; SomaDiameter(i)];
+        BarCMap(i,:) = cdbx;
+    else 
+        BarhlSomaDia = [BarhlSomaDia;SomaDiameter(i)];
+        BarCMap(i,:) = cbarhl;
+    end
+end
+
+        
 
 
 

@@ -36,7 +36,7 @@ end
 % remove padding from the edges and return vol to predefined size
 vol = vol(20+ksize/2 : 140+ksize/2, 60+ksize/2 : 250+ksize/2, ksize/2:60+ksize/2);
 % normalize volume to compare different trees
-NormVol = vol;%./max(vol(:));
+NormVol = vol./max(vol(:));
 
 % display only Normalized volume plots
 

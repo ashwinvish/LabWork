@@ -17,7 +17,7 @@ for i = 1:length(cellIDs)
         AlxDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
         AlxAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
         AlxDenPlength(index,1:size(DenPlength,2)) = DenPlength;
-        plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 25,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
+        plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;
     end
@@ -61,7 +61,7 @@ end
 pbaspect([1 2 1]);
 plot([1,3],[mean(nonzeros(TransAxnDia))/1000,mean(nonzeros(TransDenDia))/1000],'-o','MarkerFaceColor','k','MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
 
-h = set(gca,'YLim',[0.1 0.35],'YTick',[],'YColor','none','XLim',[0 4],'XTick',[1 3],'XTickLabel',{'axon', 'dendrite'},'Color',[ctrans 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+h = set(gca,'YLim',[0 0.35],'XLim',[0 4],'XTick',[1 3],'XTickLabel',{'axon', 'dendrite'},'Color',[ctrans 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 box off;
 hold off;
@@ -94,7 +94,7 @@ end
 pbaspect([1 2 1]);
 plot([1,3],[mean(nonzeros(DbxAxnDia))/1000,mean(nonzeros(DbxDenDia))/1000],'-o','MarkerFaceColor','k','MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
 
-h = set(gca,'YLim',[0 0.35],'YTick',[],'YColor','none','XLim',[0 4],'XTick',[1 3],'XTickLabel',{'axon', 'dendrite'},'Color',[cdbx 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+h = set(gca,'YLim',[0 0.35],'XLim',[0 4],'XTick',[1 3],'XTickLabel',{'axon', 'dendrite'},'Color',[cdbx 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 box off;
 hold off;
@@ -127,7 +127,7 @@ end
 pbaspect([1 2 1]);
 plot([1,3],[nan,mean(nonzeros(BarhlDenDia))/1000],'-o','MarkerFaceColor','k','MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
 
-h = set(gca,'YLim',[0 0.35],'YTick',[],'YColor','none','XLim',[0 4],'XTick',[1 3],'XTickLabel',{'axon', 'dendrite'},'Color',[cbarhl 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+h = set(gca,'YLim',[0 0.35],'XLim',[0 4],'XTick',[1 3],'XTickLabel',{'axon', 'dendrite'},'Color',[cbarhl 0.2], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 set(gcf,'color','w');
 box off;
 hold off;

@@ -474,6 +474,39 @@ for i = 1:size(cellIDs,2)
     end
 end
 
+%%
+
+%alx-alx overlapped area
+AlxArea = [];
+TransArea = [];
+AlxDbxArea = [];
+AlxBarhlArea = [];
+AlxTransArea = [];
+
+for i = 1:numel(cellIDs)
+    for j = 1:numel(cellIDs)
+        if ismember(cellIDs{i}, cellIDsAlx) ==1 && ismember(cellIDs{j}, cellIDsAlx) ==1
+            AlxArea= [AlxArea, IntArea(i,j)];
+        else ismember(cellIDs{i}, cellIDsTrans) ==1 && ismember(cellIDs{j}, cellIDsTrans) ==1
+            TransArea = [TransArea, IntArea(i,j)];
+        end
+    end
+end
+
+for i = 1:numel(cellIDs)
+    for j = 1:numel(cellIDs)
+        if ismember(cellIDs{i}, cellIDsAlx) ==1 && ismember(cellIDs{j}, cellIDsDbx) ==1
+            AlxDbxArea = [AlxDbxArea, IntArea(i,j)];
+        elseif ismember(cellIDs{i}, cellIDsAlx) ==1 && ismember(cellIDs{j}, cellIDsTrans) ==1
+            AlxTransArea - [AlxTransArea, IntArea(i,j)];
+        else ismember(cellIDs{i}, cellIDsAlx) ==1 && ismember(cellIDs{j}, cellIDsL) ==1
+            AlxBarhlArea = [AlxBarhlArea, IntArea(i,j)];
+        end
+    end
+end
+            
+
+
 %% Plot rho vs Peakdensity
 %PostPeakDensity
 figure(16);

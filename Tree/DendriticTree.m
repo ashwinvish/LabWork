@@ -32,9 +32,12 @@ for jj = 1:numel(DenTree)
         denTree = [denTree; DnTempx DnTempy DnTempz];            % populate with all dendritic trees of all trees
     end 
 end
+
 % plot somata
+if Display == true
 plot3(denTree(1,1), denTree(1,2),denTree(1,3),'o','MarkerSize',20,'MarkerFaceColor',col,'MarkerEdgeColor','k');
 hold on;
+end
 
 denXZ = [];
 denYZ = [];
