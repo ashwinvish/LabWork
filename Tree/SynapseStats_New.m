@@ -69,6 +69,34 @@ legend('boxoff');
 box off;
 axis square;
 
+cpost = [0.8,0,0];
+cpre = [0,0.7,0];
+
+figure(2);
+
+h = boxplot([AlxPostLength'; AlxPreLength'; TransPostLength';TransPreLength'; DbxPostLength'; BarhlPostLength'],...
+    [ones(size(AlxPostLength,2),1); 2*ones(size(AlxPreLength,2),1); 3*ones(size(TransPostLength,2),1); 4*ones(size(TransPreLength,2),1); ...
+    5*ones(size(DbxPostLength,2),1); 6*ones(size(BarhlPostLength,2),1)],'Notch','on', 'Symbol', 'ko',...
+    'Colors',[cpost;cpre;cpost;cpre;cpost;cpost],...
+    'OutlierSize', 25);
+set(h,{'linew'},{4});
+h1 = findobj(gca,'tag','Median');
+set(h1,'Color','k');
+set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+box off;
+
+hold on;
+
+plot([ones(size(AlxPostLength,2),1)', 2*ones(size(AlxPreLength,2),1)', 3*ones(size(TransPostLength,2),1)', 4*ones(size(TransPreLength,2),1)', ...
+    5*ones(size(DbxPostLength,2),1)', 6*ones(size(BarhlPostLength,2),1)'],[AlxPostLength, AlxPreLength, TransPostLength,TransPreLength, DbxPostLength, BarhlPostLength], ...
+     'Marker', 'o', 'MarkerFaceColor','none' ,'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor',[0.5,0.5,0.5], 'LineWidth', 4);
+axis square;
+
+
+[p,h] = ranksum(AlxPostLength,DbxPostLength);
+
+
+
 %% Distribution of inter-synaptic distance
 
 clear InterPostSynapticDistance;
@@ -338,6 +366,48 @@ h4.Color = cbarhl;
 h4.LineWidth = 4;
 
 axis square
+
+
+figure(4)
+
+h1 = cdfplot(AlxInterPre/1000);
+h1.Color = calx;
+h1.LineWidth = 4;
+
+hold on;
+
+h2 =  cdfplot(TransInterPre/1000);
+h2.Color = ctrans;
+h2.LineWidth = 4;
+
+
+figure(5);
+
+h = boxplot([AlxInterPost/1000; TransInterPost/1000; DbxInterPost/1000; BarhlInterPost/1000]...
+, [ones(size(AlxInterPost,1),1); 2*ones(size(TransInterPost,1),1); 3*ones(size(DbxInterPost,1),1); 4*ones(size(BarhlInterPost,1),1)],...
+'Notch','on', 'Symbol', 'ko', 'Labels',{'Ipsi', 'Ipsi-Contra','Contra', 'Unknown'},'Colors',[calx;ctrans;cdbx; cbarhl], 'Orientation','horizontal' ...
+,'OutlierSize', 25);
+set(h,{'linew'},{4});
+h1 = findobj(gca,'tag','Median');
+set(h1,'Color','k');
+set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+box off;
+
+InterPrePValues = []
+
+
+
+figure(6);
+
+h = boxplot([AlxInterPre/1000; TransInterPre/1000],[ones(size(AlxInterPre,1),1); 2*ones(size(TransInterPre,1),1)],...
+'Notch','on', 'Symbol', 'ko', 'Labels',{'Ipsi', 'Ipsi-Contra'},'Colors',[calx;ctrans], 'Orientation','horizontal' ...
+,'OutlierSize', 25);
+set(h,{'linew'},{4});
+h1 = findobj(gca,'tag','Median');
+set(h1,'Color','k');
+set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+
+box off;
 
 
 

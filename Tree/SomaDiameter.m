@@ -23,16 +23,37 @@ SomaDiameter = [2.90775
 
 MarkerColorMap = BarCMap;
 
-for i = 1:numel(cellIDs)
-    figure(1);
-    plot(SomaDiameter(i), rho(i), 'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',35);
-    hold on;
-end
+% for i = 1:numel(cellIDs)
+%     figure(1);
+%     plot(SomaDiameter(i), rho(i), 'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',35);
+%     hold on;
+% end
+
+plot(SomaDiameter, rho,'o','MarkerFaceColor', 'k', 'MarkerEdgeColor','w','MarkerSize',35);
+f = ezfit('exp');
+showfit(f, 'fitcolor', 'red', 'fitlinewidth',2);
+
+
+% X = [ones(length(SomaDiameter),1), SomaDiameter];
+% b = X\rho';
+% yCalc2 = X*b;
+% plot( SomaDiameter,yCalc2,'-r');
+% 
+% R2 = 1 - sum((rho' - yCalc2).^2)/sum((rho'-mean(rho')).^2);
+% text(1,1, R2);
+
+% P = polyfit(SomaDiameter,rho',1)
+% x1 = min(SomaDiameter):0.5:7;
+% y1= polyval(P,x1);
+% plot(x1,y1, '--k');
+% hold off;
 
 xlabel('Soma diameter (\mum)','FontName', 'Arial', 'FontSize', 40);
 ylabel('Normalized perisistence \rho','FontName', 'Arial', 'FontSize', 40);
 set(gca, 'XLim',[0 max(SomaDiameter)], 'YLim',[0 1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off;
+
+
 
 for i = 1:numel(cellIDs)
     figure(2)
@@ -44,22 +65,6 @@ xlabel('Soma depth (\mum)','FontName', 'Arial', 'FontSize', 40);
 ylabel('Soma diameter (\mum)','FontName', 'Arial', 'FontSize', 40);
 set(gca, 'YLim',[0 max(SomaDiameter)],'XLim',[0 max(CellSoma(:,3))/1000],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off;
-
-
-% X = [ones(length(SomaDiameter),1), SomaDiameter];
-% b = X\rho';
-% yCalc2 = X*b;
-% plot( SomaDiameter,yCalc2,'-r');
-% 
-% P = polyfit(SomaDiameter,rho',1)
-% x1 = min(SomaDiameter):0.5:7;
-% y1= polyval(P,x1);
-% plot(x1,y1, '--k');
-% hold off;
-
-
-
-hold off;
 
 
 
