@@ -21,6 +21,9 @@ for i = 1:numel(cellIDs)
     end
 end
 
+[h,p] = kstest2(GroupTreeNormalizedPathLength,GroupNormalizedPostSynapsePathLength);
+sprintf('P value is %f',p)
+
 
 subplot(1,2,1)
 histogram(GroupTreePathLenghts/1000, 'BinWidth', 10, 'Normalization', 'Probability');

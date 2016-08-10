@@ -1,4 +1,4 @@
-function [vol,m,I] = HeatMapFish( ksize,res, PointCloud, Soma, CellID ,figure )
+function [NormVol,m,I] = HeatMapFish( ksize,res, PointCloud, Soma, CellID ,figure )
 %HeatMap used to plot the heatmap of a PointCloud for a CellID 
 
 %   PointCloud [X Y Z]  is the points of cloud over which the density is computed,

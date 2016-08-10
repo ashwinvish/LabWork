@@ -211,45 +211,32 @@ CellXAxis = h.BinEdges;
 
 hold on;
 
-% cell soma colored by type
-
-% for i = 1:length(Small)
-%     if ismember(i,SmallAlx) ==1
-%         [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(i,1),45*Small(i,3) /1000,'line','scatter');
-%         set(h1,'LineStyle','none');
-%         set(h2,'MarkerFaceColor',calx,'MarkerEdgeColor','k', 'SizeData',2000);
-%         set(a(2), 'XDir','reverse', 'XTick',[], 'YLim',[0 25], 'YTick',[], 'YDir','reverse');
-%         hold on;
-%     elseif ismember(i, SmallTrans) ==1
-%         [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293*Small(i,1),45*Small(i,3) /1000,'line','scatter');
-%         set(h1,'LineStyle','none');
-%         set(h2,'MarkerFaceColor',ctrans,'MarkerEdgeColor','k', 'SizeData',2000);
-%         set(a(2), 'XDir','reverse', 'XTick',[], 'YLim',[0 25],'YTick',[], 'YDir','reverse');
-%         hold on;
-%     elseif ismember( i, SmallDbx) ==1
-%         [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293*Small(i,1),45*Small(i,3) /1000,'line','scatter');
-%         set(h1,'LineStyle','none');
-%         set(h2,'MarkerFaceColor',cdbx,'MarkerEdgeColor','k', 'SizeData',2000);
-%         set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
-%         hold on;
-%     else
-%         [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293*Small(i,1),45*Small(i,3) /1000,'line','scatter')
-%         set(h1,'LineStyle','none');
-%         set(h2,'MarkerFaceColor',cbarhl,'MarkerEdgeColor','k', 'SizeData',2000);
-%         set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25],'YTick',[], 'YDir','reverse');
-%         hold on;
-%     end
-% end
-
-% cell soma colored by rhos
-
-[y,I] = sort(rho);
-for i = 1:numel(cellIDs)
-    [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(I(i),1),45*Small(I(i),3) /1000,'line','scatter');
-    set(h1,'LineStyle','none');
-    set(h2,'MarkerFaceColor',CT(i,:),'MarkerEdgeColor','k', 'SizeData',5000);
-    set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
-    hold on;
+for i = 1:length(Small)
+    if ismember(i,SmallAlx) ==1
+        [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(i,1),45*Small(i,3) /1000,'line','scatter');
+        set(h1,'LineStyle','none');
+        set(h2,'MarkerFaceColor',calx,'MarkerEdgeColor','k', 'SizeData',2000);
+        set(a(2), 'XDir','reverse', 'XTick',[], 'YLim',[0 25], 'YTick',[], 'YDir','reverse');
+        hold on;
+    elseif ismember(i, SmallTrans) ==1
+        [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293*Small(i,1),45*Small(i,3) /1000,'line','scatter');
+        set(h1,'LineStyle','none');
+        set(h2,'MarkerFaceColor',ctrans,'MarkerEdgeColor','k', 'SizeData',2000);
+        set(a(2), 'XDir','reverse', 'XTick',[], 'YLim',[0 25],'YTick',[], 'YDir','reverse');
+        hold on;
+    elseif ismember( i, SmallDbx) ==1
+        [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293*Small(i,1),45*Small(i,3) /1000,'line','scatter');
+        set(h1,'LineStyle','none');
+        set(h2,'MarkerFaceColor',cdbx,'MarkerEdgeColor','k', 'SizeData',2000);
+        set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
+        hold on;
+    else
+        [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293*Small(i,1),45*Small(i,3) /1000,'line','scatter')
+        set(h1,'LineStyle','none');
+        set(h2,'MarkerFaceColor',cbarhl,'MarkerEdgeColor','k', 'SizeData',2000);
+        set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25],'YTick',[], 'YDir','reverse');
+        hold on;
+    end
 end
 
 

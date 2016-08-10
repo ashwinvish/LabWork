@@ -103,16 +103,13 @@ end
 
 WD = zeros(length(ArrayOfTileInfos),1);
 for n = 1:length(ArrayOfTileInfos)
-    %INFO = IMFINFO(FILENAME,FMT)
-    
-    
-    R = ArrayOfTileInfos(n).R;
-    C = ArrayOfTileInfos(n).C;
-    
+    %INFO = IMFINFO(FILENAME,FMT)        
+     R = ArrayOfTileInfos(n).R;
+     C = ArrayOfTileInfos(n).C;    
    % disp(sprintf(' Loading File: %s, (r,c) = (%d, %d)',ArrayOfTileInfos(n).FileNameAndPath, R, C));
     load(ArrayOfTileInfos(n).FileNameAndPath, 'Info');
     ArrayOfTileInfos(n).Info = Info;
-    WD(n) = Info.WorkingDistance*1000 ; 
+    WD(n) = Info.WorkingDistance*1000 ;
     %disp(sprintf(' Info.WorkingDistance = %0.5g', Info.WorkingDistance));
    
 end

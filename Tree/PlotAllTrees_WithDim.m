@@ -53,7 +53,7 @@ for kk = 1:numel(cellIDs)
     end
 end
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'p','MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
+%scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 500,'p','MarkerFaceColor','k', 'MarkerEdgeColor', 'k'); % location of the Mauther Cell center
 %  line(stripe1(:,1),stripe1(:,2),-stripe1(:,3),'LineWidth',2,'LineStyle','-', 'color','k');                  	% stripe1
 %  line(stripe2(:,1),stripe2(:,2),-stripe2(:,3),'LineWidth',2,'LineStyle','-','color','k' );                      % stripe2
 
@@ -182,7 +182,7 @@ box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [120000, 140000], [70000, 70000],'-k' ) % insert 20um sclaebar
 daspect([1 1 1]); % make aspect ratio [1 1 1]
-set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+%set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
 set(gca,'Ydir','reverse');
 view([-128,32]); % xy view
 set(gca,'BoxStyle','full');
