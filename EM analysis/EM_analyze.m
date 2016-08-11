@@ -1,5 +1,5 @@
 clear
-addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/KayvonFunctionalData'))
+%addpath(genpath('~/Documents/Scripts/EM' analysis'))
 load('101112 _files1_4.mat')
 FLUOR(1).ROI=SPT;
 FLUOR=stimSummaryEM(FLUOR);
@@ -60,7 +60,13 @@ o=find(eye(n,n)==0);
 % [Xs,Ys,stds,Cs,Ps]=mean_bin_plot(d(o),pwCor(o),5,1,1);
 staE=[STA.staE];eyes=mean(staE,2);
 %%
-for i=1:n;k=ezfit(t,r(:,i),'a*exp(-x/t)');tau(i)=k.m(2);end
+for i=1:n;
+    k=ezfit(t,r(:,i),'a*exp(-x/t)');
+    tau(i)=k.m(2);
+end
+% to calculate rho
+NormalizedFiringRate = bsxfun(@rdivide, r, max(r));
+rho = mean(NormalizedFiringRate,1);
 tau(tau>100)=100;tau(tau<1)=1;
 [ds,ps]=PairwiseSpatialStructure2(x',tau',1);
 [Xs,Ys,stds,Cs,Ps]=mean_bin_plot(ds,ps,5,1,1);
@@ -70,7 +76,7 @@ STA=FLUOR(1).STA;
 SPT=FLUOR(1).ROI;
 close all;
 %for i=1:length(SPT);
-    for i=1:4%length(SPT);
+for i=1:4%length(SPT);
     ROI=SPT(i);
     sta=STA(i).staf;stae=STA(i).staE;
     rsqs=SPT(i).rsqs;
@@ -83,8 +89,8 @@ close all;
     cls=intersect(cls,find(rsqs>.25));
     if i==2;cls=[cls 17 9];end
     areaI=SPT(i).areaI;
-%     cls=intersect(cls,areaI);
-%     cls=1:size(sta,2);
+    %     cls=intersect(cls,areaI);
+    %     cls=1:size(sta,2);
     figure(3*(i-1)+1);
     im=ROI.mnImage;
     ct=ROI.centroid;
@@ -98,7 +104,7 @@ close all;
     image(im+.1);
     str=['image',num2str(i)];
     hold on;
-%     plot(ct(:,1),ct(:,2),'r.')
+    %     plot(ct(:,1),ct(:,2),'r.')
     ROIcellLabel(ROI,cls,1,[1 0 0])
     set(gcf,'units','inches','position',[3 3 4 4]);
     set(gcf,'paperposition',[3 3 4 4]);
@@ -112,7 +118,7 @@ close all;
         a=sta(:,cls(j));
         e=err(:,cls(j));
         l=max(abs(e));
-        KDsubplot(n+1,1,[j+1,1],0);        
+        KDsubplot(n+1,1,[j+1,1],0);
         confplot(t,a,e);hold on;
         plot(t,0*t,'k--');
         set(gca,'visible','off');
@@ -121,7 +127,7 @@ close all;
         xlim([1 t(end)+40])
         set(g,'color','r','fontsize',14,'fontweight','bold');
     end
-     KDsubplot(n+1,1,[1,1],0);
+    KDsubplot(n+1,1,[1,1],0);
     plot(stae(:,1),'b','linewidth',2);
     xlim([0 t(end)+40]);
     set(gca,'visible','off');
@@ -150,68 +156,68 @@ close all;
     %set(gca,'visible','off');
     str=['timeseries',num2str(i)];
     %print(gcf,'-depsc',[folder,str,'.eps'])
-    end
+end
 
-    %%
-    %set(gcf,'position',[4 .1 4 9]*sc,'paperposition',[4 .1 4 9]*sc);
-    n=length(cls);
-    %set(gcf,'color','w');
-    i = 4;
-    for j=1:n;
-        t=SPT(i).time(:,cls(j));
-        a=int(:,cls(j));
-        %a = a/max(a); % added by AV
-        subplot(7,1,j+1);
-        plot(t,a,'k','linewidth',2);
-        %set(gca,'visible','off');
-        ylim([min(a) max(a)]);
-        
-        g=text(t(end)+10,a(end)+.05,num2str(j));
-        xlim([1 t(end)+30])
-        set(g,'color','r','fontsize',14,'fontweight','bold');
-    end
-    subplot(7,1,1)
-    th=SPT(i).theta;
-    plot(th(:,1),medfilt1(th(:,2),11),'b','linewidth',2);
-    xlim([0 th(end,1)+30]);
+%%
+%set(gcf,'position',[4 .1 4 9]*sc,'paperposition',[4 .1 4 9]*sc);
+n=length(cls);
+%set(gcf,'color','w');
+i = 4;
+for j=1:n;
+    t=SPT(i).time(:,cls(j));
+    a=int(:,cls(j));
+    %a = a/max(a); % added by AV
+    subplot(7,1,j+1);
+    plot(t,a,'k','linewidth',2);
     %set(gca,'visible','off');
-    str=['timeseries',num2str(i)];
-    %print(gcf,'-depsc',[folder,str,'.eps'])
-    end
+    ylim([min(a) max(a)]);
     
-    
-    
-    %%
-    
-    
-    folder = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/KayvonFunctionalData';
-    n=length(cls);
-    t=1:size(sta,1);
-    set(gcf,'color','w');
-    for j=1:n;
-        figure(j);
-        a=sta(:,cls(j));
-        e=err(:,cls(j));
-        l=max(abs(e));
-        shadedErrorBar(t,a,e, {'-','color','k','markerfacecolor','k','LineWidth',4},1);
-        hold on;
-        plot(t,0*t,'k--');
-        set(gcf,'Renderer','painters');
-        ylim([-.05 0.25]);
-        %set(gca,'visible','off');
-        g=text(t(end)+10,a(end)+.05,num2str(j));
-        xlim([1 t(end)])
-        set(g,'color','r','fontsize',14,'fontweight','bold');
-        box off;
-        str=['sta',num2str(j)];
-       % print(gcf,'-dsvg',[folder,str,'.svg'])
-    end
-    figure();
-    plot(stae(:,1),'b','linewidth',4);
-    xlim([0 t(end)]);
+    g=text(t(end)+10,a(end)+.05,num2str(j));
+    xlim([1 t(end)+30])
+    set(g,'color','r','fontsize',14,'fontweight','bold');
+end
+subplot(7,1,1)
+th=SPT(i).theta;
+plot(th(:,1),medfilt1(th(:,2),11),'b','linewidth',2);
+xlim([0 th(end,1)+30]);
+%set(gca,'visible','off');
+str=['timeseries',num2str(i)];
+%print(gcf,'-depsc',[folder,str,'.eps'])
+end
+
+
+
+%%
+
+
+folder = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/KayvonFunctionalData';
+n=length(cls);
+t=1:size(sta,1);
+set(gcf,'color','w');
+for j=1:n;
+    figure(j);
+    a=sta(:,cls(j));
+    e=err(:,cls(j));
+    l=max(abs(e));
+    shadedErrorBar(t,a,e, {'-','color','k','markerfacecolor','k','LineWidth',4},1);
+    hold on;
+    plot(t,0*t,'k--');
     set(gcf,'Renderer','painters');
-    str=['staEyepos'];
-  %  print(gcf,'-dsvg',[folder,str,'.svg'])
+    ylim([-.05 0.25]);
+    %set(gca,'visible','off');
+    g=text(t(end)+10,a(end)+.05,num2str(j));
+    xlim([1 t(end)])
+    set(g,'color','r','fontsize',14,'fontweight','bold');
+    box off;
+    str=['sta',num2str(j)];
+    % print(gcf,'-dsvg',[folder,str,'.svg'])
+end
+figure();
+plot(stae(:,1),'b','linewidth',4);
+xlim([0 t(end)]);
+set(gcf,'Renderer','painters');
+str=['staEyepos'];
+%  print(gcf,'-dsvg',[folder,str,'.svg'])
 
 
 
