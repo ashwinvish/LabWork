@@ -1,5 +1,5 @@
 %% Load images
-ImageFname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/AVTraces-Exported-01122016/ZFishLowResAlined1285.tif'; % file name for the stack used
+ImageFname = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/ZFishLowResAlined1285.tif'; % file name for the stack used
 info = imfinfo(ImageFname);
 for i = 1:numel(info)
     %ZFishImage(:,:,i) = imread(ImageFname,i,'PixelRegion',{[4, 754], [34,427]});
@@ -40,7 +40,7 @@ end
 
 %MarkerColors = repmat([0.9,0.9,0.9],length(ZfishSmallX),1);
 MarkerColors = repmat([0.1,0.1,0.1],length(ZfishSmallX),1);
-hplot = scatter3( ZfishSmallX,ZfishSmallY,ZfishSmallZ ,100,MarkerColors,'+','filled','MarkerEdgeColor','k');
+hplot = scatter3( ZfishSmallX,ZfishSmallY,ZfishSmallZ ,10,MarkerColors,'o','filled','MarkerEdgeColor','k');
 daspect([1,1,9]);
 axis vis3d;
 set(gca,'XDir','reverse');
@@ -59,30 +59,30 @@ CaD =   [80,    583,    1];
 CaV =   [86,    604,    23];
 
 scatter3(MCell(1),MCell(2),-1*MCell(3),500,'k', 'p', 'MarkerFaceColor','k');
-text( 480,MCell(2),-1, 'r4', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text( 520,MCell(2),-1, 'r4', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
 %text(-10, MCell(2), -1, 'Mauthner cell','FontName', 'Arial', 'FontSize', 40, 'Color','k');
 
 scatter3(M2C1(1),M2C1(2),-1*M2C1(3),300,'r', 'p', 'MarkerFaceColor','r', 'MarkerEdgeColor','k');
 scatter3(M2C2(1),M2C2(2),-1*M2C2(3),300,'r', 'p', 'MarkerFaceColor','r', 'MarkerEdgeColor','k');
 MeanM2C = mean([M2C1; M2C2]);
-text(480, MeanM2C(2), -1,'r5', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text(520, MeanM2C(2), -1,'r5', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
 %text(-10, MeanM2C(2), -1,'Mi2', 'FontName', 'Arial', 'FontSize', 40, 'Color','r');
 
 scatter3(M3C1(1),M3C2(2),-1*M2C2(3),300,'b', 'p', 'MarkerFaceColor','b', 'MarkerEdgeColor','k');
 scatter3(M3C2(1),M3C2(2),-1*M3C2(3),300,'b','p', 'MarkerFaceColor','b', 'MarkerEdgeColor','k');
 MeanM3C = mean([M3C1; M3C2]);
-text(480, MeanM3C(2), -1, 'r6', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text(520, MeanM3C(2), -1, 'r6', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
 %text(-10, MeanM3C(2), -1, 'Mi3', 'FontName', 'Arial', 'FontSize', 40, 'Color','b');
 
 scatter3(CaD(1), CaD(2), -1*CaD(3), 300, 'g','p', 'MarkerFaceColor','g', 'MarkerEdgeColor','k');
 scatter3(CaV(1), CaV(2), -1*CaV(3), 300, 'g','p', 'MarkerFaceColor','g', 'MarkerEdgeColor','k');
 MeanCa  = mean([CaD; CaV]);
-text(480, MeanCa(2), -1, 'r7', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text(520, MeanCa(2), -1, 'r7', 'FontName', 'Arial', 'FontSize', 40, 'Color','k');
 %text(-10, MeanCa(2), -1, 'Ca', 'FontName', 'Arial', 'FontSize', 40, 'Color','g');
 
-text(450,412,-1,'M1','FontName', 'Arial', 'FontSize', 40, 'Color','k');
-text(358,270,-1,'M2','FontName', 'Arial', 'FontSize', 40, 'Color','k');
-text(317,109,-1,'M3','FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text(520,412,-1,'M1','FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text(520,270,-1,'M2','FontName', 'Arial', 'FontSize', 40, 'Color','k');
+text(520,109,-1,'M3','FontName', 'Arial', 'FontSize', 40, 'Color','k');
 
 set(gca, 'color','none');
 box on;

@@ -1,9 +1,9 @@
 clear
-%addpath(genpath('~/Documents/Scripts/EM' analysis'))
-load('101112 _files1_4.mat')
+addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis'))
+load('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis/101112 _files1_4.mat')
 FLUOR(1).ROI=SPT;
 FLUOR=stimSummaryEM(FLUOR);
-%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 delt=.05;
 STA=FLUOR(1).STA;
 SPT=FLUOR(1).ROI;
@@ -49,17 +49,20 @@ end
 
 load('modes_stafs');
 fs=[fs sta];
-t=0:delt:delt*(size(fs,1)-1);t=t-2;
+t=0:delt:delt*(size(fs,1)-1);
+t=t-2;
 r=svd_rates(fs,t,1.9,[3,3],-100);
 r=r(:,end-(n-1):end);
-firing=r;fluorescence=sta(1:end-1,:);T=t(1:end-1);
+firing=r;
+fluorescence=sta(1:end-1,:);
+T=t(1:end-1);
 r=r(40:end,:);
 t=0:.05:.05*(size(r,1)-1);
 pwCor=corr(int);
 o=find(eye(n,n)==0);
 % [Xs,Ys,stds,Cs,Ps]=mean_bin_plot(d(o),pwCor(o),5,1,1);
 staE=[STA.staE];eyes=mean(staE,2);
-%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:n;
     k=ezfit(t,r(:,i),'a*exp(-x/t)');
     tau(i)=k.m(2);
@@ -70,7 +73,7 @@ rho = mean(NormalizedFiringRate,1);
 tau(tau>100)=100;tau(tau<1)=1;
 [ds,ps]=PairwiseSpatialStructure2(x',tau',1);
 [Xs,Ys,stds,Cs,Ps]=mean_bin_plot(ds,ps,5,1,1);
-%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %folder='C:\Users\kpd7\Documents\data\EM\101112\zfigures\';
 STA=FLUOR(1).STA;
 SPT=FLUOR(1).ROI;
@@ -95,7 +98,7 @@ for i=1:4%length(SPT);
     im=ROI.mnImage;
     ct=ROI.centroid;
     ct=ct(:,cls)';
-    
+
     im=repmat(ROI.mnImage,[1 1 3]);
     im=im/max(im(:));
     mx=find(im>max(im(:))*.7);
@@ -109,7 +112,7 @@ for i=1:4%length(SPT);
     set(gcf,'units','inches','position',[3 3 4 4]);
     set(gcf,'paperposition',[3 3 4 4]);
     %print(gcf,'-depsc',[folder,str,'.eps'])
-    
+
     sc=.75;
     figure(3*(i-1)+2);figure_initialize;
     set(gcf,'position',[4 .1 1.2 9]*sc,'paperposition',[4 .1 1.2 9]*sc);
@@ -133,7 +136,7 @@ for i=1:4%length(SPT);
     set(gca,'visible','off');
     str=['sta',num2str(i)];
     %print(gcf,'-depsc',[folder,str,'.eps'])
-    
+
     figure(3*(i-1)+3);figure_initialize;
     set(gcf,'position',[4 .1 4 9]*sc,'paperposition',[4 .1 4 9]*sc);
     n=length(cls);set(gcf,'color','w');
@@ -171,7 +174,7 @@ for j=1:n;
     plot(t,a,'k','linewidth',2);
     %set(gca,'visible','off');
     ylim([min(a) max(a)]);
-    
+
     g=text(t(end)+10,a(end)+.05,num2str(j));
     xlim([1 t(end)+30])
     set(g,'color','r','fontsize',14,'fontweight','bold');
@@ -183,11 +186,11 @@ xlim([0 th(end,1)+30]);
 %set(gca,'visible','off');
 str=['timeseries',num2str(i)];
 %print(gcf,'-depsc',[folder,str,'.eps'])
-end
+%end
 
 
 
-%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 folder = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/KayvonFunctionalData';
@@ -218,13 +221,3 @@ xlim([0 t(end)]);
 set(gcf,'Renderer','painters');
 str=['staEyepos'];
 %  print(gcf,'-dsvg',[folder,str,'.svg'])
-
-
-
-
-
-
-
-
-
-
