@@ -124,9 +124,8 @@ for i=2:length(SPT);
     T=t(1:end-1);
     r=r(40:end,:);
     t=0:.05:.05*(size(r,1)-1);
-    Normr = bsxfun(@rdivide, r, max(r));
-    
-    
+    Normr = bsxfun(@rdivide, r, mean(r(1:10,:)));
+     
     clear tau
     for tau_i=1:size(sta,2);
         k=ezfit(t,r(:,tau_i),'a*exp(-x/t)');

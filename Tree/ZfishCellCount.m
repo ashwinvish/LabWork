@@ -1,5 +1,6 @@
 %% Load images
-ImageFname = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/ZFishLowResAlined1285.tif'; % file name for the stack used
+%ImageFname = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/ZFishLowResAlined1285.tif'; % file name for the stack used
+ImageFname = '/Users/admin/Documents/ZFishLowResAlined1285.tif';
 info = imfinfo(ImageFname);
 for i = 1:numel(info)
     %ZFishImage(:,:,i) = imread(ImageFname,i,'PixelRegion',{[4, 754], [34,427]});
@@ -91,7 +92,7 @@ set(gca, 'BoxStyle','full', 'XTick',[],'YTick',[], 'ZTick',[]);
 % RC distance between reticulospinal cells
 
 % creating a flat surface of same size as image
-colormap gray;
+%colormap gray;
 %[X,Y] = meshgrid(linspace(0, 393, 393), linspace(0,750,750)); % image dimensions are 903x511
 [X,Y] = meshgrid(linspace(0, 511, 511), linspace(0,903,903)); % image dimensions are 903x511
 imageplane = 458; % 1 to 1285
@@ -160,6 +161,7 @@ Small(22,:) = [82	624	274];
  CT = cbrewer('div','Spectral',size(CellSoma,1));
 % %CT = parula(22);
  [y,I] = sort(rho);
+ [y,I] =  sort(log2(tau));
  for i = 1:numel(cellIDs)
      scatter3(Small(I(i),1), Small(I(i),2), Small(I(i),3), 250, CT(i,:), 'filled', 'MarkerEdgeColor','k');
  end
