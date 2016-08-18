@@ -217,8 +217,8 @@ t=STA(1).T;
 figure();
 for i = 1:size(TAU,1)
      subplot(4,6,i);
-     shadedErrorBar(t,A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',2},1);
-     set(gca, 'XLim', [-2,7],'YLim', [0,0.35]);
+     shadedErrorBar(t,A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',4},1);
+     set(gca, 'XLim', [-2,7]);
      str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
      title(str);
 end
@@ -232,7 +232,7 @@ for i = 1:size(TAU,1)
      hold on;
      plot(t(1:end-1), Firing(:,I(i)), 'color',  CT(i,:));
      showfit(FitsFinal{I(i)},'dispeqboxmode', 'off','fitlinestyle','--', 'fitcolor', 'k');
-     set(gca, 'XLim', [-2,7], 'YLim', [0,0.2]);
+     set(gca, 'XLim', [-2,7]);
      str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
      title(str);
 end

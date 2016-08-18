@@ -32,8 +32,9 @@ for i=1:size(xx,2);
     % plot(x,y,'.','color',.6*[1 1 1]);hold on;
     if plt==1
         if size(xx,2)>1;subplot(1,size(xx,2),i);end
-        errorbar(X(:,i),Y(:,i),stdEr(:,i),'k.-','markersize',5,'color',color(i));
-        set(gca,'fontweight','bold','fontsize',12)
+        errorbar(X(:,i),Y(:,i),stdEr(:,i),'k.-','markersize',25,'color',color(i), 'LineWidth', 2);
+        set(gca,'FontName', 'Arial','FontSize',40, 'LineWidth', 2)
+        box off;
     end
     C(:,i)=diag(c);P(:,i)=diag(p);
     hold on;

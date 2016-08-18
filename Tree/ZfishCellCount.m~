@@ -160,7 +160,7 @@ Small(22,:) = [82	624	274];
 % end
  CT = cbrewer('div','Spectral',size(CellSoma,1));
 % %CT = parula(22);
- %[y,I] = sort(rho);
+ [y,I] = sort(rho);
  [y,I] =  sort(log2(tau));
  for i = 1:numel(cellIDs)
      scatter3(Small(I(i),1), Small(I(i),2), Small(I(i),3), 250, CT(i,:), 'filled', 'MarkerEdgeColor','k');
@@ -245,7 +245,7 @@ hold on;
 
 % cell soma colored by rhos
 
-[y,I] = sort(log2(tau));
+[y,I] = sort(rho);
 for i = 1:numel(cellIDs)
     [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(I(i),1),45*Small(I(i),3) /1000,'line','scatter');
     set(h1,'LineStyle','none');
@@ -272,9 +272,6 @@ xlabel('Distance (\mum)', 'FontName', 'Arial', 'FontSize', 40);
 ylabel(a(1),'Number of cells', 'FontName', 'Arial', 'FontSize', 40);
 ylabel(a(2),'Depth (\mum)', 'FontName', 'Arial', 'FontSize', 40);
 
-%% plot time constant trends along the three axes
 
-                                        %(RC,                  ML,                       DV)
-[ds,ps] = PairwiseSpatialStructure2([CellSoma(:,2)./1000, CellSoma(:,1)./1000, CellSoma(:,3)./1000], tau',1);
-mean_bin_plot(ds,ps,5,1,1)
+
 
