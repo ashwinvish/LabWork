@@ -1,4 +1,4 @@
-clear
+%clear
 addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis'))
 load('101112 _files1_4.mat')
 FLUOR(1).ROI=SPT;
@@ -82,6 +82,7 @@ FitsFinal = {};
 A= [];
 E = [];
 Firing = [];
+FullFluo = [];
 index = 0;
 
 close all;
@@ -147,11 +148,12 @@ for i=2:length(SPT);
     FitsFinal = [FitsFinal,Fits{cls}];
     index = size(cls,2);
     Firing = [Firing, firing(:,cls)];
+    FullFluo = [FullFluo, int(:,cls)];
     
     
-    sc=.75;
-%     figure(3*(i-1)+2);figure_initialize;
-%     set(gcf,'position',[4 .1 1.2 9]*sc,'paperposition',[4 .1 1.2 9]*sc);
+    sc = .75;
+     figure(3*(i-1)+2);figure_initialize;
+     set(gcf,'position',[4 .1 1.2 9]*sc,'paperposition',[4 .1 1.2 9]*sc);
     n=length(cls);t=1:size(sta,1);set(gcf,'color','w');
     
     for j=1:n;
@@ -173,8 +175,8 @@ for i=2:length(SPT);
         set(g,'color','r','fontsize',10,'fontweight','bold');
         tau
         axis square;
-        A = [A, a];
-        E = [E, e];
+        A = [A, a(22:end)];
+        E = [E, e(22:end)];
     end
     %KDsubplot(n+1,1,[1,1],0);
     subplot(n+1,1,1);
@@ -192,9 +194,11 @@ for i=2:length(SPT);
         t=SPT(i).time(:,cls(j));
         a=int(:,cls(j));
         KDsubplot(n+1,1,[j+1,1],0);
-        plot(t,a,'k','linewidth',2);
+        %plot(t,a,'k','linewidth',2);
+        plot(t,a/max(a),'k','linewidth',2); % normalized f/f
         set(gca,'visible','off');
-        ylim([min(a) max(a)]);
+%       ylim([min(a) max(a)]);
+        ylim([-1,1]);
         g=text(t(end)+10,a(end)+.05,num2str(j));
         xlim([1 t(end)+30])
         set(g,'color','r','fontsize',14,'fontweight','bold');
@@ -209,32 +213,137 @@ for i=2:length(SPT);
 end
 
 %% plots
-
-CT = cbrewer('div','Spectral',size(TAU,1));
+folder = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/NewFigure1/'
+CT = cbrewer('div','Spectral',size(unique(TAU),1));
+CT(19:22,:) = repmat(CT(18,:),4,1);
+% CT = jet(18);
+% CT(19:22,:) = repmat(CT(18,:),4,1);
 [y,I] = sort(log2(TAU));
-t=STA(1).T;
+tFlo=STA(1).T;
+tFir=0:delt:delt*(size(fs,1)-1);
+tFir=tFir-2;
+colormap(CT);
 
-figure();
+
+
 for i = 1:size(TAU,1)
-     subplot(4,6,i);
-     shadedErrorBar(t,A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',2},1);
-     set(gca, 'XLim', [-2,7],'YLim', [0,0.35]);
-     str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
+     figure('units','normalized','outerposition',[0 0 1 1]);
+     subplot(1,2,1);
+     shadedErrorBar(tFir,A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',4},1);
+     set(gca, 'XLim', [-2,6],'YLim', [0,0.35],'XTick',[-2,-1,0,1,2,3,4,5,6], 'XTickLabel',[-1,0,1,2,3,4,5,6,7]);
+     set(gcf, 'Renderer','painters','Color','none');
+     str = sprintf('Cell%dlog(tau)%1.2f', I(i), y(i));
      title(str);
+     axis square;
+     box off;
+     
+     subplot(1,2,2);
+     plot(tFir(1:end-1), Firing(:,I(i)), 'color',  CT(i,:),'LineWidth', 4);
+     hold on;
+     showfit(FitsFinal{I(i)},'dispeqboxmode', 'off','fitlinestyle','-', 'fitcolor', 'k', 'fitlinewidth', 2);
+     set(gca, 'XLim', [-2,6],'YLim', [0,0.35],'XTick',[-2,-1,0,1,2,3,4,5,6], 'XTickLabel',[-1,0,1,2,3,4,5,6,7]);
+     set(gcf, 'Renderer','painters','Color','none');
+     str = sprintf('Cell%dlog(tau)%1.2f', I(i), y(i));
+     title(str);
+     axis square;
+     box off;
+    % print(gcf,'-dsvg',[folder,str,'.svg']);
 end
+
+
 clear t;
 
-figure();
-    t=0:delt:delt*(size(fs,1)-1);
-    t=t-2;
-for i = 1:size(TAU,1)
-     subplot(4,6,i);
-     hold on;
-     plot(t(1:end-1), Firing(:,I(i)), 'color',  CT(i,:));
-     showfit(FitsFinal{I(i)},'dispeqboxmode', 'off','fitlinestyle','--', 'fitcolor', 'k');
-     set(gca, 'XLim', [-2,7], 'YLim', [0,0.2]);
-     str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
-     title(str);
+% figure();
+%     t=0:delt:delt*(size(fs,1)-1);
+%     t=t-2;
+% for i = 1:size(TAU,1)
+%      subplot(4,6,i);
+%      hold on;
+%      plot(t(1:end-1), Firing(:,I(i)), 'color',  CT(i,:));
+%      showfit(FitsFinal{I(i)},'dispeqboxmode', 'off','fitlinestyle','--', 'fitcolor', 'k');
+%      set(gca, 'XLim', [-2,7], 'YLim', [0,0.2]);
+%      str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
+%      title(str);
+% end
+% 
+
+
+t=SPT(1).time(:,cls(1));
+index =1;
+
+figure('units','normalized','outerposition',[0 0 1 1])
+    subplot(10,1,1);
+    th=SPT(2).theta;
+    plot(th(:,1),medfilt1(th(:,2),11),'b','linewidth',2);
+    xlim([0 th(end,1)+30]);
+for i = 1:22   
+    if (I(i)<=7)
+        subplot(10,1,index+1);
+        plot(t,FullFluo(:,I(i))/max(FullFluo(:,I(i))),'color',CT(i,:),'LineWidth', 2);
+        %plot(t,FullFluo(:,I(i)),'color',CT(i,:),'LineWidth', 2);
+        set(gcf, 'Renderer','painters','Color','none');
+        xlim([1 t(end)+30]);
+        %ylim([min(FullFluo(:,I(i))), max(FullFluo(:,I(i)))])
+        ylim([-1, 1]);
+        index = index+1;
+        str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
+        title(str);
+        box off;
+        i
+    end
 end
+print(gcf,'-dsvg',[folder,'Plane1.svg']);
 
 
+figure('units','normalized','outerposition',[0 0 1 1])
+index =1;
+    subplot(10,1,1);
+    th=SPT(3).theta;
+    plot(th(:,1),medfilt1(th(:,2),11),'b','linewidth',2);
+    xlim([0 th(end,1)+30]);
+for i = 1:22        
+    if  (I(i) >=8 && I(i)<= 16)
+        subplot(10,1,index+1);
+        plot(t,FullFluo(:,I(i))/max(FullFluo(:,I(i))),'color',CT(i,:),'LineWidth', 2);
+        %plot(t,FullFluo(:,I(i)),'color',CT(i,:),'LineWidth', 2);
+        set(gcf, 'Renderer','painters','Color','none');
+        xlim([1 t(end)+30]);
+        %ylim([min(FullFluo(:,I(i))), max(FullFluo(:,I(i)))])
+        ylim([-1, 1]);
+        index = index+1;
+        str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
+        title(str);
+        box off;
+    end
+end
+print(gcf,'-dsvg',[folder,'Plane2.svg']);
+
+figure('units','normalized','outerposition',[0 0 1 1]);
+index =1;
+    subplot(10,1,1);
+    th=SPT(4).theta;
+    plot(th(:,1),medfilt1(th(:,2),11),'b','linewidth',2);
+    xlim([0 th(end,1)+30]);
+for i = 1:22    
+        if  (I(i) >=17)
+        subplot(10,1,index+1);
+        plot(t,FullFluo(:,I(i))/max(FullFluo(:,I(i))),'color',CT(i,:),'LineWidth', 2);
+        %plot(t,FullFluo(:,I(i)),'color',CT(i,:),'LineWidth', 2);
+        set(gcf, 'Renderer','painters','Color','none');
+        xlim([1 t(end)+30]);
+        %ylim([min(FullFluo(:,I(i))), max(FullFluo(:,I(i)))])
+        ylim([-1, 1]);
+        index = index+1;
+        str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
+        title(str);
+        box off;
+    end
+end
+print(gcf,'-dsvg',[folder,'Plane3.svg']);
+
+%%
+figure();
+ [ds,ps]=PairwiseSpatialStructure2([CellSoma(:,2)/1000, CellSoma(:,1)/1000, CellSoma(:,3)/1000],TAU',1);
+ [Xs,Ys,stds,Cs,Ps]=mean_bin_plot(ds,ps,5,1,1);
+
+       

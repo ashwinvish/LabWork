@@ -146,8 +146,8 @@ for i = 1:length(cellIDs)
 end
 
 xlabel('Neuron #', 'FontName', 'Arial', 'FontSize', 40);
-ylabel('Persistence time Measure \rho', 'FontName', 'Arial', 'FontSize', 40);
-set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth', 2);
+ylabel('log time constant', 'FontName', 'Arial', 'FontSize', 40);
+set(gca,'XLim',[0,22], 'FontName', 'Arial', 'FontSize', 40, 'LineWidth', 2);
 set(gcf,'color','w');
 axis square;
 box off

@@ -158,12 +158,12 @@ Small(22,:) = [82	624	274];
 %         MarkerColorMap(:,i) = cbarhl';
 %     end
 % end
- CT = cbrewer('div','Spectral',size(CellSoma,1));
-% %CT = parula(22);
- %[y,I] = sort(rho);
- [y,I] =  sort(log2(tau));
- for i = 1:numel(cellIDs)
+CT = cbrewer('div','Spectral',size(unique(tau),1));
+CT(19:22,:) = repmat(CT(18,:),4,1);
+[y,I] =  sort(log2(tau));
+ for i = 1:22 %numel(cellIDs)
      scatter3(Small(I(i),1), Small(I(i),2), Small(I(i),3), 250, CT(i,:), 'filled', 'MarkerEdgeColor','k');
+     %caxis([min(log2(tau)), max(log2(tau))])
  end
 %colorbar;
 daspect([1,1,9]);
@@ -249,7 +249,7 @@ hold on;
 for i = 1:numel(cellIDs)
     [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(I(i),1),45*Small(I(i),3) /1000,'line','scatter');
     set(h1,'LineStyle','none');
-    set(h2,'MarkerFaceColor',CT(i,:),'MarkerEdgeColor','k', 'SizeData',5000);
+    set(h2,'MarkerFaceColor',CT(i,:),'MarkerEdgeColor','k', 'SizeData',4000);
     set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
     hold on;
 end

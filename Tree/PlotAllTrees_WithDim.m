@@ -167,7 +167,7 @@ for kk = 1 : length(allTrees)
 end
 
 %figure();
-scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500,rho, 'fill', 'Marker','o', 'MarkerEdgeColor', 'k');
+scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 500,log2(tau), 'fill', 'Marker','o', 'MarkerEdgeColor', 'k');
 %scatter3(CellSoma(:,1),CellSoma(:,2),-CellSoma(:,3), 150, 'red', 'fill', 'Marker','o' ,'LineWidth', 2,'MarkerEdgeColor', 'k');
 hold on;
 scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 1000,'p','MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
@@ -177,7 +177,8 @@ scatter3(Mid3C1(1,1),Mid3C1(1,2),Mid3C1(1,3), 500,'p','MarkerFaceColor','b', 'Ma
 scatter3(Mid3C2(1,1),Mid3C2(1,2),Mid3C2(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
 scatter3(CAD(1,1), CAD(1,2), CAD(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
 scatter3(CAV(1,1), CAV(1,2), CAV(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
-caxis([0 1]);
+caxis([min(log2(tau)) max(log2(tau))]);
+colormap parula;
 box on;
 axis([ 20000 140000 60000 250000 -60000 0]);
 plot( [120000, 140000], [70000, 70000],'-k' ) % insert 20um sclaebar
