@@ -40,9 +40,10 @@ NormVol = vol./max(vol(:));
 
 % display only Normalized volume plots
 
-cmap = cbrewer('seq','Reds', size(vol,1));
+cmap = cbrewer('seq','Reds', size(NormVol,1));
+
 if figure == true
-    threeView(NormVol,Soma, cmap);
+    threeView(NormVol,Soma,cmap);
    % title(CellID);
     [m,I] = max(NormVol(:));
     

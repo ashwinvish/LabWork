@@ -1,0 +1,42 @@
+% To calculate the overlapping area between cells
+
+ksize = 12000;
+res = 1000;
+
+AlxPreVol = HeatMapFish(ksize,res, AlxPre,AlxSoma,cellIDsAlx,false);
+AlxPostVol = HeatMapFish(ksize,res, AlxPost,AlxSoma,cellIDsAlx,false);
+TransPreVol = HeatMapFish(ksize,res, TransPre,TransSoma,cellIDsTrans,false);
+TransPostVol = HeatMapFish(ksize,res, TransPost,TransSoma,cellIDsTrans,false);
+DbxPostVol = HeatMapFish(ksize,res, DbxPost,DbxSoma,cellIDsDbx,false);
+BarhlPostVol = HeatMapFish(ksize,res, BarhlPost,BarhlSoma,cellIDsL,false);
+
+%Ipsi axons with Ipsi dendrites
+figure();
+AlxArea = dotVol(AlxPreVol,AlxPostVol,AlxSoma, AlxSoma, res);
+
+% IpsiContra axons with IpsiContraDendrites
+figure();
+TransArea = dotVol(TransPreVol,TransPostVol,TransSoma, TransSoma, res);
+
+% IpsiAxons with Contra dendrites
+figure();
+subplot(1,2,1);
+AlxDbxArea = dotVol(AlxPreVol,DbxPostVol,AlxSoma, DbxSoma, res);
+subplot(1,2,2);
+TransDbxArea = dotVol(TransPreVol,DbxPostVol,TransSoma, DbxSoma, res);
+
+% IpsiAxons with Unknown dendrites
+figure();
+subplot(1,2,1);
+AlxBarhlArea = dotVol(AlxPreVol,BarhlPostVol,AlxSoma, BarhlSoma, res);
+subplot(1,2,2);
+TransBarhlArea = dotVol(TransPreVol,BarhlPostVol,TransSoma, BarhlSoma, res);
+
+figure();
+plot(1, AlxArea/1e6, 'Marker','o', 'MarkerFaceColor',calx, 'MarkerEdgeColor','k');
+hold on;
+plot(1, TransArea/1e6, 'Marker','o', 'MarkerFaceColor',ctrans, 'MarkerEdgeColor','k');
+plot(1, (AlxDbxArea+TransDbxArea/1e6, 'Marker','o', 'MarkerFaceColor',, 'MarkerEdgeColor','k');
+
+
+

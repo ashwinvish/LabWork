@@ -79,19 +79,26 @@ else if nargin> 3
         % calculate the overlap area in downsampled coordinates
         area = sum(tempXY(:)); % should be same for all planes.
         
-        %plot XZ soma location
-        plot(140-Soma(1,1), 60 -Soma(1,3),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');
-        %plot XY soma location
-        plot(140-Soma(1,1), 10 + Soma(1,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');
-        %plot YZ soma location
-        plot(130+Soma(1,3), 10 + Soma(1,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');
+        %
+        Soma2 =  varargin{4};
         
         %plot XZ soma location
-        plot(140-Soma(2,1), 60 -Soma(2,3),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','g');
+        scatter(140-Soma(:,1), 60 -Soma(:,3),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');
         %plot XY soma location
-        plot(140-Soma(2,1), 10 + Soma(2,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','g');
+        scatter(140-Soma(:,1), 10 + Soma(:,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');
         %plot YZ soma location
-        plot(130+Soma(2,3), 10 + Soma(2,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','g');
+        scatter(130+Soma(:,3), 10 + Soma(:,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','r');
+        
+        if ~isempty(Soma2)
+        
+        %plot XZ soma location
+        scatter(140-Soma2(:,1), 60 -Soma2(:,3),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','g');
+        %plot XY soma location
+        scatter(140-Soma2(:,1), 10 + Soma2(:,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','g');
+        %plot YZ soma location
+        scatter(130+Soma2(:,3), 10 + Soma2(:,2),'Marker','o', 'MarkerFaceColor','w', 'MarkerEdgeColor','g');
+        
+        end
         
         
     end
