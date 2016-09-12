@@ -23,14 +23,15 @@ PrimaryCilia = [allTrees{1}{1,2}{1,3};
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellIDsAlx) ==1
-        subplot(221)
+        %subplot(221)
+        hold on;
         h1 = compass(PrimaryCilia(i,1)/1000-CellSoma(i,1)/1000, PrimaryCilia(i,2)/1000-CellSoma(i,2)/1000);
         h1.LineWidth = 2;
         h1.Color = calx;
-        hold on;
+        h2.axis
     end
 end
-% axis([min(h1.XData) max(h1.XData), min(h1.YData), max(h1.YData)])
+axis([min(h1.XData) max(h1.XData), min(h1.YData), max(h1.YData)])
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellIDsTrans) ==1
@@ -38,10 +39,9 @@ for i = 1:numel(cellIDs)
         h2 = compass(PrimaryCilia(i,1)/1000-CellSoma(i,1)/1000, PrimaryCilia(i,2)/1000-CellSoma(i,2)/1000);
         h2.LineWidth = 2;
         h2.Color = ctrans;
-        hold on;
     end
 end
-% axis([min(h2.XData) max(h2.XData), min(h2.YData), max(h2.YData)])
+axis([min(h2.XData) max(h2.XData), min(h2.YData), max(h2.YData)])
 
 
 for i = 1:numel(cellIDs)
@@ -51,7 +51,6 @@ for i = 1:numel(cellIDs)
         h3 = compass(PrimaryCilia(i,1)/1000-CellSoma(i,1)/1000, PrimaryCilia(i,2)/1000-CellSoma(i,2)/1000);
         h3.LineWidth = 2;
         h3.Color = cdbx;
-        hold on;
     end
 end
 axis([min(h3.XData) max(h3.XData), min(h3.YData), max(h3.YData)])
@@ -63,11 +62,10 @@ for i = 1:numel(cellIDs)
         h4 = compass(PrimaryCilia(i,1)/1000-CellSoma(i,1)/1000, PrimaryCilia(i,2)/1000-CellSoma(i,2)/1000);
         h4.LineWidth = 2;
         h4.Color = cbarhl;
-        hold on;
     end
  
 end
-%     axis([min(h4.XData) max(h4.XData), min(h4.YData), max(h4.YData)])
+    axis([min(h4.XData) max(h4.XData), min(h4.YData), max(h4.YData)])
 
 
 
