@@ -3,7 +3,7 @@ function [X,Y,stdEr,C,P]=mean_bin_plot(xx,yy,col,plt,A,color,g)
 %a matrix of distances, each column corresponds to a direction. yy is a
 %matrix of corresponding pairwise values (i.e. pairwise difference in
 %persistence), plt=1 if you want to output a plot, plt=any number
-%otherwise. Col is number of data ponits to reshape the matrix.
+%otherwise. 
 if nargin==5;color='bbbbbbb';end
 for i=1:size(xx,2);
     x=xx(:,i);y=yy(:,i)/A;
@@ -32,10 +32,8 @@ for i=1:size(xx,2);
     % plot(x,y,'.','color',.6*[1 1 1]);hold on;
     if plt==1
         if size(xx,2)>1;subplot(1,size(xx,2),i);end
-        plot(X(:,i),Y(:,i),'k.-','markersize',25,'color','r', 'LineWidth', 2);
-        hold on;
-        plot(x,y,'k.','markersize',25,'color',color(i), 'LineWidth', 2);
-        %errorbar(X(:,i),Y(:,i),stdEr(:,i),'k.-','markersize',25,'color',color(i), 'LineWidth', 2);
+        plot(X(:,i),Y(:,i),'k.-','markersize',25,'color',color(i), 'LineWidth', 2);
+        errorbar(X(:,i),Y(:,i),stdEr(:,i),'k.-','markersize',25,'color',color(i), 'LineWidth', 2);
         set(gca,'FontName', 'Arial','FontSize',40, 'LineWidth', 2)
         box off;
     end

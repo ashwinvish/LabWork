@@ -52,6 +52,7 @@ else if nargin> 3
         vol = 0;
         tempXY = varargin{1};
         imagesc(0,70,imrotate(tempXY,-90));
+        imwrite(temp
         h1 = gcf;
         set(h1.CurrentAxes, 'LineWidth', 2);
         colormap(cmap);

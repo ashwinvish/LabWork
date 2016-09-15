@@ -1,4 +1,4 @@
-RCSoma = [CellSoma(:,1),CellSoma(:,2)]; % considering only the x,y coordinates
+RCSoma = [CellSoma(:,1),CellSoma(:,2)]; % considering only the ML,RC coordinates
 RCSomapDist = tril(squareform(pdist(RCSoma)),-1);
 %cmap = parula(44);
 index =1;

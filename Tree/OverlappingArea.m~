@@ -88,8 +88,8 @@ IpsiToUnknown =[AlxBarhlArea';TransBarhlArea'];
 IpsiToUnknown = IpsiToUnknown(find(IpsiToUnknown~=0));
 IpsiToUnknown = IpsiToUnknown';
 
-h = boxplot([IpsiToIpsi./1e6;IpsiContraToIpsiContra./1e6; IpsiToContra./1e6;IpsiToUnknown./1e6],...
-    [ones(size(IpsiToIpsi,1),1); 2*ones(size(IpsiContraToIpsiContra,1),1); 3*ones(size(IpsiToContra,1),1); 4*ones(size(IpsiToUnknown,1),1)],...
+h = boxplot([IpsiToIpsi'./1e6 ;IpsiContraToIpsiContra'./1e6; IpsiToContra'./1e6;IpsiToUnknown'./1e6],...
+    [ones(size(IpsiToIpsi,2),1); 2*ones(size(IpsiContraToIpsiContra,2),1); 3*ones(size(IpsiToContra,2),1); 4*ones(size(IpsiToUnknown,2),1)],...
     'Notch','off', 'Symbol', 'ko','Colors',[calx;ctrans;cdbx;cbarhl],'OutlierSize', 25);
 set(h,{'linew'},{4});
 h1 = findobj(gca,'tag','Median');
@@ -99,12 +99,12 @@ box off;
 
 hold on;
 
-plot([ones(size(IpsiToIpsi,1),1); 2*ones(size(IpsiContraToIpsiContra,1),1); 3*ones(size(IpsiToContra,1),1); 4*ones(size(IpsiToUnknown,1),1)]...
-    ,[IpsiToIpsi./1e6;IpsiContraToIpsiContra./1e6; IpsiToContra./1e6;IpsiToUnknown./1e6], ...
+plot([ones(size(IpsiToIpsi,2),1); 2*ones(size(IpsiContraToIpsiContra,2),1); 3*ones(size(IpsiToContra,2),1); 4*ones(size(IpsiToUnknown,2),1)]...
+    ,[IpsiToIpsi'./1e6;IpsiContraToIpsiContra'./1e6; IpsiToContra'./1e6;IpsiToUnknown'./1e6], ...
      'Marker', 'o', 'MarkerFaceColor','none' ,'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor','k', 'LineWidth', 4);
 axis square;
 
-
+ylabel('Overlapping area (\mum)', 'FontName', 'Arial', 'FontSize', 40);
 
 
 
@@ -120,37 +120,88 @@ BarhlPostVol = HeatMapFish(ksize,res, BarhlPost,BarhlSoma,cellIDsL,false);
 
 %Ipsi axons with Ipsi dendrites
 figure();
+subplot(2,2,1)
 AlxAlxArea = dotVol(AlxPreVol,AlxPostVol,AlxSoma, AlxSoma, res);
-suptitle('Ipis Axons with Ipsi dendrites');
+title('Ipis Axons with Ipsi dendrites');  
+% colorbar; 
+ caxis([0, 1]);
+
 
 
 % IpsiContra axons with IpsiContraDendrites
-figure();
+subplot(2,2,2)
 TransArea = dotVol(TransPreVol,TransPostVol,TransSoma, TransSoma, res);
-suptitle('IpisContra Axons with IpsiContra dendrites');
+title('IpisContra Axons with IpsiContra dendrites');
+% colorbar;
+ caxis([0, 1]);
+
 
 % IpsiAxons with Contra dendrites
-figure();
-subplot(1,2,1);
-AlxDbxArea = dotVol(AlxPreVol,DbxPostVol,AlxSoma, DbxSoma, res);
-subplot(1,2,2);
-TransDbxArea = dotVol(TransPreVol,DbxPostVol,TransSoma, DbxSoma, res);
-suptitle('Ipis Axons with Contra dendrites');
+% figure();
+% subplot(1,2,1);
+% AlxDbxArea = dotVol(AlxPreVol,DbxPostVol,AlxSoma, DbxSoma, res);
+% subplot(1,2,2);
+% TransDbxArea = dotVol(TransPreVol,DbxPostVol,TransSoma, DbxSoma, res);
+% suptitle('Ipis Axons with Contra dendrites');
+
+% figure();
+subplot(2,2,3)
+dotVol(AlxPreVol+TransPreVol, DbxPostVol,[AlxSoma;TransSoma], DbxSoma, res);
+title('Ipis Axons with Contra dendrites');
+% colorbar;
+ caxis([0, 1]);
 
 
 % IpsiAxons with Unknown dendrites
+% figure();
+% subplot(1,2,1);
+% AlxBarhlArea = dotVol(AlxPreVol,BarhlPostVol,AlxSoma, BarhlSoma, res);
+% subplot(1,2,2);
+% TransBarhlArea = dotVol(TransPreVol,BarhlPostVol,TransSoma, BarhlSoma, res);
+% suptitle('Ipis Axons with Unkown dendrites');
+
+% figure();
+subplot(2,2,4)
+dotVol(AlxPreVol+TransPreVol, BarhlPostVol,[AlxSoma;TransSoma], BarhlSoma, res);
+title('Ipis Axons with Unkown dendrites');
+% colorbar;
+ caxis([0, 1]);
+
+
+
 figure();
-subplot(1,2,1);
-AlxBarhlArea = dotVol(AlxPreVol,BarhlPostVol,AlxSoma, BarhlSoma, res);
-subplot(1,2,2);
-TransBarhlArea = dotVol(TransPreVol,BarhlPostVol,TransSoma, BarhlSoma, res);
-suptitle('Ipis Axons with Unkown dendrites');
+h = boxplot([IpsiToIpsi'./1e6 ;IpsiContraToIpsiContra'./1e6; IpsiToContra'./1e6;IpsiToUnknown'./1e6],...
+    [ones(size(IpsiToIpsi,2),1); 2*ones(size(IpsiContraToIpsiContra,2),1); 3*ones(size(IpsiToContra,2),1); 4*ones(size(IpsiToUnknown,2),1)],...
+    'Notch','off', 'Symbol', 'ko','Colors',[calx;ctrans;cdbx;cbarhl],'OutlierSize', 25);
+set(h,{'linew'},{4});
+h1 = findobj(gca,'tag','Median');
+set(h1,'Color','k');
+set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+box off;
+
+hold on;
+
+plot([ones(size(IpsiToIpsi,2),1); 2*ones(size(IpsiContraToIpsiContra,2),1); 3*ones(size(IpsiToContra,2),1); 4*ones(size(IpsiToUnknown,2),1)]...
+    ,[IpsiToIpsi'./1e6;IpsiContraToIpsiContra'./1e6; IpsiToContra'./1e6;IpsiToUnknown'./1e6], ...
+     'Marker', 'o', 'MarkerFaceColor','none' ,'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor','k', 'LineWidth', 4);
+axis square;
+
+ylabel('Overlapping area (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+
+plot([1,2,3,4]', [mean(IpsiToIpsi'./1e6) ;mean(IpsiContraToIpsiContra'./1e6); mean(IpsiToContra'./1e6);mean(IpsiToUnknown'./1e6)], 'ro','Marl
+
 
 
 figure();
-bar([ AlxAlxArea/1e6,TransArea/1e6,(AlxDbxArea+TransDbxArea)/1e6, (AlxBarhlArea+TransBarhlArea)/1e6] ,...
-    'color',{calx, ctrans, cdbx, cbarhl});
 
+
+figure();
+
+imagesc(IntArea./1e6);
+axis square;
+box off;
+colormap jet;
+colorbar;
 
 
 

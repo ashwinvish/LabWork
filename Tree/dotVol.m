@@ -12,7 +12,7 @@ tempxy = dot(vol1,vol2,3);
 tempxz = dot(vol1,vol2,2);
 tempyz = dot(vol1,vol2,1);
 
-%cmap = cbrewer('seq','Greys', size(vol1,1));
+%cmap = cbrewer('div','Spectral', size(vol1,1));
 
 if ~(isempty(find((tempxy>0))& isempty(find(tempxz>0))& isempty(find(tempyz>0)))>0)
     area = threeView([],soma1,jet,tempxy,tempxz,tempyz, soma2);

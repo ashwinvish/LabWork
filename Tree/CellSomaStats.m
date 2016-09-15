@@ -1,5 +1,5 @@
 %% RC axis only
-RCSoma = [CellSoma(:,1),CellSoma(:,2)]; % considering only the x,y coordinates
+RCSoma = [CellSoma(:,2)]; % considering only the ML,RC coordinates
 RCpdist = tril(squareform(pdist(RCSoma)),-1);
 clear RhoDiffRC;
 clear RhoDiffRC_SD;
@@ -10,9 +10,9 @@ steps = 1:10000:max(RCpdist(:));
 for i = 1:length(steps)-1
     tempRC = find(RCpdist>steps(i) & RCpdist<steps(i+1));
     [m,n] = ind2sub(size(RCpdist),tempRC);
-    tempdiffRC = abs(rho(m)-rho(n));
-    RhoDiffRC(index) = mean(abs(rho(m)-rho(n)));
-    RhoDiffRC_SD(index) = std(abs(rho(m)-rho(n)));
+    tempdiffRC = abs(tau(m)-tau(n));
+    TauDiffRC(index) = mean(abs(tau(m)-tau(n)));
+    TauDiffRC_SD(index) = std(abs(tau(m)-tau(n)));
     MeanRCEucDist(index) = mean(RCpdist(tempRC));
     index = index+1;
     figure(1);
@@ -20,8 +20,8 @@ for i = 1:length(steps)-1
     hold on;
 end
 figure(1);
-plot(MeanRCEucDist./1000,RhoDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 35 );
-plot([MeanRCEucDist./1000;MeanRCEucDist./1000], [RhoDiffRC-RhoDiffRC_SD; RhoDiffRC+RhoDiffRC_SD], 'Color','k','LineWidth',2);
+plot(MeanRCEucDist./1000,TauDiffRC,'o', 'MarkerFaceColor', 'k', 'MarkerEdgeColor','none', 'MarkerSize', 35 );
+plot([MeanRCEucDist./1000;MeanRCEucDist./1000], [TauDiffRC-TauDiffRC_SD; TauDiffRC+TauDiffRC_SD], 'Color','k','LineWidth',2);
 xlabel('Pairwise RC distance in \mum', 'FontName', 'Arial', 'FontSize', 40);
 ylabel('Pairwise persistence difference \rho', 'FontName', 'Arial', 'FontSize', 40);
 set(gca, 'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
@@ -29,16 +29,16 @@ set(gcf,'color','w');
 box off;
 
 
-X = [ones(length(MeanRCEucDist./1000),1) MeanRCEucDist'./1000];
-y =RhoDiffRC';
-b = X\y;
-yCalc2 = X*b;
-Rsq2 = 1 - sum((y - yCalc2).^2)/sum((y - mean(y)).^2);
-plot(MeanRCEucDist'./1000,yCalc2,'-r','LineWidth',2);
-%text(max(MeanRCEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2), 'FontName', 'Arial', 'FontSize', 20 );
-[PearsonsCoeffRC, PvalRC] = corr(MeanRCEucDist',RhoDiffRC');
-axis square;
-clear temp;
+% X = [ones(length(MeanRCEucDist./1000),1) MeanRCEucDist'./1000];
+% y =TauDiffRC';
+% b = X\y;
+% yCalc2 = X*b;
+% Rsq2 = 1 - sum((y - yCalc2).^2)/sum((y - mean(y)).^2);
+% plot(MeanRCEucDist'./1000,yCalc2,'-r','LineWidth',2);
+% %text(max(MeanRCEucDist'./1000),max(yCalc2), sprintf('R^2 = %0.2f',Rsq2), 'FontName', 'Arial', 'FontSize', 20 );
+% [PearsonsCoeffRC, PvalRC] = corr(MeanRCEucDist',TauDiffRC');
+% axis square;
+% clear temp;
 
 
 
