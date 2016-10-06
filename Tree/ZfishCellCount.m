@@ -158,18 +158,22 @@ Small(22,:) = [82	624	274];
 %         MarkerColorMap(:,i) = cbarhl';
 %     end
 % end
-CT = cbrewer('div','Spectral',size(unique(tau),1));
-CT(19:22,:) = repmat(CT(18,:),4,1);
+CT = cbrewer('div','Spectral',size(unique(tau),2));
+%CT = parula(22);
+%CT(19:22,:) = repmat(CT(18,:),4,1);
 [y,I] =  sort(log2(tau));
- for i = 1:22 %numel(cellIDs)
+ for i = 1:18 %numel(cellIDs)
      scatter3(Small(I(i),1), Small(I(i),2), Small(I(i),3), 250, CT(i,:), 'filled', 'MarkerEdgeColor','k');
-     %caxis([min(log2(tau)), max(log2(tau))])
- end
-%colorbar;
+     
+ end 
+scatter3(Small(I(19:22),1), Small(I(19:22),2), Small(I(19:22),3), 250, CT(18,:), 'filled', 'MarkerEdgeColor','k');
+h = colorbar;
 daspect([1,1,9]);
 set(gca,'XDir','reverse');
 colormap(CT);
+caxis([min(log2(tau)), max(log2(tau))])
 %MarkerColorMap = [MarkerColorMap;repmat(1,1,22)];
+%set(h,'YTick', rho(I(1:18)));
 
 %% Cell counts to get peaks
 figure();

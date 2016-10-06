@@ -46,12 +46,16 @@ SomaDiameters = [2.90775
 4.68705];
 
 MarkerColorMap = BarCMap;
-[y,I] = sort(SomaDiameters);
+[y,I] = sort(rho);
+
+figure()
+
 
 for i = 1:numel(cellIDs)
-    figure(1);
-    plot(SomaDiameters(I(i)), rho(I(i)), 'o','MarkerFaceColor', MarkerColorMap(I(i),:), 'MarkerEdgeColor','k','MarkerSize',35);
+    subplot(1,3,1)
     hold on;
+    plot(i, rho(I(i)), 'o','MarkerFaceColor', MarkerColorMap(I(i),:), 'MarkerEdgeColor','k','MarkerSize',35);
+    
 end
 
 % plot(SomaDiameters, rho,'o','MarkerFaceColor', 'k', 'MarkerEdgeColor','w','MarkerSize',35);
@@ -59,13 +63,7 @@ end
 % showfit(f, 'fitcolor', 'red', 'fitlinewidth',2);
 
 
-% X = [ones(length(SomaDiameter),1), SomaDiameter];
-% b = X\rho';
-% yCalc2 = X*b;
-% plot( SomaDiameter,yCalc2,'-r');
-% 
-% R2 = 1 - sum((rho' - yCalc2).^2)/sum((rho'-mean(rho')).^2);
-% text(1,1, R2);
+
 
 % P = polyfit(SomaDiameter,rho',1)
 % x1 = min(SomaDiameter):0.5:7;
@@ -75,13 +73,13 @@ end
 
 xlabel('Soma diameter (\mum)','FontName', 'Arial', 'FontSize', 40);
 ylabel('Normalized perisistence \rho','FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0 max(SomaDiameters)], 'YLim',[0 1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca,'XLIm', [0,22], 'YLim',[0 7],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off;
 
 
-
 for i = 1:numel(cellIDs)
-    figure(2)
+    
+subplot(1,3,2);
     plot(CellSoma(i,3)/1000,SomaDiameters(i),'o','MarkerFaceColor', MarkerColorMap(i,:), 'MarkerEdgeColor','k','MarkerSize',35);
     hold on;
 end
@@ -91,14 +89,22 @@ ylabel('Soma diameter (\mum)','FontName', 'Arial', 'FontSize', 40);
 set(gca, 'YLim',[0 max(SomaDiameters)],'XLim',[0 max(CellSoma(:,3))/1000],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off;
 
-
-
-figure(3)
+subplot(1,3,3);
 scatter(SomaDiameters,rho, 1000, MarkerColorMap,'filled', 'MarkerEdgeColor','k');
-xlabel('cell#','FontName', 'Arial', 'FontSize', 40);
+xlabel('SomaDiameter','FontName', 'Arial', 'FontSize', 40);
 ylabel('Log time constant','FontName', 'Arial', 'FontSize', 40);
-set(gca, 'XLim',[0 7], 'YLim',[0 7],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
+set(gca, 'XLim',[min(SomaDiameters) max(SomaDiameters)], 'YLim',[0 7],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2);
 axis square; box off
+
+hold on;
+
+X = [ones(length(SomaDiameters),1), SomaDiameters];
+b = X\rho';
+yCalc2 = X*b;
+plot( SomaDiameters,yCalc2,'-r');
+
+R2 = 1 - sum((rho' - yCalc2).^2)/sum((rho'-mean(rho')).^2);
+text(1,1, R2);
 
 
         

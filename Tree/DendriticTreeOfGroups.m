@@ -1,4 +1,4 @@
-function [] = DendriticTreeOfGroups(group,allTrees,cellIDs, col, Display)
+function [denXY, denYZ, denXZ] = DendriticTreeOfGroups(group,allTrees,cellIDs, col, Display)
 % DENDRITICTREE is to extract all the nodes of the dendrites of a tree
 %   Tree is the tree whos dendrites are being extracted
 %   treeno is the ID associated with the tree
