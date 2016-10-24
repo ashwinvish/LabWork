@@ -92,7 +92,7 @@ set(gca, 'BoxStyle','full', 'XTick',[],'YTick',[], 'ZTick',[]);
 % RC distance between reticulospinal cells
 
 % creating a flat surface of same size as image
-%colormap gray;
+colormap gray;
 %[X,Y] = meshgrid(linspace(0, 393, 393), linspace(0,750,750)); % image dimensions are 903x511
 [X,Y] = meshgrid(linspace(0, 511, 511), linspace(0,903,903)); % image dimensions are 903x511
 imageplane = 458; % 1 to 1285
@@ -167,11 +167,12 @@ CT = cbrewer('div','Spectral',size(unique(tau),2));
      
  end 
 scatter3(Small(I(19:22),1), Small(I(19:22),2), Small(I(19:22),3), 250, CT(18,:), 'filled', 'MarkerEdgeColor','k');
-h = colorbar;
+h = gca;
 daspect([1,1,9]);
 set(gca,'XDir','reverse');
-colormap(CT);
-caxis([min(log2(tau)), max(log2(tau))])
+colormap(h , CT);
+colorbar('peer', h);
+%caxis([min(log2(tau)), max(log2(tau))])
 %MarkerColorMap = [MarkerColorMap;repmat(1,1,22)];
 %set(h,'YTick', rho(I(1:18)));
 
