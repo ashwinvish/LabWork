@@ -74,7 +74,7 @@ figure(2);
 
 h = boxplot([AlxPostLength'; AlxPreLength'; TransPostLength';TransPreLength'; DbxPostLength'; BarhlPostLength'],...
     [ones(size(AlxPostLength,2),1); 2*ones(size(AlxPreLength,2),1); 3*ones(size(TransPostLength,2),1); 4*ones(size(TransPreLength,2),1); ...
-    5*ones(size(DbxPostLength,2),1); 6*ones(size(BarhlPostLength,2),1)],'Notch','on', 'Symbol', 'ko',...
+    5*ones(size(DbxPostLength,2),1); 6*ones(size(BarhlPostLength,2),1)],'Notch','off', 'Symbol', 'ko',...
     'Colors',[cpost;cpre;cpost;cpre;cpost;cpost],...
     'OutlierSize', 25);
 set(h,{'linew'},{4});
@@ -486,6 +486,7 @@ set(gca, 'XLim',[0, 1],'YLim',[0,0.35],'FontName', 'Arial', 'FontSize', 40, 'Lin
 box off;
 set(gcf,'color','w');
 set(gca,'color',[calx,0.2]);
+daspect([1,2,1]);
 % axis square;
 
 
@@ -501,6 +502,8 @@ set(gca, 'XLim',[0, 1],'YLim',[0,0.35],'YColor','k','FontName', 'Arial', 'FontSi
 box off;
 set(gcf,'color','w');
 set(gca,'color',[ctrans,0.2]);
+daspect([1,2,1]);
+
 % axis square;
 
 
@@ -514,6 +517,8 @@ set(gca, 'XLim',[0, 1],'YLim',[0,0.35],'YColor','k','FontName', 'Arial', 'FontSi
 box off;
 set(gcf,'color','w');
 set(gca,'color',[cdbx,0.2]);
+daspect([1,2,1]);
+
 %axis square;
 
 
@@ -527,6 +532,7 @@ set(gca, 'XLim',[0,1],'YLim',[0,0.35],'YColor','k','FontName', 'Arial', 'FontSiz
 box off;
 set(gcf,'color','w');
 set(gca,'color',[cbarhl,0.2]);
+daspect([1,2,1]);
 %axis square;
 
 

@@ -734,7 +734,7 @@ ylabel('Count');
 %% ratio of dendritic length/ axonal length
 axLength = [];
 clear temp;
-
+load CellAxons_Chopped.mat
 for i = 1:size(cellIDs,2)
     if eval([cellIDs{i},'_axon'])>0
         AxnNodes = eval([cellIDs{i},'_axon']);

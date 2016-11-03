@@ -7,6 +7,7 @@ function DisplayTree( tree, visualNodes, newFig, axonHighlight, color, presynaps
 %   presynapses are the presynaptic locations
 %   postsynapses are the postsynaptic locations
 
+%load CellAxons.mat;
 load CellAxons.mat;
 load CellSomata.mat;
 
@@ -36,7 +37,6 @@ end
 
 axonHighlightColor  = abs(color-0.3) ;
 %axonHighlightColor  = color;
-
 treeVisualizer(tree, visualNodes, axonHighlight,[{postsynapses},{presynapses},{spine}],newFig,{color axonHighlightColor}, 1:numel(tree), false);
 end
 
