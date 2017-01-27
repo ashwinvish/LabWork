@@ -97,9 +97,18 @@ MeanBorder4_5_projcet = Projection(MeanBorder4_5,p1,p3);
 %generate YZ image volume
 for i = 1:imWidth
     for j = 1:imNumber
-        SideImage(:,j,i) = FinalImage(:,i,j);
+        SideImageYZ(:,j,i) = FinalImage(:,i,j);
     end
 end
+
+% generate XZ image volume
+
+for i = 1:imHeight
+    for j = 1:imNumber-1
+        SideImageXZ(j,:,i) = FinalImage(i,:,j);
+    end
+end
+
 
 % calculate border lines
 index =2;
@@ -110,12 +119,12 @@ for i = 1:length(x)
     index = index+1;
 end
 
-% plot planes ever 10um; 10*1000/292
+% plot planes every 10um; 10*1000/292
 figure()
 index =1;
 for i =  1:35:imWidth
     subplot(2,8,index);
-    imshow(medfilt2((SideImage(:,:,i))));
+    imshow(medfilt2((SideImageYZ(:,:,i))));Disp
     daspect([6.48,1,1]);
     hold on;
     %scatter(x,y(1:80),'k.');
@@ -130,11 +139,23 @@ for i =  1:35:imWidth
 end
 
 
+% plot XZ planeevery 5um; 5*1000/292
+figure();
+index = 1;
+for i = 1:17:17*6
+    subplot(2,3,index)
+    imshow(medfilt2((SideImageXZ(:,:,imHeight-i))));
+    daspect([1,6.48,1])
+    hold on;
+    index = index+1;
+end
+
+
 % plot line across planes with abducens nerve
 
 figure();
 subplot(1,2,1);
-imshow(medfilt2((SideImage(:,:,213))));daspect([6.48,1,1]);
+imshow(medfilt2((SideImageYZ(:,:,213))));daspect([6.48,1,1]);
 hold on;
 scatter(MCell(3), MCell(2),500,'k', 'p', 'MarkerFaceColor','k');
 scatter(MeanM2C(3),MeanM2C(2),300,'r', 'p', 'MarkerFaceColor','r', 'MarkerEdgeColor','k');
@@ -147,7 +168,7 @@ line([1111 1111], [903 0 ], 'Color','w', 'LineWidth', 4, 'LineStyle', '--');
 title('Rostral abducens nerve');
 
 subplot(1,2,2)
-imshow(medfilt2((SideImage(:,:,231))));daspect([6.48,1,1]);
+imshow(medfilt2((SideImageYZ(:,:,231))));daspect([6.48,1,1]);
 hold on;
 scatter(MCell(3), MCell(2),500,'k', 'p', 'MarkerFaceColor','k');
 scatter(MeanM2C(3),MeanM2C(2),300,'r', 'p', 'MarkerFaceColor','r', 'MarkerEdgeColor','k');

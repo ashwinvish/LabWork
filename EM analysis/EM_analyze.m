@@ -66,9 +66,11 @@ staE=[STA.staE];eyes=mean(staE,2);
 for i=1:n;
     k=ezfit(t,r(:,i),'a*exp(-x/t)');
     tau(i)=k.m(2);
+    AreaUnderCurve(i) = trapz(k.x,k.y);
 end
 % to calculate rho
 NormalizedFiringRate = bsxfun(@rdivide, r, max(r));
+NormalizedFiringRate2 = bsxfun(@rdivide, r, r(1,:));
 rho = mean(NormalizedFiringRate,1);
 tau(tau>100)=100;tau(tau<1)=1;
 [ds,ps]=PairwiseSpatialStructure2(x',tau',1);

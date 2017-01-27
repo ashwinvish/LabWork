@@ -87,7 +87,7 @@ hold on;
 
 plot([ones(size(AlxPostLength,2),1)', 2*ones(size(AlxPreLength,2),1)', 3*ones(size(TransPostLength,2),1)', 4*ones(size(TransPreLength,2),1)', ...
     5*ones(size(DbxPostLength,2),1)', 6*ones(size(BarhlPostLength,2),1)'],[AlxPostLength, AlxPreLength, TransPostLength,TransPreLength, DbxPostLength, BarhlPostLength], ...
-     'Marker', 'o', 'MarkerFaceColor','none' ,'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor',[0.5,0.5,0.5], 'LineWidth', 4);
+     'Marker', 'o', 'MarkerFaceColor','none' ,'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor','k', 'LineWidth', 4);
 axis square;
 
 
@@ -383,17 +383,17 @@ figure(5);
 
 h = boxplot([AlxInterPost/1000; TransInterPost/1000; DbxInterPost/1000; BarhlInterPost/1000]...
 , [ones(size(AlxInterPost,1),1); 2*ones(size(TransInterPost,1),1); 3*ones(size(DbxInterPost,1),1); 4*ones(size(BarhlInterPost,1),1)],...
-'Notch','on', 'Symbol', 'ko', 'Labels',{'Ipsi', 'Ipsi-Contra','Contra', 'Unknown'},'Colors',[calx;ctrans;cdbx; cbarhl] ...
+'Notch','off', 'Symbol', 'ko', 'Labels',{'Ipsi', 'Ipsi-Contra','Contra', 'Unknown'},'Colors',[calx;ctrans;cdbx; cbarhl] ...
 ,'OutlierSize', 25);
 set(h,{'linew'},{4});
 h1 = findobj(gca,'tag','Median');
 set(h1,'Color','k');
-set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+set(gca,'YLim', [0,10],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
 box off;
 
-hold on;
-plot([ones(size(AlxInterPost,1),1)', 2*ones(size(TransInterPost,1),1)', 3*ones(size(DbxInterPost,1),1)', 4*ones(size(BarhlInterPost,1),1)'],...
-   [AlxInterPost/1000; TransInterPost/1000; DbxInterPost/1000; BarhlInterPost/1000],'o','MarkerSize', 25, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', [0.5,0.5,0.5], 'LineWidth', );
+% hold on;
+% plot([ones(size(AlxInterPost,1),1)', 2*ones(size(TransInterPost,1),1)', 3*ones(size(DbxInterPost,1),1)', 4*ones(size(BarhlInterPost,1),1)'],...
+%    [AlxInterPost/1000; TransInterPost/1000; DbxInterPost/1000; BarhlInterPost/1000],'o','MarkerSize', 25, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', 'k', 'LineWidth',2 );
 
 hold off;
 axis square;
@@ -405,12 +405,11 @@ InterPrePValues = []
 figure(6);
 
 h = boxplot([AlxInterPre/1000; TransInterPre/1000],[ones(size(AlxInterPre,1),1); 2*ones(size(TransInterPre,1),1)],...
-'Notch','on', 'Symbol', 'ko', 'Labels',{'Ipsi', 'Ipsi-Contra'},'Colors',[calx;ctrans], 'Orientation','horizontal' ...
-,'OutlierSize', 25);
+'Notch','off', 'Symbol', 'ko', 'Labels',{'Ipsi', 'Ipsi-Contra'},'Colors',[calx;ctrans],'OutlierSize', 25);
 set(h,{'linew'},{4});
 h1 = findobj(gca,'tag','Median');
 set(h1,'Color','k');
-set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+set(gca,'YLim', [0,10],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
 
 box off;
 

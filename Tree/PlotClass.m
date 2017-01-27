@@ -5,7 +5,8 @@ function [ h ] = PlotClass( cellClass, allTrees, cellIDs, col )
 %   cellIDs is the IDs of all cells
 %   col is the color of the class
 
-load CellAxons.mat
+%load CellAxons.mat
+load CellAxons_Chop14.mat
 load LoadSynapses.mat
 colors = distinguishable_colors(numel(cellClass),col);
 index= 1;
@@ -15,7 +16,7 @@ for i = 1:numel(cellIDs)
         DisplayTree(allTrees{i},[],false, [eval([cellIDs{i},'_axon'])],colors(index,:), allPreSynapse{i}, allPost{i});
         hold on;
         TreeSomata(i,colors(index,:)); 
-        %DisplayTree(allTrees{i},[1],false, [eval([cellIDs{i},'_axon'])],colors(index,:));
+        %DisplayTree(allTrees{i},[],false, [eval([cellIDs{i},'_axon'])],colors(index,:));
         index = index+1;
     else
         continue
