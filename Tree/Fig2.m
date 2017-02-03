@@ -5,7 +5,7 @@ DisplayTree(allTrees{6},[],false, [eval([cellIDs{6},'_axon'])],[0.3 0.3 0.3],all
 hold on
 TreeSomata(6,[0.3,0.3,0.3]);
 box off
-set(gca, 'color','none');
+set(gca, 'color','none', 'Clipping', 'off');
 set(gca, 'XColor', 'none', 'YColor','none', 'ZColor', 'none');
 BeginMyelin = [5*7493,5*40208,-45*725;5*7056,5*46560,-45*1200;5*7478, 5*37592,-45*531];
 EndMyelin = [5*7366, 5*44816, -45*1111;5*7367, 5*48064, -45*1278;5*7871, 5*36291, -45*455];
@@ -28,9 +28,9 @@ TreeSomata(9,[0.3,0.3,0.3]);
 set(gca, 'color','none');
 set(gca, 'XColor', 'none', 'YColor','none', 'ZColor', 'none');
 
-%3_6
+%3_5
 DisplayTree(allTrees{21},[],false, [eval([cellIDs{21},'_axon'])],[0.3 0.3 0.3],allPreSynapse{21}, allPostSynapse{21});
 hold on
 TreeSomata(21,[0.3,0.3,0.3]);
 set(gca, 'XColor', 'none', 'YColor','none', 'ZColor', 'none');
-set(gca, 'color','none');
+set(gca, 'color','none',  'Clipping', 'off');

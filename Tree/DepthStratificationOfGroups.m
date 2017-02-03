@@ -7,8 +7,8 @@ function [] = DepthStratificationOfGroups(group, cellIDs, allTrees, col)
 %   col is the 1x3 vector indicating color
 
 % load variables
-load CellAxons_Chopped.mat
-load LoadSynapses_Chopped.mat
+load CellAxons_Chop14.mat
+load LoadSynapses_Chop14.mat
 groupName = inputname(1);
 fname = sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/SupFigures/SupFig6/%sArborDensity.svg',groupName);
 

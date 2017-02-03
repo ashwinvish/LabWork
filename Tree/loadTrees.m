@@ -41,18 +41,18 @@ CAD = [5*6846,5*36655, -45*1 ];
 CAV = [5*6894,5*38023,-45*16];
 
 cellIDs = {'Int1_1','Int1_2', 'Int1_3','Int1_4', 'Int1_5' ,'Int1_6','Int1_7' ,'Int2_1' , 'Int2_2','Int2_3' , 'Int2_4','Int2_5','Int2_6', 'Int2_7', 'Int2_8',  'Int2_9', 'Int3_1','Int3_2', 'Int3_3' 'Int3_4', 'Int3_5',  'Int3_6' };								      % all CellIDS
-cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int2_6','Int2_9','Int3_6'};                                               % all the alx cells, Int2_8 , Int 3_5, Int 1_7
-cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5', 'Int2_8',};                           % all bdx1b cells
-cellIDsTrans = {'Int1_7','Int3_5'};                                                                                 % all cells with ipsi and contra projections            
-cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};                                            % all barhl1 cells
-cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
-
-% Fully chopped axon definitions
 % cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int2_6','Int2_9','Int3_6'};                                               % all the alx cells, Int2_8 , Int 3_5, Int 1_7
-% cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5', 'Int2_8', 'Int3_5'};                  % all bdx1b cells
-% cellIDsTrans = {'Int1_7'};                                                                                          % all cells with ipsi and contra projections            
+% cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5', 'Int2_8'};                           % all bdx1b cells
+% cellIDsTrans = {'Int1_7','Int3_5' };                                                                                 % all cells with ipsi and contra projections            
 % cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};                                            % all barhl1 cells
 % cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
+
+% Fully chopped axon definitions
+cellIDsAlx = {'Int1_4','Int1_5','Int1_6','Int2_6','Int2_9','Int3_6'};                                               % all the alx cells, Int2_8 , Int 3_5, Int 1_7
+cellIDsDbx = {'Int1_2','Int1_3','Int2_1','Int2_2','Int2_3','Int2_4','Int2_5', 'Int2_8', 'Int3_5'};                  % all bdx1b cells
+cellIDsTrans = {'Int1_7'};                                                                                          % all cells with ipsi and contra projections            
+cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};                                            % all barhl1 cells
+cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
 
 % Convert from .swc file to tree structre with presynapses,postsynapses,
 %fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/AVTraces-Exported-01122016';

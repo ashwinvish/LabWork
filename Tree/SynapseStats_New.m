@@ -70,6 +70,8 @@ axis square;
 cpost = [0.8,0,0];
 cpre = [0,0.7,0];
 
+pause(5);
+
 figure(2);
 
 h = boxplot([AlxPostLength'; AlxPreLength'; TransPostLength';TransPreLength'; DbxPostLength'; BarhlPostLength'],...
@@ -78,6 +80,7 @@ h = boxplot([AlxPostLength'; AlxPreLength'; TransPostLength';TransPreLength'; Db
     'Colors',[cpost;cpre;cpost;cpre;cpost;cpost],...
     'OutlierSize', 25);
 set(h,{'linew'},{4});
+set(findobj(gcf,'LineStyle','--'),'LineStyle','-');
 h1 = findobj(gca,'tag','Median');
 set(h1,'Color','k');
 set(gca,'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
@@ -389,6 +392,7 @@ set(h,{'linew'},{4});
 h1 = findobj(gca,'tag','Median');
 set(h1,'Color','k');
 set(gca,'YLim', [0,10],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+set(findobj(gcf,'LineStyle','--'),'LineStyle','-');
 box off;
 
 % hold on;
@@ -410,8 +414,10 @@ set(h,{'linew'},{4});
 h1 = findobj(gca,'tag','Median');
 set(h1,'Color','k');
 set(gca,'YLim', [0,10],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4);
+set(findobj(gcf,'LineStyle','--'),'LineStyle','-');
 
 box off;
+axis square;
 
 
 

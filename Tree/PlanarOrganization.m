@@ -1,8 +1,8 @@
 % Organization of AlxPost and DbxPost sites
 
-P1 = PlaneFit(AlxPost,calx,calx,1);
+P1 = PlaneFit(AlxPost,calx,calx);
 hold on;
-P2 = PlaneFit(DbxPost, cdbx, cdbx,1);
+P2 = PlaneFit(DbxPost, cdbx, cdbx);
 view(-90,0);
 
 AlxDbxPostAngle = acosd(dot(P1,P2));

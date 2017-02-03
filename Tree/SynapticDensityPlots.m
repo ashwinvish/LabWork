@@ -121,10 +121,14 @@ hold on;
 plot([ones(size(AlxPostSynapseDensity,1),1)', 2*ones(size(TransPostSynapseDensity,1),1)', 3*ones(size(DbxPostSynapseDensity,1),1)',...
     4*ones(size(BarhlPostSynapseDensity,1),1)'],[AlxPostSynapseDensity'*1000 , TransPostSynapseDensity'*1000, DbxPostSynapseDensity'*1000,...
     BarhlPostSynapseDensity'*1000],'o','MarkerSize', 25, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', 'k', 'LineWidth', 4);
+set(findobj(gcf,'LineStyle','--'),'LineStyle','-');
+
 
 hold off;
 axis square;
 
+
+pause(5)
 
 figure(3);
 
@@ -140,6 +144,8 @@ box off;
 hold on;
 plot([ones(size(AlxPreSynapseDensity,1),1)', 2*ones(size(TransPreSynapseDensity,1),1)'],[AlxPreSynapseDensity'*1000 , TransPreSynapseDensity'*1000],...
     'o','MarkerSize', 25, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', 'k', 'LineWidth', 4);
+set(findobj(gcf,'LineStyle','--'),'LineStyle','-');
+
 
 hold off;
 axis square;

@@ -32,7 +32,7 @@ if nargin < 8
     end
 end
 
-axonHighlightColor  = abs(color-0.3) ;
+axonHighlightColor  = abs(color-0.1) ;
 %axonHighlightColor  = color;
 treeVisualizer(tree, visualNodes, axonHighlight,[{postsynapses},{presynapses},{spine}],newFig,{color axonHighlightColor}, 1:numel(tree), false);
 end

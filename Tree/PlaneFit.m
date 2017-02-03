@@ -18,12 +18,12 @@ Ygrid= linspace(YMaxMin(1), YMaxMin(2),5);
 [X,Y] = meshgrid(Xgrid,Ygrid);
 
 % plot surface
-surf(X,Y, -(p1(1)/p1(3)*X + p1(2)/p1(3)*Y-dot(p1,p3)/p1(3)),'FaceColor',PlaneColor,'FaceAlpha',0.5, 'FaceLighting','gouraud','EdgeColor', 'k' );
+surf(X,Y, -(p1(1)/p1(3)*X + p1(2)/p1(3)*Y-dot(p1,p3)/p1(3)),'FaceColor',PlaneColor,'FaceAlpha',0.5, 'FaceLighting','gouraud','EdgeColor', 'k', 'LineWidth', 2 );
 hold on;
 
 % plots point cloud
 
-plot3(PointCloud(:,1),PointCloud(:,2), -PointCloud(:,3),'o','MarkerSize',6,'MarkerFaceColor','none', 'MarkerEdgeColor',PointColor);
+plot3(PointCloud(:,1),PointCloud(:,2), -PointCloud(:,3),'o','MarkerSize',10,'MarkerFaceColor','none', 'MarkerEdgeColor',PointColor);
 
 
 % % plot normal vector

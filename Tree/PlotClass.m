@@ -7,7 +7,7 @@ function [ h ] = PlotClass( cellClass, allTrees, cellIDs, col )
 
 %load CellAxons.mat
 load CellAxons_Chop14.mat
-load LoadSynapses.mat
+load LoadSynapses_Chop14.mat
 colors = distinguishable_colors(numel(cellClass),col);
 index= 1;
 

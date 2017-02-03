@@ -186,7 +186,7 @@ plot([ones(size(IpsiToIpsi,2),1); 2*ones(size(IpsiContraToIpsiContra,2),1); 3*on
      'Marker', 'o', 'MarkerFaceColor','none' ,'MarkerSize',25,'LineStyle','none', 'MarkerEdgeColor','k', 'LineWidth', 4);
 axis square;
 
-ylabel('Overlapping area (\mum)', 'FontName', 'Arial', 'FontSize', 40);
+ylabel('Overlapping area (\mum^2)', 'FontName', 'Arial', 'FontSize', 40);
 
 plot([1,2,3,4]', [mean(IpsiToIpsi'./1e6) ;mean(IpsiContraToIpsiContra'./1e6); mean(IpsiToContra'./1e6);mean(IpsiToUnknown'./1e6)], 'ro','MarkerSize', 25, 'MarkerFaceColor', 'r');
 

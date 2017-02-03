@@ -23,8 +23,8 @@ for i = 1:numel(cellIDs)
         clear ConVol;
         clear denTree;
         hold on;
+        scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),200, calx,);
         treeCol(i,:) = calx;
-         scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),200, 'Marker','o', 'MarkerFaceColor',calx, 'MarkerEdgeColor','k','LineWidth', 2);
         daspect([1 1 1]);
         axis vis3d;
         axis([20000 140000  60000 250000 -60000 0]);
@@ -45,8 +45,7 @@ for i = 1:numel(cellIDs)
         clear denTree;
         hold on;
         treeCol(i,:) = ctrans;
-                 scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),200, 'Marker','o', 'MarkerFaceColor',ctrans, 'MarkerEdgeColor','k','LineWidth', 2);
-
+        
         daspect([1 1 1]);
         axis vis3d;
         axis([20000 140000  60000 250000 -60000 0]);
@@ -67,8 +66,7 @@ for i = 1:numel(cellIDs)
         clear denTree;
         hold on;
         treeCol(i,:) = cdbx;
-                 scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),200, 'Marker','o', 'MarkerFaceColor',cdbx, 'MarkerEdgeColor','k','LineWidth', 2);
-
+        
         daspect([1 1 1]);
         axis vis3d;
         axis([20000 140000  60000 250000 -60000 0]);
@@ -89,8 +87,6 @@ for i = 1:numel(cellIDs)
         clear denTree;
         hold on;
         treeCol(i,:) = cbarhl;
-                 scatter3(CellSoma(i,1),CellSoma(i,2),CellSoma(i,3),200, 'Marker','o', 'MarkerFaceColor',cbarhl, 'MarkerEdgeColor','k','LineWidth', 2);
-
         daspect([1 1 1]);
         axis vis3d;
         axis([20000 140000  60000 250000 -60000 0]);

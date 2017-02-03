@@ -31,7 +31,7 @@ end
 
 % get pathlenths to dendritic nodes
 fname = sprintf('%s_WithTags.swc',cellIDs{cellNo});
-[plength] = findPathLength(fname,allTrees{cellNo},[5,5,45],[5*Diameter(:,1),5*Diameter(:,2),45*Diameter(:,3)]);
+[plength] = findPathLength_new(fname,allTrees{cellNo},[5,5,45],[5*Diameter(:,1),5*Diameter(:,2),45*Diameter(:,3)]);
 %plength =  findPathLength_old(fname,[5,5,45],[5*Diameter(:,1),5*Diameter(:,2),45*Diameter(:,3)]);
 
 % get identity of diameter node, axon or dendrite and the respective

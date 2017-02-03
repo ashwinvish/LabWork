@@ -7,11 +7,11 @@ axis vis3d;
 close(figure(4));
 
 
-export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllAlxXY.png'),'-r300','-transparent');
-export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllAlxYZ.png'),'-r300','-transparent');
-export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllAlxXZ.png'),'-r300','-transparent');
+export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllAlxXY.png'),'-r300','-transparent');
+export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllAlxYZ.png'),'-r300','-transparent');
+export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllAlxXZ.png'),'-r300','-transparent');
 
-pause(100);
+pause(50);
 close all;
 clear col;
 
@@ -24,11 +24,11 @@ axis vis3d;
 close(figure(4));
 
 
-export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllTransXY.png'),'-r300','-transparent');
-export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllTransYZ.png'),'-r300','-transparent');
-export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllTransXZ.png'),'-r300','-transparent');
+export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllTransXY.png'),'-r300','-transparent');
+export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllTransYZ.png'),'-r300','-transparent');
+export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllTransXZ.png'),'-r300','-transparent');
 
-pause(100);
+pause(50);
 close all;
 clear col;
 
@@ -40,11 +40,11 @@ axis vis3d;
 [h2,h3] = PlotViews(h1);
 close(figure(4));
 
-export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllDbxXY.png'),'-r300','-transparent');
-export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllDbxYZ.png'),'-r300','-transparent');
-export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllDbxXZ.png'),'-r300','-transparent');
+export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllDbxXY.png'),'-r300','-transparent');
+export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllDbxYZ.png'),'-r300','-transparent');
+export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllDbxXZ.png'),'-r300','-transparent');
 
-pause(100);
+pause(50);
 close all;
 clear col;
 
@@ -58,11 +58,11 @@ axis vis3d;
 close(figure(4));
 
 
-export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllBarhlXY.png'),'-r300','-transparent');
-export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllBarhlYZ.png'),'-r300','-transparent');
-export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishpaperFigures/NewFigure4/AllBarhlXZ.png'),'-r300','-transparent');
+export_fig(h1,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllBarhlXY.png'),'-r300','-transparent');
+export_fig(h2,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllBarhlYZ.png'),'-r300','-transparent');
+export_fig(h3,sprintf('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/ZfishPaperFigures/RebuttalFigures/Figure3/AllBarhlXZ.png'),'-r300','-transparent');
 
-pause(100);
+pause(50);
 close all;
 clear col;
 

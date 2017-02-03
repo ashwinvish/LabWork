@@ -15,8 +15,8 @@ for i = 1:length(cellIDs)
         end
         AlxAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         AlxDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
-        AlxAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
-        AlxDenPlength(index,1:size(DenPlength,2)) = DenPlength;
+        AlxAxonPlength(index,1:size(AxnPlength,1)) = AxnPlength;
+        %AlxDenPlength(index,1:size(DenPlength,1)) = DenPlength;
         plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;
@@ -51,8 +51,8 @@ for i = 1:length(cellIDs)
         end
         TransAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         TransDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
-        TransAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
-        TransDenPlength(index,1:size(DenPlength,2)) = DenPlength;
+        TransAxonPlength(index,1:size(AxnPlength,1)) = AxnPlength;
+       % TransDenPlength(index,1:size(DenPlength,1)) = DenPlength;
         plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index =index+1;
@@ -82,8 +82,8 @@ for  i = 1:length(cellIDs)
         end
         DbxAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         DbxDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
-        DbxAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
-        DbxDenPlength(index,1:size(DenPlength,2)) = DenPlength;
+        DbxAxonPlength(index,1:size(AxnPlength,1)) = AxnPlength;
+        %DbxDenPlength(index,1:size(DenPlength,1)) = DenPlength;
         plot([1,3],[mean(AxnDia{i})/1000,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;
@@ -116,8 +116,8 @@ for  i = 1:length(cellIDs)
         end
         BarhlAxnDia(index,1:size(AxnDia{i},1)) = AxnDia{i}';
         BarhlDenDia(index,1:size(DenDia{i},1)) = DenDia{i}';
-        BarhlAxonPlength(index,1:size(AxnPlength,2)) = AxnPlength;
-        BarhlDenPlength(index,1:size(DenPlength,2)) = DenPlength;
+        BarhlAxonPlength(index,1:size(AxnPlength,1)) = AxnPlength;
+        %BarhlDenPlength(index,1:size(DenPlength,1)) = DenPlength;
         plot([1,3],[nan,mean(DenDia{i})/1000], '-o','MarkerFaceColor',[0.8,0.8,0.8],'MarkerSize', 35,'MarkerEdgeColor','k','Color','k', 'LineWidth',2);
         hold all;
         index = index+1;

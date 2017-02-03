@@ -33,7 +33,7 @@ res = 1000;                                                                     
 ksize = 20000;
 
 figure('units','normalized','outerposition',[0 0 1 1]); 
-HeatMapFish(ksize,res, AlxPostSites,AlxSoma,cellIDsAlx,true);
+AlxPostVol = HeatMapFish(ksize,res, AlxPostSites,AlxSoma,cellIDsAlx,true);
 title('Ipsilateral postsynaptic sites', 'FontName', 'Arial', 'FontSize', 40);
 colormap(jet);
 c1 = colorbar;
@@ -44,7 +44,7 @@ set(gcf, 'color', 'none');
 %export_fig('/Users/admin/Dropbox/ZFishPresentation/IpsiPostHeatMap.png');
 
 figure('units','normalized','outerposition',[0 0 1 1]);
-HeatMapFish(ksize,res, AlxPreSites,AlxSoma,cellIDsAlx,true);
+AlxPreVol = HeatMapFish(ksize,res, AlxPreSites,AlxSoma,cellIDsAlx,true);
 title('Ipsilateral presynaptic sites', 'FontName', 'Arial', 'FontSize', 40);
 colormap(jet);
 c2 = colorbar;
