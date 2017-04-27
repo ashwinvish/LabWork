@@ -26,6 +26,6 @@ Out = Out .* (Chan);
 Out = Out * (1-alpha);
 Out = Out + Tmp;
 
-Out = uint8(Out * 255);
+%Out = uint8(Out * 255);
 
 end
