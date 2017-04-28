@@ -18,7 +18,7 @@ AxonInitiation{17} = NaN
 AxonInitiation{18} = NaN
 AxonInitiation{19} = NaN
 AxonInitiation{20} = NaN
-AxonInitiation{21} = [54245,157650,17730]
+AxonInitiation{21} = NAN
 AxonInitiation{22} = [63500,176335,47925]
 
 %%
