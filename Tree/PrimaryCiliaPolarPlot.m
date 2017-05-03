@@ -26,6 +26,7 @@ DbxCiliaAngle = [];
 TransCiliaAngle = [];
 BarhlCiliaAngle = [];
 
+%figure();
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellIDsAlx) ==1
         %subplot(221)
@@ -38,9 +39,10 @@ for i = 1:numel(cellIDs)
 %         clear temp;
     end
 end
-
- %axis([min(h1.XData) max(h1.XData), min(h1.YData), max(h1.YData)])
-
+ %axis([min(h1.XData) max(h1.XData), min(h1.YData), max(h1.YData)]);
+ set(gca, 'FontName', 'Arial', 'FontSize', 40);
+ 
+figure();
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellIDsTrans) ==1
         %subplot(222)
@@ -56,7 +58,7 @@ end
 % axis([min(h2.XData) max(h2.XData), min(h2.YData), max(h2.YData)])
 set(gca, 'FontName', 'Arial', 'FontSize', 40);
 
-
+figure();
 for i = 1:numel(cellIDs)
 
     if ismember(cellIDs{i}, cellIDsDbx) ==1
@@ -73,7 +75,7 @@ end
 %axis([min(h3.XData) max(h3.XData), min(h3.YData), max(h3.YData)])
 set(gca, 'FontName', 'Arial', 'FontSize', 40);
 
-
+figure();
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i}, cellIDsL) ==1
         %subplot(224)

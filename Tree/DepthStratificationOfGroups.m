@@ -1,4 +1,4 @@
-function [] = DepthStratificationOfGroups(group, cellIDs, allTrees, col)
+function [denXZ] = DepthStratificationOfGroups(group, cellIDs, allTrees, col)
 %DEPTHSTRATIFICATIONOFGROUPS plots the distribution of synapses along the
 %XZ and YZ axes of a group of trees
 %   group is cell of strigs with names of trees e.g.cellIDsAlx

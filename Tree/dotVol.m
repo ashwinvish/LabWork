@@ -1,5 +1,5 @@
 function [area] = dotVol( vol1, vol2 , soma1, soma2, res )
-%dotVol dotprodict of the interaction of two volumes
+%dotVol dotproduct of the interaction of two volumes
 %   vol1, soma1 presynaptic cell volume, soma
 %   vol2, soma2 postsynaptic cell volume, soma
 %   res is the downsampling factor
