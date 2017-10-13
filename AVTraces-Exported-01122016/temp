@@ -1,4 +1,0 @@
-DenAlx =  [mean(DenDia{4}),mean(DenDia{5}),mean(DenDia{6}), mean(DenDia{13}),mean(DenDia{16}),mean(DenDia{22})];
-DenTrans = [mean(DenDia{7}),mean(DenDia{22})];
-DenDbx = [mean(DenDia{2}),mean(DenDia{3}),mean(DenDia{8}),mean(DenDia{9}), mean(DenDia{10}),mean(DenDia{11}),mean(DenDia{12}),mean(DenDia{15})];
-DenBarhl = [mean(DenDia{1}),mean(DenDia{14}),mean(DenDia{19}),mean(DenDia{20})];
