@@ -36,8 +36,7 @@
 %             (slower), color is mapped independently of matlab, always
 %             min to max.
 %     '-3l' : 3D. forces line output (2D), no diameter (slower, as '-l')
-%     '-2q' : 2D (using only X and Y). edges are represented as arrows
-%             (using quiver) . Color vectors do not work.
+%     '-2q' : 2D (using only X and Y).p
 %     '-3q' : 3D. edges are represented as arrows (using quiver, as '-q')
 %   additional options:
 %     '-thin'  : all diameters 1um, for line and quiver linewidth 0.25

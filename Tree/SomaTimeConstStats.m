@@ -2,7 +2,7 @@ AlxSomaTime = [];
 TransSomaTime = [];
 DbxSomaTime  = [];
 BarhlSomaTime = [];
-CellColor = [];
+%CellColor = [];
 
 for i = 1:numel(cellIDs)
     if ismember(cellIDs{i},cellIDsAlx) ==1

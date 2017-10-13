@@ -1,4 +1,4 @@
-function [] = DepthStratificationOfGroups(group, cellIDs, allTrees, col)
+function [meanPeak, stdPeak] = DepthStratificationOfGroups(group, cellIDs, allTrees, col)
 %DEPTHSTRATIFICATIONOFGROUPS plots the distribution of synapses along the
 %XZ and YZ axes of a group of trees
 %   group is cell of strigs with names of trees e.g.cellIDsAlx
@@ -175,6 +175,13 @@ axis(h1, 'normal');
 set(h1,'Color','none','XColor','none','YColor','none', 'ZColor','none');
 box(h1,'off');
 set(gcf, 'units','normalized','outerposition',[0 0 1 1],'Renderer','painters');
+
+
+% calculate peaks
+
+[m,n] = max(denXZ,[],2);
+meanPeak = mean(y3(n));
+stdPeak = std(y3(n));
 
 
 

@@ -1,6 +1,7 @@
 % plot Trees
 
-col = distinguishable_colors(24);
+%col = distinguishable_colors(24);
+col = repmat([0.8,0.8,0.8],[22,1]);
 DisplayTree(allTrees{5},[],true,eval([cellIDs{5},'_axon']),col(5,:))                           % 1_5
 hold on;
 TreeSomata(5,col(5,:));
@@ -22,7 +23,7 @@ syn1 = [16662	24415	470
     19645	36619	960
     19279	35061	1046];
 syn1(:,3) = -1*syn1(:,3);
-s1 = scatter3(5*syn1(:,1),5*syn1(:,2),45*syn1(:,3),'Marker','o','MarkerFaceColor','k','MarkerEdgeColor','none');
+s1 = scatter3(5*syn1(:,1),5*syn1(:,2),45*syn1(:,3),'Marker','o','MarkerFaceColor',[0.1,0.5,0.1],'MarkerEdgeColor','none');
 s1Markers = s1.MarkerHandle;
 s1.SizeData = 100;
 
@@ -31,7 +32,7 @@ syn2 = [14363 21117	390
     16022 21879	364];
 syn2(:,3) = -1*syn2(:,3);
 
-s2 = scatter3(5*syn2(:,1),5*syn2(:,2),45*syn2(:,3),'Marker','o','MarkerFaceColor','k','MarkerEdgeColor','none');
+s2 = scatter3(5*syn2(:,1),5*syn2(:,2),45*syn2(:,3),'Marker','o','MarkerFaceColor',[0.1,0.5,0.1],'MarkerEdgeColor','none');
 s2Markers = s2.MarkerHandle;
 s2.SizeData = 100;
 
