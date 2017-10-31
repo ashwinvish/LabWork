@@ -1,0 +1,9 @@
+<!DOCTYPE FilterScript>
+<FilterScript>
+ <filter name="Remove Zero Area Faces"/>
+ <filter name="Remove Unreferenced Vertices"/>
+ <filter name="Remove Duplicate Vertices"/>
+ <filter name="Re-Compute Vertex Normals">
+  <Param enum_cardinality="4" enum_val0="None (avg)" type="RichEnum" tooltip="" enum_val1="By Angle" enum_val2="By Area" enum_val3="As defined by N. Max" value="0" name="weightMode" description="Weighting Mode:"/>
+ </filter>
+</FilterScript>
