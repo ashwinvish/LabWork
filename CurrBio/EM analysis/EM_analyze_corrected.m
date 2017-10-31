@@ -1,6 +1,7 @@
-%clear
-addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis'))
-load('101112 _files1_4.mat')
+clear
+addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis'));
+load('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis/101112 _files1_4.mat')
+%load('101112 _files1_4.mat')
 FLUOR(1).ROI=SPT;
 FLUOR=stimSummaryEM(FLUOR);
 %%
@@ -194,8 +195,8 @@ for i=2:length(SPT);
         t=SPT(i).time(:,cls(j));
         a=int(:,cls(j));
         KDsubplot(n+1,1,[j+1,1],0);
-        %plot(t,a,'k','linewidth',2);
-        plot(t,a/max(a),'k','linewidth',2); % normalized f/f
+        plot(t,a,'k','linewidth',2);
+       % plot(t,a/max(a),'k','linewidth',2); % normalized f/f
         set(gca,'visible','off');
 %       ylim([min(a) max(a)]);
         ylim([-1,1]);
@@ -292,7 +293,7 @@ for i = 1:22
         i
     end
 end
-print(gcf,'-dsvg',[folder,'Plane1.svg']);
+%print(gcf,'-dsvg',[folder,'Plane1.svg']);
 
 
 figure('units','normalized','outerposition',[0 0 1 1])
@@ -306,17 +307,19 @@ for i = 1:22
         subplot(10,1,index+1);
         plot(t,FullFluo(:,I(i))/max(FullFluo(:,I(i))),'color',CT(i,:),'LineWidth', 2);
         %plot(t,FullFluo(:,I(i)),'color',CT(i,:),'LineWidth', 2);
-        set(gcf, 'Renderer','painters','Color','none');
         xlim([1 t(end)+30]);
         %ylim([min(FullFluo(:,I(i))), max(FullFluo(:,I(i)))])
         ylim([-1, 1]);
+        %yticks([-1,-0.5,0,0.5,1]);
+        set(gcf, 'Renderer','painters','Color','none');
+        set(gca,'YTick',[-1,-0.5,0,0.5,1],'YTickLabel',[-1,-0.5,0,0.5,1]);
         index = index+1;
         str = sprintf('Cell:%d , log(tau): %1.2f', I(i), y(i));
         title(str);
         box off;
     end
 end
-print(gcf,'-dsvg',[folder,'Plane2.svg']);
+%print(gcf,'-dsvg',[folder,'Plane2.svg']);
 
 figure('units','normalized','outerposition',[0 0 1 1]);
 index =1;
@@ -339,7 +342,7 @@ for i = 1:22
         box off;
     end
 end
-print(gcf,'-dsvg',[folder,'Plane3.svg']);
+%print(gcf,'-dsvg',[folder,'Plane3.svg']);
 
 %%
 figure();

@@ -1,0 +1,45 @@
+SELECT a.username, LEFT(v.finish, 10) AS date, COUNT(*) AS cnt FROM validations v JOIN tasks t ON t.id = v.task_id JOIN accounts a ON a.id = v.user_id JOIN cells c ON t.cell = c.id WHERE c.dataset_id = 11 AND v.status = 0 AND v.type IS NOT NULL AND v.finish BETWEEN "2017-01-17 0:00:00" AND "2017-02-1 0:00:00" GROUP BY v.user_id;
+
+BETWEEN "2017-01-17 0:00:00" AND "2017-02-1 0:00:00"
++----------+------------+------+
+| username | date       | cnt  |
++----------+------------+------+
+| SYSTEM   | 2017-01-17 | 2063 |
++----------+------------+------+
+
+
++----------------+------------+-----+
+| username       | date       | cnt |
++----------------+------------+-----+
+| SYSTEM         | 2017-02-01 | 994 |
+| nkem_test      | 2017-02-07 |   1 |
+| Hoodwinked     | 2017-02-13 | 306 |
+| BenSilverman   | 2017-02-13 | 436 |
+| merlmoor       | 2017-02-13 |  68 |
+| Hightower      | 2017-02-13 | 678 |
+| sarah.morejohn | 2017-02-13 | 296 |
+| sunreddy       | 2017-02-14 | 307 |
+| SeldenK        | 2017-02-13 | 292 |
+| celiaz         | 2017-02-17 |  71 |
+| twisterZ       | 2017-02-10 | 253 |
+| hjones.jr      | 2017-02-14 |  12 |
++----------------+------------+-----+
+
+
++----------------+------------+------+
+| username       | date       | cnt  |
++----------------+------------+------+
+| SYSTEM         | 2017-03-01 | 1702 |
+| Hoodwinked     | 2017-03-06 |  277 |
+| BenSilverman   | 2017-03-01 | 1236 |
+| Hightower      | 2017-03-01 | 1848 |
+| sarah.morejohn | 2017-03-01 |  230 |
+| sunreddy       | 2017-03-01 |  476 |
+| SeldenK        | 2017-03-01 |  831 |
+| peleaj43       | 2017-03-07 |  384 |
+| celiaz         | 2017-03-10 |   13 |
+| twisterZ       | 2017-03-17 |  436 |
+| hjones.jr      | 2017-03-07 |   50 |
++----------------+------------+------+
+
+

@@ -1,0 +1,9 @@
+from cloudvolume import *
+import h5py
+
+vol = CloudVolume("gs://neuroglancer/zfish_v1/consensus-20170829",mip=4)
+v = vol[1944:1954,1264:1274,16400:16410]
+
+h5f = h5py.File('FNAME', 'w')
+h5f.create_dataset('main', data=v)
+h5f.close()

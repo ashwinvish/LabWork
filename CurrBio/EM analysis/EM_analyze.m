@@ -81,7 +81,7 @@ STA=FLUOR(1).STA;
 SPT=FLUOR(1).ROI;
 close all;
 %for i=1:length(SPT);
-for i=1:4%length(SPT);
+for i=2:2%length(SPT);
     ROI=SPT(i);
     sta=STA(i).staf;stae=STA(i).staE;
     rsqs=SPT(i).rsqs;
@@ -135,7 +135,7 @@ for i=1:4%length(SPT);
     KDsubplot(n+1,1,[1,1],0);
     plot(stae(:,1),'b','linewidth',2);
     xlim([0 t(end)+40]);
-    set(gca,'visible','off');
+    %set(gca,'visible','off');
     str=['sta',num2str(i)];
     %print(gcf,'-depsc',[folder,str,'.eps'])
 
