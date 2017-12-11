@@ -57,7 +57,7 @@ cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','I
 % Convert from .swc file to tree structre with presynapses,postsynapses,
 %fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/AVTraces-Exported-01122016';
 %fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/AVTraces-Exported-11012016-Chopped';
-fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/AVTraces-Exported-01122016-Chopped14';
+fname = '/Users/admin/Documents/Scripts/CurrBio/AVTraces-Exported-01122016-Chopped14';
 %fname = '/Users/admin/Documents/Scripts/AVTraces-Exported-01122016-Chopped14';
 
 for kk = 1: numel(cellIDs)

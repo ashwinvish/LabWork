@@ -1,5 +1,5 @@
 % Organization of AlxPost and DbxPost sites
-
+figure();
 P1 = PlaneFit(AlxPost,calx,calx);
 hold on;
 P2 = PlaneFit(DbxPost, cdbx, cdbx);
