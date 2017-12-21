@@ -1,0 +1,3 @@
+from cloudvolume import CloudVolume
+vol = CloudVolume('gs://neuroglancer/zfish_v1/consensus-20170928')
+vol.save_mesh( SEGMENT_ID )
