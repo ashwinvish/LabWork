@@ -10,16 +10,16 @@ for i = 1:size(SPT,2)
     title('raw eye pos');
     subplot(5,1,2)
     plot(SPT(i).eyevars(:,2));
-    title('ipsi eye pos');
+    title('ipsi side');
     subplot(5,1,3)
     plot(SPT(i).eyevars(:,3));
-    title('contra eye pos');
+    title('contra side');
     subplot(5,1,4)
     plot(SPT(i).eyevars(:,4));
-    title('ipsi eye vel');
+    title('ipsi eye vel?');
     subplot(5,1,5)
     plot(SPT(i).eyevars(:,5));
-    title('contra eye vel');
+    title('contra eye vel?');
     suptitle(SPT(i).filename);
 end
 
@@ -44,6 +44,21 @@ for i = 1:size(SPT,2)
     axis square;
     suptitle(SPT(i).filename);
 end
+
+% view mnImage (Median?)
+figure
+for i = 1:size(SPT,2)  
+    subplot(2,2,i)
+    imagesc(SPT(i).mnImage);
+    hold on
+    scatter(SPT(i).centroid(1,:),SPT(i).centroid(2,:) ,'r.');
+    colormap gray;
+    axis square;
+    axis off
+    title(SPT(i).filename);
+end
+
+
 
 
 

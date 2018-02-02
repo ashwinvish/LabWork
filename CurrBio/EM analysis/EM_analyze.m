@@ -1,6 +1,6 @@
 clear
-addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis'))
-load('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/EM analysis/101112 _files1_4.mat')
+addpath(genpath('./ezyfit'))
+load('./101112 _files1_4.mat')
 FLUOR(1).ROI=SPT;
 FLUOR=stimSummaryEM(FLUOR);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
