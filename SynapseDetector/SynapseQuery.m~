@@ -1,0 +1,28 @@
+clc;
+clear all;
+
+df = readtable('final.csv');
+
+% Columns 1 through 12
+%     'psd_segid'    'BBOX_bx'    'BBOX_by'    'BBOX_bz'    'BBOX_ex'    'BBOX_ey'    'BBOX_ez'    'COM_x'    'COM_y'    'COM_z'    'postsyn_seg'    'postsyn_sz'
+%  Columns 13 through 23
+%     'postsyn_wt'    'postsyn_x'    'postsyn_y'    'postsyn_z'    'presyn_seg'    'presyn_sz'    'presyn_wt'    'presyn_x'    'presyn_y'    'presyn_z'    'size'
+
+% find presynaptic partners of a cell
+eg = (df.presyn_seg(df.postsyn_seg==76181));
+% find location of synapses that need to be seeded
+PresynapticPartners = (df.presyn_seg(df.postsyn_seg==76184));
+PrePartnerSynapseSegID76184 = PresynapticPartners(PresynapticPartners>1e5);
+PrePartnerCoordinatesID76184 = prePartnerCoordinates(PrePartnerSynapseSegID76184)
+
+function [PreX,PreY,PreX] = prePartnerCoordinates(PrePartnerSynapseSegID)
+PreX = [];
+PreY = [];
+PreZ = [];
+    for i = 1: length(PrePartnerSynapseSegID)
+         PreX = [PreX; df.presyn_x(df.presyn_seg==PrePartnerSynapseSegID(i))];
+         PreY = [PreY; df.presyn_x(df.presyn_seg==PrePartnerSynapseSegID(i))];
+         PreZ = [PreZ; df.presyn_x(df.presyn_seg==PrePartnerSynapseSegID(i))];
+    end
+end
+
