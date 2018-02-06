@@ -2,7 +2,7 @@ clc;
 clear all;
 addpath(genpath('/Users/admin/Documents/Scripts'));
 
-df = readtable('final.csv');
+%df = readtable('final.csv');
 
 % Columns 1 through 12
 %     'psd_segid'    'BBOX_bx'    'BBOX_by'    'BBOX_bz'    'BBOX_ex'    'BBOX_ey'    'BBOX_ez'    'COM_x'    'COM_y'    'COM_z'    'postsyn_seg'    'postsyn_sz'
@@ -68,7 +68,8 @@ end
 [g,h] = intersect(cellIDs_new,cellIDsTrans);
 
 CellDisplayOrder = [b;d;f;h];
-map = cbrewer('seq','YlGnBu',255);
+%map = cbrewer('seq','PuRd',255);
+map = colorcet('L8');
 %% compare synapses
 colors = cbrewer('qual','Dark2',10);
 
@@ -161,7 +162,7 @@ set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 
 figure;
-cspy(ConnMatrixPost,'Colormap',map,'Levels',255,'MarkerSize',15)
+cspy(ConnMatrixPost,'Colormap', map,'Levels',255,'MarkerSize',15)
 %imagesc(ConnMatrixPost); axis square;
 xlabel('Postsynaptic cell');
 ylabel('Presynaptic cell');
@@ -186,7 +187,8 @@ ylabel('count');
 box off;
 
 subplot_tight(2,1,2,0.05);
-cspy(IntPreSynapseConn,'Colormap',map,'Levels',255,'MarkerSize',15);
+cspy(IntPreSynapseConn,'Colormap',map,'Levels',255,'MarkerSize',25);
+box on;
 %imagesc(IntPreSynapseConn);
 %colorcet('CBTL2');
 %colormap hot; colorbar
@@ -197,7 +199,7 @@ line([0,size(AllCells,1)],[21.5,21.5], 'Color','black'); % Barhl block
 
 xlabel('Presynaptic cell');
 ylabel('Integrator cell');
-colorcet('CBTL1');
+%colorcet('CBTL1');
 set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 
@@ -208,7 +210,8 @@ IntConn = zeros(2*length(cellIDs_new),2*size(AllCells,1));
 IntConn(1:length(cellIDs_new),1:size(AllCells,1)) = IntPreSynapseConn;
 IntConn(length(cellIDs_new)+1:end,size(AllCells,1)+1:end) = IntPostSynapseConn;
 
-cspy(IntConn,'Colormap',1-map,'Levels',255,'MarkerSize',15);
+cspy(IntConn,'Colormap',map,'Levels',255,'MarkerSize',25);
+box on
 %imagesc(IntConn);
 %colorcet('CBTL2');
 %colormap hot; 
@@ -249,11 +252,12 @@ ylabel('count');
 box off;
 
 subplot_tight(2,1,2,0.05)
-cspy(IntPostSynapseConn,'Colormap',1-map,'Levels',255,'MarkerSize',15);
+cspy(IntPostSynapseConn,'Colormap',map,'Levels',255,'MarkerSize',25);
+box on;
 %imagesc(IntPostSynapseConn);
 %colormap hot; colorbar
 %colorcet('CBTL1');
-hold on;it
+hold on;
 line([0,size(AllCells,1)],[6.5,6.5],   'Color','black'); % Alx block
 line([0,size(AllCells,1)],[15.5,15.5], 'Color','black'); % Dbx block
 line([0,size(AllCells,1)],[21.5,21.5], 'Color','black'); % Barhl block
@@ -330,15 +334,14 @@ line([6.5,6.5],[0,size(cellIDs_new,2)],   'Color','white'); % Alx block
 line([15.5,15.5],[0,size(cellIDs_new,2)], 'Color','white'); % Dbx block
 line([21.5,21.5],[0,size(cellIDs_new,2)],  'Color','white'); % Barhl block
 
-
-
 xlabel('Post cell');
-
 ylabel('Pre cell');
 %colorcet('CBTL2');
 set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 axis square;
+
+%%
 
 
 
