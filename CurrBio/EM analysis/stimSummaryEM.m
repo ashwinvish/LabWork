@@ -11,10 +11,10 @@ for QQ=1:length(FLUOR)
         else
             stimm=0;
         end
-        ROI=FLUOR(QQ).ROI(Q);        
+        ROI=FLUOR(QQ).ROI(Q);
         a=[ROI.time(end,:) ROI.theta(end,1)];
         a(a<2)=[];strt=max([ROI.time(1,:) ROI.theta(1,1)]);
-        tend=min(a);delt=.05;t=strt:delt:tend;               
+        tend=min(a);delt=.05;t=strt:delt:tend;
         if stimm==0;
             E=interp1(ROI.theta(:,1),ROI.theta(:,2),t,'linear');
             k=sort(E);l=length(k);
@@ -22,7 +22,7 @@ for QQ=1:length(FLUOR)
             E=E-((top-bot)/2+bot);
             e=(E)*30/(top-bot);
         else
-            E=ROI.theta(:,4);dll=floor(1/mean(diff(ROI.theta(:,1))));          
+            E=ROI.theta(:,4);dll=floor(1/mean(diff(ROI.theta(:,1))));
             E=interp1(ROI.theta(1:end,1),E,t,'linear');
             e=max(E)-E;
         end
@@ -33,17 +33,17 @@ for QQ=1:length(FLUOR)
                 if any(ROI.intensity(:,i))==1
                     a=[ROI.intensity(:,i)];
                     a=(a-mean(a))/mean(a);
-                    sp=a;                    
+                    sp=a;
                     cl(:,i)=interp1(ROI.time(:,i),sp,t,'linear');
                     [cl(:,i),ey,bs,rsqs(i)]=baseline_regress(cl(:,i),e,t,e*0);
                 end;end;end;
         FLUOR(QQ).ROI(Q).rsqs=rsqs;
         eyeThr=[3 140];fixLength=7;
         if stimm==0
-        STA(Q)=...
-            spontSTtrials(Q,t,cl,e,eyeThr,fixLength);        
+            STA(Q)=...
+                spontSTtrials(Q,t,cl,e,eyeThr,fixLength);
         else
-        FLUOR(QQ).stimTA(Q)=stimTrials(t,cl,e);
+            FLUOR(QQ).stimTA(Q)=stimTrials(t,cl,e);
         end
     end
     if stimm==0;

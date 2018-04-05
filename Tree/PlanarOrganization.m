@@ -10,16 +10,16 @@ if AlxDbxPostAngle>90
     AlxDbxPostAngle = 180-AlxDbxPostAngle;
 end
 
-str1 = sprintf('Angle between AlxPost and DbxPost plane is %3.2fd', AlxDbxPostAngle);
-title(str1);
+% str1 = sprintf('Angle between AlxPost and DbxPost plane is %3.2fd', AlxDbxPostAngle);
+% title(str1);
 hold on;
-scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 1000,'p','MarkerFaceColor','k', 'MarkerEdgeColor', 'k');
-scatter3(Mid2C1(1,1),Mid2C1(1,2),Mid2C1(1,3), 500,'p','MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
-scatter3(Mid2C2(1,1),Mid2C2(1,2),Mid2C2(1,3), 500,'p','MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
-scatter3(Mid3C1(1,1),Mid3C1(1,2),Mid3C1(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
-scatter3(Mid3C2(1,1),Mid3C2(1,2),Mid3C2(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
-scatter3(CAD(1,1), CAD(1,2), CAD(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
-scatter3(CAV(1,1), CAV(1,2), CAV(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
+scatter3(MauthnerCell(1,1),MauthnerCell(1,2),MauthnerCell(1,3), 1000,'p','MarkerFaceColor',map(1,:), 'MarkerEdgeColor', 'k');
+% scatter3(Mid2C1(1,1),Mid2C1(1,2),Mid2C1(1,3), 500,'p','MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
+% scatter3(Mid2C2(1,1),Mid2C2(1,2),Mid2C2(1,3), 500,'p','MarkerFaceColor','r', 'MarkerEdgeColor', 'k');
+% scatter3(Mid3C1(1,1),Mid3C1(1,2),Mid3C1(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
+% scatter3(Mid3C2(1,1),Mid3C2(1,2),Mid3C2(1,3), 500,'p','MarkerFaceColor','b', 'MarkerEdgeColor', 'k');
+% scatter3(CAD(1,1), CAD(1,2), CAD(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
+% scatter3(CAV(1,1), CAV(1,2), CAV(1,3), 500,'p','MarkerFaceColor','g', 'MarkerEdgeColor', 'k');
 
 
 Border6_7 = mean([MeanMid3; MeanCa]);
@@ -50,8 +50,8 @@ AlxPrePostAngle = acosd(dot(P3,P4));
 if AlxPrePostAngle>90
     AlxPrePostAngle = 180-AlxPrePostAngle;
 end
-str2 = sprintf('Angle between AlxPost and DbxPost plane is %3.2fd', AlxPrePostAngle);
-title(str2);
+% str2 = sprintf('Angle between AlxPost and DbxPost plane is %3.2fd', AlxPrePostAngle);
+% title(str2);
 
 % Angle between AlxPre and DbxPost
 figure();
@@ -65,8 +65,8 @@ if AlxPreDbxPostAngle>90
     AlxPreDbxPostAngle = 180-AlxPreDbxPostAngle;
 end
 
-str3 = sprintf('Angle between AlxPost and DbxPost plane is %3.2f', AlxPreDbxPostAngle);
-title(str3);
+% str3 = sprintf('Angle between AlxPost and DbxPost plane is %3.2f', AlxPreDbxPostAngle);
+% title(str3);
 
 % All postSynaptic planes
 figure();

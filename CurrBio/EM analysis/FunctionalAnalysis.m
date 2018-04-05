@@ -58,6 +58,22 @@ for i = 1:size(SPT,2)
     title(SPT(i).filename);
 end
 
+% plot correct fluorescence intensities for all cells
+for i = 1:size(SPT,2)
+    figure(i);
+    n = round(SPT(i).numROIs/5);
+    subplot(n,5,1)
+    plot(SPT(i).eyevars(:,1));
+    set(gca,'XLim',[0,300]);
+    for j = 1:SPT(i).numROIs
+        subplot(n,6,j+1)
+        plot(SPT(i).intCorrect(:,j));
+        set(gca,'XLim',[0,300]);
+    end
+end
+        
+        
+
 
 
 

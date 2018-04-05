@@ -259,31 +259,27 @@ hold on;
 % cell soma colored by rhos
 
 [y,I] = sort(log2(tau));
-for i = 1:numel(cellIDs)
-    [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(I(i),1),45*Small(I(i),3) /1000,'line','scatter');
-    %set(h1,'LineStyle','none');
-    %set(h2,'MarkerFaceColor',CT(i,:),'MarkerEdgeColor','k', 'SizeData',2000);
-        set(h2,'MarkerFaceColor','none','MarkerEdgeColor','none', 'SizeData',2000);
-
-   % set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
-    set(a(2), 'XTick',[],'YLim',[0 25], 'YDir','reverse');
-set(a(1),'XLim',[0, 140],'YColor','b','YLim',[0,25],'YTick',[0,5,10,15,20,25],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4,'XColor','w' );
-set(a(2), 'XTick',[],'YDir','reverse', 'YLim',[0, 25],'YTick',[0,5,10,15,20,25],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4,'YColor','w','XColor','w');
-    hold on;
-end
+% for i = 1:numel(cellIDs)
+%     [a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0.293* Small(I(i),1),45*Small(I(i),3) /1000,'line','scatter');
+%     set(h1,'LineStyle','none');
+%     set(h2,'MarkerFaceColor',CT(i,:),'MarkerEdgeColor','k', 'SizeData',2000);
+%     set(a(2), 'XDir','reverse', 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
+%    % set(a(2), 'XTick',[],'YLim',[0 25], 'YTick',[], 'YDir','reverse');
+% 
+%     hold on;
+% end
 
 
 [pks,loc] = findpeaks(smooth(CellCount),'MinPeakHeight',17);
-%[a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0,0,'line','scatter');
+[a,h1,h2] = plotyy(0.293*CellXAxis, smooth(CellCount),0,0,'line','scatter');
 set(h1,'Color','b', 'LineWidth', 4);
 set(h1,'Color','b', 'LineWidth', 4);
 set(h2,'MarkerFaceColor','none','MarkerEdgeColor','none');
 
 % insert stripe locations, 0.293*CellXAxis(loc)
-plot(a(1), [0.293*CellXAxis(loc(1)),0.293*CellXAxis(loc(1)) ], [0, 25], 'w--', 'LineWidth',4);
-plot(a(1), [0.293*CellXAxis(loc(2)),0.293*CellXAxis(loc(2)) ], [0, 25], 'r--', 'LineWidth',4);
-plot(a(1), [0.293*CellXAxis(loc(3)),0.293*CellXAxis(loc(3)) ], [0, 25], 'r--','LineWidth',4);
-plot(a(1), [0.293*CellXAxis(loc(4)),0.293*CellXAxis(loc(4)) ], [0, 25], 'r--','LineWidth',4);
+plot(a(1), [140-0.293*CellXAxis(loc(2)),0.293*CellXAxis(loc(2)) ], [0, 25], 'r--', 'LineWidth',4);
+plot(a(1), [140-0.293*CellXAxis(loc(3)),0.293*CellXAxis(loc(3)) ], [0, 25], 'r--','LineWidth',4);
+plot(a(1), [10.293*CellXAxis(loc(4)),0.293*CellXAxis(loc(4)) ], [0, 25], 'r--','LineWidth',4);
 
 
 %set(a(1),'XDir','reverse','XLim',[0, 140],'YColor','b','YLim',[0,25],'YTick',[0,5,10,15,20,25],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4,'XColor','w' );

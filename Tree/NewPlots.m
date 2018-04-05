@@ -38,7 +38,7 @@ set(gca,'XLim',[min(CellSoma(:,3)/1000), max(CellSoma(:,3)/1000)],'YLim', [0,7],
 axis square;
 box off;
 
-
+%%
 % ML orginization of dendrites
 
 [AlxXY, AlxYZ, AlxXZ] = DendriticTreeOfGroups(cellIDsAlx, allTrees, cellIDs, calx, false);

@@ -35,7 +35,7 @@ for i = 1:numel(cellIDs)
                 else
                     if Display == true
                         h1 = subplot(2,2,1);
-                       % plot3(DnTempx,DnTempy,DnTempz,'-','color',col);
+                        plot3(DnTempx,DnTempy,DnTempz,'-','color',col,'LineWidth',2);
                         hold on;
                         %h2.Color(4) = 0.2;
                     end
@@ -45,6 +45,7 @@ for i = 1:numel(cellIDs)
             end
         end
         %plot3(denTree(1,1), denTree(1,2),denTree(1,3),'o','MarkerSize',20,'MarkerFaceColor',col,'MarkerEdgeColor','k');
+        TreeSomata(i,col);
         
 
         edge1 = 0:5:60; % bins of 5um each along the Z axis
@@ -66,24 +67,30 @@ if Display == true
     view(h1, -180,0);
     axis(h1, 'normal');
     set (h1,'XTick',[], 'YTick',[],'ZTick', [], 'ZLim',[-60000, -0],'XLim',[20000 , 140000]);
-    set(h1,'Color','none','XColor','none','YColor','none', 'ZColor','none');
+    set(h1,'Color','none','XColor','none','YColor','none', 'ZColor','none','XDir','reverse');
     box(h1,'off');
     %set(gcf, 'units','normalized','outerposition',[0 0 1 1]);
     
     h2 = subplot(2,2,2);
     pbaspect(h2,[0.38,0.38,0.38])
     hold on;
-    plot(nanmean(denXZ,1)./ max(nanmean(denXZ,1)),y1, '-','Color',col, 'LineWidth',2);
-    set(h2, 'YLim',[0 60],'XTick',[0.5,1],'YDir','reverse','XDir','reverse','YTick',[0 20 40 60],'YAxisLocation','right','FontName', 'Arial', 'FontSize', 40, 'LineWidth',2,'Position',[0.4,0.584,0.335,0.341]);
+    plot(nanmean(denXZ,1)./ max(nanmean(denXZ,1)),y1, '-','Color',col, 'LineWidth',4);
+    set(h2, 'YLim',[0 60],'XTick',[0.5,1],'XDir','reverse','YDir','reverse','YTick',[0 20 40 60],'YAxisLocation','right','FontName', 'Arial', 'FontSize', 40, 'LineWidth',4,'Position',[0.4,0.584,0.335,0.341]);
+    set(h2,'XColor','w','YColor','w');
     box(h2, 'off');
     set(h2,'color','none');
     
     h3 = subplot(2,2,3);
     hold on;
-    plot(y3,nanmean(denXY,1)./max(nanmean(denXY,1)),'-','Color',col, 'LineWidth',2);
-    set(h3, 'XLim',[20 140],'XDir','reverse','XTickLabel',[0,20,40,60,80,100,120],'YTick',[0.5,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',2 , 'Position',[0.13,0.22,0.335,0.341])
+    plot(y3,nanmean(denXY,1)./max(nanmean(denXY,1)),'-','Color',col, 'LineWidth',4);
+    set(h3, 'XLim',[20 140],'XDir','normal','XTickLabel',[0,20,40,60,80,100,120],'YTick',[0.5,1],'FontName', 'Arial', 'FontSize', 40, 'LineWidth',4 , 'Position',[0.13,0.22,0.335,0.341])
+    set(h3,'XColor','w','YColor','w');
     box (h3, 'off');
     set(h3,'Color','none');
+%     loc=[6 28 39 82];
+    plot(h3, [42.19+20, 42.19+20], [0, 1], 'r--', 'LineWidth',4);
+    plot(h3, [55.08+20, 55.08+20], [0, 1], 'g--','LineWidth',4);
+    plot(h3, [105.48+20, 105.48+20], [0, 1], 'r--','LineWidth',4);
 end
 %set(gcf,'PaperUnits','inches','PaperPosition',[0 0 4 3]);
 set(gcf, 'units','normalized','outerposition',[0 0 1 1]);

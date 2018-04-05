@@ -1,5 +1,5 @@
 clear
-addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/KayvonFunctionalData/EM analysis'))
+%addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Experiements/10122012-1/KayvonFunctionalData/EM analysis'))
 load('101112 _files1_4.mat')
 FLUOR(1).ROI=SPT;
 FLUOR=stimSummaryEM(FLUOR);

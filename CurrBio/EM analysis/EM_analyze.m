@@ -100,7 +100,7 @@ for i=2:2%length(SPT);
     im=ROI.mnImage;
     ct=ROI.centroid;
     ct=ct(:,cls)';
-
+    
     im=repmat(ROI.mnImage,[1 1 3]);
     im=im/max(im(:));
     mx=find(im>max(im(:))*.7);
@@ -114,7 +114,7 @@ for i=2:2%length(SPT);
     set(gcf,'units','inches','position',[3 3 4 4]);
     set(gcf,'paperposition',[3 3 4 4]);
     %print(gcf,'-depsc',[folder,str,'.eps'])
-
+    
     sc=.75;
     figure(3*(i-1)+2);figure_initialize;
     set(gcf,'position',[4 .1 1.2 9]*sc,'paperposition',[4 .1 1.2 9]*sc);
@@ -138,7 +138,7 @@ for i=2:2%length(SPT);
     %set(gca,'visible','off');
     str=['sta',num2str(i)];
     %print(gcf,'-depsc',[folder,str,'.eps'])
-
+    
     figure(3*(i-1)+3);figure_initialize;
     set(gcf,'position',[4 .1 4 9]*sc,'paperposition',[4 .1 4 9]*sc);
     n=length(cls);set(gcf,'color','w');
@@ -176,7 +176,7 @@ for j=1:n;
     plot(t,a,'k','linewidth',2);
     %set(gca,'visible','off');
     ylim([min(a) max(a)]);
-
+    
     g=text(t(end)+10,a(end)+.05,num2str(j));
     xlim([1 t(end)+30])
     set(g,'color','r','fontsize',14,'fontweight','bold');

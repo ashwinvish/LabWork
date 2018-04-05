@@ -1,13 +1,17 @@
 clc;
 clear all;
-addpath(genpath('/Users/admin/Documents/Scripts'));
+addpath(genpath('/Users/admin/Documents/Scripts'));a
 
-%df = readtable('final.csv');
+df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
 
-% Columns 1 through 12
-%     'psd_segid'    'BBOX_bx'    'BBOX_by'    'BBOX_bz'    'BBOX_ex'    'BBOX_ey'    'BBOX_ez'    'COM_x'    'COM_y'    'COM_z'    'postsyn_seg'    'postsyn_sz'
-%  Columns 13 through 23
-%     'postsyn_wt'    'postsyn_x'    'postsyn_y'    'postsyn_z'    'presyn_seg'    'presyn_sz'    'presyn_wt'    'presyn_x'    'presyn_y'    'presyn_z'    'size'
+% Columns 1 through 8
+%     'psd_segid'    'BBOX_bx'    'BBOX_by'    'BBOX_bz'    'BBOX_ex'    'BBOX_ey'    'BBOX_ez'    'postsyn_sz' 
+% Columns 9 through 16 
+%     'postsyn_wt'    'postsyn_x'    'postsyn_y'    'postsyn_z'    'presyn_sz'    'presyn_wt'    'presyn_x'    'presyn_y' 
+% Columns 17 through 23
+%     'presyn_z'    'size'    'postsyn_segid'    'presyn_segid'    'centroid_x'    'centroid_y'    'centroid_z'
+ 
+
 
 %eg = (df.presyn_seg(df.postsyn_seg==76181));% find presynaptic partners of a cell
 
@@ -73,7 +77,6 @@ map = colorcet('L8');
 %% compare synapses
 colors = cbrewer('qual','Dark2',10);
 
-
 for i = 1:size(functionalCellIDs_new,2)
     PrePartners{i} = SynapticPartners(functionalCellIDs_new(i),1,df);
     PostPartners{i} = SynapticPartners(functionalCellIDs_new(i),2,df);
@@ -95,7 +98,36 @@ xlabel('CellNumber');
 ylabel('Number of Synapses');
 box off;
 axis square;
-set(gca,'FontName','Arial','FontSize',25);
+set(gca,'XLim',[0,23],'FontName','Arial','FontSize',25);
+legend({'old','new'})
+
+
+%% Integrator partners only
+temp = [];
+intPartners = [PrePartners, PostPartners];
+for i = 1: size(intPartners,2)
+    temp = [temp ; intPartners{i}];
+end
+intPartners = unique(temp(temp<1e5)); 
+IntConnMatrixPre = zeros(size(intPartners));
+for i = 1:size(intPartners,1) % pre
+        tempPrePartner =  df.presyn_segid(df.postsyn_segid==intPartners(i));
+        tempPrePartner = tempPrePartner(tempPrePartner<1e5);
+        if ~tempPrePartner == 0
+            %i
+            [N,edges] = histc(tempPrePartner, unique(tempPrePartner));
+            [a,b] = intersect(intPartners,unique(tempPrePartner));
+            for j = 1:size(b,1)
+             IntConnMatrixPre(i,b(j)) = N(find(a(j)==unique(tempPrePartner)));
+            end
+        else 
+            continue;
+        end
+        IntConnMatrixPre(i,i) = 0;
+        clear tempPrePartner;      
+end
+
+
 %% Construct connctivity matrix
 
 AllCells = [];
@@ -106,12 +138,12 @@ AllCells = [];
 
 %AllCells = unique([df.presyn_seg(df.presyn_seg<1e5);df.postsyn_seg(df.postsyn_seg<1e5)]);
 
-AllCells = unique([unique(df.postsyn_seg(df.postsyn_seg<1e5)); unique(df.presyn_seg(df.presyn_seg<1e5))]);
+AllCells = unique([unique(df.postsyn_segid(df.postsyn_segid<1e5)); unique(df.presyn_segid(df.presyn_segid<1e5))]);
 ConnMatrixPre = zeros(length(AllCells));
 clear tempPrePartner
 
 for i = 1:size(AllCells,1) % pre
-        tempPrePartner =  df.presyn_seg(df.postsyn_seg==AllCells(i));
+        tempPrePartner =  df.presyn_segid(df.postsyn_segid==AllCells(i));
         tempPrePartner = tempPrePartner(tempPrePartner<1e5);
         if ~tempPrePartner == 0
             %i
@@ -132,7 +164,7 @@ end
 ConnMatrixPost = zeros(length(AllCells));
 clear tempPostPartner
 for i = 1:size(AllCells,1) % pre
-        tempPostPartner =  df.postsyn_seg(df.presyn_seg==AllCells(i));
+        tempPostPartner =  df.postsyn_segid(df.presyn_segid==AllCells(i));
         tempPostPartner = tempPostPartner(tempPostPartner<1e5);
         if ~tempPostPartner == 0
             %i
@@ -158,7 +190,7 @@ ylabel('Postsynaptic cell');
 %map1 = cbrewer('seq','BuPu',255);
 %colormap hot;
 %colorcet('CBTL1');
-set(gcf,'Color','white');
+set(gcf,'Color','none');
 set(gca, 'FontName','Aria','FontSize',25);
 
 figure;

@@ -23,7 +23,7 @@ hold on;
 
 % plots point cloud
 
-plot3(PointCloud(:,1),PointCloud(:,2), -PointCloud(:,3),'o','MarkerSize',10,'MarkerFaceColor','none', 'MarkerEdgeColor',PointColor);
+plot3(PointCloud(:,1),PointCloud(:,2), -PointCloud(:,3),'o','MarkerSize',10,'MarkerFaceColor',PointColor, 'MarkerEdgeColor','w');
 
 
 % % plot normal vector

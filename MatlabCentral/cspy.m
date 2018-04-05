@@ -63,6 +63,7 @@ islevels = 0;
 levels = 0;
 MAP = 0;
 markerSize = 0;
+markeredgecolor = [];
 marker = 0;
 ischannels = 0;
 xdir = 0;
@@ -77,6 +78,8 @@ for i=2:2:nargin
             end
         case 'markersize'
             markerSize = cell2mat(varargin(i+1));
+        case 'markeredgecolor'
+            markeredgecolor = cell2mat(varargin(i+1));
         case 'levels'
             levels = cell2mat(varargin(i+1));
             islevels = 1;
@@ -116,6 +119,9 @@ if ~MAP
 end
 if ~markerSize
     markerSize = 10;
+end
+if ~markeredgecolor
+    markeredgecolor = [1,1,1];
 end
 if isempty(marker) || (~iscell(marker) && ~marker )
     marker = '.';
@@ -200,7 +206,7 @@ for j=1:channels
         plot(x(ids), y(ids), cmarker, 'MarkerSize', markerSize, 'Color', colors(i,:));
         set(gca,'XDir', xdir);
         set(gca,'YDir', ydir);
-        set(gca, 'XAxisLocation', 'top');
+        set(gca, 'XAxisLocation', 'bottom');
         %step_init = step_init + step;
         %step_end = step_end + step;
     end
