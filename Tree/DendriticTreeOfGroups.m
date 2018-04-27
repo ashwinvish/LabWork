@@ -88,9 +88,9 @@ if Display == true
     box (h3, 'off');
     set(h3,'Color','none');
 %     loc=[6 28 39 82];
-    plot(h3, [42.19+20, 42.19+20], [0, 1], 'r--', 'LineWidth',4);
-    plot(h3, [55.08+20, 55.08+20], [0, 1], 'g--','LineWidth',4);
-    plot(h3, [105.48+20, 105.48+20], [0, 1], 'r--','LineWidth',4);
+%     plot(h3, [42.19+20, 42.19+20], [0, 1], 'r--', 'LineWidth',4);
+%     plot(h3, [55.08+20, 55.08+20], [0, 1], 'g--','LineWidth',4);
+%     plot(h3, [105.48+20, 105.48+20], [0, 1], 'r--','LineWidth',4);
 end
 %set(gcf,'PaperUnits','inches','PaperPosition',[0 0 4 3]);
 set(gcf, 'units','normalized','outerposition',[0 0 1 1]);

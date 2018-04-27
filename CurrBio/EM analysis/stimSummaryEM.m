@@ -17,6 +17,7 @@ for QQ=1:length(FLUOR)
         tend=min(a);delt=.05;t=strt:delt:tend;
         if stimm==0;
             E=interp1(ROI.theta(:,1),ROI.theta(:,2),t,'linear');
+           % E=interp1(ROI.theta(:,1),ROI.theta(:,3),t,'linear'); % changed by AV
             k=sort(E);l=length(k);
             bot=k(floor(l*.05));top=k(floor(l*.95));
             E=E-((top-bot)/2+bot);

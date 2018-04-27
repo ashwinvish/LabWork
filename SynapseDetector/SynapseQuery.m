@@ -1,6 +1,6 @@
 clc;
 clear all;
-addpath(genpath('/Users/admin/Documents/Scripts'));a
+addpath(genpath('/Users/admin/Documents/Scripts'));
 
 df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
 
@@ -126,7 +126,8 @@ for i = 1:size(intPartners,1) % pre
         IntConnMatrixPre(i,i) = 0;
         clear tempPrePartner;      
 end
-
+save('IntPartners.mat','intPartners');
+save('IntConnMatrixPre.mat','IntConnMatrixPre');
 
 %% Construct connctivity matrix
 
@@ -180,6 +181,9 @@ for i = 1:size(AllCells,1) % pre
         clear tempPostPartner;      
 end 
 
+save('AllCells.mat','AllCells');
+save('ConnMatrixPre.mat','ConnMatrixPre');
+
 %% Pre and Postsynaptic connectivity matrix
 
 figure;
@@ -219,15 +223,15 @@ ylabel('count');
 box off;
 
 subplot_tight(2,1,2,0.05);
-cspy(IntPreSynapseConn,'Colormap',map,'Levels',255,'MarkerSize',25);
+cspy(IntPreSynapseConn,'Colormap',parula(255),'Levels',255,'MarkerSize',40);
 box on;
 %imagesc(IntPreSynapseConn);
 %colorcet('CBTL2');
 %colormap hot; colorbar
 hold on;
-line([0,size(AllCells,1)],[6.5,6.5],   'Color','black'); % Alx block
-line([0,size(AllCells,1)],[15.5,15.5], 'Color','black'); % Dbx block
-line([0,size(AllCells,1)],[21.5,21.5], 'Color','black'); % Barhl block
+line([0,size(AllCells,1)],[6.5,6.5],   'Color','w','LineWidth',4); % Alx block
+line([0,size(AllCells,1)],[15.5,15.5], 'Color','w','LineWidth',4); % Dbx block
+line([0,size(AllCells,1)],[21.5,21.5], 'Color','w','LineWidth',4); % Barhl block
 
 xlabel('Presynaptic cell');
 ylabel('Integrator cell');

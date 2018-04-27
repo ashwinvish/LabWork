@@ -176,8 +176,8 @@ for i=2:length(SPT);
         set(g,'color','r','fontsize',10,'fontweight','bold');
         tau
         axis square;
-        A = [A, a(22:end)];
-        E = [E, e(22:end)];
+        A = [A, a];
+        E = [E, e];
     end
     %KDsubplot(n+1,1,[1,1],0);
     subplot(n+1,1,1);
@@ -221,8 +221,8 @@ folder = '/usr/people/ashwinv/seungmount/research/Ashwin/MIT/Emre_HindBrain/Zfis
  CT(19:22,:) = repmat(CT(18,:),4,1);
 [y,I] = sort(log2(TAU));
 tFlo=STA(1).T;
-tFir=0:delt:delt*(size(fs,1)-1);
-tFir=tFir-2;
+% tFir=0:delt:delt*(size(fs,1)-1);
+% tFir=tFir-2;
 colormap(CT);
 
 
@@ -230,7 +230,7 @@ index = 0;
 for i = 1:size(TAU,1)
     %figure('units','normalized','outerposition',[0 0 1 1]);
    % subplot(1,2,1);
-    shadedErrorBar(tFir,i*0.25+A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',2},0.5);
+    shadedErrorBar(tFlo,i*0.25+A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',2},0.5);
     %set(gca, 'XLim', [-2,6],'YLim', [0,0.35],'XTick',[-2,-1,0,1,2,3,4,5,6], 'XTickLabel',[-1,0,1,2,3,4,5,6,7]);
     %set(gcf, 'Renderer','painters','Color','none');
     %str = sprintf('Cell%dlog(tau)%1.2f', I(i), y(i));
@@ -367,12 +367,58 @@ figure();
 for i = 1:1:22
     plot(tFir(1:end-1), 0.2*i+Firing(:,I(i)), 'color',  CT(i,:),'LineWidth', 4);
     hold on;
+   % showfit(0.2*i+FitsFinal{I(i)},'dispeqboxmode', 'off','fitlinestyle','--', 'fitcolor', 'w', 'fitlinewidth', 4);
 end
-axis off;
-ax = gca;
+ax  = gca;
+ax.YColor = 'none';
 ax.CLim = [log2(min(TAU)),log2(max(TAU))];
 ax.FontSize = 40;
 ax.FontName = 'Arial'
-ax.Color = 'w'
+ax.Color = 'none'
+ax.XColor = 'w'
 ax.LineWidth = 4;
-daspect([10,1,1]);
+ax.XLim = [-2 7];
+ax.XTick = [-1,1,3,5];
+ax.XTickLabel = [0,2,4,6];
+daspect([8,1,1]);
+box off;
+
+%%
+
+i = 11 ; 
+figure;
+plot(STA(1).T, stae(:,1),'b','linewidth',4);
+%ax = gca;
+axis off;
+box off;
+
+
+figure;
+shadedErrorBar(STA(1).T,A(:,I(i)),E(:,I(i)), {'-','color',CT(i,:),'markerfacecolor',CT(i,:),'LineWidth',2},0.5);
+ax = gca;
+box off
+ax.YColor = 'none';
+ax.XColor = 'w';
+ax.LineWidth = 4;
+ax.FontSize = 40;
+ax.FontName = 'Arial';
+ax.Color = 'none';
+ax.XLim = [-2 7];
+
+figure;
+plot(tFir(1:end-1), Firing(:,I(i)), 'color',  CT(i,:),'LineWidth', 4);
+ hold on;
+showfit(FitsFinal{I(i)},'dispeqboxmode', 'off','fitlinestyle','--', 'fitcolor', 'w', 'fitlinewidth', 4);
+ax = gca;
+ax.FontSize = 40;
+ax.FontName = 'Arial'
+ax.Color = 'none'
+ax.LineWidth = 4;
+ax.YColor = 'none'
+ax.XColor = 'w';
+ax.XLim = [-2 7];
+ax.XTick = [-1,1,3,5];
+ax.XTickLabel = [0,2,4,6];
+box off;
+
+

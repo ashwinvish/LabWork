@@ -1,6 +1,7 @@
 load('IntConnMatrix.mat');
 load('IntPartners.mat');
 addpath(genpath('/Users/admin/Documents/ComDetTBv091'));
+addpath(genpath('/Users/admin/Documents/BCT'));
 [m,n,v] = find(IntConnMatrixPre); % m -postSynapse, n - presynapse, v - number of synapses
 for i = 1:size(intPartners,1)
     AllCellNames{i} = num2str(intPartners(i));
@@ -32,25 +33,15 @@ A = sparse(s,t,G.Edges.Weight,nn,nn);
 %Lap = laplacian(G);
 
 %% try clustering
-
-[modules,inmodule] = louvain_community_finding(A);
-% [Vsort,idx] = sort(V);
-% figure; cspy(IntConnMatrixPre(idx,idx),'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',15);
-% blocks = find(diff(Vsort));
-% hold on;
-% for i = 1:length(blocks)
-%     line([0,size(IntConnMatrixPre,1)],[blocks(i),blocks(i)],'color','k');
-%     line([blocks(i),blocks(i)],[0,size(IntConnMatrixPre,1)],'color','k');
-% end
+Iterations = 10000;
+for i = 1:1:Iterations
+[M(:,i),Q(:,i)] = community_louvain(A);
+end
 %%
-
-V = GCModulMax1(A); % louvain-community detection
-Vmean = mean(V,2);
-Vmean = round(Vmean);
-[Vsort,idx] = sort(V);
-figure; cspy(IntConnMatrixPre(idx,idx),'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',15);
-hold on;
+[Vsort,idx] = sort(M);
+figure; cspy(A(idx,idx),'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',15);
 blocks = find(diff(Vsort));
+hold on;
 for i = 1:length(blocks)
     line([0,size(IntConnMatrixPre,1)],[blocks(i),blocks(i)],'color','k');
     line([blocks(i),blocks(i)],[0,size(IntConnMatrixPre,1)],'color','k');
