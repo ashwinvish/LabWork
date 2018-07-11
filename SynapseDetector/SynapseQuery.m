@@ -1,8 +1,13 @@
 clc;
 clear all;
-addpath(genpath('/Users/admin/Documents/Scripts'));
 
-df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
+if ismac
+    addpath(genpath('/Users/admin/Documents/Scripts'));
+    df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
+else
+    addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
+    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/04122018.csv');
+end
 
 % Columns 1 through 8
 %     'psd_segid'    'BBOX_bx'    'BBOX_by'    'BBOX_bz'    'BBOX_ex'    'BBOX_ey'    'BBOX_ez'    'postsyn_sz' 
@@ -32,7 +37,12 @@ cellIDsL = {'Int1_1', 'Int2_7', 'Int3_1', 'Int3_2', 'Int3_3', 'Int3_4'};        
 cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','Int3_6'};
 
 % load Trees from manual tracing
-fname = 'Users/admin/Documents/Scripts/CurrBio/AVTraces-Exported-01122016-Chopped14';
+if ismac
+    fname = 'Users/admin/Documents/Scripts/CurrBio/AVTraces-Exported-01122016-Chopped14';
+else
+    fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/CurrBio/AVTraces-Exported-01122016-Chopped14';
+end
+    
 resolution = [5,5,45];
 
 for kk = 1: numel(cellIDs_old)
@@ -194,7 +204,7 @@ ylabel('Postsynaptic cell');
 %map1 = cbrewer('seq','BuPu',255);
 %colormap hot;
 %colorcet('CBTL1');
-set(gcf,'Color','none');
+set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 
 figure;
@@ -204,7 +214,7 @@ xlabel('Postsynaptic cell');
 ylabel('Presynaptic cell');
 %colormap hot;
 %colorcet('CBTL1');
-%set(gcf,'Color','white');
+set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 
 

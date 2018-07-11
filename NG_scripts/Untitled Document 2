@@ -1,0 +1,14 @@
+1. cd ~/neuroglancer
+2. npm run dev-server-python  ( starts the state server -- kinda)
+3. Open new terminal
+4. cd ~/neuroglancer/python/neuroglancer/tool
+5. python video_tool.py -a 127.0.0.1 --static-content-url http://localhost:8080 edit YOUR_SCRIPT.EXT
+6. Above step will provide a link, open that link. This link is your NG session connected to the state server
+7. paste/recreate the NG state from a different NG session
+8. position the view  ( make pretty)
+9. key point (K)
+10. quit key point (Q) -- this will write YOUR_SCRIPT.EXT to the folder ~/neuroglancer/python/tool
+11. run the render script
+12. python video_tool.py -a 127.0.0.1 --static-content-url http://localhost:8080 render YOUR_SCRIPT.EXT OUTPUT_DIR --fps FPS --width WIDTH --height HEIGHT 
+
+

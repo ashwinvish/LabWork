@@ -1,5 +1,6 @@
-% Manual Sort List 
-ml = readtable('/Users/admin/Documents/SynapseDetector/ManualSortList.csv');
+% Manual Sort List
+addpath(genpath('../')); 
+ml = readtable('../../SynapseDetector/ManualSortList.csv');
 mlMat = table2array(ml);
 load('IntConnMatrix.mat')
 load('IntPartners.mat')
@@ -26,8 +27,16 @@ end
 
 figure;
 cspy(mlConn,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
+hold on;
+blocks =0;
+for i = 1:length(mlSize)
+    blocks = blocks+mlSize(i)
+    line([0,size(mlConn,1)],[blocks,blocks],'color','k');
+    line([blocks,blocks],[0,size(mlConn,1)],'color','k');
+end
 
 [a,b] = ismember(functionalCellIDs_new(CellDisplayOrder),AllCells);
+b(2) =24; % just a place holder until the cell is validated.
 mlInt = ConnMatrixPre(b,v);
 figure;
 cspy(mlInt,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
