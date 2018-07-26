@@ -23,7 +23,14 @@ end
 
 for i =1:size(m,1)
     mlConn(i,:) = ConnMatrixPre(v(i),v);
-end   
+end
+
+mlConn = [];
+
+for i = 1:size(mlOrdered,1)
+    if ~isempty(find(mlOrderd(i) == AllCells))
+        mlConn(i,:) = AllCells(i,:)
+
 
 figure;
 cspy(mlConn,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
@@ -34,8 +41,6 @@ for i = 1:length(mlSize)
     line([0,size(mlConn,1)],[blocks(i+1),blocks(i+1)],'color','k');
     line([blocks(i+1),blocks(i+1)],[0,size(mlConn,1)],'color','k');
     text(repmat(-50,1,1), blocks(i), sprintf('%s\\rightarrow',cell2mat(ml.Properties.VariableNames(i))), 'HorizontalAlignment','center', 'FontWeight','bold');
-    set(gca,'YTick',1:size(mlConn),'YTickLabel',AllCells(v),'XTick',1:size(mlConn),...
-        'XTickLabel',AllCells(v),'XTickLabelRotation',45,'XAxisLocation','top');
 end
 
 

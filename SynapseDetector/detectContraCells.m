@@ -2,7 +2,7 @@ fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/SW
 cd(fname);
 directory = dir('*.swc');
 for i = 1:size(directory,1)
-    [ContraCells(i).isContra,ContraCells(i).AngleinDegrees] = isMidline(directory(i).name(1:5),false);
+    [ContraCells(i).isContra,ContraCells(i).AngleinDegrees,ContraCells(i).DistanceToPlane] = isMidline(directory(i).name(1:5),false);
     ContraCells(i).CellID = directory(i).name(1:5);
 end
 contra = [];

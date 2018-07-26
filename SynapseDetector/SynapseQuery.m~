@@ -149,10 +149,8 @@ ConnMatrixPre = zeros(length(AllCells));
 clear tempPrePartner
 
 [a,b,c] = intersect(functionalCellIDs_new(CellDisplayOrder),AllCells(1:22),'stable');
-AllCellsSwap(1:size(c,1),:) = AllCells(c,:);
-AllCellsSwap(size(c,1)+1:size(AllCells,1),:) = AllCells(size(c,1)+1:end,:);
-
-AllCells = AllCellsSwap;
+AlSwap(1:size(c,1),:) = ConnMatrixPre(c,:);
+ConnMatrixPreSwap(size(c,1)+1:size(ConnMatrixPre,2),:) = ConnMatrixPre(size(c,1)+1:end,:);
 
 for i = 1:size(AllCells,1) % pre
         tempPrePartner =  df.presyn_segid(df.postsyn_segid==AllCells(i));
@@ -196,9 +194,15 @@ save('AllCells.mat','AllCells');
 
 %% Pre and Postsynaptic connectivity matrix
 
+% swap rows corresponding to integrator cells to conform with
+% CellDisplayOrder
+[a,b,c] = intersect(functionalCellIDs_new(CellDisplayOrder),AllCells(1:22),'stable');
+ConnMatrixPreSwap(1:size(c,1),:) = ConnMatrixPre(c,:);
+ConnMatrixPreSwap(size(c,1)+1:size(ConnMatrixPre,2),:) = ConnMatrixPre(size(c,1)+1:end,:);
+
 
 figure;
-cspy(ConnMatrixPre,'Colormap',map,'Levels',255,'MarkerSize',15);
+cspy(ConnMatrixPreSwap,'Colormap',map,'Levels',255,'MarkerSize',15);
 %imagesc(ConnMatrixPre); axis square;df.
 xlabel('Presynaptic cell');
 ylabel('Postsynaptic cell');
@@ -208,8 +212,11 @@ ylabel('Postsynaptic cell');
 set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 
+ConnMatrixPostSwap(1:size(c,1),:) = ConnMatrixPost(c,:);
+ConnMatrixPostSwap(size(c,1)+1:size(ConnMatrixPost,2),:) = ConnMatrixPost(size(c,1)+1:end,:);
+
 figure;
-cspy(ConnMatrixPost,'Colormap', map,'Levels',255,'MarkerSize',15)
+cspy(ConnMatrixPostSwap,'Colormap', map,'Levels',255,'MarkerSize',15)
 %imagesc(ConnMatrixPost); axis square;
 xlabel('Postsynaptic cell');
 ylabel('Presynaptic cell');
@@ -218,7 +225,7 @@ ylabel('Presynaptic cell');
 set(gcf,'Color','white');
 set(gca, 'FontName','Aria','FontSize',25);
 
-save('ConnMatrixPre.mat','ConnMatrixPre');
+save('ConnMatrixPre.mat','ConnMatrixPreSwap');
 
 
 %% Conectivity for Intcells Only
