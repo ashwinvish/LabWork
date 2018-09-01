@@ -91,3 +91,7 @@ for i = 1:size(AbdCells,2)
     contraProjectingToAbd = [contraProjectingToAbd; C];
     ipsiProjectingToAbd = [ipsiProjectingToAbd; D];
 end
+
+%% All eyepos cells
+
+[~,~,m] = intersect([ipsiProjectingToAbd;contraProjectingToAbd],AllCells);

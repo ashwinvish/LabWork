@@ -1,5 +1,6 @@
 function STA=spontSTtrials(j,t,cl,e,eyeThr,fixLength)
 global SPT delt
+delt = 0.05;
 %% Saccade triggered averages of the spontaneous data
 E=[e;-e];%loop through twice, but with the eye position flipped the second time.
 %This has the effect of finding cells with positive eye correlation first and
@@ -59,7 +60,7 @@ staf=zeros(length(T),size(cl,2));
 dosu=zeros(size(staf,1),size(staf,2),20);
 for W=1;
     e=E(W,:);%f=figure;plot(e);ex=input('exclude?');close(f);
-    [c,pp]=corrcoef([e' cl]);COR=c(2:end,1);pval=pp(2:end,1);%find correlation between all cells and the eye
+    [c,pp]=corrcoef([e' cl]);COR=c(2:end,1);pval=pp(2:end,1); %find correlation between all cells and the eye
     COR=ones(size(COR));
     if length(find(COR>0))>0
         CL=cl(:,COR>0);%CL=[zeros(pre,size(CL,2));CL;zeros(fix,size(CL,2))];

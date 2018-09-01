@@ -250,8 +250,6 @@ figure;
 scatter(maxEyeCorrNonInterpolated_P(b1),maxEyeCorrNonInterpolated_V(b2),'ko','filled');
 hold on;
 line([-0.05,6],[-0.05,6],'color','k','linestyle','--');
-%line([-0.05,0.2],[0.2,0.2], 'color','k');
-%line([0.2,0.2],[-0.05,0.2], 'color','k');
 set(gca, 'XLim',[-0.05,0.6],'YLim',[-0.05,0.6]);
 xlabel('Correlation to eye position');
 ylabel('Correlation to eye velocity');

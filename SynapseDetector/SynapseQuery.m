@@ -223,6 +223,7 @@ save('ConnMatrixPre.mat','ConnMatrixPre');
 
 %% Conectivity for Intcells Only
 [a,b] = ismember(functionalCellIDs_new(CellDisplayOrder),AllCells);
+
 IntPreSynapseConn = ConnMatrixPre(b',:); 
 IntPreSynSum = sum(IntPreSynapseConn,1);
 
@@ -236,6 +237,7 @@ box off;
 
 subplot_tight(2,1,2,0.05);
 cspy(IntPreSynapseConn,'Colormap',parula(255),'Levels',255,'MarkerSize',40);
+set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells,'XTickLabelRotation',45,'XAxisLocation','top');
 box on;
 %imagesc(IntPreSynapseConn);
 %colorcet('CBTL2');
