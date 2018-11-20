@@ -1,14 +1,14 @@
 % Manual Sort List
 addpath(genpath('../')); 
-ml = readtable('../..//SynapseDetector/ManualSortList-082718.csv');
+ml = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/ManualSortList-102218.csv');
 mlMat = table2array(ml);
 load('IntConnMatrix.mat')
 load('IntPartners.mat')
 load('AllCells.mat');
 load('ConnMatrixPre.mat');
 
-% remove cells that are not in AllCells
-k = setdiff(mlMat, AllCells)
+% remove cells from mlMat that are not in AllCells
+k = setdiff(mlMat, AllCells); % returns cells in mlMat that are not in AllCells
 k = k(~isnan(k));
 
 [a1,a2,a3] = intersect(k,mlMat)
@@ -37,21 +37,24 @@ figure;
 cspy(mlConn,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
 hold on;
 blocks(1) =0;
+%blocks = [0, 43, 79, 85 207, 222, 244 ]
 for i = 1:length(mlSize)
     blocks(i+1) = blocks(i)+mlSize(i);
     line([0,size(mlConn,1)],[blocks(i+1),blocks(i+1)],'color','k');
     line([blocks(i+1),blocks(i+1)],[0,size(mlConn,1)],'color','k');
-    text(repmat(-50,1,1), blocks(i), sprintf('%s\\rightarrow',cell2mat(ml.Properties.VariableNames(i))), 'HorizontalAlignment','center', 'FontWeight','bold');
-    set(gca,'YTick',1:size(mlConn),'YTickLabel',AllCells(v),'XTick',1:size(mlConn),...
-        'XTickLabel',AllCells(v),'XTickLabelRotation',45,'XAxisLocation','top');
+    text(repmat(-50,1,1), blocks(i), sprintf('%s\n\\rightarrow',cell2mat(ml.Properties.VariableNames(i))), 'HorizontalAlignment','center','FontSize',8);
+    text(blocks(i),repmat(-10,1,1), sprintf('%s\n\\downarrow',cell2mat(ml.Properties.VariableNames(i))),'Rotation',20, 'HorizontalAlignment','left',  'FontSize',8);
+   % set(gca,'YTick',1:size(mlConn),'YTickLabel',AllCells(v),'XTick',1:size(mlConn),...
+   %    'XTickLabel',AllCells(v),'XTickLabelRotation',45,'XAxisLocation','top');
 end
 
+mlCellIDs = AllCells(v);
 
 % integrators and putative integrator
 
-nonCuratedCells =  setdiff(AllCells, mlOrdered);
-nonIntersectingCells = setdiff(1:size(AllCells,1),v);
-mlConnOrder = [v;nonIntersectingCells'];
+nonCuratedCellIDs =  setdiff(AllCells, mlOrdered);
+nonCuratedCellLoc = setdiff(1:size(AllCells,1),v);
+mlConnOrder = [v;nonCuratedCellLoc'];
 for i = 1:size(ConnMatrixPre,1)    
 mlConnAll(i,:) = ConnMatrixPre(mlConnOrder(i),mlConnOrder);
 end
@@ -59,6 +62,7 @@ end
 figure;
 cspy(mlConnAll,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
 hold on;
+%set(gca,'FontName','Arial','FontSize',20);
 set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells(mlConnOrder),'XTickLabelRotation',45,'XAxisLocation','top', ...
     'YTick',1:size(AllCells,1),'YTickLabel',AllCells(mlConnOrder),'YTickLabelRotation',45);
 line([0,size(ConnMatrixPre,1)],[size(v,1),size(v,1)],'color','k');
@@ -83,11 +87,18 @@ end
 [~,locIpsi] = intersect(AllCells, ipsiCells); % location of Ipsi cells in AllCells
 [~,locCont] = intersect(AllCells,contraCells);% location of Contrs cells in AllCells
 
+remainingIpsiCells = [];
+remainingContraCells=[];
 
-[a,b,c] = intersect(mlOrdered,ipsiCells,'stable'); % location of mlOrdered cell in Ipsi cells
-[~,d] = setdiff(ipsiCells,ipsiCells(c))
+for i = 1:size(nonCuratedCellIDs,1)
+if ismember(nonCuratedCellLoc(i),locIpsi)
+    remainingIpsiCells = [remainingIpsiCells,nonCuratedCellLoc(i)];
+else
+    remainingContraCells = [remainingContraCells,nonCuratedCellLoc(i)];
+end
+end
 
-ipsiContraOrder = [c;d;locCont];
+ipsiContraOrder = [v;remainingIpsiCells';remainingContraCells'];
 %ipsiContraOrder = [locIpsi;locCont];
 
 for i = 1:size(AllCells,1)
@@ -96,6 +107,9 @@ end
 
 figure;
 cspy(ipsiContraConn,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
+
+line([0,size(ConnMatrixPre,1)],[size(v,1),size(v,1)],'color','k');
+line([size(v,1),size(v,1)],[0,size(ConnMatrixPre,1)],'color','k');
 line([0,size(AllCells,1)],[size(locIpsi,1),size(locIpsi,1)],'color','k');
 line([size(locIpsi,1),size(locIpsi,1)],[0,size(AllCells,1)],'color','k');
 set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells(ipsiContraOrder),'XTickLabelRotation',45,'XAxisLocation','top', ...

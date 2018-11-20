@@ -6,7 +6,7 @@ if ismac
     df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
-    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/04122018.csv');
+    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
 end
 
 % Columns 1 through 8
