@@ -1,0 +1,120 @@
+addpath(genpath('../'));
+colors = cbrewer('qual', 'Set1', 10);
+startup;
+
+% DBX - red
+% ALX - blue
+% Barhl - green
+
+if ismac
+    addpath(genpath('/Users/admin/Documents/Scripts'));
+    df = readtable('/Users/admin/Documents/SynapseDetector/09202018.csv');
+else
+    addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
+    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
+end
+
+%load('FiringRates.mat');
+load('TAU.mat');
+load('STA.mat');
+load('AllCells.mat');
+Firing = A;
+
+DbxCells = [76182,76183,76185,76186,76188,76189,76191,76199,76200];
+OriginalCellOrderDBX = [8,9,10,11,21,12,15,2,3];
+DbxTimeConstants = TAU(OriginalCellOrderDBX);
+
+AlxCells = [76181,76201,76187,76184,76192,76197];
+OriginalCellOrderALX = [5,7,6,13,16,22];
+AlxTimeConstants = TAU(OriginalCellOrderALX);
+
+BarhlCells = [76198,76190,76193,76194,76195,76196];
+OriginalCellOrderBARHL = [1,14,17,18,19,20];
+BarhlTimeConstants = TAU(OriginalCellOrderBARHL);
+
+AllCellClasses = [DbxCells,AlxCells,BarhlCells];
+OriginalCellOrder =  [OriginalCellOrderDBX,OriginalCellOrderALX,riginalCellOrderBARHL];
+
+
+%%
+% DBX
+corrAndSizeDBX = [];
+for i = 1:length(DbxCells)
+    for j = 1:length(DbxCells)
+        if i == j
+            corrAndSizeDBX = [corrAndSizeDBX];
+        else
+            [preSynapticInputs1,preSynapticInputs1PSD] = SynapticPartners(DbxCells(i),1,df);
+            [preSynapticInputs2,preSynapticInputs2PSD] = SynapticPartners(DbxCells(j),1,df);
+            [commonInputs,loc1,loc2] = intersect(preSynapticInputs1, preSynapticInputs2);
+            psdSize1 = df.size(preSynapticInputs1PSD(loc1));
+            psdSize2 = df.size(preSynapticInputs2PSD(loc2));
+            corr = corrcoef(Firing(:,OriginalCellOrderDBX(i)), Firing(:,OriginalCellOrderDBX(j)));
+            corrAndSizeDBX = [corrAndSizeDBX; corr(1,2).*ones(size(psdSize1,1),1), psdSize1, psdSize2];
+            
+            clear {'preSynapticInputs1','preSynapticInputs1PSD', 'psdSize1','loc1'};
+            clear {'preSynapticInputs2', 'preSynapticInputs2PSD','psdSize2', 'loc2'};
+            clear commonInputs;
+        end
+    end
+end
+
+
+% ALX
+corrAndSizeALX = [];
+for i = 1:length(AlxCells)
+    for j = 1:length(AlxCells)
+        if i == j
+            corrAndSizeALX = [corrAndSizeALX];
+        else
+            [preSynapticInputs1,preSynapticInputs1PSD] = SynapticPartners(DbxCells(i),1,df);
+            [preSynapticInputs2,preSynapticInputs2PSD] = SynapticPartners(DbxCells(j),1,df);
+            [commonInputs,loc1,loc2] = intersect(preSynapticInputs1, preSynapticInputs2);
+            psdSize1 = df.size(preSynapticInputs1PSD(loc1));
+            psdSize2 = df.size(preSynapticInputs2PSD(loc2));
+            corr = corrcoef(Firing(:,OriginalCellOrderALX(i)), Firing(:,OriginalCellOrderALX(j)));
+            corrAndSizeALX = [corrAndSizeALX; corr(1,2).*ones(size(psdSize1,1),1), psdSize1, psdSize2];
+            
+            clear {'preSynapticInputs1','preSynapticInputs1PSD', 'psdSize1','loc1'};
+            clear {'preSynapticInputs2', 'preSynapticInputs2PSD','psdSize2', 'loc2'};
+            clear commonInputs;
+        end
+    end
+end
+
+%BARHL
+corrAndSizeBARHL = [];
+for i = 1:length(BarhlCells)
+    for j = 1:length(BarhlCells)
+        if i == j
+            corrAndSizeBARHL = [corrAndSizeBARHL];
+        else
+            [preSynapticInputs1,preSynapticInputs1PSD] = SynapticPartners(DbxCells(i),1,df);
+            [preSynapticInputs2,preSynapticInputs2PSD] = SynapticPartners(DbxCells(j),1,df);
+            [commonInputs,loc1,loc2] = intersect(preSynapticInputs1, preSynapticInputs2);
+            psdSize1 = df.size(preSynapticInputs1PSD(loc1));
+            psdSize2 = df.size(preSynapticInputs2PSD(loc2));
+            corr = corrcoef(Firing(:,OriginalCellOrderBARHL(i)), Firing(:,OriginalCellOrderBARHL(j)));
+            corrAndSizeBARHL = [corrAndSizeBARHL; corr(1,2).*ones(size(psdSize1,1),1), psdSize1, psdSize2];
+            
+            clear {'preSynapticInputs1','preSynapticInputs1PSD', 'psdSize1','loc1'};
+            clear {'preSynapticInputs2', 'preSynapticInputs2PSD','psdSize2', 'loc2'};
+            clear commonInputs;
+        end
+    end
+end
+
+
+subplot(4,4,5)
+scatter(corrAndSizeDBX(:,1), (corrAndSizeDBX(:,2)+corrAndSizeDBX(:,3)),20, 'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
+hold on;
+scatter(corrAndSizeALX(:,1), (corrAndSizeALX(:,2)+corrAndSizeALX(:,3)),20, 'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
+scatter(corrAndSizeBARHL(:,1), (corrAndSizeBARHL(:,2)+corrAndSizeBARHL(:,3)),20, 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
+set(gca,'XLim',[-0.3,1])
+xlabel('STA correlation');
+ylabel('PSD size (voxels)');
+axis square;
+showfit('linear','fitcolor','k');
+offsetAxes
+
+
