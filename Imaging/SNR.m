@@ -3,7 +3,7 @@ function A = SNR(H)
 %   The noise free ACF is estimated based on JTL Thong et.al. Scanning 2001.
 
 %im = imread(H);
-im = H;
+%im = H;
 im = im2double(im);
 [n,m] = size(im);
 

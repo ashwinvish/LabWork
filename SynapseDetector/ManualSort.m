@@ -1,6 +1,12 @@
 % Manual Sort List
-addpath(genpath('../')); 
-ml = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/ManualSortList-102218.csv');
+if ismac
+    addpath(genpath('../'));
+    ml = readtable('/Users/admin/Documents/SynapseDetector/ManualSortList-102218.csv');
+else
+    addpath(genpath('../'));
+    ml = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/ManualSortList-102218.csv');
+end
+
 mlMat = table2array(ml);
 load('IntConnMatrix.mat')
 load('IntPartners.mat')

@@ -127,9 +127,21 @@ for i = 1:length(AllCellClasses)
     end
 end
 
+%%
+
+subplot(4,4,1)
+histogram(corrAndSizeDBX(:,3:4),'FaceColor',colors(1,:),'NumBins',20,'EdgeColor','k','BinLimits',[0,10000]);
+hold on;
+histogram(corrAndSizeALX(:,3:4),'FaceColor',colors(2,:),'NumBins',20,'EdgeColor','k','BinLimits',[0,10000]);
+histogram(corrAndSizeBARHL(:,3:4),'FaceColor',colors(3,:),'NumBins',20,'EdgeColor','k','BinLimits',[0,10000]);
+xlabel('DBX PSD size');
+ylabel('count');
+box off;
+offsetAxes
+
 
 subplot(4,4,5)
-scatter( (corrAndSizeDBX(:,3)+corrAndSizeDBX(:,4)), corrAndSizeDBX(:,2), 20, 'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
+scatter( (corrAndSizeDBX(:,3)+corrAndSizeDBX(:,4)), corrAndSizeDBX(:,2), 15, 'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
 %showfit('linear','fitcolor',colors(1,:), 'Linestyle','--');
 set(gca,'YLim',[-0.3,1],'XLim', [min(corrAndSize(:,3)+corrAndSize(:,4)), max(corrAndSize(:,3)+corrAndSize(:,4))])
 ylabel('STA correlation');
@@ -138,7 +150,7 @@ axis square;
 offsetAxes
 
 subplot(4,4,6)
-scatter((corrAndSizeALX(:,3)+corrAndSizeALX(:,4)), corrAndSizeALX(:,2), 20, 'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
+scatter((corrAndSizeALX(:,3)+corrAndSizeALX(:,4)), corrAndSizeALX(:,2), 15, 'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
 set(gca,'YLim',[-0.3,1])
 xlabel('STA correlation');
 ylabel('PSD size (voxels)');
@@ -147,7 +159,7 @@ axis square;
 offsetAxes
 
 subplot(4,4,7)
-scatter((corrAndSizeBARHL(:,3)+corrAndSizeBARHL(:,4)), corrAndSizeBARHL(:,2), 20, 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
+scatter((corrAndSizeBARHL(:,3)+corrAndSizeBARHL(:,4)), corrAndSizeBARHL(:,2), 15, 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
 set(gca,'YLim',[-0.3,1])
 xlabel('STA correlation');
 ylabel('PSD size (voxels)');
@@ -157,7 +169,7 @@ offsetAxes
 
 
 subplot(4,4,9)
-scatter((corrAndSize(:,3)+corrAndSize(:,4)),corrAndSize(:,2) ,30, 'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
+scatter((corrAndSize(:,3)+corrAndSize(:,4)),corrAndSize(:,2) ,15, 'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
 set(gca,'YLim',[-0.3,1])
 xlabel('STA correlation');
 ylabel('PSD size (voxels)');

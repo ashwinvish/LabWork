@@ -2,10 +2,12 @@ clc;
 
 if ismac
     addpath(genpath('/Users/admin/Documents/Scripts'));
-    df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
+    df = readtable('/Users/admin/Documents/SynapseDetector/09202018.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
+    %ml = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/ManualSortList-102218.csv');
+
 end
 
 ABDr_CellIDs = [77648, 77710, 77300, 77705, 77305, 77301, 77709, 77672, 77302];
@@ -42,10 +44,6 @@ ABDIrOnly = setdiff(ABDIr_inputs,ABDIcommon);
 ABDIcOnly = setdiff(ABDIc_inputs,ABDIcommon);
 
 
-
-addpath(genpath('../')); 
-ml = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/ManualSortList-102218.csv');
-mlMat = table2array(ml);
 load('IntConnMatrix.mat')
 load('IntPartners.mat')
 load('AllCells.mat');
@@ -56,8 +54,29 @@ for i = 1:size(ABD_All,2)
    ABDmatrix(i,:) = ConnMatrixPre(tempID,:);
 end
 
+%% ABD common input analysis
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+commonInputsABDr = [];
+for i = 1:size(ABDr_CellIDs)
+    for j = 1:size(ABDr_CellIDs)
+         [pre1,pre1PSD] = SynapticPartners(ABDr_CellIDs(i),1,df);
+         [pre2,pre2PSD] = SynapticPartners(ABDr_CellIDs(j),1,df);  
+         [commonInputs,loc1,loc2] = intersect(pre1,pre2);
+         psdSize1 = df.size(pre1PSD(loc1));
+         psdSize2 = df.size(pre1PSD(loc2));    
+         commonInputsABDr = [commonInputsABDr; commonInputs,psdSize1,psdSize2];
+         clear commonInputs;
+         clear pre1
+         clear pre2
+         clear pre1PSD
+         clear pre2PSD
+    end
+end
+         
+         
+         
+
 
 
 

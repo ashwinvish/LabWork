@@ -20,5 +20,5 @@ function B=autocorr2d(H)
 % Divide by the size for normalization
 
 B=abs(fftshift(ifft2(fft2(H).*conj(fft2(H)))))./(n*m);
-figure, surf(B);
-shading interp;
+%figure, surf(B);
+%shading interp;
