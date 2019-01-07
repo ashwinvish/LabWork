@@ -1,4 +1,4 @@
-addpath(genpath('../'));
+%addpath(genpath('../'));
 colors = cbrewer('qual', 'Set1', 10);
 startup;
 
@@ -7,8 +7,8 @@ startup;
 % Barhl - green
 
 if ismac
-    addpath(genpath('/Users/admin/Documents/Scripts'));
-    df = readtable('/Users/admin/Documents/SynapseDetector/09202018.csv');
+    addpath(genpath('/Users/ashwin/Documents/LabWork'));
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/09202018.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
@@ -117,8 +117,8 @@ for i = 1:length(AllCellClasses)
             [commonInputs,loc1,loc2] = intersect(preSynapticInputs1, preSynapticInputs2);
             psdSize1 = df.size(preSynapticInputs1PSD(loc1));
             psdSize2 = df.size(preSynapticInputs2PSD(loc2));
-            corr = corrcoef(Firing(:,OriginalCellOrder(i)), Firing(:,OriginalCellOrder(j)));
-            corrAndSize = [corrAndSize; commonInputs, corr(1,2).*ones(size(commonInputs,1),1), psdSize1, psdSize2];
+            corr_func = corrcoef(Firing(:,OriginalCellOrder(i)), Firing(:,OriginalCellOrder(j)));
+            corrAndSize = [corrAndSize; commonInputs, corr_func(1,2).*ones(size(commonInputs,1),1), psdSize1, psdSize2];
             
             clear {'preSynapticInputs1','preSynapticInputs1PSD', 'psdSize1','loc1'};
             clear {'preSynapticInputs2', 'preSynapticInputs2PSD','psdSize2', 'loc2'};
@@ -152,8 +152,8 @@ offsetAxes
 subplot(4,4,6)
 scatter((corrAndSizeALX(:,3)+corrAndSizeALX(:,4)), corrAndSizeALX(:,2), 15, 'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
 set(gca,'YLim',[-0.3,1])
-xlabel('STA correlation');
-ylabel('PSD size (voxels)');
+ylabel('STA correlation');
+xlabel('PSD size (voxels)');
 axis square;
 %showfit('linear','fitcolor',colors(2,:), 'Linestyle','--');
 offsetAxes
@@ -161,8 +161,8 @@ offsetAxes
 subplot(4,4,7)
 scatter((corrAndSizeBARHL(:,3)+corrAndSizeBARHL(:,4)), corrAndSizeBARHL(:,2), 15, 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
 set(gca,'YLim',[-0.3,1])
-xlabel('STA correlation');
-ylabel('PSD size (voxels)');
+ylabel('STA correlation');
+xlabel('PSD size (voxels)');
 axis square;
 %showfit('linear','fitcolor',colors(3,:), 'Linestyle','--');
 offsetAxes
@@ -171,18 +171,14 @@ offsetAxes
 subplot(4,4,9)
 scatter((corrAndSize(:,3)+corrAndSize(:,4)),corrAndSize(:,2) ,15, 'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
 set(gca,'YLim',[-0.3,1])
-xlabel('STA correlation');
-ylabel('PSD size (voxels)');
+ylabel('STA correlation');
+xlabel('PSD size (voxels)');
 axis square;
 %showfit('linear','fitcolor',colors(4,:), 'Linestyle','--');
 offsetAxes
 
 
 %% Break up axon analysis by axon type
-
-for i = 1:size(corrAndSizeDBX,1)
-    
-
 
 for i = 1:size(CommonInputsDBX,2)
     [a,b,c] = intersect(mlOrdered,CommonInputsDBX{i});

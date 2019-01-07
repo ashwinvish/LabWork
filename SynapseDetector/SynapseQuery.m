@@ -2,8 +2,8 @@ clc;
 clear all;
 
 if ismac
-    addpath(genpath('/Users/admin/Documents/Scripts'));
-    df = readtable('/Users/admin/Documents/SynapseDetector/140318_134755_final.csv');
+    addpath(genpath('/Users/ashwin/Documents/LabWork'));
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/09202018.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
@@ -38,7 +38,7 @@ cellIDsAxon = {'Int1_4','Int1_5','Int1_6','Int1_7','Int2_6','Int2_9','Int3_5','I
 
 % load Trees from manual tracing
 if ismac
-    fname = 'Users/admin/Documents/Scripts/CurrBio/AVTraces-Exported-01122016-Chopped14';
+    fname = '/Users/ashwin/Documents/LabWork/CurrBio/AVTraces-Exported-01122016-Chopped14';
 else
     fname = '/usr/people/ashwinv/seungmount/research/Ashwin/Scripts/CurrBio/AVTraces-Exported-01122016-Chopped14';
 end
@@ -237,7 +237,7 @@ box off;
 
 subplot_tight(2,1,2,0.05);
 cspy(IntPreSynapseConn,'Colormap',parula(255),'Levels',255,'MarkerSize',40);
-set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells,'XTickLabelRotation',45,'XAxisLocation','top');
+set(gca,'XTick',1:size(AllCells,1),'XTickLabel',[],'XTickLabelRotation',45,'XAxisLocation','top');
 box on;
 %imagesc(IntPreSynapseConn);
 %colorcet('CBTL2');
