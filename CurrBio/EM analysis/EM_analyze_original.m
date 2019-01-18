@@ -73,7 +73,8 @@ tau(tau>100)=100;tau(tau<1)=1;
 STA=FLUOR(1).STA;
 SPT=FLUOR(1).ROI;
 close all;
-for i=2:2%length(SPT);
+A = [];
+for i=2:4%length(SPT);
     ROI=SPT(i);
     sta=STA(i).staf;stae=STA(i).staE;
     rsqs=SPT(i).rsqs;
@@ -123,7 +124,9 @@ for i=2:2%length(SPT);
         g=text(t(end)+10,a(end)+.05,num2str(j));
         xlim([1 t(end)+40])
         set(g,'color','r','fontsize',14,'fontweight','bold');
+        A = [A,a];
     end
+    
      KDsubplot(n+1,1,[1,1],0);
     plot(stae(:,1),'b','linewidth',2);
     xlim([0 t(end)+40]);
@@ -153,7 +156,10 @@ for i=2:2%length(SPT);
 %     set(gca,'visible','off');
 %     str=['timeseries',num2str(i)];
  %   print(gcf,'-depsc',[folder,str,'.eps'])
+ 
+ 
 end
+
 
 
 
