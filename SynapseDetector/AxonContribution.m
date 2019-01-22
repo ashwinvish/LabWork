@@ -1,5 +1,5 @@
 colors = cbrewer('qual','Paired',10);
-startup;
+startup
 
 % DBX - red
 % ALX - blue
