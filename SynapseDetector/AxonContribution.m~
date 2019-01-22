@@ -1,16 +1,14 @@
-colors = cbrewer('qual','Paired',10);
-startup;
+clear;
 
-% DBX - red
-% ALX - blue
-% Barhl - green
+colors = cbrewer('qual','Paired',10);
+startup
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/09202018.csv');
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/11252018.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
-    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
+    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
 end
 
 %load('FiringRates.mat');
@@ -24,86 +22,211 @@ DbxCells = [76182,76183,76185,76186,76188,76189,76191,76199,76200];
 OriginalCellOrderDBX = [8,9,10,11,21,12,15,2,3];
 DbxTimeConstants = TAU(OriginalCellOrderDBX);
 
-t = [-2:0.05:7];
+t = [-2:0.05:7]; % time period in sec
 
-Firing = STAall;
-FiringDbx = [Firing(:,OriginalCellOrderDBX) , DBX_vglut_neg/100 , DBX_vglut/100]; % divide by 100 to convert back from %
-DBXpop = [ DBX_vglut_neg/100 , DBX_vglut/100]; 
+Firing = [STAall(:,OriginalCellOrderDBX) , DBX_vglut_neg/100 , DBX_vglut/100]; % divide by 100 to convert back from %
+DBXpop = [DBX_vglut_neg/100 , DBX_vglut/100]; 
 CellOrder = [ones(1,size(DbxCells,2)), 2* ones(1,size(DBX_vglut_neg,2)), 3* ones(1,size(DBX_vglut,2))];
 
-% consider only the first 3 components of the trace
+% consider only the first 5 components of the trace
 [A,B,C,D,E,F] = pca(Firing);
-sprintf('first %d components capture %f of the data' ,5, sum(E(1:5)))
+sprintf('first %d components capture %f of the data',5, sum(E(1:5)))
 Firing = B(:,1:5)*A(:,1:5)'+ F;
+normFiring = Firing(:,1:9);
+%%  plot population data according to groups
+% 2 --> Vglut_negative; blue
+% 3 --> Vglut_positive; red
 
-%normFiring = Firing(:,1:22)./max(Firing(:,1:22));
-normFiring = Firing(:,1:22);
-
-%normFiring = normFiring - normFiring(1,:);
-%DBXpop = DBXpop - DBXpop(1,:);
-
+figure(1)
+subplot(4,4,1)
+shadedErrorBar(t,mean(Firing(:,CellOrder==2),2),std(Firing(:,CellOrder==2),[],2),'lineprops',{'b'});
+hold on ; 
+shadedErrorBar(t,mean(Firing(:,CellOrder==3),2),std(Firing(:,CellOrder==3),[],2),'lineprops',{'r'});
+axis square;
+title('Clusters from type');
 
 %% Coorelation analyis of the cells.
 
-CorrVals = corr(FiringDbx);
-[idx,c] = kmeans(FiringDbx',2,'Distance','correlation');
+CorrVals = corr(Firing);
+[idx,c] = kmeans(Firing',2,'Distance','correlation');
 corrIds = idx;
 [~,order]=sort(idx);
-figure(1);
-% subplot(4,4,1);
-% imagesc(CorrVals(order,order));
-% set(gca,'XTick',1:size(order,1),'XTickLabel',{CellOrder(order)},'YTick',1:size(order,1),'YTickLabel',{CellOrder(order)});
-% colorbar;
-% axis square;
-% title('Sorted by coorelations');
 
-if size(find(corrIds == 1),1) > size(find(corrIds == 2))
-    lead = 'r';
-    lag = 'b';
+leadColor = 'r';
+lagColor = 'b';
+
+figure(1);
+
+if trapz(mean(Firing(1:50,corrIds==1),2)) > trapz(mean(Firing(1:50,corrIds==2),2))
+    leadCorrIDs = find(corrIds==1);
+    lagCorrIDs = find(corrIds==2);
 else
-    lead = 'b'
-    lag = 'r'
+    leadCorrIDs = find(corrIds==2);
+    lagCorrIDs = find(corrIds==1);
 end
 
-subplot(4,4,1);
-shadedErrorBar(t,mean(FiringDbx(:,corrIds==1),2),std(FiringDbx(:,corrIds==1),[],2),'lineprops',{lead});
+subplot(4,4,5);
+imagesc(CorrVals(order,order));
+% set(gca,'XTick',1:size(order,1),'XTickLabel',{CellOrder(order)},'YTick',1:size(order,1),'YTickLabel',{CellOrder(order)});
+colorbar;
+axis square;
+% title('Sorted by coorelations');
+
+subplot(4,4,6);
+shadedErrorBar(t,mean(Firing(:,leadCorrIDs),2),std(Firing(:,leadCorrIDs),[],2),'lineprops',{leadColor});
 hold on;
-%plot(t,FiringDbx(:,find(corrIds==1)<9),'Color',[1,0,0,0.4], 'LineWidth',1);
-
-shadedErrorBar(t,mean(FiringDbx(:,corrIds==2),2),std(FiringDbx(:,corrIds==2),[],2),'lineprops',{lag});
-%plot(t,FiringDbx(:,find(corrIds==2)<9), 'Color',[0,0,1,0.4], 'LineWidth',1);
-
+plot(t,Firing(:,find(corrIds==1)<9),'Color',leadColor, 'LineWidth',0.5,'LineStyle','--');
+shadedErrorBar(t,mean(Firing(:,lagCorrIDs),2),std(Firing(:,lagCorrIDs),[],2),'lineprops',{lagColor});
+plot(t,Firing(:,find(corrIds==2)<9), 'Color',lagColor, 'LineWidth',0.5,'LineStyle','--');
 
 box off;
 set(gca, 'XLim',[-2,7]);
+axis square;
 title('Clusters from coorelation values');
 
+leadNeurons = DbxCells(leadCorrIDs(leadCorrIDs<10));
+lagNeurons  = DbxCells(lagCorrIDs(lagCorrIDs<10));
+
 % find our cells in the population
-subplot(4,4,2)
-histogram(CellOrder(corrIds == 2),'faceColor',lag)
-hold on ; histogram(CellOrder(corrIds == 1),'faceColor',lead)
+subplot(4,4,7)
+histogram(CellOrder(leadCorrIDs),'faceColor',leadColor)
+hold on ;
+histogram(CellOrder(lagCorrIDs),'faceColor',lagColor)
 box off;
+axis square;
 title('Type dist');
 
-%legend({'lag','lead'},'Location','bestoutside');
-%set(gca,'XTicks',{'recorded','vglut_neg','vglut'});
-
-
-subplot(4,4,3)
-shadedErrorBar(t,mean(FiringDbx(:,CellOrder==2),2),std(FiringDbx(:,CellOrder==2),[],2),'lineprops',{lag});
-hold on ; 
-shadedErrorBar(t,mean(FiringDbx(:,CellOrder==3),2),std(FiringDbx(:,CellOrder==3),[],2),'lineprops',{lead});
-title('Clusters from type');
-
-
 % randomized cells in each group
-subplot(4,4,4)
-randomPop1 = randperm(161,80);
-randomPop2 = 160-randomPop1;
-shadedErrorBar(t,mean(FiringDbx(:,randomPop1),2),std(FiringDbx(:,randomPop1),[],2),'lineprops',{lead});
+
+subplot(4,4,8)
+randomPop1 = randperm(160,80);
+randomPop2 = 161-randomPop1;
+shadedErrorBar(t,mean(Firing(:,randomPop1),2),std(Firing(:,randomPop1),[],2),'lineprops',{leadColor});
 hold on;
-shadedErrorBar(t,mean(FiringDbx(:,randomPop2),2),std(FiringDbx(:,randomPop2),[],2),'lineprops',{lag});
+shadedErrorBar(t,mean(Firing(:,randomPop2),2),std(Firing(:,randomPop2),[],2),'lineprops',{lagColor});
+axis square;
 title('Random clusters');
+
+%% Extract Lead and Lag neuron partners from coorelation analysis.
+
+% lead Neurons
+Lead.PreSynapses = [];
+Lead.PostSynapse = [];
+Lead.PSDIDs = [];
+Lead.PSDsize = [];
+Lead.SynapseCount = [];
+Lead.SynapseLocation = [];
+Lead.SynapseLocationTransfromed = [];
+
+for i = 1:numel(leadNeurons)
+    [A,B] = SynapticPartners(leadNeurons(i),1,df);
+    Lead(i).PreSynapses = A;
+    Lead(i).PostSynapse = leadNeurons(i);
+    Lead(i).PSDIDs = B;
+    Lead(i).PSDsize = df.size(B);
+    Lead(i).SynapseCount = histcounts(histcounts(Lead(i).PreSynapses, unique(Lead(i).PreSynapses)));
+    Lead(i).SynapseLocation = PrePartnerCoordinates(B,df);
+    Lead(i).SynapseLocationTransfromed = TransformPoints(Lead(i).SynapseLocation);
+    clear A;
+    clear B;
+end
+
+% lag neurons
+Lag.PreSynapses = [];
+Lag.PostSynapse = [];
+Lag.PSDIDs = [];
+Lag.PSDsize = [];
+Lag.SynapseCount = [];
+Lag.SynapseLocation = [];
+Lag.SynapseLocationTransfromed = [];
+
+for i = 1:numel(lagNeurons)
+    [A,B] = SynapticPartners(lagNeurons(i),1,df);
+    Lag(i).PreSynapses = A;
+    Lag(i).PostSynapse = lagNeurons(i);
+    Lag(i).PSDIDs = B;
+    Lag(i).PSDsize = df.size(B);
+    Lag(i).SynapseCount = histcounts(histcounts(Lag(i).PreSynapses,unique(Lag(i).PreSynapses)));
+    Lag(i).SynapseLocation = PrePartnerCoordinates(B,df);
+    Lag(i).SynapseLocationTransfromed = TransformPoints(Lag(i).SynapseLocation);
+    clear A;
+    clear B;
+end
+
+figure(2)
+
+subplot(4,4,1)
+
+histogram(vertcat(Lead.PSDsize)/sum(vertcat(Lead.PSDsize)),'FaceColor',leadColor,'EdgeColor','none');
+hold on;
+histogram(vertcat(Lag.PSDsize)/sum(vertcat(Lag.PSDsize)),'FaceColor',lagColor,'EdgeColor','none');
+box off;
+axis square;
+
+
+leadAxons = vertcat(Lead.PreSynapses);
+numberOfLeadAxons = numel(leadAxons);
+leadAxons = leadAxons(leadAxons<1e5);
+
+lagAxons = vertcat(Lag.PreSynapses);
+numberOfLagAxons = numel(lagAxons);
+lagAxons = lagAxons(lagAxons<1e5);
+
+subplot(4,4,2)
+histogram(histcounts(vertcat(Lead.PreSynapses),unique(vertcat(Lead.PreSynapses))),'FaceColor',leadColor,'EdgeColor','none');
+hold on;
+histogram(histcounts(vertcat(Lag.PreSynapses),unique(vertcat(Lag.PreSynapses))),'FaceColor',lagColor,'EdgeColor','none');
+box off;
+axis square;
+
+
+%% plot the axons on the Z-brain atlas
+figure(3);
+
+subplot(1,3,1)
+transform_swc_AV(unique(leadAxons)',colors(5,:),colors(6,:),[],false);
+subplot(1,3,2);
+transform_swc_AV(unique(lagAxons)',colors(1,:),colors(2,:),[],false);
+
+
+% plot the location of the synapses
+
+leadSynapseLocations = vertcat(Lead.SynapseLocationTransfromed);
+lagSynapseLocations = vertcat(Lag.SynapseLocationTransfromed);
+
+subplot(1,3,3);
+transform_swc_AV(leadNeurons,colors(5,:),colors(6,:),[],false);
+hold on;
+transform_swc_AV(lagNeurons,colors(1,:),colors(2,:),[],false);
+scatter3(leadSynapseLocations(:,1), leadSynapseLocations(:,2),leadSynapseLocations(:,3),...
+    8,'o','MarkerFaceColor',leadColor,'MarkerEdgeColor','none');
+hold on;
+scatter3(lagSynapseLocations(:,1), lagSynapseLocations(:,2),lagSynapseLocations(:,3),...
+    8,'o','MarkerFaceColor',lagColor,'MarkerEdgeColor','none');
+daspect([1,1,1]);
+set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
+set(gca,'ZLim',[0 276],'XLim',[0 495.558], 'YLim',[0 1121.988]);
+%% Extract lead/lag axons identity
+
+for i =1:numel(leadNeurons)
+    for j = 1:numel(Lead(i).PreSynapses)
+        l = isSaccade(Lead(i).PreSynapses(j));
+        Lead(i).isSaccade(1,j) = l;
+    end
+end
+
+leadSaccade = leadSaccade(find(leadSaccade==1),2);
+
+
+lagSaccade = zeros(numel(lagAxons),2);
+for i = 1:numel(lagAxons)
+    l = isSaccade(lagAxons(i));
+    lagSaccade(i,:) = [l,lagAxons(i)];
+end
+lagSaccade = lagSaccade(find(lagSaccade==1),2);
+
+
+
 
 %%
 
@@ -398,4 +521,3 @@ figure(2);
 shadedErrorBar(t, mean(meanCluster1),std(meanCluster1),{'g','lineStyle','--'},0.2);
 hold on;
 shadedErrorBar(t, mean(meanCluster2),std(meanCluster2),{'c', 'lineStyle','--'},0.2)
-
