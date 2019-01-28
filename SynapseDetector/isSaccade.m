@@ -1,4 +1,5 @@
-function [ logic , type] =  isSaccade(cellID)
+function [ logic ] =  isSaccade(cellID)
+
 % Check is the cell in cellID is a saccadic cell
 % logic = 1 if saccadic cell
 % logic = 0 if not a saccadic cell
@@ -14,33 +15,13 @@ bushySaccadic = [76618 76625 76627 77132 77162 77163 77329 77434 77447 77460 ...
 
 putativeBushySaccadic = [77342 77352 77336 77354 77373 78346 77433 77435 77453 77461 ];
 
-lateralDSaccadic = [76629 76667 80185 76691 76692 77357 77389 77689 77806 77816 78601 77667 77684  ];
+lateralDSaccadic = [76629 76667 80185 76691 76692 77357 77389 77689 77806 77816 78601 77667 77684 ];
 
 lateralVSaccadic = [80163 80167 80177 80179 76688 80204 80206 80210 76682 ];
 
-unknownSaccadic = [78391 78434 78438 78440 78447 78448 78450 78540 78583 78649 79017 76878 77450 77670 77683 79045 ];
+unknownSaccadic = [78391 78434 78438 78440 78447 78448 78450 78540 78583 78649 79017 76878 77450 77670 77683 79045 80217 80746 80679 ];
 
-if ismember(cellID,sparseSaccadic)
-    logic = 1;
-    type = char('sparseSaccadic');
-    
-elseif ismember(cellID,bushySaccadic);
-    logic = 1;
-    type = char('bushySaccadic');
-elseif ismember(cellID,putativeBushySaccadic)
-    logic = 1;
-    type = char('putativeBushySaccadic');
-elseif ismember(cellID, lateralDSaccadic);
-    logic= 1;
-    type = char('lateralDSaccadic');
-elseif ismember(cellID, lateralVSaccadic);
-    logic = 1;
-    type = char('lateralVSaccadic');
-elseif ismember(cellID, unknownSaccadic)
-    logic = 1;
-    type = char('unknownSaccadic');
-else
-    logic = 0;
-end
+[logic] = ismember(cellID, [sparseSaccadic,bushySaccadic,putativeBushySaccadic,lateralDSaccadic,lateralVSaccadic,unknownSaccadic]);
+
 
 end
