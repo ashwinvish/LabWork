@@ -46,11 +46,11 @@ function varargout = load_tree (tname, options)
 % trees : contains the tree structures in the trees package
 global trees
 
-if (nargin<1)||isempty(tname),
+if (nargin<1)||isempty(tname)
      [tname path] = uigetfile ({'*.mtr;*swc;*.neu', ...
          'TREES formats (TREES *.mtr or *.swc or *.neu)'}, ...
         'Pick a file', 'multiselect', 'off');
-    if tname == 0,
+    if tname == 0
         varargout {1} = []; varargout {2} = []; varargout {3} = [];
         return
     end
@@ -63,16 +63,16 @@ nstart = unique ([0 strfind(tname, '/') strfind(tname, '\')]);
 name   = tname  (nstart (end) + 1 : end - 4);
 
 if (nargin<2)||isempty(options)
-    if strcmp (format, 'swc') || strcmp (format, 'neu'),
+    if strcmp (format, 'swc') || strcmp (format, 'neu')
         options = '-r';
     else
         options = '';
     end
 end
 
-switch format,
+switch format
     case '.neu'
-        if ~exist ([path tname], 'file'),
+        if ~exist ([path tname], 'file')
             error ('.neu file nonexistent...');
         end
         neufid = fopen ([path tname], 'r');
@@ -82,7 +82,7 @@ switch format,
         a = textscan (neufid, '%s %n %s %n %n', nsec {1});
         a1 = a {1}; a2 = a {3}; a3 = a {5};
         c0 = a {2}; c1 = a {4};
-        if sum (c0 ~= 0),
+        if sum (c0 ~= 0)
             error ('sorry!! I assume that each new branch is attached at 0 end');
         end
         textscan (neufid, '%s', 3);
@@ -94,8 +94,8 @@ switch format,
         nsec = length (a1);
         % search parent compartment to each compartment
         d = zeros (nsec, 1);
-        for ward = 1 : nsec,
-            if strcmp (a1, a2 (ward)) == 0,
+        for ward = 1 : nsec;
+            if strcmp (a1, a2 (ward)) == 0
                 d (ward) = 0; % root
             else
                 d (ward) = find (strcmp (a1, a2 (ward)));
@@ -103,19 +103,19 @@ switch format,
         end
         % allow region vectors
         strings = cell (1, nsec);
-        for ward = 1 : nsec,
+        for ward = 1 : nsec;
             sa   = char (a1 (ward));
             insa = findstr (sa, '[');
-            if ~isempty (insa),
+            if ~isempty (insa);
                 sa = [sa(1 : insa - 1) '[]'];
             end
             strings {ward}= char (sa);
         end
         [rnames i1 i2] = unique (strings); % assign region numbers and names
         R = [];
-        for ward = 1 : length (a3),
+        for ward = 1 : length (a3)
             R = [R; ones(a3 (ward), 1).*i2(ward)];
-        end;
+        end
         as    = sum (a3); % total number of nodes
         a4    = [0; cumsum(a3)]; % cumulative sum of nodes for each branch
         a5    = [0; 1; cumsum(a3)+1];
@@ -129,12 +129,12 @@ switch format,
         swc = [(1 : as)', R, geo, parid];
         % tree from swc|(see below) except that it can be more than one tree
         treelimits = [find(swc (:, 7) == -1); size(swc, 1)+1];
-        if length (treelimits) > 2,
+        if length (treelimits) > 2
             tree = cell (1, 1);
-            for ward = 1 : length (treelimits) - 1,
+            for ward = 1 : length (treelimits) - 1
                 N  = treelimits (ward + 1) - treelimits (ward);
                 dA = sparse (N, N);
-                for te = 2 : N;
+                for te = 2 : N
                     dA (te, parid (te + treelimits (ward) - 1) - treelimits (ward) + 1) = 1;
                 end
                 tree {ward}.dA = dA;
@@ -150,7 +150,7 @@ switch format,
         else
             N = size (swc, 1);
             dA = sparse (N, N);
-            for ward = 2 : N;
+            for ward = 2 : N
                 dA (ward, parid (ward)) = 1;
             end
             tree.dA = dA;
@@ -162,26 +162,26 @@ switch format,
             tree.rnames = rnames;
         end
     case '.swc' % this is then swc
-        if ~exist ([path tname], 'file'),
+        if ~exist ([path tname], 'file')
             error ('no such file...');
         end
         A = textread ([path tname], '%s', 'delimiter', '\n');
         swc = [];
-        for ward = 1 : length (A),
-            if ~isempty (A {ward}), % allow empty lines in between
+        for ward = 1 : length (A)
+            if ~isempty (A {ward}) % allow empty lines in between
                 if ~strcmp (A {ward} (1), '#') % allow comments: lines starting with #
                     swc = [swc; str2num(A {ward})];
                 end
             end
         end
         N       = size (swc, 1);
-        if sum (swc (:, 1) ~= (1 : N)'),   % check index in first column
+        if sum (swc (:, 1) ~= (1 : N)')   % check index in first column
             error ('index needs to be 1 .. n');
         end
         idpar   = swc (:, 7); % vector containing index to direct parent
         dA      = sparse (N, N);
-        for ward = 2 : N;
-             ward
+        for ward = 2 : N
+             ward;
             dA (ward, idpar (ward)) = 1;
            
         end
@@ -202,11 +202,11 @@ switch format,
         varargout {2} = tname; varargout {3} = path; return
 end
 
-if strfind (options, '-r'),
-    if iscell (tree),
-        for ward = 1 : length (tree),
-            if iscell (tree {ward}),
-                for te = 1 : length (tree {ward}),
+if strfind (options, '-r')
+    if iscell (tree)
+        for ward = 1 : length (tree)
+            if iscell (tree {ward})
+                for te = 1 : length (tree {ward})
                     tree{ward}{te} = repair_tree (tree{ward}{te});
                 end
             else

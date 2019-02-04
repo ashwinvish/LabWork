@@ -56,7 +56,9 @@ if (nargin < 2)||isempty(tname),
         return
     end
 else
-    path = '';
+    %path = '';
+    [path,tname,ext] = fileparts(tname); % added by AV
+    tname = strcat(tname,ext);% added by AV
 end
 % extract a sensible name from the filename string:
 nstart = unique ([0 strfind(tname, '/') strfind(tname, '\')]);
@@ -76,7 +78,8 @@ idpar0 (idpar0 == 0) = -1;
 
 % then it is trivial:
 swc = [(1 : N)' R tree.X tree.Y tree.Z tree.D/2 idpar0];
-swcfile = fopen([path tname],'w'); % open file
+%swcfile = fopen([path tname],'w'); % open file 
+swcfile = fopen(fullfile(path, tname),'w'); % added by AV
 fwrite  (swcfile, ['# TREES toolbox tree - ' name,   char(13), char(10)],'char');
 fwrite  (swcfile, ['# written by an automatic procedure "swc_tree" part of the TREES package', char(13), char(10)], 'char');
 fwrite  (swcfile, ['# in MATLAB',                    char(13), char(10)], 'char');
