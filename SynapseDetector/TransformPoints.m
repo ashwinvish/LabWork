@@ -1,4 +1,4 @@
-function [pointCloudPost] =  TransformPoints(pointCloudPre)
+function [pointCloudPost] =  TransformPoints(pointCloudPre,mipLevel)
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
@@ -8,6 +8,8 @@ else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     fname =  '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/SWC_all/consensus-20180920/swc/'
 end
+
+if mipLevel == 0
     coord = pointCloudPre;
     
     % multiply with mip0 resolution to get to nm space
@@ -56,6 +58,54 @@ end
     % transfromation matrix that was loaded above.
     
     pointCloudPost = transformPointsForward(tformRough, coord);
-   
+    
+    
+elseif mipLevel ==4
+        
+     coord = pointCloudPre ;
+    
+    % compute offset as data in NG is offset from origin
+    offset = [920,752,16400] .* [80, 80, 45]; % offset at mip4 number can be obtained from NG .info file
+ 
+    
+    coord(:,1) = coord(:,1) - offset(1);
+    coord(:,2) = coord(:,2) - offset(2);
+    coord(:,3) = coord(:,3) - offset(3);
+    
+    % adjust voxel size to LM space
+    %voxel --> micron
+    
+    coord = coord ./ 1000;
+    coord(:,1) = coord(:,1)/0.798;
+    coord(:,2) = coord(:,2)/0.798;
+    coord(:,3) = coord(:,3)/2;
+    
+    % rotation NG data is 90 to the righ as compared to the z-brain atlas
+    % Create rotation matrix
+    theta = pi/2; % to rotate 90 counterclockwise
+    R = [cos(theta) -sin(theta) 0 0; sin(theta) cos(theta) 0 0; ...
+        0 0 1 0; 0 0 0 1];
+    rotateTForm = affine3d(R);
+    coord = transformPointsForward(rotateTForm, coord);
+    
+    % translate the image after it is rotate to compensate for the rotation
+    % about the top left corner
+    coord(:,2) = coord(:,2) + 436;
+    
+    % perform transformation
+    load('tformRough-LowEMtoHighEM-set2.mat')
+    
+    % transform from voxels to microns
+    coord(:,1) = coord(:,1) * 0.798 ;
+    coord(:,2) = coord(:,2) * 0.798 ;
+    coord(:,3) = coord(:,3) * 2 ;
+    
+    % transform from NG space to Atlas space using a precomputed
+    % transfromation matrix.
+    
+    pointCloudPost = transformPointsForward(tformRough, coord);
+    end
 end
+        
+  
 
