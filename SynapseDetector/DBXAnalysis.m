@@ -9,7 +9,7 @@ startup;
 
 if ismac
     addpath(genpath('/Users/admin/Documents/Scripts'));
-    df = readtable('/Users/admin/Documents/SynapseDetector/09202018.csv');
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/09202018.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');

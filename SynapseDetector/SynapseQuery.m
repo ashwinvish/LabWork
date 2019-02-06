@@ -1,12 +1,12 @@
-clc;
-clear all;
+%clc;
+%clear all;
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/09202018.csv');
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/11252018.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
-    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/09202018.csv');
+    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
 end
 
 % Columns 1 through 8

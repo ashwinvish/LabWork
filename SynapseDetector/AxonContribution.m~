@@ -1,7 +1,7 @@
 clear;
 addpath(genpath('/Users/ashwin/Documents/'));
 
-colors = cbrewer('qual','Dark2',10);
+colors = cbrewer('qual','Set1',10);
 startup
 
 if ismac
@@ -49,7 +49,6 @@ axis square;
 title('Clusters from type');
 
 %% Coorelation analyis of the cells.
-
 CorrVals = corr(Firing);
 [idx,c] = kmeans(Firing',2,'Distance','correlation');
 corrIds = idx;
@@ -135,7 +134,7 @@ for i = 1:numel(leadNeurons)
     Lead(i).PSDsize = df.size(B);
     Lead(i).SynapseCount = histcounts(histcounts(Lead(i).PreSynapses, unique(Lead(i).PreSynapses)));
     Lead(i).SynapseLocation = PrePartnerCoordinates(B,df);
-    Lead(i).SynapseLocationTransfromed = TransformPoints(Lead(i).SynapseLocation);
+    Lead(i).SynapseLocationTransfromed = TransformPoints(Lead(i).SynapseLocation,0);
     clear A;
     clear B;
 end
@@ -157,7 +156,7 @@ for i = 1:numel(lagNeurons)
     Lag(i).PSDsize = df.size(B);
     Lag(i).SynapseCount = histcounts(histcounts(Lag(i).PreSynapses,unique(Lag(i).PreSynapses)));
     Lag(i).SynapseLocation = PrePartnerCoordinates(B,df);
-    Lag(i).SynapseLocationTransfromed = TransformPoints(Lag(i).SynapseLocation);
+    Lag(i).SynapseLocationTransfromed = TransformPoints(Lag(i).SynapseLocation,0);
     clear A;
     clear B;
 end
@@ -238,23 +237,6 @@ end
 % axis square;
 % title('Saccadic synapses');
 
-subplot(4,4,3)
-plot([1,2,3,4,5],[size(vertcat(Lead.Vestibular),1),size(vertcat(Lead.Integrator),1),size(vertcat(Lead.Saccade),1), ...
-    size(vertcat(Lead.Contra),1), size(vertcat(Lead.Saccade),1)],'-ro');
-hold on;
-plot([1,2,3,4,5],[size(vertcat(Lag.Saccade),1),size(vertcat(Lag.Contra),1),size(vertcat(Lag.Vestibular),1), ...
-    size(vertcat(Lag.Integrator),1),size(vertcat(Lag.Saccade),1) ],'-bo');
-box off;
-axis square;
-xticks([1,2,3,4,5]);
-xticklabels({'Saccadic','Contra','Vestibular','Integrator','Remaining'});
-xtickangle(45);
-ylabel('Synapses');
-
-
-
-
-
 
 
 
@@ -293,6 +275,21 @@ for i = 1:numel(lagNeurons)
    Lag(i).EverythingElseMotorDist = Lag(i).MotorDist(ismember(Lag(i).PreSynapses,Lag(i).EverythingElse),:);
 
 end
+
+subplot(4,4,3)
+plot([1,2,3,4,5],[size(vertcat(Lead.Vestibular),1),size(vertcat(Lead.Integrator),1),size(vertcat(Lead.Saccade),1), ...
+    size(vertcat(Lead.Contra),1), size(vertcat(Lead.EverythingElse),1)],'-ro');
+hold on;
+plot([1,2,3,4,5],[size(vertcat(Lag.Vestibular),1), size(vertcat(Lag.Integrator),1),size(vertcat(Lag.Saccade),1), ...
+    size(vertcat(Lag.Contra),1),size(vertcat(Lag.EverythingElse),1)],'-bo');
+box off;
+axis square;
+xticks([1,2,3,4,5]);
+xticklabels({'Vestibular','Integrator','Saccadic','Contra','Remaining'});
+xtickangle(45);
+ylabel('Synapses');
+
+
 
 
  allSaccade = sort([vertcat(Lead.Saccade); vertcat(Lag.Saccade)]);

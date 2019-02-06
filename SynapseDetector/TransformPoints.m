@@ -13,9 +13,9 @@ if mipLevel == 0
     coord = pointCloudPre;
     
     % multiply with mip0 resolution to get to nm space
-    coord = coord .* [5,5,45]; 
+    coord = coord .* [5,5,45];
     
-     % convert the mip0 offset to nm space
+    % convert the mip0 offset to nm space
     offset = [14720, 12032, 16400] .* [5,5,45]; % offset can be obtained from NG .info file.
     
     % subtract offset to line up with origin
@@ -42,7 +42,7 @@ if mipLevel == 0
     coord = transformPointsForward(rotateTForm, coord);
     
     % following rotation a translation needs to be applied to bring back to
-    % origin. 
+    % origin.
     
     coord(:,2) = coord(:,2) + 436;
     
@@ -61,12 +61,12 @@ if mipLevel == 0
     
     
 elseif mipLevel ==4
-        
-     coord = pointCloudPre ;
+    
+    coord = pointCloudPre ;
     
     % compute offset as data in NG is offset from origin
     offset = [920,752,16400] .* [80, 80, 45]; % offset at mip4 number can be obtained from NG .info file
- 
+    
     
     coord(:,1) = coord(:,1) - offset(1);
     coord(:,2) = coord(:,2) - offset(2);
@@ -104,8 +104,8 @@ elseif mipLevel ==4
     % transfromation matrix.
     
     pointCloudPost = transformPointsForward(tformRough, coord);
-    end
 end
-        
-  
+end
+
+
 

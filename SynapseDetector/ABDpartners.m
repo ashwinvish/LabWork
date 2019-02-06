@@ -198,49 +198,11 @@ for i = 1:numel(ABDr_CellIDs)
     ABDrEverythingElseCoords = [ABDrEverythingElseCoords;TransformPoints(ABDr(i).PreSynCoords(ABDr(i).isEverythingElse,:),0)-ABDr(i).Origin];
 end
 
-% figure(2);
-% subplot(4,2,1)
-% scatter3(ABDrSaccadicCoords(:,1), ABDrSaccadicCoords(:,2), ABDrSaccadicCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
-% hold on;
-% scatter3(ABDrVestibularCoords(:,1), ABDrVestibularCoords(:,2), ABDrVestibularCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
-% scatter3(ABDrContraCoords(:,1), ABDrContraCoords(:,2), ABDrContraCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
-% scatter3(ABDrIntegratorCoords(:,1), ABDrIntegratorCoords(:,2), ABDrIntegratorCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-% scatter3(ABDrEverythingElseCoords(:,1), ABDrEverythingElseCoords(:,2), ABDrEverythingElseCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
-% 
-% daspect([1,1,1]);
-% view(2)
-% set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
-% set(gca,'ZLim',[0 276],'XLim',[0 495.558], 'YLim',[0 1121.988]); % numbers are from transfrom_swc.m\
-
-subplot(4,2,2)
-h1=histfit(ABDrSaccadicCoords(:,1),50,'kernel')
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(1,:);
-hold on;
-h1=histfit(ABDrVestibularCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(2,:);
-h1=histfit(ABDrContraCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(3,:);
-h1=histfit(ABDrIntegratorCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(4,:);
-h1=histfit(ABDrEverythingElseCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(5,:);
-
-box off;
+ABDrSaccadicEucDist = (pdist2(zeros(size(ABDrSaccadicCoords,1),3),ABDrSaccadicCoords));
+ABDrVestibularEucDist = (pdist2(zeros(size(ABDrVestibularCoords,1),3),ABDrVestibularCoords));
+ABDrContraEucDist = (pdist2(zeros(size(ABDrContraCoords,1),3),ABDrContraCoords));
+ABDrIntegratorEucDist = (pdist2(zeros(size(ABDrIntegratorCoords,1),3),ABDrIntegratorCoords));
+ABDrEverytingElseEucDist = (pdist2(zeros(size(ABDrEverythingElseCoords,1),3),ABDrEverythingElseCoords));
 
 % ABDc
 
@@ -258,50 +220,12 @@ for i = 1:numel(ABDc_CellIDs)
     ABDcEverythingElseCoords = [ABDcEverythingElseCoords;TransformPoints(ABDc(i).PreSynCoords(ABDc(i).isEverythingElse,:),0)-ABDc(i).Origin];
 end
 
+ABDcSaccadicEucDist = (pdist2(zeros(size(ABDcSaccadicCoords,1),3),ABDcSaccadicCoords));
+ABDcVestibularEucDist = (pdist2(zeros(size(ABDcVestibularCoords,1),3),ABDcVestibularCoords));
+ABDcContraEucDist = (pdist2(zeros(size(ABDcContraCoords,1),3),ABDcContraCoords));
+ABDcIntegratorEucDist = (pdist2(zeros(size(ABDcIntegratorCoords,1),3),ABDcIntegratorCoords));
+ABDcEverytingElseEucDist = (pdist2(zeros(size(ABDcEverythingElseCoords,1),3),ABDcEverythingElseCoords));
 
-% subplot(4,2,3)
-% scatter3(ABDcSaccadicCoords(:,1), ABDcSaccadicCoords(:,2), ABDcSaccadicCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
-% hold on;
-% scatter3(ABDcVestibularCoords(:,1), ABDcVestibularCoords(:,2), ABDcVestibularCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
-% scatter3(ABDcContraCoords(:,1), ABDcContraCoords(:,2), ABDcContraCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
-% scatter3(ABDcIntegratorCoords(:,1), ABDcIntegratorCoords(:,2), ABDcIntegratorCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-% scatter3(ABDcEverythingElseCoords(:,1), ABDcEverythingElseCoords(:,2), ABDcEverythingElseCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
-% 
-% 
-% daspect([1,1,1]);
-% view(2)
-% set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
-% set(gca,'ZLim',[0 276],'XLim',[0 495.558], 'YLim',[0 1121.988]); % numbers are from transfrom_swc.m\
-
-subplot(4,2,4)
-h1=histfit(ABDcSaccadicCoords(:,1),50,'kernel')
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(1,:);
-hold on;
-h1=histfit(ABDcVestibularCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(2,:);
-h1=histfit(ABDcContraCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(3,:);
-h1=histfit(ABDcIntegratorCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(4,:);
-h1=histfit(ABDcEverythingElseCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(5,:);
-
-box off;
 
 % ABDIr
 
@@ -319,53 +243,11 @@ for i = 1:numel(ABDIr_CellIDs)
     ABDIrEverythingElseCoords  = [ABDIrEverythingElseCoords;TransformPoints(ABDIr(i).PreSynCoords(ABDIr(i).isEverythingElse,:),0)-ABDIr(i).Origin];      
 end
 
-% 
-% figure(2);
-% subplot(4,2,5)
-% scatter3(ABDIrSaccadicCoords(:,1), ABDIrSaccadicCoords(:,2), ABDIrSaccadicCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
-% hold on;
-% scatter3(ABDIrVestibularCoords(:,1), ABDIrVestibularCoords(:,2), ABDIrVestibularCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
-% scatter3(ABDIrContraCoords(:,1), ABDIrContraCoords(:,2), ABDIrContraCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
-% scatter3(ABDIrIntegratorCoords(:,1), ABDIrIntegratorCoords(:,2), ABDIrIntegratorCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-% scatter3(ABDIrIntegratorCoords(:,1), ABDIrIntegratorCoords(:,2), ABDIrIntegratorCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-% scatter3(ABDIrEverythingElseCoords(:,1), ABDIrEverythingElseCoords(:,2), ABDIrEverythingElseCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
-% 
-% daspect([1,1,1]);
-% view(2)
-% set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
-% set(gca,'ZLim',[0 276],'XLim',[0 495.558], 'YLim',[0 1121.988]); % numbers are from transfrom_swc.m\
-
-subplot(4,2,6)
-h1=histfit(ABDIrSaccadicCoords(:,1),50,'kernel')
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(1,:);
-hold on;
-h1=histfit(ABDIrVestibularCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(2,:);
-h1=histfit(ABDIrContraCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(3,:);
-h1=histfit(ABDIrIntegratorCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(4,:);
-h1=histfit(ABDIrEverythingElseCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(5,:);
-
-box off;
-
+ABDIrSaccadicEucDist = (pdist2(zeros(size(ABDIrSaccadicCoords,1),3),ABDIrSaccadicCoords));
+ABDIrVestibularEucDist = (pdist2(zeros(size(ABDIrVestibularCoords,1),3),ABDIrVestibularCoords));
+ABDIrContraEucDist = (pdist2(zeros(size(ABDIrContraCoords,1),3),ABDIrContraCoords));
+ABDIrIntegratorEucDist = (pdist2(zeros(size(ABDIrIntegratorCoords,1),3),ABDIrIntegratorCoords));
+ABDIrEverytingElseEucDist = (pdist2(zeros(size(ABDIrEverythingElseCoords,1),3),ABDIrEverythingElseCoords));
 
 
 % ABDIc
@@ -386,48 +268,141 @@ for i = 1:numel(ABDIc_CellIDs)
 
 end
 
-% figure(2);
-% subplot(4,2,7)
-% scatter3(ABDIcSaccadicCoords(:,1), ABDIcSaccadicCoords(:,2), ABDIcSaccadicCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
-% hold on;
-% scatter3(ABDIcVestibularCoords(:,1), ABDIcVestibularCoords(:,2), ABDIcVestibularCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
-% scatter3(ABDIcContraCoords(:,1), ABDIcContraCoords(:,2), ABDIcContraCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
-% scatter3(ABDIcIntegratorCoords(:,1), ABDIcIntegratorCoords(:,2), ABDIcIntegratorCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-% scatter3(ABDIcEverythingElseCoords(:,1), ABDIcEverythingElseCoords(:,2), ABDIcEverythingElseCoords(:,3),5, ...
-%     'Marker','o','MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
-% 
-% daspect([1,1,1]);
-% view(2)
-% set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
-% set(gca,'ZLim',[0 276],'XLim',[0 495.558], 'YLim',[0 1121.988]); % numbers are from transfrom_swc.m\
+ABDIcSaccadicEucDist = (pdist2(zeros(size(ABDIcSaccadicCoords,1),3),ABDIcSaccadicCoords));
+ABDIcVestibularEucDist = (pdist2(zeros(size(ABDIcVestibularCoords,1),3),ABDIcVestibularCoords));
+ABDIcContraEucDist = (pdist2(zeros(size(ABDIcContraCoords,1),3),ABDIcContraCoords));
+ABDIcIntegratorEucDist = (pdist2(zeros(size(ABDIcIntegratorCoords,1),3),ABDIcIntegratorCoords));
+ABDIcEverytingElseEucDist = (pdist2(zeros(size(ABDIcEverythingElseCoords,1),3),ABDIcEverythingElseCoords));
 
-subplot(4,2,8)
-h1=histfit(ABDIcSaccadicCoords(:,1),50,'kernel')
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(1,:);
-hold on;
-h1=histfit(ABDIcVestibularCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(2,:);
-h1=histfit(ABDIcContraCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(3,:);
-h1=histfit(ABDIcIntegratorCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(4,:);
-h1=histfit(ABDIcEverythingElseCoords(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(5,:);
+% plot distributions of everything
 
+subplot(4,5,1)
+h1 = histogram(ABDrSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(1,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,6)
+h1 = histogram(ABDcSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(1,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,11)
+h1 = histogram(ABDIrSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(1,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,16)
+h1 = histogram(ABDIcSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(1,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+
+
+subplot(4,5,2)
+h1=histogram(ABDrVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(2,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,7)
+h1=histogram(ABDcVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(2,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,12)
+h1=histogram(ABDIrVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(2,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,17)
+h1=histogram(ABDIcVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(2,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+
+
+subplot(4,5,3)
+h1=histogram(ABDrIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(4,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,8)
+h1=histogram(ABDcIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(4,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,13)
+h1=histogram(ABDIrIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(4,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,18)
+h1=histogram(ABDIcIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(4,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+
+
+subplot(4,5,4)
+h1=histogram(ABDrContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(3,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,9)
+h1=histogram(ABDcContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(3,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,14)
+h1=histogram(ABDIrContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(3,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,19)
+h1=histogram(ABDIcContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(3,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+
+
+subplot(4,5,5)
+h1=histogram(ABDrEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(5,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,10)
+h1=histogram(ABDcEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(5,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,15)
+h1=histogram(ABDIrEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(5,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
+box off;
+subplot(4,5,20)
+h1=histogram(ABDIcEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(5,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,60]);
 box off;
 
 

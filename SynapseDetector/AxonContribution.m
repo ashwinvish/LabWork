@@ -1,7 +1,7 @@
 clear;
 addpath(genpath('/Users/ashwin/Documents/'));
 
-colors = cbrewer('qual','Dark2',10);
+colors = cbrewer('qual','Set1',10);
 startup
 
 if ismac
@@ -134,7 +134,7 @@ for i = 1:numel(leadNeurons)
     Lead(i).PSDsize = df.size(B);
     Lead(i).SynapseCount = histcounts(histcounts(Lead(i).PreSynapses, unique(Lead(i).PreSynapses)));
     Lead(i).SynapseLocation = PrePartnerCoordinates(B,df);
-    Lead(i).SynapseLocationTransfromed = TransformPoints(Lead(i).SynapseLocation);
+    Lead(i).SynapseLocationTransfromed = TransformPoints(Lead(i).SynapseLocation,0);
     clear A;
     clear B;
 end
@@ -156,7 +156,7 @@ for i = 1:numel(lagNeurons)
     Lag(i).PSDsize = df.size(B);
     Lag(i).SynapseCount = histcounts(histcounts(Lag(i).PreSynapses,unique(Lag(i).PreSynapses)));
     Lag(i).SynapseLocation = PrePartnerCoordinates(B,df);
-    Lag(i).SynapseLocationTransfromed = TransformPoints(Lag(i).SynapseLocation);
+    Lag(i).SynapseLocationTransfromed = TransformPoints(Lag(i).SynapseLocation,0);
     clear A;
     clear B;
 end

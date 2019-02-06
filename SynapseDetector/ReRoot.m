@@ -8,6 +8,7 @@ fileName = sprintf('%d.swc',cellID);
 reSampleFactor = 5000;
 tree = resample_tree(tree,reSampleFactor);
 xplore_tree(tree);
+view(90,-90);
 prompt = 'Enter the new root node: '
 
 if ~isempty(prompt)
