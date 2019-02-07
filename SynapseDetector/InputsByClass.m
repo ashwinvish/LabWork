@@ -1,5 +1,8 @@
 function [cellClasses] = InputsByClass(cellID,df);
 
+
+cellClasses.Tree = SwctoZbrian(cellID);
+cellClasses.Origin = [cellClasses.Tree{1}.X(1), cellClasses.Tree{1}.Y(1), cellClasses.Tree{1}.Z(1)];
 [cellClasses.Inputs, cellClasses.PSDID] = SynapticPartners(cellID,1,df);
 
 for i =1:size(cellClasses.PSDID,1)
@@ -7,6 +10,7 @@ for i =1:size(cellClasses.PSDID,1)
 end
 
 cellClasses.PreSynCoords = PrePartnerCoordinates(cellClasses.PSDID,df);
+cellClasses.PreSynCoordsTransfromed = TransformPoints(cellClasses.PreSynCoords,0);
 
 cellClasses.isSaccadic = isSaccade(cellClasses.Inputs);
 cellClasses.isVestibular = isVestibular(cellClasses.Inputs);
@@ -23,18 +27,5 @@ cellClasses.EverythingElse = setdiff(cellClasses.Inputs, ...
 cellClasses.isEverythingElse = ismember(cellClasses.Inputs,cellClasses.EverythingElse);
 
 cellClasses.MotorDist = isMotor(cellID,df);
-
-fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
-filename = sprintf('%d.swc',cellID);
-
-if exist(fullfile(fname,filename))>0
-    temp = dlmread(fullfile(fname,filename), ' ');
-    coord = temp(:,3:5);
-    cellClasses.Origin = TransformPoints(coord(1,:),4);
-else
-    cellClasses.Origin = NaN;
-end
-
-
 
 end
