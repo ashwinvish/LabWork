@@ -1,4 +1,4 @@
-load('/Users/ashwin/Downloads/f48870437u97212/dual_single_xfp_final_with_STA_112014.mat')
+load('/Users/ashwin/Documents/LabWork/SynapseDetector/f48870437u97212/dual_single_xfp_final_with_STA_112014.mat')
 
 ind_vpni = find(logical(FIN.vpni)); % indices for staf, stad
 
@@ -28,3 +28,13 @@ set(gca,'box','off','TickDir','out','FontName','MyriadPro-Regular','FontSize',12
 subplot(2,2,4); plot(T,FIN.staf(:,dbx_vglut_neg_pop),'g');  title('DsRed - dbx1b');
 set(gca,'box','off','TickDir','out','FontName','MyriadPro-Regular','FontSize',12); set(gca,'ylim',[-5 50]); set(gca,'xlim',[-2 7]);
 xlabel('time (sec)'); 
+
+figure;
+hold on;
+shadedErrorBar(T,mean(FIN.staf(:,alx_pos_pop)/100,2), std(FIN.staf(:,alx_pos_pop)/100,[],2),'lineprops',{'r'});
+shadedErrorBar(T,mean(FIN.staf(:,alx_neg_pop)/100,2), std(FIN.staf(:,alx_neg_pop)/100,[],2),'lineprops',{'b'});
+figure;
+shadedErrorBar(T,mean(FIN.staf(:,dbx_vglut_pop)/100,2), std(FIN.staf(:,dbx_vglut_pop)/100,[],2),'lineprops',{'m'});
+hold on;
+shadedErrorBar(T,mean(FIN.staf(:,dbx_vglut_neg_pop)/100,2), std(FIN.staf(:,dbx_vglut_neg_pop)/100,[],2),'lineprops',{'g'})
+
