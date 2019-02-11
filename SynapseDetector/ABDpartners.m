@@ -29,19 +29,19 @@ ABDIc_CellIDs = [77148, 77625, 77641, 77692, 77144, 77643, 77640, 79051, 79066, 
 
 %%
 
-for i = 1:numel(ABDr_CellIDs)
+parfor i = 1:numel(ABDr_CellIDs)
     ABDr(i) = InputsByClass(ABDr_CellIDs(i),df);  
 end
 
-for i = 1:numel(ABDc_CellIDs)
+parfor i = 1:numel(ABDc_CellIDs)
     ABDc(i) = InputsByClass(ABDc_CellIDs(i),df);
 end
 
-for i = 1:numel(ABDIr_CellIDs)
+parfor i = 1:numel(ABDIr_CellIDs)
     ABDIr(i) = InputsByClass(ABDIr_CellIDs(i),df);
 end
 
-for i = 1:numel(ABDIc_CellIDs)
+parfor i = 1:numel(ABDIc_CellIDs)
     ABDIc(i) = InputsByClass(ABDIc_CellIDs(i),df);
 end
 
@@ -183,227 +183,495 @@ ylabel('Remaining Synapses');
 
 
 %% plot positon of synapses on Z-brain space
-figure();
-ABDrSaccadicCoords = [];
-ABDrVestibularCoords = [];
-ABDrContraCoords = [];
-ABDrIntegratorCoords = [];
-ABDrEverythingElseCoords = [];
 
+% ABDr
 for i = 1:numel(ABDr_CellIDs)
-    ABDrSaccadicCoords  = [ABDrSaccadicCoords; TransformPoints(ABDr(i).PreSynCoords(ABDr(i).isSaccadic,:),0)-ABDr(i).Origin ];
-    ABDrVestibularCoords  = [ABDrVestibularCoords; TransformPoints(ABDr(i).PreSynCoords(ABDr(i).isVestibular,:),0)-ABDr(i).Origin];
-    ABDrContraCoords  = [ABDrContraCoords; TransformPoints(ABDr(i).PreSynCoords(ABDr(i).isContra,:),0)-ABDr(i).Origin];
-    ABDrIntegratorCoords  = [ABDrIntegratorCoords; TransformPoints(ABDr(i).PreSynCoords(ABDr(i).isIntegrator,:),0)-ABDr(i).Origin]; 
-    ABDrEverythingElseCoords = [ABDrEverythingElseCoords;TransformPoints(ABDr(i).PreSynCoords(ABDr(i).isEverythingElse,:),0)-ABDr(i).Origin];
+    ABDr(i).SaccadicDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isSaccadic,:),ABDr(i).Tree{1});
+    ABDr(i).VestibularDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isVestibular,:),ABDr(i).Tree{1});
+    ABDr(i).ContraDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isContra,:),ABDr(i).Tree{1}); 
+    ABDr(i).IntegratorDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isIntegrator,:),ABDr(i).Tree{1});
+    ABDr(i).EverytingElseDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isEverythingElse,:), ABDr(i).Tree{1});
 end
-
-ABDrSaccadicEucDist = (pdist2(zeros(size(ABDrSaccadicCoords,1),3),ABDrSaccadicCoords));
-ABDrVestibularEucDist = (pdist2(zeros(size(ABDrVestibularCoords,1),3),ABDrVestibularCoords));
-ABDrContraEucDist = (pdist2(zeros(size(ABDrContraCoords,1),3),ABDrContraCoords));
-ABDrIntegratorEucDist = (pdist2(zeros(size(ABDrIntegratorCoords,1),3),ABDrIntegratorCoords));
-ABDrEverytingElseEucDist = (pdist2(zeros(size(ABDrEverythingElseCoords,1),3),ABDrEverythingElseCoords));
 
 % ABDc
-
-ABDcSaccadicCoords = [];
-ABDcVestibularCoords = [];
-ABDcContraCoords = [];
-ABDcIntegratorCoords = [];
-ABDcEverythingElseCoords = [];
-
 for i = 1:numel(ABDc_CellIDs)
-    ABDcSaccadicCoords  = [ABDcSaccadicCoords; TransformPoints(ABDc(i).PreSynCoords(ABDc(i).isSaccadic,:),0)-ABDc(i).Origin];
-    ABDcVestibularCoords  = [ABDcVestibularCoords; TransformPoints(ABDc(i).PreSynCoords(ABDc(i).isVestibular,:),0)-ABDc(i).Origin];
-    ABDcContraCoords  = [ABDcContraCoords;TransformPoints( ABDc(i).PreSynCoords(ABDc(i).isContra,:),0)-ABDc(i).Origin];
-    ABDcIntegratorCoords  = [ABDcIntegratorCoords; TransformPoints(ABDc(i).PreSynCoords(ABDc(i).isIntegrator,:),0)-ABDc(i).Origin];
-    ABDcEverythingElseCoords = [ABDcEverythingElseCoords;TransformPoints(ABDc(i).PreSynCoords(ABDc(i).isEverythingElse,:),0)-ABDc(i).Origin];
+    ABDc(i).SaccadicDist  = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isSaccadic,:),ABDc(i).Tree{1});
+    ABDc(i).VestibularDist  = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isVestibular,:),ABDc(i).Tree{1});
+    ABDc(i).ContraDist  = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isContra,:),ABDc(i).Tree{1});
+    ABDc(i).IntegratorDist  =  PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isIntegrator,:),ABDc(i).Tree{1});
+    ABDc(i).EverytingElseDist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isEverythingElse,:),ABDc(i).Tree{1});
 end
-
-ABDcSaccadicEucDist = (pdist2(zeros(size(ABDcSaccadicCoords,1),3),ABDcSaccadicCoords));
-ABDcVestibularEucDist = (pdist2(zeros(size(ABDcVestibularCoords,1),3),ABDcVestibularCoords));
-ABDcContraEucDist = (pdist2(zeros(size(ABDcContraCoords,1),3),ABDcContraCoords));
-ABDcIntegratorEucDist = (pdist2(zeros(size(ABDcIntegratorCoords,1),3),ABDcIntegratorCoords));
-ABDcEverytingElseEucDist = (pdist2(zeros(size(ABDcEverythingElseCoords,1),3),ABDcEverythingElseCoords));
-
 
 % ABDIr
 
-ABDIrSaccadicCoords = [];
-ABDIrVestibularCoords = [];
-ABDIrContraCoords = [];
-ABDIrIntegratorCoords = [];
-ABDIrEverythingElseCoords = [];
-
 for i = 1:numel(ABDIr_CellIDs)
-    ABDIrSaccadicCoords  = [ABDIrSaccadicCoords; TransformPoints(ABDIr(i).PreSynCoords(ABDIr(i).isSaccadic,:),0)-ABDIr(i).Origin];
-    ABDIrVestibularCoords  = [ABDIrVestibularCoords; TransformPoints(ABDIr(i).PreSynCoords(ABDIr(i).isVestibular,:),0)-ABDIr(i).Origin];
-    ABDIrContraCoords  = [ABDIrContraCoords; TransformPoints(ABDIr(i).PreSynCoords(ABDIr(i).isContra,:),0)-ABDIr(i).Origin];
-    ABDIrIntegratorCoords  = [ABDIrIntegratorCoords; TransformPoints(ABDIr(i).PreSynCoords(ABDIr(i).isIntegrator,:),0)-ABDIr(i).Origin];  
-    ABDIrEverythingElseCoords  = [ABDIrEverythingElseCoords;TransformPoints(ABDIr(i).PreSynCoords(ABDIr(i).isEverythingElse,:),0)-ABDIr(i).Origin];      
+    ABDIr(i).SaccadicDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isSaccadic,:),ABDIr(i).Tree{1});
+    ABDIr(i).VestibularDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isVestibular,:),ABDIr(i).Tree{1});
+    ABDIr(i).ContraDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isContra,:),ABDIr(i).Tree{1});
+    ABDIr(i).IntegratorDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isIntegrator,:),ABDIr(i).Tree{1});
+    ABDIr(i).EverytingElseDist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isEverythingElse,:),ABDIr(i).Tree{1});
 end
-
-ABDIrSaccadicEucDist = (pdist2(zeros(size(ABDIrSaccadicCoords,1),3),ABDIrSaccadicCoords));
-ABDIrVestibularEucDist = (pdist2(zeros(size(ABDIrVestibularCoords,1),3),ABDIrVestibularCoords));
-ABDIrContraEucDist = (pdist2(zeros(size(ABDIrContraCoords,1),3),ABDIrContraCoords));
-ABDIrIntegratorEucDist = (pdist2(zeros(size(ABDIrIntegratorCoords,1),3),ABDIrIntegratorCoords));
-ABDIrEverytingElseEucDist = (pdist2(zeros(size(ABDIrEverythingElseCoords,1),3),ABDIrEverythingElseCoords));
 
 
 % ABDIc
 
-
-ABDIcSaccadicCoords = [];
-ABDIcVestibularCoords = [];
-ABDIcContraCoords = [];
-ABDIcIntegratorCoords = [];
-ABDIcEverythingElseCoords = [];
-
 for i = 1:numel(ABDIc_CellIDs)
-    ABDIcSaccadicCoords  = [ABDIcSaccadicCoords; TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isSaccadic,:),0) - ABDIc(i).Origin];
-    ABDIcVestibularCoords  = [ABDIcVestibularCoords; TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isVestibular,:),0) - ABDIc(i).Origin];
-    ABDIcContraCoords  = [ABDIcContraCoords; TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isContra,:),0) - ABDIc(i).Origin];
-    ABDIcIntegratorCoords  = [ABDIcIntegratorCoords; TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isIntegrator,:),0) - ABDIc(i).Origin];  
-    ABDIcEverythingElseCoords  = [ABDIcEverythingElseCoords; TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isEverythingElse,:),0) - ABDIc(i).Origin];  
-
+    ABDIc(i).SaccadicDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isSaccadic,:),ABDIc(i).Tree{1});
+    ABDIc(i).VestibularDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isVestibular,:),ABDIc(i).Tree{1});
+    ABDIc(i).ContraDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isContra,:),ABDIc(i).Tree{1});
+    ABDIc(i).IntegratorDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isIntegrator,:),ABDIc(i).Tree{1});
+    ABDIc(i).EverytingElseDist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isEverythingElse,:),ABDIc(i).Tree{1});
 end
 
-ABDIcSaccadicEucDist = (pdist2(zeros(size(ABDIcSaccadicCoords,1),3),ABDIcSaccadicCoords));
-ABDIcVestibularEucDist = (pdist2(zeros(size(ABDIcVestibularCoords,1),3),ABDIcVestibularCoords));
-ABDIcContraEucDist = (pdist2(zeros(size(ABDIcContraCoords,1),3),ABDIcContraCoords));
-ABDIcIntegratorEucDist = (pdist2(zeros(size(ABDIcIntegratorCoords,1),3),ABDIcIntegratorCoords));
-ABDIcEverytingElseEucDist = (pdist2(zeros(size(ABDIcEverythingElseCoords,1),3),ABDIcEverythingElseCoords));
-
-% plot distributions of everything
+%% plot distributions of everything
 
 subplot(4,5,1)
-h1 = histogram(ABDrSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1 = histogram(vertcat(ABDr.SaccadicDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(1,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,6)
-h1 = histogram(ABDcSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1 = histogram(vertcat(ABDc.SaccadicDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(1,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,11)
-h1 = histogram(ABDIrSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1 = histogram(vertcat(ABDIr.SaccadicDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(1,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,16)
-h1 = histogram(ABDIcSaccadicEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1 = histogram(vertcat(ABDIc.SaccadicDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(1,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
+
 
 
 subplot(4,5,2)
-h1=histogram(ABDrVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDr.VestibularDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(2,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,7)
-h1=histogram(ABDcVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDc.VestibularDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(2,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,12)
-h1=histogram(ABDIrVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIr.VestibularDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(2,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,17)
-h1=histogram(ABDIcVestibularEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIc.VestibularDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(2,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
 
 subplot(4,5,3)
-h1=histogram(ABDrIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDr.IntegratorDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(4,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,8)
-h1=histogram(ABDcIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDc.IntegratorDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(4,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,13)
-h1=histogram(ABDIrIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIr.IntegratorDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(4,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,18)
-h1=histogram(ABDIcIntegratorEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIc.IntegratorDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(4,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
 
 subplot(4,5,4)
-h1=histogram(ABDrContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDr.ContraDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(3,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,9)
-h1=histogram(ABDcContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDc.ContraDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(3,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,14)
-h1=histogram(ABDIrContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIr.ContraDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(3,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,19)
-h1=histogram(ABDIcContraEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIc.ContraDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(3,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
 
 subplot(4,5,5)
-h1=histogram(ABDrEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDr.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,10)
-h1=histogram(ABDcEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDc.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,15)
-h1=histogram(ABDIrEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIr.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,20)
-h1=histogram(ABDIcEverytingElseEucDist(1,:),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIc.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
-set(gca,'XLim',[0,60]);
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
+
+
+%% distributions of each class onto lumped Motor classes.
+
+subplot(4,4,1)
+h1=histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+
+h1=histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('Saccadic axons');
+
+subplot(4,4,2)
+h1=histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+
+h1=histogram([vertcat(ABDIr.VestibularDist);vertcat(ABDIc.VestibularDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+title('Vestibular axons');
+
+
+subplot(4,4,3)
+h1=histogram([vertcat(ABDr.IntegratorDist);vertcat(ABDc.IntegratorDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+
+h1=histogram([vertcat(ABDIr.IntegratorDist);vertcat(ABDIc.IntegratorDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+title('Integrator axons');
+
+
+
+subplot(4,4,4)
+h1=histogram([vertcat(ABDr.ContraDist);vertcat(ABDc.ContraDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+
+h1=histogram([vertcat(ABDIr.ContraDist);vertcat(ABDIc.ContraDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+title('Contra axons');
+
+
+
+subplot(4,4,5)
+h1=histogram([vertcat(ABDr.EverytingElseDist);vertcat(ABDc.EverytingElseDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+
+h1=histogram([vertcat(ABDIr.EverytingElseDist);vertcat(ABDIc.EverytingElseDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+title('Remaining axons');
+
+legend({'ABD','ABDi'},'Location','bestoutside');
+
+%% Split the contributions from each of the axons classes
+
+load('leadDiff.mat','leadDiff')
+load('leadMotorDiff.mat','leadMotorDiff');
+load('leadDiffAxons.mat','leadDiffAxons');
+
+load('lagDiff.mat','lagDiff')
+load('lagMotorDiff.mat','lagMotorDiff');
+load('lagDiffAxons.mat','lagDiffAxons');
+
+figure;
+
+% saccadic
+subplot(4,4,1)
+h1=histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('Saccadic axons');
+
+temp = [];
+for i = 1:numel(ABDr_CellIDs)
+    [~,ia,~] = intersect(ABDr(i).Saccadic, [leadDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LeadSaccadicDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDr(i).Saccadic, [lagDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LagSaccadicDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDc_CellIDs)
+    [~,ia,~] = intersect(ABDc(i).Saccadic, [leadDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LeadSaccadicDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDc(i).Saccadic, [lagDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LagSaccadicDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,2)
+h1=histogram([vertcat(ABDr.LeadSaccadicDist);vertcat(ABDc.LeadSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDr.LagSaccadicDist);vertcat(ABDc.LagSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABD Saccadic axons');
+
+% ABDi Calculation
+
+temp = [];
+for i = 1:numel(ABDIr_CellIDs)
+    [~,ia,~] = intersect(ABDIr(i).Saccadic, [leadDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LeadSaccadicDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIr(i).Saccadic, [lagDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LagSaccadicDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDIc_CellIDs)
+    [~,ia,~] = intersect(ABDIc(i).Saccadic, [leadDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LeadSaccadicDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIc(i).Saccadic, [lagDiffAxons.Saccadic]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LagSaccadicDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,3)
+h1=histogram([vertcat(ABDIr.LeadSaccadicDist);vertcat(ABDIc.LeadSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.LagSaccadicDist);vertcat(ABDIc.LagSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABDi Saccadic axons');
+
+
+
+
+
+%% plot location on individual Abducens neurons
+
+figure;
+for i = 1:numel(ABDr_CellIDs)
+    subplot(4,4,i)
+plot_tree(ABDr(i).Tree{1},'k',[],[],[],'-3l');
+hold on;
+scatter3(ABDr(i).PreSynCoordsTransformed(ABDr(i).isSaccadic,1), ABDr(i).PreSynCoordsTransformed(ABDr(i).isSaccadic,2), ABDr(i).PreSynCoordsTransformed(ABDr(i).isSaccadic,3),'o',...
+    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
+scatter3(ABDr(i).PreSynCoordsTransformed(ABDr(i).isContra,1), ABDr(i).PreSynCoordsTransformed(ABDr(i).isContra,2), ABDr(i).PreSynCoordsTransformed(ABDr(i).isContra,3),'o', ...
+     'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
+scatter3(ABDr(i).PreSynCoordsTransformed(ABDr(i).isIntegrator,1), ABDr(i).PreSynCoordsTransformed(ABDr(i).isIntegrator,2), ABDr(i).PreSynCoordsTransformed(ABDr(i).isIntegrator,3),'o', ...
+ 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
+title(ABDr_CellIDs(i));
+axis off;
+end
+sgtitle('ABDr');
+
+figure;
+for i = 1:numel(ABDc_CellIDs)
+    subplot(4,4,i)
+plot_tree(ABDc(i).Tree{1},'k',[],[],[],'-3l');
+hold on;
+scatter3(ABDc(i).PreSynCoordsTransformed(ABDc(i).isSaccadic,1), ABDc(i).PreSynCoordsTransformed(ABDc(i).isSaccadic,2), ABDc(i).PreSynCoordsTransformed(ABDc(i).isSaccadic,3),'o',...
+    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
+scatter3(ABDc(i).PreSynCoordsTransformed(ABDc(i).isContra,1), ABDc(i).PreSynCoordsTransformed(ABDc(i).isContra,2), ABDc(i).PreSynCoordsTransformed(ABDc(i).isContra,3),'o', ...
+     'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
+scatter3(ABDc(i).PreSynCoordsTransformed(ABDc(i).isIntegrator,1), ABDc(i).PreSynCoordsTransformed(ABDc(i).isIntegrator,2), ABDc(i).PreSynCoordsTransformed(ABDc(i).isIntegrator,3),'o', ...
+ 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
+title(ABDc_CellIDs(i));
+axis off;
+end
+sgtitle('ABDc');
+
+figure;
+for i = 1:numel(ABDIr_CellIDs)
+    subplot(4,4,i)
+plot_tree(ABDIr(i).Tree{1},'k',[],[],[],'-3l');
+hold on;
+scatter3(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isSaccadic,1), ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isSaccadic,2), ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isSaccadic,3),'o',...
+    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
+scatter3(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isContra,1), ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isContra,2), ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isContra,3),'o', ...
+     'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
+scatter3(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isIntegrator,1), ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isIntegrator,2), ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isIntegrator,3),'o', ...
+ 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
+title(ABDIr_CellIDs(i));
+axis off;
+end
+sgtitle('ABDIr');
+
+figure;
+for i = 1:numel(ABDIc_CellIDs)
+    subplot(4,4,i)
+plot_tree(ABDIc(i).Tree{1},'k',[],[],[],'-3l');
+hold on;
+scatter3(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isSaccadic,1), ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isSaccadic,2), ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isSaccadic,3),'o',...
+    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
+scatter3(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isContra,1), ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isContra,2), ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isContra,3),'o', ...
+     'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
+scatter3(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isIntegrator,1), ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isIntegrator,2), ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isIntegrator,3),'o', ...
+ 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
+title(ABDIc_CellIDs(i));
+axis off;
+end
+sgtitle('ABDIc');
 
 
 %% 
@@ -416,38 +684,47 @@ box off;
 l = find(ABDr_CellIDs == 77710);
 i = l;
 
-PreSyn77710Saccade =  TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isSaccadic,:),0)-ABDIc(i).Origin;
-PreSyn77710Vestibular =  TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isVestibular,:),0)-ABDIc(i).Origin;
-PreSyn77710Contra =  TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isContra,:),0)-ABDIc(i).Origin;
-PreSyn77710Integrator =  TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isIntegrator,:),0)-ABDIc(i).Origin;
-PreSyn77710EverythginElse = TransformPoints(ABDIc(i).PreSynCoords(ABDIc(i).isEverythingElse,:),0)-ABDIc(i).Origin;
-
+PreSyn77710Saccade =  PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isSaccadic,:),ABDr(i).Tree{1});
+PreSyn77710Vestibular =  PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isVestibular,:),ABDr(i).Tree{1});
+PreSyn77710Contra = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isContra,:),ABDr(i).Tree{1});
+PreSyn77710Integrator =  PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isIntegrator,:),ABDr(i).Tree{1});
+PreSyn77710EverythginElse = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isEverythingElse,:),ABDr(i).Tree{1});
 
 figure()
 
-h1=histfit(PreSyn77710Saccade(:,1),50,'kernel')
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(1,:);
-hold on;
-h1=histfit(PreSyn77710Vestibular(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(2,:);
-h1=histfit(PreSyn77710Contra(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(3,:);
-h1=histfit(PreSyn77710Integrator(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(4,:);
-h1=histfit(PreSyn77710EverythginElse(:,1),50,'kernel');
-h1(1).FaceColor = 'none';
-h1(1).EdgeColor = 'none';
-h1(2).Color = colors(5,:);
-
+h1 = histogram(PreSyn77710Saccade,20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(1,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
+
+hold on;
+h1 = histogram(PreSyn77710Vestibular,20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(2,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+
+h1 = histogram(PreSyn77710Contra,20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(3,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+
+h1 = histogram(PreSyn77710Integrator,20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(4,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+
+h1 = histogram(PreSyn77710EverythginElse,20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = colors(5,:);
+h1.LineWidth = 2;
+set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+
+
+
 
 
 
