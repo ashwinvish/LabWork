@@ -10,7 +10,7 @@ for i =1:size(cellClasses.PSDID,1)
 end
 
 cellClasses.PreSynCoords = PrePartnerCoordinates(cellClasses.PSDID,df);
-cellClasses.PreSynCoordsTransfromed = TransformPoints(cellClasses.PreSynCoords,0);
+cellClasses.PreSynCoordsTransformed = TransformPoints(cellClasses.PreSynCoords,0);
 
 cellClasses.isSaccadic = isSaccade(cellClasses.Inputs);
 cellClasses.isVestibular = isVestibular(cellClasses.Inputs);
