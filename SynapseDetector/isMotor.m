@@ -18,6 +18,7 @@ if ~isempty(cellID)
         temp = ABD_All_type(lob(lob>0))';
         edges(i,:) = [cellID(i),histcounts(temp,[0.9,1.9,2.9,3.1,4])];
     end
+    
 else
     edges = [];
 end
