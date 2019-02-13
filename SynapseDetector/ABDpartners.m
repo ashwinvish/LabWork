@@ -461,20 +461,22 @@ load('lagDiff.mat','lagDiff')
 load('lagMotorDiff.mat','lagMotorDiff');
 load('lagDiffAxons.mat','lagDiffAxons');
 
+%%
+
 figure;
 
 % saccadic
 subplot(4,4,1)
-h1=histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'm';
 h1.LineWidth = 2;
-set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
-h1=histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'g';
 h1.LineWidth = 2;
-set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 axis square
@@ -483,7 +485,7 @@ title('Saccadic axons');
 
 temp = [];
 for i = 1:numel(ABDr_CellIDs)
-    [~,ia,~] = intersect(ABDr(i).Saccadic, [leadDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDr(i).Inputs, [leadDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
     temp = [temp; tempdist];
@@ -492,7 +494,7 @@ for i = 1:numel(ABDr_CellIDs)
     ABDr(i).LeadSaccadicDist = temp;
     temp = [];
     
-    [~,ia,~] = intersect(ABDr(i).Saccadic, [lagDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDr(i).Inputs, [lagDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
     temp = [temp; tempdist];
@@ -504,7 +506,7 @@ end
 
 temp = [];
 for i = 1:numel(ABDc_CellIDs)
-    [~,ia,~] = intersect(ABDc(i).Saccadic, [leadDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDc(i).Inputs, [leadDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
     temp = [temp; tempdist];
@@ -513,7 +515,7 @@ for i = 1:numel(ABDc_CellIDs)
     ABDc(i).LeadSaccadicDist = temp;
     temp = [];
     
-    [~,ia,~] = intersect(ABDc(i).Saccadic, [lagDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDc(i).Inputs, [lagDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
     temp = [temp; tempdist];
@@ -525,16 +527,16 @@ end
     
 
 subplot(4,4,2)
-h1=histogram([vertcat(ABDr.LeadSaccadicDist);vertcat(ABDc.LeadSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDr.LeadSaccadicDist);vertcat(ABDc.LeadSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'r';
 h1.LineWidth = 2;
-set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
-h1=histogram([vertcat(ABDr.LagSaccadicDist);vertcat(ABDc.LagSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDr.LagSaccadicDist);vertcat(ABDc.LagSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'b';
 h1.LineWidth = 2;
-set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 axis square
@@ -545,7 +547,7 @@ title('ABD Saccadic axons');
 
 temp = [];
 for i = 1:numel(ABDIr_CellIDs)
-    [~,ia,~] = intersect(ABDIr(i).Saccadic, [leadDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [leadDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
     temp = [temp; tempdist];
@@ -554,7 +556,7 @@ for i = 1:numel(ABDIr_CellIDs)
     ABDIr(i).LeadSaccadicDist = temp;
     temp = [];
     
-    [~,ia,~] = intersect(ABDIr(i).Saccadic, [lagDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [lagDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
     temp = [temp; tempdist];
@@ -566,7 +568,7 @@ end
 
 temp = [];
 for i = 1:numel(ABDIc_CellIDs)
-    [~,ia,~] = intersect(ABDIc(i).Saccadic, [leadDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [leadDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
     temp = [temp; tempdist];
@@ -575,7 +577,7 @@ for i = 1:numel(ABDIc_CellIDs)
     ABDIc(i).LeadSaccadicDist = temp;
     temp = [];
     
-    [~,ia,~] = intersect(ABDIc(i).Saccadic, [lagDiffAxons.Saccadic]);
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [lagDiffAxons.Saccadic]);
     for j = 1:length(ia)
     tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
     temp = [temp; tempdist];
@@ -587,25 +589,582 @@ end
     
 
 subplot(4,4,3)
-h1=histogram([vertcat(ABDIr.LeadSaccadicDist);vertcat(ABDIc.LeadSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDIr.LeadSaccadicDist);vertcat(ABDIc.LeadSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'r';
 h1.LineWidth = 2;
-set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
-h1=histogram([vertcat(ABDIr.LagSaccadicDist);vertcat(ABDIc.LagSaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDIr.LagSaccadicDist);vertcat(ABDIc.LagSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'b';
 h1.LineWidth = 2;
-set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 axis square
 xlabel('Pathlength (um)');
 title('ABDi Saccadic axons');
 
+%% Vestibular inputs distribution
+subplot(4,4,5)
+h1=histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.VestibularDist);vertcat(ABDIc.VestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('Saccadic axons');
 
+temp = [];
+for i = 1:numel(ABDr_CellIDs)
+    [~,ia,~] = intersect(ABDr(i).Inputs, [leadDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LeadVestibularDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDr(i).Inputs, [lagDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LagVestibularDist = temp;
+    temp =[];
+end
 
+temp = [];
+for i = 1:numel(ABDc_CellIDs)
+    [~,ia,~] = intersect(ABDc(i).Inputs, [leadDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LeadVestibularDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDc(i).Inputs, [lagDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LagVestibularDist = temp;
+    temp =[];
+end
+    
 
+subplot(4,4,6)
+h1=histogram([vertcat(ABDr.LeadVestibularDist);vertcat(ABDc.LeadVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDr.LagVestibularDist);vertcat(ABDc.LagVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABD Vestibular axons');
+
+% ABDi Calculation
+
+temp = [];
+for i = 1:numel(ABDIr_CellIDs)
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [leadDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LeadVestibularDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [lagDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LagVestibularDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDIc_CellIDs)
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [leadDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LeadVestibularDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [lagDiffAxons.Vestibular]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LagVestibularDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,7)
+h1=histogram([vertcat(ABDIr.LeadVestibularDist);vertcat(ABDIc.LeadVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.LagVestibularDist);vertcat(ABDIc.LagVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABDi Vestibular axons');
+
+%% Integrator axons distribution
+subplot(4,4,9)
+h1=histogram([vertcat(ABDr.IntegratorDist);vertcat(ABDc.IntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.IntegratorDist);vertcat(ABDIc.IntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('Integrator axons');
+
+temp = [];
+for i = 1:numel(ABDr_CellIDs)
+    [~,ia,~] = intersect(ABDr(i).Inputs, [leadDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LeadIntegratorDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDr(i).Inputs, [lagDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LagIntegratorDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDc_CellIDs)
+    [~,ia,~] = intersect(ABDc(i).Inputs, [leadDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LeadIntegratorDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDc(i).Inputs, [lagDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LagIntegratorDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,10)
+h1=histogram([vertcat(ABDr.LeadIntegratorDist);vertcat(ABDc.LeadIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDr.LagIntegratorDist);vertcat(ABDc.LagIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABD Integrator axons');
+
+% ABDi Calculation
+
+temp = [];
+for i = 1:numel(ABDIr_CellIDs)
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [leadDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LeadIntegratorDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [lagDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LagIntegratorDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDIc_CellIDs)
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [leadDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LeadIntegratorDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [lagDiffAxons.Integrator]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LagIntegratorDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,11)
+h1=histogram([vertcat(ABDIr.LeadIntegratorDist);vertcat(ABDIc.LeadIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.LagIntegratorDist);vertcat(ABDIc.LagIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABDi Integrator axons');
+
+%% Contra axons distribution
+subplot(4,4,13)
+h1=histogram([vertcat(ABDr.ContraDist);vertcat(ABDc.ContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.ContraDist);vertcat(ABDIc.ContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('Contra axons');
+
+temp = [];
+for i = 1:numel(ABDr_CellIDs)
+    [~,ia,~] = intersect(ABDr(i).Inputs, [leadDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LeadContraDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDr(i).Inputs, [lagDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LagContraDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDc_CellIDs)
+    [~,ia,~] = intersect(ABDc(i).Inputs, [leadDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LeadContraDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDc(i).Inputs, [lagDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LagContraDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,14)
+h1=histogram([vertcat(ABDr.LeadContraDist);vertcat(ABDc.LeadContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDr.LagContraDist);vertcat(ABDc.LagContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABD Contra axons');
+
+% ABDi Calculation
+
+temp = [];
+for i = 1:numel(ABDIr_CellIDs)
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [leadDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LeadContraDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [lagDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LagContraDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDIc_CellIDs)
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [leadDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LeadContraDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [lagDiffAxons.Contra]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LagContraDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,15)
+h1=histogram([vertcat(ABDIr.LeadContraDist);vertcat(ABDIc.LeadContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.LagContraDist);vertcat(ABDIc.LagContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABDi Contra axons');
+
+%% Remaining axon distribution
+
+subplot(4,4,1)
+h1=histogram([vertcat(ABDr.EverythingElseDist);vertcat(ABDc.EverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'm';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.EverythingElseDist);vertcat(ABDIc.EverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'g';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('Remaining axons');
+
+temp = [];
+for i = 1:numel(ABDr_CellIDs)
+    [~,ia,~] = intersect(ABDr(i).Inputs, [leadDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LeadEverythingElseDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDr(i).Inputs, [lagDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ia(j),:),ABDr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDr(i).LagEverythingElseDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDc_CellIDs)
+    [~,ia,~] = intersect(ABDc(i).Inputs, [leadDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LeadEverythingElseDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDc(i).Inputs, [lagDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ia(j),:),ABDc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDc(i).LagEverythingElseDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,2)
+h1=histogram([vertcat(ABDr.LeadEverythingElseDist);vertcat(ABDc.LeadEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDr.LagEverythingElseDist);vertcat(ABDc.LagEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABD EverythingElse axons');
+
+% ABDi Calculation
+
+temp = [];
+for i = 1:numel(ABDIr_CellIDs)
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [leadDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LeadEverythingElseDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIr(i).Inputs, [lagDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ia(j),:),ABDIr(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIr(i).LagEverythingElseDist = temp;
+    temp =[];
+end
+
+temp = [];
+for i = 1:numel(ABDIc_CellIDs)
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [leadDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LeadEverythingElseDist = temp;
+    temp = [];
+    
+    [~,ia,~] = intersect(ABDIc(i).Inputs, [lagDiffAxons.EverythingElse]);
+    for j = 1:length(ia)
+    tempdist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ia(j),:),ABDIc(i).Tree{1});
+    temp = [temp; tempdist];
+    end
+    clear ia;
+    ABDIc(i).LagEverythingElseDist = temp;
+    temp =[];
+end
+    
+
+subplot(4,4,3)
+h1=histogram([vertcat(ABDIr.LeadEverythingElseDist);vertcat(ABDIc.LeadEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'r';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+h1=histogram([vertcat(ABDIr.LagEverythingElseDist);vertcat(ABDIc.LagEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
+h1.EdgeColor = 'b';
+h1.LineWidth = 2;
+%set(gca,'XLim',[0,100],'YLim',[0,0.15]);
+box off;
+hold on;
+axis square
+xlabel('Pathlength (um)');
+title('ABDi EverythingElse axons');
 
 %% plot location on individual Abducens neurons
 
