@@ -10,8 +10,8 @@ end
 %location = ismember(cellId,contraList);
 
 for i = 1:size(cellId,1)
-    if cellId(i) < 1e5 
-        l = find(cellId(i) == contraList(:,1));
+         l = find(cellId(i) == contraList(:,1));
+    if ~isempty(l)
         if isnumeric(contraList(l,3))
             value(i) = logical(contraList(l,3));
         else
