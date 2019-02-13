@@ -13,14 +13,14 @@ end
 % end
 AllCellNames = intPartners;
 G = digraph(n',m',v',size(AllCellNames,1));                 % digraph(source, target, weight, numNodes)
-%G.Nodes.Names = AllCellNames';   
+%G.Nodes.Names = AllCellNames';
 G.Nodes.Names = num2str(intPartners);  % nodeNames
 for i = 1:size(AllCellNames)
     temp = find(AllCellNames(i) == mlOrdered);
     if ~isempty(temp)
-    AllCellManualID(i) = mlOrderedTypes(temp);
+        AllCellManualID(i) = mlOrderedTypes(temp);
     else
-       AllCellManualID(i) = cellstr(sprintf('%d',AllCellNames(i)));
+        AllCellManualID(i) = cellstr(sprintf('%d',AllCellNames(i)));
     end
 end
 
@@ -34,7 +34,7 @@ top3in = G.Nodes.Names(ranking(1:10));                  % get top 3 node names
 
 outDeg = outdegree(G);
 %notConnected = find(outDeg < 2);                       % weakly connected nodes
-%outDeg(notConnected) = []; 
+%outDeg(notConnected) = [];
 %Gout = rmnode(G, notConnected);
 [~, ranking] = sort(outDeg,'descend');                 % get ranking by degree
 top3out = G.Nodes.Names(ranking(1:10));                  % get top 3 node names
@@ -51,8 +51,8 @@ A = sparse(s,t,G.Edges.Weight,nn,nn);
 %% try clustering
 Iterations = 10;
 parfor i = 1:1:Iterations
-[Mmany(:,i),Q(:,i)] = community_louvain(A);
-disp(i)
+    [Mmany(:,i),Q(:,i)] = community_louvain(A);
+    disp(i)
 end
 
 % Q0 = -1; Q1 = 0;            % initialize modularity values
@@ -74,8 +74,8 @@ end
 
 
 set(gca,'YTick',1:size(A),'YTickLabel',AllCellManualID(idx),'XTick',1:size(A),...
-       'XTickLabel',AllCellManualID(idx),'XTickLabelRotation',45,'XAxisLocation','top');
-   
+    'XTickLabel',AllCellManualID(idx),'XTickLabelRotation',45,'XAxisLocation','top');
+
 %%
 % find int cells in idx sapce
 [c,ia,ib] = intersect(1:18,idx);
