@@ -118,8 +118,8 @@ line([0,size(ConnMatrixPre,1)],[size(v,1),size(v,1)],'color','k');
 line([size(v,1),size(v,1)],[0,size(ConnMatrixPre,1)],'color','k');
 line([0,size(AllCells,1)],[size(locIpsi,1),size(locIpsi,1)],'color','k');
 line([size(locIpsi,1),size(locIpsi,1)],[0,size(AllCells,1)],'color','k');
-set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells(ipsiContraOrder),'XTickLabelRotation',45,'XAxisLocation','top', ...
-    'YTick',1:size(AllCells,1),'YTickLabel',AllCells(ipsiContraOrder),'YTickLabelRotation',45);    
+%set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells(ipsiContraOrder),'XTickLabelRotation',45,'XAxisLocation','top', ...
+%    'YTick',1:size(AllCells,1),'YTickLabel',AllCells(ipsiContraOrder),'YTickLabelRotation',45);    
 
 
 % [a,b] = ismember(functionalCellIDs_new(CellDisplayOrder),AllCells);
