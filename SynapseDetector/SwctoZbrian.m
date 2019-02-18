@@ -1,4 +1,6 @@
 function tree =  SwctoZBrain(cellID)
+% SwctoZbrian converts the swc tree from NG space to Z-brain space.
+% cellID is a nx1 vector of the cell IDs that need to be transfromed.
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
@@ -9,9 +11,6 @@ else
     fname =  '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/SWC_all/consensus-20180920/swc/'
 end
 
-%preallocate
-%wc = cell(1,size(cellID,2));
-%swc_new = cell(1,size(cellID,2));
 
 for i = 1:numel(cellID)
     
@@ -80,8 +79,7 @@ for i = 1:numel(cellID)
     newFileName = sprintf('%d_reRoot_reSample_5000_transfromed.swc',cellID(i));
     dlmwrite(newFileName,swc_new{i},' ');
     tree{i} = load_tree(newFileName);
-    delete(newFileName);
-    
+    delete(newFileName);  
 end
 end
 
