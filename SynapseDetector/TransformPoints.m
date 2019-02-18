@@ -1,4 +1,10 @@
-function [pointCloudPost] =  TransformPoints(pointCloudPre,mipLevel)
+function [pointCloudZB] =  TransformPoints(pointCloudNG,mipLevel)
+%TransfromPoints transfroms pointcloud from NG space to Z-brian space
+% pointCloudNG is the MX3 point cloud in NG space
+% mip level is either 0 or 4
+    % is 0 if the piont clouds are queried from the edge list
+    % is 4 if the poit clouds are from the swc skeletons.
+% pointCloudZB is the poiuntcloud in Z-brain space.    
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
@@ -10,7 +16,7 @@ else
 end
 
 if mipLevel == 0
-    coord = pointCloudPre;
+    coord = pointCloudNG;
     
     % multiply with mip0 resolution to get to nm space
     coord = coord .* [5,5,45];
@@ -57,12 +63,12 @@ if mipLevel == 0
     % transform from NG space to z-brainAtlas space using a precomputed
     % transfromation matrix that was loaded above.
     
-    pointCloudPost = transformPointsForward(tformRough, coord);
+    pointCloudZB = transformPointsForward(tformRough, coord);
     
     
 elseif mipLevel ==4
     
-    coord = pointCloudPre ;
+    coord = pointCloudNG ;
     
     % compute offset as data in NG is offset from origin
     offset = [920,752,16400] .* [80, 80, 45]; % offset at mip4 number can be obtained from NG .info file
@@ -103,7 +109,7 @@ elseif mipLevel ==4
     % transform from NG space to Atlas space using a precomputed
     % transfromation matrix.
     
-    pointCloudPost = transformPointsForward(tformRough, coord);
+    pointCloudZB = transformPointsForward(tformRough, coord);
 end
 end
 
