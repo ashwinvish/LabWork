@@ -88,6 +88,7 @@ end
 %%
 motorGroups = [1,2,3,4];
 
+figure;
 subplot(4,4,1)
 plot(ones(1,size([ABDr.NumberofInputs],2)),[ABDr.NumberofInputs],'ko');
 hold on;
@@ -190,7 +191,7 @@ for i = 1:numel(ABDr_CellIDs)
     ABDr(i).VestibularDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isVestibular,:),ABDr(i).Tree{1});
     ABDr(i).ContraDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isContra,:),ABDr(i).Tree{1}); 
     ABDr(i).IntegratorDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isIntegrator,:),ABDr(i).Tree{1});
-    ABDr(i).EverytingElseDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isEverythingElse,:), ABDr(i).Tree{1});
+    ABDr(i).EverythingElseDist = PathLengthToCoordinate(ABDr(i).PreSynCoordsTransformed(ABDr(i).isEverythingElse,:), ABDr(i).Tree{1});
 end
 
 % ABDc
@@ -199,7 +200,7 @@ for i = 1:numel(ABDc_CellIDs)
     ABDc(i).VestibularDist  = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isVestibular,:),ABDc(i).Tree{1});
     ABDc(i).ContraDist  = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isContra,:),ABDc(i).Tree{1});
     ABDc(i).IntegratorDist  =  PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isIntegrator,:),ABDc(i).Tree{1});
-    ABDc(i).EverytingElseDist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isEverythingElse,:),ABDc(i).Tree{1});
+    ABDc(i).EverythingElseDist = PathLengthToCoordinate(ABDc(i).PreSynCoordsTransformed(ABDc(i).isEverythingElse,:),ABDc(i).Tree{1});
 end
 
 % ABDIr
@@ -209,7 +210,7 @@ for i = 1:numel(ABDIr_CellIDs)
     ABDIr(i).VestibularDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isVestibular,:),ABDIr(i).Tree{1});
     ABDIr(i).ContraDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isContra,:),ABDIr(i).Tree{1});
     ABDIr(i).IntegratorDist  = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isIntegrator,:),ABDIr(i).Tree{1});
-    ABDIr(i).EverytingElseDist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isEverythingElse,:),ABDIr(i).Tree{1});
+    ABDIr(i).EverythingElseDist = PathLengthToCoordinate(ABDIr(i).PreSynCoordsTransformed(ABDIr(i).isEverythingElse,:),ABDIr(i).Tree{1});
 end
 
 
@@ -220,11 +221,13 @@ for i = 1:numel(ABDIc_CellIDs)
     ABDIc(i).VestibularDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isVestibular,:),ABDIc(i).Tree{1});
     ABDIc(i).ContraDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isContra,:),ABDIc(i).Tree{1});
     ABDIc(i).IntegratorDist  = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isIntegrator,:),ABDIc(i).Tree{1});
-    ABDIc(i).EverytingElseDist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isEverythingElse,:),ABDIc(i).Tree{1});
+    ABDIc(i).EverythingElseDist = PathLengthToCoordinate(ABDIc(i).PreSynCoordsTransformed(ABDIc(i).isEverythingElse,:),ABDIc(i).Tree{1});
 end
 
 %% plot distributions of everything
+figure;
 
+% saccadic pop
 subplot(4,5,1)
 h1 = histogram(vertcat(ABDr.SaccadicDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(1,:);
@@ -250,7 +253,7 @@ h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
-
+% Vestibular pop
 
 subplot(4,5,2)
 h1=histogram(vertcat(ABDr.VestibularDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
@@ -277,7 +280,7 @@ h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
-
+% Integrator pop
 subplot(4,5,3)
 h1=histogram(vertcat(ABDr.IntegratorDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(4,:);
@@ -303,7 +306,7 @@ h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
-
+% Contra pop
 subplot(4,5,4)
 h1=histogram(vertcat(ABDr.ContraDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(3,:);
@@ -329,27 +332,27 @@ h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 
-
+% Remaining pop
 subplot(4,5,5)
-h1=histogram(vertcat(ABDr.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDr.EverythingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,10)
-h1=histogram(vertcat(ABDc.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDc.EverythingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,15)
-h1=histogram(vertcat(ABDIr.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIr.EverythingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 subplot(4,5,20)
-h1=histogram(vertcat(ABDIc.EverytingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram(vertcat(ABDIc.EverythingElseDist),20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
@@ -358,6 +361,8 @@ box off;
 
 %% distributions of each class onto lumped Motor classes.
 
+figure; 
+% Saccadic pop
 subplot(4,4,1)
 h1=histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'm';
@@ -376,6 +381,7 @@ axis square
 xlabel('Pathlength (um)');
 title('Saccadic axons');
 
+% Vestibular pop
 subplot(4,4,2)
 h1=histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'm';
@@ -393,7 +399,7 @@ hold on;
 axis square
 title('Vestibular axons');
 
-
+% Integrator pop
 subplot(4,4,3)
 h1=histogram([vertcat(ABDr.IntegratorDist);vertcat(ABDc.IntegratorDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'm';
@@ -411,8 +417,7 @@ hold on;
 axis square
 title('Integrator axons');
 
-
-
+%Contra pop
 subplot(4,4,4)
 h1=histogram([vertcat(ABDr.ContraDist);vertcat(ABDc.ContraDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'm';
@@ -430,17 +435,16 @@ hold on;
 axis square
 title('Contra axons');
 
-
-
+% Remaining pop
 subplot(4,4,5)
-h1=histogram([vertcat(ABDr.EverytingElseDist);vertcat(ABDc.EverytingElseDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDr.EverythingElseDist);vertcat(ABDc.EverythingElseDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'm';
 h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 
-h1=histogram([vertcat(ABDIr.EverytingElseDist);vertcat(ABDIc.EverytingElseDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
+h1=histogram([vertcat(ABDIr.EverythingElseDist);vertcat(ABDIc.EverythingElseDist)],20,'Normalization','probability','FaceColor','none','DisplayStyle','stairs');
 h1.EdgeColor = 'g';
 h1.LineWidth = 2;
 set(gca,'XLim',[0,100],'YLim',[0,0.15]);
@@ -605,6 +609,25 @@ axis square
 xlabel('Pathlength (um)');
 title('ABDi Saccadic axons');
 
+subplot(4,4,4)
+SaccadicAxons = [vertcat(ABDr.Saccadic);vertcat(ABDc.Saccadic);vertcat(ABDIr.Saccadic);vertcat(ABDIc.Saccadic)];
+uniqueSaccadicAxons = unique(SaccadicAxons);
+saccadicMotorSynapses = isMotor(uniqueSaccadicAxons,df);
+saccadicMotorNeuronTargets = isPostSynapseMotor(uniqueSaccadicAxons,df);
+
+scatter([sum(saccadicMotorSynapses(:,2:3),2)-sum(saccadicMotorSynapses(:,4:5),2)], ...
+    [sum(saccadicMotorNeuronTargets(:,2:3),2)-sum(saccadicMotorNeuronTargets(:,4:5),2)],20,'o',...
+    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
+line([0,0],[-20,20],'linestyle',':','color','k');
+line([-200,200],[0,0],'linestyle',':','color','k');
+ylabel('#(ABD - ABDi) neurons');
+xlabel('#(ABD - ABDi) synapses')
+title('Saccadic Axons');
+text(100,-18,sprintf('n = %d',size(uniqueSaccadicAxons,1)));
+box off;
+axis square;
+
+
 %% Vestibular inputs distribution
 subplot(4,4,5)
 h1=histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
@@ -744,6 +767,24 @@ hold on;
 axis square
 xlabel('Pathlength (um)');
 title('ABDi Vestibular axons');
+
+subplot(4,4,8)
+VestibularAxons = [vertcat(ABDr.Vestibular);vertcat(ABDc.Vestibular);vertcat(ABDIr.Vestibular);vertcat(ABDIc.Vestibular)];
+uniqueVestibularAxons = unique(VestibularAxons);
+vestibularMotorSynapses = isMotor(uniqueVestibularAxons,df);
+vestibularMotorNeuronTargets = isPostSynapseMotor(uniqueVestibularAxons,df);
+
+scatter([sum(vestibularMotorSynapses(:,2:3),2)-sum(vestibularMotorSynapses(:,4:5),2)], ...
+    [sum(vestibularMotorNeuronTargets(:,2:3),2)-sum(vestibularMotorNeuronTargets(:,4:5),2)],20,'o',...
+    'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
+line([0,0],[-20,20],'linestyle',':','color','k');
+line([-200,200],[0,0],'linestyle',':','color','k');
+ylabel('#(ABD - ABDi) neurons');
+xlabel('#(ABD - ABDi) synapses');
+text(100,-18,sprintf('n = %d',size(uniqueVestibularAxons,1)));
+title('Vestibular Axons');
+box off;
+axis square;
 
 %% Integrator axons distribution
 subplot(4,4,9)
@@ -885,6 +926,24 @@ axis square
 xlabel('Pathlength (um)');
 title('ABDi Integrator axons');
 
+subplot(4,4,12)
+IntegratorAxons = [vertcat(ABDr.Integrator);vertcat(ABDc.Integrator);vertcat(ABDIr.Integrator);vertcat(ABDIc.Integrator)];
+uniqueIntegratorAxons = unique(IntegratorAxons);
+integratorMotorSynapses = isMotor(uniqueIntegratorAxons,df);
+integratorMotorNeuronTargets = isPostSynapseMotor(uniqueIntegratorAxons,df);
+
+scatter([sum(integratorMotorSynapses(:,2:3),2)-sum(integratorMotorSynapses(:,4:5),2)], ...
+    [sum(integratorMotorNeuronTargets(:,2:3),2)-sum(integratorMotorNeuronTargets(:,4:5),2)],20,'o',...
+    'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
+line([0,0],[-20,20],'linestyle',':','color','k');
+line([-200,200],[0,0],'linestyle',':','color','k');
+ylabel('#(ABD - ABDi) neurons');
+xlabel('#(ABD - ABDi) synapses')
+text(100,-18,sprintf('n = %d',size(uniqueIntegratorAxons,1)));
+title('Integrator Axons');
+box off;
+axis square;
+
 %% Contra axons distribution
 subplot(4,4,13)
 h1=histogram([vertcat(ABDr.ContraDist);vertcat(ABDc.ContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
@@ -1024,6 +1083,24 @@ hold on;
 axis square
 xlabel('Pathlength (um)');
 title('ABDi Contra axons');
+
+subplot(4,4,16)
+ContraAxons = [vertcat(ABDr.Contra);vertcat(ABDc.Contra);vertcat(ABDIr.Contra);vertcat(ABDIc.Contra)];
+uniqueContraAxons = unique(ContraAxons);
+contraMotorSynapses = isMotor(uniqueContraAxons,df);
+contraMotorNeuronTargets = isPostSynapseMotor(uniqueContraAxons,df);
+
+scatter([sum(contraMotorSynapses(:,2:3),2)-sum(contraMotorSynapses(:,4:5),2)], ...
+    [sum(contraMotorNeuronTargets(:,2:3),2)-sum(contraMotorNeuronTargets(:,4:5),2)],20,'o',...
+    'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
+line([0,0],[-20,20],'linestyle',':','color','k');
+line([-200,200],[0,0],'linestyle',':','color','k');
+ylabel('#(ABD - ABDi) neurons');
+xlabel('#(ABD - ABDi) synapses')
+title('Contra Axons');
+text(100,-18,sprintf('n = %d',size(uniqueContraAxons,1)));
+box off;
+axis square;
 
 %% Remaining axon distribution
 
@@ -1231,6 +1308,8 @@ title(ABDIc_CellIDs(i));
 axis off;
 end
 sgtitle('ABDIc');
+
+
 
 
 %% 
