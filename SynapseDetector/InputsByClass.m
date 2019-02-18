@@ -1,6 +1,6 @@
 function [cellClasses] = InputsByClass(cellID,df);
 
-
+% transfrom teee to Z-brian space, in microns
 cellClasses.Tree = SwctoZbrian(cellID);
 cellClasses.Origin = [cellClasses.Tree{1}.X(1), cellClasses.Tree{1}.Y(1), cellClasses.Tree{1}.Z(1)];
 [cellClasses.Inputs, cellClasses.PSDID] = SynapticPartners(cellID,1,df);
@@ -11,6 +11,7 @@ end
 
 cellClasses.PreSynCoords = PrePartnerCoordinates(cellClasses.PSDID,df);
 cellClasses.PreSynCoordsTransformed = TransformPoints(cellClasses.PreSynCoords,0);
+cellClasses.PathLength =  PathLengthToCoordinate(cellClasses.PreSynCoordsTransformed,cellClasses.Tree{1});
 
 cellClasses.isSaccadic = isSaccade(cellClasses.Inputs);
 cellClasses.isVestibular = isVestibular(cellClasses.Inputs);
@@ -22,8 +23,9 @@ cellClasses.Vestibular = cellClasses.Inputs(cellClasses.isVestibular);
 cellClasses.Contra  = cellClasses.Inputs(cellClasses.isContra);
 cellClasses.Integrator = cellClasses.Inputs(cellClasses.isIntegrator);
 
-cellClasses.EverythingElse = setdiff(cellClasses.Inputs, ...
-    [cellClasses.Saccadic;cellClasses.Vestibular;cellClasses.Contra;cellClasses.Integrator]);
+idx = ~ismember(cellClasses.Inputs, ...
+    [cellClasses.Saccadic;cellClasses.Vestibular;cellClasses.Contra;cellClasses.Integrator],'rows');
+cellClasses.EverythingElse = cellClasses.Inputs(idx);
 cellClasses.isEverythingElse = ismember(cellClasses.Inputs,cellClasses.EverythingElse);
 
 cellClasses.MotorDist = isMotor(cellID,df);
