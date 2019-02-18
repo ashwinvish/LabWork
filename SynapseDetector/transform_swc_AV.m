@@ -1,4 +1,15 @@
-function  transform_SWC_AV(CELL_Id, neuronColor, somataColor, IdsHighlight,  displayRefBrain)
+function  transform_swc_AV(cellID, neuronColor, IdsHighlight,  displayRefBrain)
+% transfroms cellID fronm NG space to Z-brain space.
+% cellID is a nx1 vector
+% neuroncolor is [r,g,b] color of the neuron
+% IdsHilight are the brain regions from the maskdatabase that need to be
+% hilighted
+% displayRefBrain is true if the background needs to be an image plane from
+% the zbrain atlas.
+
+colors = cbrewer('qual','Paired',10);
+[m,n] = min(abs(neuronColor - colors)) ;
+somataColor = colors(round(mean(n)),:);
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
@@ -57,8 +68,8 @@ end
 if IdsHighlight
     
     %IdsHighlight = [238,235,186];        % Vestibular Clusters
-    %Ids =  [Ids,184:190];                % Reticulospinal Clusters
-    %Ids =  [Ids,135,186, 246, 250];      % Gad1b-s2, Gly2-s2, VglutS3, vglut2-strip4
+    %Ids =  [Ids,184,185,187:190];        % Reticulospinal Clusters
+    %Ids =  [Ids,135,186,246,250];        % Gad1b-s2, Gly2-s2, VglutS3, vglut2-strip4
     %Ids =  [93,131,130,134];             % Cerebellum
     
     for i = 1:length(IdsHighlight)
@@ -70,23 +81,23 @@ end
 
 
 %% get swc coordinate
-swc = cell(1,size(CELL_Id,2));
-swc_new = cell(1,size(CELL_Id,2));
-for i = 1:length(CELL_Id)
-    filename = sprintf('%d_reRoot_reSample_5000.swc',CELL_Id(i));
+swc = cell(1,size(cellID,1));
+swc_new = cell(1,size(cellID,1));
+for i = 1:length(cellID)
+    filename = sprintf('%d_reRoot_reSample_5000.swc',cellID(i));
     if exist(fullfile(fname,filename))
-        fID = fopen(fileName);
+        fID = fopen(fullfile(fname,filename));
         swc{i} = textscan(fID, '%f %f %f %f %f %f %f','HeaderLines',6,'CollectOutput',true);
         fclose(fID);
-    elseif exist(fullfile(fname,sprintf('%d.swc',CELL_Id(i))))
-        fID = fopen(fileName);
+    elseif exist(fullfile(fname,sprintf('%d.swc',cellID(i))))
+        fID = fopen(fullfile(fname,sprintf('%d.swc',cellID(i))));
         swc{i} = textscan(fID, '%f %f %f %f %f %f %f','HeaderLines',0,'CollectOutput',true);
         fclose(fID);
     else
         continue;
     end
     clear coord;
-    coord = swc{i}(:, 3:5) ;
+    coord = swc{i}{1,1}(:, 3:5) ;
     
     % compute offset as data in NG is offset from origin
     offset = [920,752,16400] .* [80, 80, 45]; % offset at mip4 number can be obtained from NG .info file
@@ -137,8 +148,7 @@ for i = 1:length(CELL_Id)
     
     % get mask plane and image (in mircron space, atlas space) through which the root node traverses.
     
-    n=1;
-    rootNodePlane(i) = round(min(coord_transformed(n,3))); % in micron space
+    rootNodePlane(i) = round(coord_transformed(1,3)); % in micron space
     rootNodeImage(:,:,i) = images(:,:,round(rootNodePlane(i)/imagesRef.PixelExtentInWorldZ));
 end
 %% construct a grided volume
@@ -240,31 +250,13 @@ if IdsHighlight
 end
 
 set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
-set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
+%set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
 set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
 
-%% plot cells in CELL_Id
+%% plot cells in cellID
 
-% for i = 1:length(CELL_Id)
-%     filename = sprintf('%d_reRoot_reSample_5000.swc',CELL_Id(i));
-%     if exist(fullfile(fname,filename))
-%         plot3(swc_new{i}(:,3), swc_new{i}(:,4), swc_new{i}(:,5),'MarkerFaceColor',neuronColor,'MarkerEdgeColor','none'); % plot neuron
-%         %[a_new,b_new] = min(swc_new{i}(:,5));
-%         %[a,b] = min(swc{i}(:,5));
-%         b=1;
-%         scatter3(swc_new{i}(b,3), swc_new{i}(b,4), swc_new{i}(b,5),50,'MarkerFaceColor',somataColor,'MarkerEdgeColor','w'); % plot somata
-%     elseif exist(fullfile(fname,sprintf('%d.swc',CELL_Id(i))))
-%         scatter3(swc_new{i}(:,3), swc_new{i}(:,4), swc_new{i}(:,5),1,'MarkerFaceColor',neuronColor,'MarkerEdgeColor','none'); % plot neuron
-%         %[a_new,b_new] = min(swc_new{i}(:,5));
-%         %[a,b] = min(swc{i}(:,5));
-%         b=1;
-%         scatter3(swc_new{i}(b,3), swc_new{i}(b,4), swc_new{i}(b,5),50,'MarkerFaceColor',somataColor,'MarkerEdgeColor','w'); % plot somata
-%         continue;
-%     end
-% end
-
-for i = 1:length(CELL_Id)
-    filename = sprintf('%d_reRoot_reSample_5000.swc',CELL_Id(i));
+for i = 1:length(cellID)
+    filename = sprintf('%d_reRoot_reSample_5000.swc',cellID(i));
     if exist(fullfile(fname,filename))
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
@@ -272,16 +264,16 @@ for i = 1:length(CELL_Id)
             'Color',neuronColor,'LineWidth',0.15);
         hold on;
         scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),35,'MarkerFaceColor',somataColor,...
-            'MarkerEdgeColor','k');
+            'MarkerEdgeColor','k','LineWidth',0.25);
         clear I;
         clear J;
         clear tree;
-    elseif exist(fullfile(fname,sprintf('%d.swc',CELL_Id(i))))
-        tree = load_tree(fullfile(fname,sprintf('%d.swc',CELL_Id(i))));
+    elseif exist(fullfile(fname,sprintf('%d.swc',cellID(i))))
+        tree = load_tree(fullfile(fname,sprintf('%d.swc',cellID(i))));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]','Color',neuronColor);
         hold on;
-        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor,'MarkerEdgeColor','none'); 
+        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor,'MarkerEdgeColor','none');
         clear I;
         clear J;
         clear tree;
@@ -295,7 +287,7 @@ end
 % text(500,1300,'50um','FontName','Arila','FontSize',10);
 
 axis off;
-%title(sprintf('%s,%d',name,138-round(mean
+%title(sprintf('%s,%d',name,138-round(meanRootNodePlane))
 
 
 end
