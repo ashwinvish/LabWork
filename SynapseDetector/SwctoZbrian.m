@@ -12,19 +12,20 @@ else
 end
 
 
-for i = 1:numel(cellID)
-    
+for i = 1:numel(cellID)   
     fileName = sprintf('%d_reRoot_reSample_5000.swc',cellID(i));
     if exist(fullfile(fname,fileName))
-        fID = fopen(fileName);
+        fID = fopen(fullfile(fname,fileName));
         swc{i} = textscan(fID, '%f %f %f %f %f %f %f','HeaderLines',6,'CollectOutput',true);
         fclose(fID);
         %swc{i} = dlmread(fullfile(fname,fileName), ' ',6,0);
     elseif exist(fullfile(fname,sprintf('%d.swc',cellID(i))))
-        fID = fopen(fileName);
+        fileName = sprintf('%d.swc',cellID(i));
+        fID = fopen(fullfile(fname,fileName));
         swc{i} = textscan(fID, '%f %f %f %f %f %f %f','HeaderLines',0,'CollectOutput',true);
         fclose(fID);
     else
+        tree{i} = [];
         continue;
     end
     
@@ -81,6 +82,7 @@ for i = 1:numel(cellID)
     tree{i} = load_tree(newFileName);
     delete(newFileName);  
 end
+
 end
 
 
