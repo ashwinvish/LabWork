@@ -1,8 +1,9 @@
 function [inBoundary] = isRhombomere(cellID)
 % isRhombomere deteremines which rhombomere the root node of cellID
 % lies in.
+% inBoundary is nx6 where (n,1) is the cellID
+% (n,2:6) are r3:r7
 
-% path to relavent folder with the skeletons.
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
@@ -25,7 +26,7 @@ height = imagesInfo(1).Height;
 imagesRef = imref3d([width,height,length(imagesInfo)],0.798,0.798,2); % set the correct dimensions for the images using the ref object
 
 
-IdsHighlight = [221:225];        % r3:r7 ;
+IdsHighlight = 221:225;        % r3:r7 ;
 
 for i = 1:length(IdsHighlight)
     maskImageHighlight(i).Ids = IdsHighlight(i);
@@ -35,52 +36,65 @@ end
 
 %  load and transfrom skeleton to z-brain atlas space
 
-%swc_zbrian = zeros(1,size(cellID,1));
 rootNodePlane = zeros(size(cellID,1),3);
-for i = 1:length(cellID)
-    swc_zbrian{i} = SwctoZbrian(cellID(i));
-    rootNodePlane(i,:) = [swc_zbrian{i}{1}.X(1),swc_zbrian{i}{1}.Y(1),swc_zbrian{i}{1}.Z(1)]; % get root node coords in Z-brain space.
+%swc_zbrian = zeros(size(cellID,1),1);
+
+if length(cellID) == 1
+    swc_zbrian = SwctoZbrian(cellID);
+    rootNodePlane(1,:) = [swc_zbrian{1}.X(1),swc_zbrian{1}.Y(1),swc_zbrian{1}.Z(1)]; % get root node coords in Z-brain space.
+else
+    swc_zbrian = SwctoZbrian(cellID);
 end
+
+for i = 1:length(cellID)
+    if ~isempty(swc_zbrian{i})
+        rootNodePlane(i,:) = [swc_zbrian{i}.X(1),swc_zbrian{i}.Y(1),swc_zbrian{i}.Z(1)]; % get root node coords in Z-brain space.
+    else
+        rootNodePlane(i,:) = NaN;
+    end
+end
+
 
 % determine which rhombomere the rootnode lies in.
+
+inBoundary = struct('cellID',zeros(length(cellID),1),'r3',zeros(length(cellID),1),'r4',zeros(length(cellID),1), ...
+    'r5', zeros(length(cellID),1), 'r6', zeros(length(cellID),1), 'r7',zeros(length(cellID),1));
+
 for j = 1:length(cellID)
-    for i = 1:length(IdsHighlight)
-        invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-rootNodePlane(j,3);
-        invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
-        [B,L] = bwboundaries(maskImageHighlight(i).image(:,:,invertedPlaneinVoxel));
-        inveratedPlaneinMicrons = rootNodePlane(j,3);
-        temp = cell2mat(B);
-        if i ==1
-            boundaries(j).r3(:,1) =  temp(:,1).*[imagesRef.PixelExtentInWorldX];
-            boundaries(j).r3(:,2) = temp(:,2).*[imagesRef.PixelExtentInWorldY];
-            boundaries(j).r3(:,3) = invertedPlaneinMicrons*ones(size(temp,1),1);
-            inBoundary(j).r3 = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(j).r3(:,2), boundaries(j).r3(:,1));
-        elseif i ==2
-            boundaries(j).r4(:,1) =  temp(:,1).*[imagesRef.PixelExtentInWorldX];
-            boundaries(j).r4(:,2) = temp(:,2).*[imagesRef.PixelExtentInWorldY];
-            boundaries(j).r4(:,3) = invertedPlaneinMicrons*ones(size(temp,1),1);
-            inBoundary(j).r4 = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(j).r4(:,2), boundaries(j).r4(:,1));
-
-        elseif i ==3
-            boundaries(j).r5(:,1) =  temp(:,1).*[imagesRef.PixelExtentInWorldX];
-            boundaries(j).r5(:,2) = temp(:,2).*[imagesRef.PixelExtentInWorldY];
-            boundaries(j).r5(:,3) = invertedPlaneinMicrons*ones(size(temp,1),1);
-            inBoundary(j).r5 = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(j).r5(:,2), boundaries(j).r5(:,1));
-
-        elseif i ==4
-            boundaries(j).r6(:,1) =  temp(:,1).*[imagesRef.PixelExtentInWorldX];
-            boundaries(j).r6(:,2) = temp(:,2).*[imagesRef.PixelExtentInWorldY];
-            boundaries(j).r6(:,3) = invertedPlaneinMicrons*ones(size(temp,1),1);
-            inBoundary(j).r6 = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(j).r6(:,2), boundaries(j).r6(:,1));
-
-        elseif i ==5
-            boundaries(j).r7(:,1) =  temp(:,1).*[imagesRef.PixelExtentInWorldX];
-            boundaries(j).r7(:,2) = temp(:,2).*[imagesRef.PixelExtentInWorldY];
-            boundaries(j).r7(:,3) = invertedPlaneinMicrons*ones(size(temp,1),1);
-            inBoundary(j).r7 = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(j).r7(:,2), boundaries(j).r7(:,1));
-        end  
+    if ~isnan(rootNodePlane(j,:))
+        inBoundary.cellID(j) = cellID(j);
+        for i = 1:length(IdsHighlight)
+            invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-rootNodePlane(j,3);
+            invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
+            [B,L] = bwboundaries(maskImageHighlight(i).image(:,:,invertedPlaneinVoxel));
+            inveratedPlaneinMicrons = rootNodePlane(j,3);
+            temp = cell2mat(B);
+            boundaries(:,1) =  temp(:,1).*[imagesRef.PixelExtentInWorldX];
+            boundaries(:,2) = temp(:,2).*[imagesRef.PixelExtentInWorldY];
+            boundaries(:,3) = invertedPlaneinMicrons*ones(size(temp,1),1);
+            if i ==1
+                inBoundary.r3(j) = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(:,2), boundaries(:,1));
+                clear boundaries;
+            elseif i ==2
+                inBoundary.r4(j) = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(:,2), boundaries(:,1));
+                clear boundaries;
+            elseif i ==3
+                inBoundary.r5(j) = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(:,2), boundaries(:,1));
+                clear boundaries;
+            elseif i ==4
+                inBoundary.r6(j) = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(:,2), boundaries(:,1));
+                clear boundaries;
+            elseif i ==5
+                inBoundary.r7(j) = inpolygon(rootNodePlane(j,1),rootNodePlane(j,2),boundaries(:,2), boundaries(:,1));
+                clear boundaries;
+            end
+        end
+    else
+        inBoundary.cellID(j) = cellID(j);
     end
-
+    
 end
+
+
 end
 
