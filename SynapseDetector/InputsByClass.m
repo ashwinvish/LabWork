@@ -1,33 +1,36 @@
-function [cellClasses] = InputsByClass(cellID,df);
+function [cellProperties] = InputsByClass(cellID,df);
 
 % transfrom teee to Z-brian space, in microns
-cellClasses.Tree = SwctoZbrian(cellID);
-cellClasses.Origin = [cellClasses.Tree{1}.X(1), cellClasses.Tree{1}.Y(1), cellClasses.Tree{1}.Z(1)];
-[cellClasses.Inputs, cellClasses.PSDID] = SynapticPartners(cellID,1,df);
+cellProperties.Tree = SwctoZbrian(cellID);
+cellProperties.Origin = [cellProperties.Tree{1}.X(1), cellProperties.Tree{1}.Y(1), cellProperties.Tree{1}.Z(1)];
+cellProperties.Rhombomere = struct2array(isRhombomere(cellID));
+[cellProperties.Inputs, cellProperties.PSDID] = SynapticPartners(cellID,1,df);
+%cellProperties.InputsRhombomeres = struct2array(isRhombomere(cellProperties.Inputs));
 
-for i =1:size(cellClasses.PSDID,1)
-    cellClasses.PSDsize(i,1) = df.size(df.psd_segid == cellClasses.PSDID(i));
+for i =1:size(cellProperties.PSDID,1)
+    cellProperties.PSDsize(i,1) = df.size(df.psd_segid == cellProperties.PSDID(i));
 end
 
-cellClasses.PreSynCoords = PrePartnerCoordinates(cellClasses.PSDID,df);
-cellClasses.PreSynCoordsTransformed = TransformPoints(cellClasses.PreSynCoords,0);
-cellClasses.PathLength =  PathLengthToCoordinate(cellClasses.PreSynCoordsTransformed,cellClasses.Tree{1});
+cellProperties.PreSynCoords = PrePartnerCoordinates(cellProperties.PSDID,df);
+cellProperties.PreSynCoordsTransformed = TransformPoints(cellProperties.PreSynCoords,0);
+cellProperties.PathLength =  PathLengthToCoordinate(cellProperties.PreSynCoordsTransformed,cellProperties.Tree{1});
 
-cellClasses.isSaccadic = isSaccade(cellClasses.Inputs);
-cellClasses.isVestibular = isVestibular(cellClasses.Inputs);
-cellClasses.isContra = isContra(cellClasses.Inputs);
-cellClasses.isIntegrator = isIntegrator(cellClasses.Inputs);
+cellProperties.isSaccadic = isSaccade(cellProperties.Inputs);
+cellProperties.isVestibular = isVestibular(cellProperties.Inputs);
+cellProperties.isContra = isContra(cellProperties.Inputs);
+cellProperties.isIntegrator = isIntegrator(cellProperties.Inputs);
 
-cellClasses.Saccadic = cellClasses.Inputs(cellClasses.isSaccadic);
-cellClasses.Vestibular = cellClasses.Inputs(cellClasses.isVestibular);
-cellClasses.Contra  = cellClasses.Inputs(cellClasses.isContra);
-cellClasses.Integrator = cellClasses.Inputs(cellClasses.isIntegrator);
+cellProperties.Saccadic = cellProperties.Inputs(cellProperties.isSaccadic);
+cellProperties.Vestibular = cellProperties.Inputs(cellProperties.isVestibular);
+cellProperties.Contra  = cellProperties.Inputs(cellProperties.isContra);
+cellProperties.Integrator = cellProperties.Inputs(cellProperties.isIntegrator);
 
-idx = ~ismember(cellClasses.Inputs, ...
-    [cellClasses.Saccadic;cellClasses.Vestibular;cellClasses.Contra;cellClasses.Integrator],'rows');
-cellClasses.EverythingElse = cellClasses.Inputs(idx);
-cellClasses.isEverythingElse = ismember(cellClasses.Inputs,cellClasses.EverythingElse);
 
-cellClasses.MotorDist = isMotor(cellID,df);
+idx = ~ismember(cellProperties.Inputs, ...
+    [cellProperties.Saccadic;cellProperties.Vestibular;cellProperties.Contra;cellProperties.Integrator],'rows');
+cellProperties.EverythingElse = cellProperties.Inputs(idx);
+cellProperties.isEverythingElse = ismember(cellProperties.Inputs,cellProperties.EverythingElse);
+
+cellProperties.MotorDist = isMotor(cellID,df);
 
 end
