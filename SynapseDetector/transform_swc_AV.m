@@ -7,9 +7,18 @@ function  transform_swc_AV(cellID, neuronColor, IdsHighlight,  displayRefBrain)
 % displayRefBrain is true if the background needs to be an image plane from
 % the zbrain atlas.
 
-colors = cbrewer('qual','Paired',10);
-[m,n] = min(abs(neuronColor - colors)) ;
-somataColor = colors(round(mean(n)),:);
+%colors = cbrewer('qual','Dark2',10);
+%[m,n] = min(abs(neuronColor - colors)) ;
+[m,n] = max(neuronColor) ;
+
+if n == 1
+    somataColor = neuronColor + [0,0.1,0.1];
+elseif n ==2
+    somataColor = neuronColor + [0.1,0,0.1];
+else
+    somataColor = neuronColor + [0.1,0.1,0];
+end  
+%somataColor = colors(round(mean(n)),:);
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
@@ -24,19 +33,19 @@ end
 % NOTE: Original files needs to be rotated ccw 90 and the zaxis needs to be
 % reversed in FIJI only.
 
-
+imageFileName = '6.7FRhcrtR-Gal4-uasKaede.tif';
 if ismac
-    imagesFile = '/Users/ashwin/Documents/RefBrains/SpinalBackfills.tif';
+    imageFilePath = '/Users/ashwin/Documents/RefBrains/';
 else
-    imagesFile = '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/RefBrains/SpinalBackfills.tif';
+    imageFilePath = '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/RefBrains/';
 end
 
-imagesInfo = imfinfo(imagesFile);
+imagesInfo = imfinfo(fullfile(imageFilePath,imageFileName));
 width = imagesInfo(1).Width;
 height = imagesInfo(1).Height;
 %images = zeros(height, width,length(imagesInfo),'uint8');
 images = zeros(height, width,length(imagesInfo));
-TifLink = Tiff(imagesFile,'r');
+TifLink = Tiff(fullfile(imageFilePath,imageFileName),'r');
 
 for i = 1:length(imagesInfo)
     TifLink.setDirectory(i);
@@ -167,19 +176,22 @@ meanRootNodePlane = meanRootNodePlane;
 %meanImage = mean(rootNodeImage,3);
 meanImage = images(:,:,round(meanRootNodePlane/imagesRef.PixelExtentInWorldZ));
 
-Z = round(meanRootNodePlane)*ones(size(X));
+%Z = round(meanRootNodePlane)*ones(size(X)); % this is the correct way to plot
+Z = round(276)*ones(size(X)); % this is to render the image layer to the back for visualization
 
 % resize the mean image to micron space
 img = imresize(meanImage,[imagesRef.ImageExtentInWorldY,imagesRef.ImageExtentInWorldX]);
+img = flip(img,2);
 
 % construct the mean plane as a surface
 
 if displayRefBrain
-    hsurf1 = surface(X,Y,Z,imcomplement(medfilt2(imadjust(img/max(img(:))))),'FaceColor','flat','EdgeColor','none');
+    %hsurf1 = surface(X,Y,Z,imcomplement(medfilt2(imadjust(img/max(img(:))))),'FaceColor','flat','EdgeColor','none');
+    hsurf1 = surface(X,Y,Z,medfilt2(imadjust(img/max(img(:)))),'FaceColor','flat','EdgeColor','none');
     %hold on;
     %hsurf2 = surface(X,Y,Z,img/max(img(:)),'FaceColor','flat','EdgeColor','none');
     colormap gray;
-    alpha(hsurf1, 0.5);
+    %alpha(hsurf1, 0.5);
     %alpha(hsurf2, 0.5);
 end
 
@@ -200,7 +212,7 @@ for i = 1:length(IdsBase)
     invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
     invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
     [B,L] = bwboundaries(maskImage(i).image(:,:,invertedPlaneinVoxel));
-    invertedPlaneinMicrons = meanRootNodePlane;
+    %invertedPlaneinMicrons = meanRootNodePlane;
     %boundarySize = size(B,1);
     if size(B,1)>0
         boundaries = B{1};
@@ -227,22 +239,22 @@ if IdsHighlight
         invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
         invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
         [B,L] = bwboundaries(maskImageHighlight(i).image(:,:,invertedPlaneinVoxel));
-        invertedPlaneinMicrons = meanRootNodePlane;
+        %invertedPlaneinMicrons = meanRootNodePlane;
         %boundarySize = size(B,1);
         if size(B,1)>0
             boundaries = B{1};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',2);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',4);
             clear boundaries;
         end
         if size(B,1)>1
             boundaries = B{2};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
-            % fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',2);
+            %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',4);
             annotation('textbox',[0.42,0.4-index,0.5,0],'EdgeColor','none','String',maskImageHighlight(i).name,'Color',cols(i,:));
         end
         index = index+0.01;
@@ -287,7 +299,7 @@ end
 % text(500,1300,'50um','FontName','Arila','FontSize',10);
 
 axis off;
-%title(sprintf('%s,%d',name,138-round(meanRootNodePlane))
+title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
 
 
 end
