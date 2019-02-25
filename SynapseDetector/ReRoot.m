@@ -1,9 +1,9 @@
 function[] = ReRoot(cellID)
 % re-root trees
 
-if isExistReRoot(cellID) == 1
-    disp('Rerooted file exists');
-else
+ %if isExistReRoot(cellID) == 1
+ %    disp('Rerooted file exists');
+ %else
     
     filePath  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
     oldFilePath = filePath;
@@ -25,7 +25,8 @@ else
         %lia = find(tree.X >= max(tree.X)-10000,1);
         
         %pmt = find(tree.Y == min(tree.Y));
-        %pmt = 3;
+        
+        %pmt = 1;
         
         
         if ~isempty(prompt)
@@ -43,6 +44,6 @@ else
         
         
     end
-end
+%end
 
 end
