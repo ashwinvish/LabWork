@@ -5,7 +5,7 @@ cellProperties.Tree = SwctoZbrian(cellID);
 cellProperties.Origin = [cellProperties.Tree{1}.X(1), cellProperties.Tree{1}.Y(1), cellProperties.Tree{1}.Z(1)];
 cellProperties.Rhombomere = struct2array(isRhombomere(cellID));
 [cellProperties.Inputs, cellProperties.PSDID] = SynapticPartners(cellID,1,df);
-%cellProperties.InputsRhombomeres = struct2array(isRhombomere(cellProperties.Inputs));
+cellProperties.InputsRhombomeres = struct2array(isRhombomere(cellProperties.Inputs));
 
 for i =1:size(cellProperties.PSDID,1)
     cellProperties.PSDsize(i,1) = df.size(df.psd_segid == cellProperties.PSDID(i));
