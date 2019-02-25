@@ -23,7 +23,7 @@ subplot(2,2,1); plot(T,FIN.staf(:,alx_pos_pop),'r');  title('DsRed + alx'); ylab
 set(gca,'box','off','TickDir','out','FontName','MyriadPro-Regular','FontSize',12); set(gca,'ylim',[-5 50]); set(gca,'xlim',[-2 7]);
 subplot(2,2,3); plot(T,FIN.staf(:,alx_neg_pop),'b'); title('DsRed - alx');
 set(gca,'box','off','TickDir','out','FontName','MyriadPro-Regular','FontSize',12); set(gca,'ylim',[-5 50]); set(gca,'xlim',[-2 7]);
-subplot(2,2,2); plot(T,FIN.staf(:,dbx_vglut_pop),'m'); title('DsRed + dbx1b');
+subplot(2,2,2); plot(T,FIN.staf(:,dbx_vglut_pop,'m'); title('DsRed + dbx1b');
 set(gca,'box','off','TickDir','out','FontName','MyriadPro-Regular','FontSize',12); set(gca,'ylim',[-5 50]); set(gca,'xlim',[-2 7]);
 subplot(2,2,4); plot(T,FIN.staf(:,dbx_vglut_neg_pop),'g');  title('DsRed - dbx1b');
 set(gca,'box','off','TickDir','out','FontName','MyriadPro-Regular','FontSize',12); set(gca,'ylim',[-5 50]); set(gca,'xlim',[-2 7]);
