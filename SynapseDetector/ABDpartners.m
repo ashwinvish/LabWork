@@ -29,7 +29,7 @@ ABDIc_CellIDs = [77148, 77625, 77641, 77692, 77144, 77643, 77640, 79051, 79066, 
 
 %%
 
-parfor i = 1:numel(ABDr_CellIDs)
+for i = 1:numel(ABDr_CellIDs)
     ABDr(i) = InputsByClass(ABDr_CellIDs(i),df);  
 end
 
