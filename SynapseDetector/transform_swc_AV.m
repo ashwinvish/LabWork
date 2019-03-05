@@ -1,4 +1,4 @@
-function  transform_swc_AV(cellID, neuronColor, IdsHighlight,  displayRefBrain)
+function  transform_swc_AV(cellID, neuronColor, IdsHighlight, displayBoundary, displayRefBrain)
 % transfroms cellID fronm NG space to Z-brain space.
 % cellID is a nx1 vector
 % neuroncolor is [r,g,b] color of the neuron
@@ -9,15 +9,34 @@ function  transform_swc_AV(cellID, neuronColor, IdsHighlight,  displayRefBrain)
 
 %colors = cbrewer('qual','Dark2',10);
 %[m,n] = min(abs(neuronColor - colors)) ;
-[m,n] = max(neuronColor) ;
 
-if n == 1
-    somataColor = neuronColor + [0,0.1,0.1];
-elseif n ==2
-    somataColor = neuronColor + [0.1,0,0.1];
+if size(neuronColor,1)>3
+    for i = 1:size(neuronColor,1)
+        [~,n(i)] = max(neuronColor(i,:)) ;
+        if n(i) == 1
+            somataColor(i,:) = neuronColor(i,:) + [0,0.1,0.1];
+        elseif n ==2
+            somataColor(i,:) = neuronColor(i,:) + [0.1,0,0.1];
+        else
+            somataColor(i,:) = neuronColor(i,:) + [0.1,0.1,0];
+        end
+    end
 else
-    somataColor = neuronColor + [0.1,0.1,0];
-end  
+    [m,n] = max(neuronColor) ;
+    if n == 1
+        somataColor = neuronColor + [0,0.1,0.1];
+    elseif n ==2
+        somataColor = neuronColor + [0.1,0,0.1];
+    else
+        somataColor = neuronColor + [0.1,0.1,0];
+    end
+    neuronColor = repmat(neuronColor,length(cellID),1);
+    somataColor = repmat(somataColor,length(cellID),1);
+end
+
+
+
+
 %somataColor = colors(round(mean(n)),:);
 
 if ismac
@@ -207,27 +226,28 @@ cols = cbrewer('qual','Accent',length(IdsBase));
 
 % Base level maske IDs (used for oveall orientation, e.g. rhombomere
 % boundaries)
-
-for i = 1:length(IdsBase)
-    invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
-    invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
-    [B,L] = bwboundaries(maskImage(i).image(:,:,invertedPlaneinVoxel));
-    %invertedPlaneinMicrons = meanRootNodePlane;
-    %boundarySize = size(B,1);
-    if size(B,1)>0
-        boundaries = B{1};
-        boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-        boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
-        %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-        plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2);
-        clear boundaries;
-    end
-    if size(B,1)>1
-        boundaries = B{2};
-        boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-        boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
-        % fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-        plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2);
+if displayBoundary
+    for i = 1:length(IdsBase)
+        invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
+        invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
+        [B,L] = bwboundaries(maskImage(i).image(:,:,invertedPlaneinVoxel));
+        %invertedPlaneinMicrons = meanRootNodePlane;
+        %boundarySize = size(B,1);
+        if size(B,1)>0
+            boundaries = B{1};
+            boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
+            boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
+            %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2);
+            clear boundaries;
+        end
+        if size(B,1)>1
+            boundaries = B{2};
+            boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
+            boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
+            % fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2);
+        end
     end
 end
 
@@ -246,7 +266,7 @@ if IdsHighlight
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',4);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
             clear boundaries;
         end
         if size(B,1)>1
@@ -254,7 +274,7 @@ if IdsHighlight
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',4);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
             annotation('textbox',[0.42,0.4-index,0.5,0],'EdgeColor','none','String',maskImageHighlight(i).name,'Color',cols(i,:));
         end
         index = index+0.01;
@@ -273,9 +293,9 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',neuronColor,'LineWidth',0.15);
+            'Color',neuronColor(i,:),'LineWidth',0.15);
         hold on;
-        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),35,'MarkerFaceColor',somataColor,...
+        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),35,'MarkerFaceColor',somataColor(i,:),...
             'MarkerEdgeColor','k','LineWidth',0.25);
         clear I;
         clear J;
@@ -283,9 +303,9 @@ for i = 1:length(cellID)
     elseif exist(fullfile(fname,sprintf('%d.swc',cellID(i))))
         tree = load_tree(fullfile(fname,sprintf('%d.swc',cellID(i))));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
-        line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]','Color',neuronColor);
+        line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]','Color',neuronColor(i,:));
         hold on;
-        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor,'MarkerEdgeColor','none');
+        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','none');
         clear I;
         clear J;
         clear tree;

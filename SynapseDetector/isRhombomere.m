@@ -57,12 +57,13 @@ end
 
 % determine which rhombomere the rootnode lies in.
 
-inBoundary = struct('cellID',zeros(length(cellID),1),'r3',zeros(length(cellID),1),'r4',zeros(length(cellID),1), ...
+inBoundary = struct('cellID',zeros(length(cellID),1),'rootNode',zeros(length(cellID),3),'r3',zeros(length(cellID),1),'r4',zeros(length(cellID),1), ...
     'r5', zeros(length(cellID),1), 'r6', zeros(length(cellID),1), 'r7',zeros(length(cellID),1));
 
 for j = 1:length(cellID)
     if ~isnan(rootNodePlane(j,:))
         inBoundary.cellID(j) = cellID(j);
+        inBoundary.rootNode(j,:) = rootNodePlane(j,:);
         for i = 1:length(IdsHighlight)
             invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-rootNodePlane(j,3);
             invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
