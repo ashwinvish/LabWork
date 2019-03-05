@@ -2,7 +2,7 @@ clc;
 clear;
 
 if ismac
-    addpath(genpath('/Users/ashwin/Documents/LabWork/SynapseDetector/Scripts'));
+    addpath(genpath('/Users/ashwin/Documents/'));
     df = readtable('/Users/ashwin/Documents/SynapseDetector/11252018.csv');
     fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
 
@@ -29,7 +29,7 @@ ABDIc_CellIDs = [77148, 77625, 77641, 77692, 77144, 77643, 77640, 79051, 79066, 
 
 %%
 
-for i = 1:numel(ABDr_CellIDs)
+parfor i = 1:numel(ABDr_CellIDs)
     ABDr(i) = InputsByClass(ABDr_CellIDs(i),df);  
 end
 
@@ -1102,6 +1102,37 @@ text(100,-18,sprintf('n = %d',size(uniqueContraAxons,1)));
 box off;
 axis square;
 
+%% plot the bimodal contra distribution
+
+figure;
+Contra_ABD_ABDi = [contraMotorNeuronTargets(:,1), [sum(contraMotorNeuronTargets(:,2:3),2)-sum(contraMotorNeuronTargets(:,4:5),2)]];
+subplot(4,4,1);
+histogram(Contra_ABD_ABDi(:,2));
+axis square;
+box off;
+
+% set threshold to 10
+
+Contra_ABD_heavy = Contra_ABD_ABDi(find(Contra_ABD_ABDi(:,2)>10));
+Contra_ABDi_heavy = Contra_ABD_ABDi(find(Contra_ABD_ABDi(:,2)<-10));
+
+Contra_ABD_rem = Contra_ABD_ABDi(find(Contra_ABD_ABDi(:,2)>0 & Contra_ABD_ABDi(:,2)<10));
+Contra_ABDi_rem = Contra_ABD_ABDi(find(Contra_ABD_ABDi(:,2)<0 & Contra_ABD_ABDi(:,2)>-10));
+
+
+
+A = colorcet('D1','N',256,'reverse',1);
+figure('units','normalized','outerposition',[0 0 1 1]);
+subplot(1,2,1);
+transform_swc_AV(Contra_ABD_heavy,A(1,:),[],false,false);
+transform_swc_AV(Contra_ABDi_heavy,A(256,:),[],false,false);
+
+subplot(1,2,2)
+transform_swc_AV(Contra_ABD_rem,A(1,:),[],true,false);
+transform_swc_AV(Contra_ABDi_rem,A(256,:),[],false,false);
+
+
+
 %% Remaining axon distribution
 
 subplot(4,4,1)
@@ -1242,6 +1273,129 @@ hold on;
 axis square
 xlabel('Pathlength (um)');
 title('ABDi EverythingElse axons');
+
+subplot(4,4,4)
+EverythingElseAxons = [vertcat(ABDr.EverythingElse);vertcat(ABDc.EverythingElse);vertcat(ABDIr.EverythingElse);vertcat(ABDIc.EverythingElse)];
+uniqueEverythingElseAxons = unique(EverythingElseAxons);
+uniqueEverythingElseAxons = uniqueEverythingElseAxons(uniqueEverythingElseAxons<1e5);
+EverythingElseMotorSynapses = isMotor(uniqueEverythingElseAxons,df);
+EverythingElseAxonsMotorNeuronTargets = isPostSynapseMotor(uniqueEverythingElseAxons,df);
+
+scatter([sum(EverythingElseMotorSynapses(:,2:3),2)-sum(EverythingElseMotorSynapses(:,4:5),2)], ...
+    [sum(EverythingElseAxonsMotorNeuronTargets(:,2:3),2)-sum(EverythingElseAxonsMotorNeuronTargets(:,4:5),2)],20,'o',...
+    'MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
+line([0,0],[-20,20],'linestyle',':','color','k');
+line([-200,200],[0,0],'linestyle',':','color','k');
+ylabel('#(ABD - ABDi) neurons');
+xlabel('#(ABD - ABDi) synapses')
+title('Remaining Axons');
+text(100,-18,sprintf('n = %d',size(uniqueEverythingElseAxons,1)));
+box off;
+axis square;
+%% plot the skeleting of all the different classes the project to the lead/lag pop
+A = colorcet('D1','N',256,'reverse',1);
+
+% Saccadic pop
+figure('units','normalized','outerposition',[0 0 1 1]);
+temp = [sum(saccadicMotorNeuronTargets(:,2:3),2)-sum(saccadicMotorNeuronTargets(:,4:5),2)];
+SaccadicOntoABD = uniqueSaccadicAxons(temp>0);
+SaccadicOntoABDi = uniqueSaccadicAxons(temp<0);
+
+subplot(1,2,1)
+transform_swc_AV([leadDiffAxons.Saccadic],A(1,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV([lagDiffAxons.Saccadic],A(256,:),[],true,false);
+export_fig('/Users/ashwin/Desktop/LeadLag_Saccadic_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+figure('units','normalized','outerposition',[0 0 1 1]);
+subplot(1,2,1)
+transform_swc_AV(SaccadicOntoABD,A(128-64,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV(SaccadicOntoABDi,A(128+64,:),[],true,false);
+clear temp;
+export_fig('/Users/ashwin/Desktop/AllSaccadic_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+% Vest pop
+figure('units','normalized','outerposition',[0 0 1 1]);
+temp = [sum(vestibularMotorNeuronTargets(:,2:3),2)-sum(vestibularMotorNeuronTargets(:,4:5),2)];
+VestibularOntoABD = uniqueVestibularAxons(temp>0);
+VestibularOntoABDi = uniqueVestibularAxons(temp<0);
+
+subplot(1,2,1)
+transform_swc_AV([leadDiffAxons.Vestibular],A(1,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV([lagDiffAxons.Vestibular],A(256,:),[],true,false);
+export_fig('/Users/ashwin/Desktop/LeadLag_Vestibular_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+figure('units','normalized','outerposition',[0 0 1 1]);
+subplot(1,2,1)
+transform_swc_AV(VestibularOntoABD,A(128-64,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV(VestibularOntoABDi,A(128+64,:),[],true,false);
+clear temp;
+export_fig('/Users/ashwin/Desktop/AllVestibular_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+ % Integrator Pop
+figure('units','normalized','outerposition',[0 0 1 1]);
+temp = [sum(integratorMotorNeuronTargets(:,2:3),2)-sum(integratorMotorNeuronTargets(:,4:5),2)];
+IntegratorOntoABD = uniqueIntegratorAxons(temp>0);
+IntegratorOntoABDi = uniqueIntegratorAxons(temp<0);
+
+subplot(1,2,1)
+transform_swc_AV([leadDiffAxons.Integrator],A(1,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV([lagDiffAxons.Integrator],A(256,:),[],true,false);
+export_fig('/Users/ashwin/Desktop/LeadLag_Integrator_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+figure('units','normalized','outerposition',[0 0 1 1]);
+subplot(1,2,1)
+transform_swc_AV(IntegratorOntoABD,A(128-64,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV(IntegratorOntoABDi,A(128+64,:),[],true,false);
+clear temp;
+export_fig('/Users/ashwin/Desktop/AllIntegrator_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+%%
+
+% Contra pop
+figure('units','normalized','outerposition',[0 0 1 1]);
+temp = [sum(contraMotorNeuronTargets(:,2:3),2)-sum(contraMotorNeuronTargets(:,4:5),2)];
+ContraOntoABD = uniqueContraAxons(temp>0);
+ContraOntoABDi = uniqueContraAxons(temp<0);
+
+subplot(1,2,1)
+transform_swc_AV([leadDiffAxons.Contra],A(1,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV([lagDiffAxons.Contra],A(256,:),[],true,false);
+export_fig('/Users/ashwin/Desktop/LeadLag_Contra_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+figure('units','normalized','outerposition',[0 0 1 1]);
+subplot(1,2,1)
+transform_swc_AV(ContraOntoABD,A(128-64,:),[],true,false);
+subplot(1,2,2)
+transform_swc_AV(ContraOntoABDi,A(128+64,:),[],true,false);
+clear temp;
+export_fig('/Users/ashwin/Desktop/AllContra_to_ABD_R_ABDi_B.png','-r300','-transparent');
+close all;
+
+
+
+%%
+figure('units','normalized','outerposition',[0 0 1 1]);
+temp = [sum(EverythingElseAxonsMotorNeuronTargets(:,2:3),2)-sum(EverythingElseAxonsMotorNeuronTargets(:,4:5),2)];
+EverythingElseOntoABD = uniqueEverythingElseAxons(temp>0);
+EverythingElseOntoABDi = uniqueEverythingElseAxons(temp<0);
+transform_swc_AV(IntegratorOntoABD,A(1,:),[],false);
+transform_swc_AV(IntegratorOntoABDi,A(3,:),[],false);
+clear temp
+
 
 %% plot location on individual Abducens neurons
 
