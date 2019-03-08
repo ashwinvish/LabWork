@@ -165,37 +165,37 @@ end
 % plot location on cells based in rhombomered organization.
 
 for i = 1:numel(leadNeurons)
-    Lead(i).r3(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,2) == 1,1);
+    Lead(i).r3(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,5) == 1,1);
     [~,Lead(i).r3(:,2)] = ismember(Lead(i).r3(:,1),Lead(i).Inputs);
     
-    Lead(i).r4(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,3) == 1,1);
+    Lead(i).r4(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,6) == 1,1);
     [~,Lead(i).r4(:,2)] = ismember(Lead(i).r4(:,1),Lead(i).Inputs);
     
-    Lead(i).r5(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,4) == 1,1);
+    Lead(i).r5(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,7) == 1,1);
     [~,Lead(i).r5(:,2)] = ismember(Lead(i).r5(:,1),Lead(i).Inputs);
     
-    Lead(i).r6(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,5) == 1,1);
+    Lead(i).r6(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,8) == 1,1);
     [~,Lead(i).r6(:,2)] = ismember(Lead(i).r6(:,1),Lead(i).Inputs);
     
-    Lead(i).r7(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,6) == 1,1);
+    Lead(i).r7(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,9) == 1,1);
     [~,Lead(i).r7(:,2)] = ismember(Lead(i).r7(:,1),Lead(i).Inputs);
     
 end
 
 for i = 1:numel(lagNeurons)
-    Lag(i).r3(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,2) == 1,1);
+    Lag(i).r3(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,5) == 1,1);
     [~,Lag(i).r3(:,2)] = ismember(Lag(i).r3(:,1),Lag(i).Inputs);
     
-    Lag(i).r4(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,3) == 1,1);
+    Lag(i).r4(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,6) == 1,1);
     [~,Lag(i).r4(:,2)] = ismember(Lag(i).r4(:,1),Lag(i).Inputs);
     
-    Lag(i).r5(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,4) == 1,1);
+    Lag(i).r5(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,7) == 1,1);
     [~,Lag(i).r5(:,2)] = ismember(Lag(i).r5(:,1),Lag(i).Inputs);
     
-    Lag(i).r6(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,5) == 1,1);
+    Lag(i).r6(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,8) == 1,1);
     [~,Lag(i).r6(:,2)] = ismember(Lag(i).r6(:,1),Lag(i).Inputs);
     
-    Lag(i).r7(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,6) == 1,1);
+    Lag(i).r7(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,9) == 1,1);
     [~,Lag(i).r7(:,2)] = ismember(Lag(i).r7(:,1),Lag(i).Inputs);
     
 end
@@ -841,185 +841,358 @@ xlabel('Pathlength (um)')
 box off;
 axis square;
 
-%% Plot all Lead/Lag axons from connectome
-
-load ConnMatrixPre.mat;
-load AllCells.mat;
-
-
-[~,leadA] = intersect(AllCells,leadDiffAxons);
-[~,leadB] = intersect(AllCells,leadNeurons);
-
-connMatLeadAxons = zeros(size(leadB,1),size(leadA,1));
-
-for i = 1:size(leadB,1)
-    connMatLeadAxons(i,:) = ConnMatrixPre(leadB(i),leadA);
-end
-
-subplot(2,1,1);
-cspy(connMatLeadAxons,'ColorMap',CustomCMap,'Level',9,'MarkerSize',20);
-
-[~,lagA] = intersect(AllCells, lagDiffAxons);
-[~,lagB] = intersect(AllCells,lagNeurons);
-
-connMatLagAxons = zeros(size(lagB,1),size(lagA,1));
-
-for i = 1:size(lagB,1)
-    connMatLagAxons(i,:) = ConnMatrixPre(lagB(i),lagA);
-end
-
-subplot(2,1,2);
-cspy(connMatLagAxons,'ColorMap',CustomCMap,'Level',9,'MarkerSize',20);
-
-%% plot the axons on the Z-brain atlas
-
-figure;
-
-subplot(1,3,1)
-transform_swc_AV([leadDiffAxons.Saccadic]',[1,0,0],[],false);
-transform_swc_AV([lagDiffAxons.Saccadic]',[0,0,1],[],false);
-title('Saccadic');
-
-subplot(1,3,2)
-transform_swc_AV([leadDiffAxons.Contra]',[1,0,0],[],false);
-transform_swc_AV([lagDiffAxons.Contra]',[0,0,1],[],false);
-title('Contra.');
-
-subplot(1,3,3)
-transform_swc_AV([leadDiffAxons.Integrator]',[1,0,0],[],false);
-transform_swc_AV([lagDiffAxons.Integrator]',[0,0,1],[],false);
-title('Integrator');
-
-
-%% plot location on cells based on identity
-
-figure;
-for i = 1:numel(leadNeurons)
-subplot(4,4,i)
-plot_tree(Lead(i).Tree{1},'k',[],[],[],'-3l');
-hold on;
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).isSaccadic,1), Lead(i).PreSynCoordsTransformed(Lead(i).isSaccadic,2), Lead(i).PreSynCoordsTransformed(Lead(i).isSaccadic,3),'o',...
-    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).isContra,1), Lead(i).PreSynCoordsTransformed(Lead(i).isContra,2), Lead(i).PreSynCoordsTransformed(Lead(i).isContra,3),'o', ...
-     'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).isIntegrator,1), Lead(i).PreSynCoordsTransformed(Lead(i).isIntegrator,2), Lead(i).PreSynCoordsTransformed(Lead(i).isIntegrator,3),'o', ...
- 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
-title(leadNeurons(i));
-axis off;
-end
-sgtitle('Lead Neurons');
-
-for i = 1:numel(lagNeurons)
-subplot(4,4,8+i)
-plot_tree(Lag(i).Tree{1},'k',[],[],[],'-3l');
-hold on;
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).isSaccadic,1), Lag(i).PreSynCoordsTransformed(Lag(i).isSaccadic,2), Lag(i).PreSynCoordsTransformed(Lag(i).isSaccadic,3),'o',...
-    'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).isContra,1), Lag(i).PreSynCoordsTransformed(Lag(i).isContra,2), Lag(i).PreSynCoordsTransformed(Lag(i).isContra,3),'o', ...
-     'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).isIntegrator,1), Lag(i).PreSynCoordsTransformed(Lag(i).isIntegrator,2), Lag(i).PreSynCoordsTransformed(Lag(i).isIntegrator,3),'o', ...
- 'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
-title(lagNeurons(i));
-axis off;
-end
-sgtitle('Lag Neurons');
+%% Looking at unique populations only
 
 
 
-%% plot location on cells based on rhombomere
-
-figure;
-for i = 1:numel(leadNeurons)
-subplot(4,4,i)
-plot_tree(Lead(i).Tree{1},'k',[],[],[],'-3l');
-hold on;
-%r3
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r3(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r3(:,2),2), ...
-    Lead(i).PreSynCoordsTransformed(Lead(i).r3(:,2),3),'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
-%r4
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r4(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r4(:,2),2), ...
-    Lead(i).PreSynCoordsTransformed(Lead(i).r4(:,2),3),'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
-%r5
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r5(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r5(:,2),2), ...
-    Lead(i).PreSynCoordsTransformed(Lead(i).r5(:,2),3),'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
-%r6
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r6(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r6(:,2),2), ...
-    Lead(i).PreSynCoordsTransformed(Lead(i).r6(:,2),3),'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-%r7
-scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r7(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r7(:,2),2), ...
-    Lead(i).PreSynCoordsTransformed(Lead(i).r7(:,2),3),'MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
-
-title(leadNeurons(i));
-axis off;
-end
-
-sgtitle('Lead Neurons');
-
-for i = 1:numel(lagNeurons)
-subplot(4,4,8+i)
-plot_tree(Lag(i).Tree{1},'k',[],[],[],'-3l');
-hold on;
-%r3
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r3(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r3(:,2),2), ...
-    Lag(i).PreSynCoordsTransformed(Lag(i).r3(:,2),3),'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
-%r4
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r4(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r4(:,2),2), ...
-    Lag(i).PreSynCoordsTransformed(Lag(i).r4(:,2),3),'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
-%r5
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r5(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r5(:,2),2), ...
-    Lag(i).PreSynCoordsTransformed(Lag(i).r5(:,2),3),'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
-%r6
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r6(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r6(:,2),2), ...
-    Lag(i).PreSynCoordsTransformed(Lag(i).r6(:,2),3),'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
-%r7
-scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r7(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r7(:,2),2), ...
-    Lag(i).PreSynCoordsTransformed(Lag(i).r7(:,2),3),'MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
-
-title(lagNeurons(i));
-axis off;
-end
-sgtitle('Lag Neurons');
-    
-
-%% plot based on rhombomere pop
+% for i = 1:numel(leadNeurons)  
+%     var1 = ismember(Lead(i).Inputs,leadOnlySaccadic);
+%     var2 = ismember(Lead(i).Inputs,commonSaccadic);
+%     leadOnlySaccadicPathlength(1:sum(var1),i) = Lead(i).PathLength(var1)/max(Pvec_tree(Lead(i).Tree{1}));
+%     CommonSaccadicPathlength(1:sum(var2),i) = Lead(i).PathLength(var2)/max(Pvec_tree(Lead(i).Tree{1}));
+% end
+% 
+% for i = 1:numel(lagNeurons)  
+%     var1 = ismember(Lag(i).Inputs,lagOnlySaccadic);
+%     var2 = ismember(Lag(i).Inputs,commonSaccadic);
+%     lagOnlySaccadicPathlength(1:sum(var1),i) = Lag(i).PathLength(var1)/max(Pvec_tree(Lag(i).Tree{1}));
+%     CommonSaccadicPathlength(1:sum(var2),numel(leadNeurons)+i) = Lag(i).PathLength(var2)/max(Pvec_tree(Lag(i).Tree{1}));
+% end
+% 
+% commonSaccadicPathlength(:,1:5) = leadCommonSaccadicPathlength;
+% commonSaccadicPathlength(:,5:9) =  lagCommonSaccadicPathlength;
+% 
+% histogram(leadOnlySaccadicPathlength(leadOnlySaccadicPathlength~=0),10);
+% hold on;
+% histogram(lagOnlySaccadicPathlength(leadOnlySaccadicPathlength~=0),10);
+% histogram(CommonSaccadicPathlength(CommonSaccadicPathlength~=0),10);
+% 
 
 
- %r3
- leadR3 = vertcat(Lead.r3);
- lagR3 = vertcat(Lag.r3);
 
- transform_swc_AV(leadR3(:,1),[1,0,0],[],false);
- transform_swc_AV(lagR3(:,1),[0,0,1],[],false);
+% %% Plot all Lead/Lag axons from connectome
+% 
+% load ConnMatrixPre.mat;
+% load AllCells.mat;
+% 
+% 
+% [~,leadA] = intersect(AllCells,leadDiffAxons);
+% [~,leadB] = intersect(AllCells,leadNeurons);
+% 
+% connMatLeadAxons = zeros(size(leadB,1),size(leadA,1));
+% 
+% for i = 1:size(leadB,1)
+%     connMatLeadAxons(i,:) = ConnMatrixPre(leadB(i),leadA);
+% end
+% 
+% subplot(2,1,1);
+% cspy(connMatLeadAxons,'ColorMap',CustomCMap,'Level',9,'MarkerSize',20);
+% 
+% [~,lagA] = intersect(AllCells, lagDiffAxons);
+% [~,lagB] = intersect(AllCells,lagNeurons);
+% 
+% connMatLagAxons = zeros(size(lagB,1),size(lagA,1));
+% 
+% for i = 1:size(lagB,1)
+%     connMatLagAxons(i,:) = ConnMatrixPre(lagB(i),lagA);
+% end
+% 
+% subplot(2,1,2);
+% cspy(connMatLagAxons,'ColorMap',CustomCMap,'Level',9,'MarkerSize',20);
+% 
+% %% plot the axons on the Z-brain atlas
+% 
+% figure;
+% 
+% subplot(1,3,1)
+% transform_swc_AV([leadDiffAxons.Saccadic]',[1,0,0],[],false);
+% transform_swc_AV([lagDiffAxons.Saccadic]',[0,0,1],[],false);
+% title('Saccadic');
+% 
+% subplot(1,3,2)
+% transform_swc_AV([leadDiffAxons.Contra]',[1,0,0],[],false);
+% transform_swc_AV([lagDiffAxons.Contra]',[0,0,1],[],false);
+% title('Contra.');
+% 
+% subplot(1,3,3)
+% transform_swc_AV([leadDiffAxons.Integrator]',[1,0,0],[],false);
+% transform_swc_AV([lagDiffAxons.Integrator]',[0,0,1],[],false);
+% title('Integrator');
+% 
+% 
+% %% plot location on cells based on identity
+% 
+% figure;
+% for i = 1:numel(leadNeurons)
+% subplot(4,4,i)
+% plot_tree(Lead(i).Tree{1},'k',[],[],[],'-3l');
+% hold on;
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).isSaccadic,1), Lead(i).PreSynCoordsTransformed(Lead(i).isSaccadic,2), Lead(i).PreSynCoordsTransformed(Lead(i).isSaccadic,3),'o',...
+%     'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).isContra,1), Lead(i).PreSynCoordsTransformed(Lead(i).isContra,2), Lead(i).PreSynCoordsTransformed(Lead(i).isContra,3),'o', ...
+%      'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).isIntegrator,1), Lead(i).PreSynCoordsTransformed(Lead(i).isIntegrator,2), Lead(i).PreSynCoordsTransformed(Lead(i).isIntegrator,3),'o', ...
+%  'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
+% title(leadNeurons(i));
+% axis off;
+% end
+% sgtitle('Lead Neurons');
+% 
+% for i = 1:numel(lagNeurons)
+% subplot(4,4,8+i)
+% plot_tree(Lag(i).Tree{1},'k',[],[],[],'-3l');
+% hold on;
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).isSaccadic,1), Lag(i).PreSynCoordsTransformed(Lag(i).isSaccadic,2), Lag(i).PreSynCoordsTransformed(Lag(i).isSaccadic,3),'o',...
+%     'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none')
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).isContra,1), Lag(i).PreSynCoordsTransformed(Lag(i).isContra,2), Lag(i).PreSynCoordsTransformed(Lag(i).isContra,3),'o', ...
+%      'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none')
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).isIntegrator,1), Lag(i).PreSynCoordsTransformed(Lag(i).isIntegrator,2), Lag(i).PreSynCoordsTransformed(Lag(i).isIntegrator,3),'o', ...
+%  'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none')
+% title(lagNeurons(i));
+% axis off;
+% end
+% sgtitle('Lag Neurons');
+% 
+% 
+% 
+% %% plot location on cells based on rhombomere
+% 
+% figure;
+% for i = 1:numel(leadNeurons)
+% subplot(4,4,i)
+% plot_tree(Lead(i).Tree{1},'k',[],[],[],'-3l');
+% hold on;
+% %r3
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r3(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r3(:,2),2), ...
+%     Lead(i).PreSynCoordsTransformed(Lead(i).r3(:,2),3),'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
+% %r4
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r4(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r4(:,2),2), ...
+%     Lead(i).PreSynCoordsTransformed(Lead(i).r4(:,2),3),'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
+% %r5
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r5(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r5(:,2),2), ...
+%     Lead(i).PreSynCoordsTransformed(Lead(i).r5(:,2),3),'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
+% %r6
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r6(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r6(:,2),2), ...
+%     Lead(i).PreSynCoordsTransformed(Lead(i).r6(:,2),3),'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
+% %r7
+% scatter3(Lead(i).PreSynCoordsTransformed(Lead(i).r7(:,2),1),Lead(i).PreSynCoordsTransformed(Lead(i).r7(:,2),2), ...
+%     Lead(i).PreSynCoordsTransformed(Lead(i).r7(:,2),3),'MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
+% 
+% title(leadNeurons(i));
+% axis off;
+% end
+% 
+% sgtitle('Lead Neurons');
+% 
+% for i = 1:numel(lagNeurons)
+% subplot(4,4,8+i)
+% plot_tree(Lag(i).Tree{1},'k',[],[],[],'-3l');
+% hold on;
+% %r3
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r3(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r3(:,2),2), ...
+%     Lag(i).PreSynCoordsTransformed(Lag(i).r3(:,2),3),'MarkerFaceColor',colors(1,:),'MarkerEdgeColor','none');
+% %r4
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r4(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r4(:,2),2), ...
+%     Lag(i).PreSynCoordsTransformed(Lag(i).r4(:,2),3),'MarkerFaceColor',colors(2,:),'MarkerEdgeColor','none');
+% %r5
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r5(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r5(:,2),2), ...
+%     Lag(i).PreSynCoordsTransformed(Lag(i).r5(:,2),3),'MarkerFaceColor',colors(3,:),'MarkerEdgeColor','none');
+% %r6
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r6(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r6(:,2),2), ...
+%     Lag(i).PreSynCoordsTransformed(Lag(i).r6(:,2),3),'MarkerFaceColor',colors(4,:),'MarkerEdgeColor','none');
+% %r7
+% scatter3(Lag(i).PreSynCoordsTransformed(Lag(i).r7(:,2),1),Lag(i).PreSynCoordsTransformed(Lag(i).r7(:,2),2), ...
+%     Lag(i).PreSynCoordsTransformed(Lag(i).r7(:,2),3),'MarkerFaceColor',colors(5,:),'MarkerEdgeColor','none');
+% 
+% title(lagNeurons(i));
+% axis off;
+% end
+% sgtitle('Lag Neurons');
+%     
+% 
+% %% plot based on rhombomere pop
+% 
+% 
+%  %r3
+%  leadR3 = vertcat(Lead.r3);
+%  lagR3 = vertcat(Lag.r3);
+% 
+%  transform_swc_AV(leadR3(:,1),[1,0,0],[],false);
+%  transform_swc_AV(lagR3(:,1),[0,0,1],[],false);
+%  
+%   %r4
+%  leadR4 = vertcat(Lead.r4);
+%  lagR4 = vertcat(Lag.r4);
+% 
+%  transform_swc_AV(leadR4(:,1),[1,0,0],[],false);
+%  transform_swc_AV(lagR4(:,1),[0,0,1],[],false);
+%  
+%   %r5
+%  leadR5 = vertcat(Lead.r5);
+%  lagR5 = vertcat(Lag.r5);
+% 
+%  transform_swc_AV(leadR5(:,1),[1,0,0],[],false);
+%  transform_swc_AV(lagR5(:,1),[0,0,1],[],false);
+%  
+%   %r3
+%  leadR6 = vertcat(Lead.r6);
+%  lagR6 = vertcat(Lag.r6);
+% 
+%  transform_swc_AV(leadR6(:,1),[1,0,0],[],false);
+%  transform_swc_AV(lagR6(:,1),[0,0,1],[],false);
+%  
+%   %r3
+%  leadR7 = vertcat(Lead.r7);
+%  lagR7 = vertcat(Lag.r7);
+% 
+%  transform_swc_AV(leadR7(:,1),[1,0,0],[],false);
+%  transform_swc_AV(lagR7(:,1),[0,0,1],[],false);
+% 
+ %% make pretty plots
  
-  %r4
- leadR4 = vertcat(Lead.r4);
- lagR4 = vertcat(Lag.r4);
-
- transform_swc_AV(leadR4(:,1),[1,0,0],[],false);
- transform_swc_AV(lagR4(:,1),[0,0,1],[],false);
+ colors2 = colorcet('CBTD1','N',5,'reverse',1); % blue-->red for the partners
+ colors1 = colorcet('D1A','N',5, 'reverse',1); % blue -->red for the neurons
  
-  %r5
- leadR5 = vertcat(Lead.r5);
- lagR5 = vertcat(Lag.r5);
-
- transform_swc_AV(leadR5(:,1),[1,0,0],[],false);
- transform_swc_AV(lagR5(:,1),[0,0,1],[],false);
+%colors = colorcet('D1A','N',20,'reverse',1);
+%colors = distinguishable_colors(5,{'w','k'});
  
-  %r3
- leadR6 = vertcat(Lead.r6);
- lagR6 = vertcat(Lag.r6);
-
- transform_swc_AV(leadR6(:,1),[1,0,0],[],false);
- transform_swc_AV(lagR6(:,1),[0,0,1],[],false);
+leadOnlySaccadic = setdiff(leadSaccadicAxons, lagSaccadicAxons);
+lagOnlySaccadic = setdiff(lagSaccadicAxons, leadSaccadicAxons);
+commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
  
-  %r3
- leadR7 = vertcat(Lead.r7);
- lagR7 = vertcat(Lag.r7);
-
- transform_swc_AV(leadR7(:,1),[1,0,0],[],false);
- transform_swc_AV(lagR7(:,1),[0,0,1],[],false);
-
+ for i = 1:numel(commonSaccadic)
+     commonSaccadicDiff(i).ID = commonSaccadic(i);
+     commonSaccadicDiff(i).Lead = sum(ismember(vertcat(Lead.Saccadic), commonSaccadic(i)));
+     commonSaccadicDiff(i).Lag = sum(ismember(vertcat(Lag.Saccadic), commonSaccadic(i)));
+ end
  
+ index = find([commonSaccadicDiff.Lead]>[commonSaccadicDiff.Lag]);
+ leadOnlySaccadic = [leadOnlySaccadic;[commonSaccadicDiff(index).ID]'];
+ index = find([commonSaccadicDiff.Lead]<[commonSaccadicDiff.Lag]);
+ lagOnlySaccadic = [lagOnlySaccadic;[commonSaccadicDiff(index).ID]'];
+
+ % plot lead and Lag neurons
+ subplot(1,2,1)
+ transform_swc_AV(leadNeurons,colors1(1:2,:),[],true,false);
+ transform_swc_AV(leadOnlySaccadic,colors2(1:2,:),[],false,false);
+ 
+%export_fig('/Users/ashwin/Desktop/SaccadicsLEADOntoInt.png','-r300','-transparent');
+%close all;
+
+ subplot(1,2,2)
+ transform_swc_AV(lagNeurons,colors1(4:5,:),[],true,false);
+ transform_swc_AV(lagOnlySaccadic,colors2(4:5,:),[],false,false);
+ 
+
+ export_fig('/Users/ashwin/Desktop/SaccadicsLAGOntoInt.png','-r300','-transparent');
+ close all;
+% 
+%  %transform_swc_AV(commonSaccadic,[colors(9,:)+colors(12,:)]/3,[],false,false);
+% 
+% % vestibular pop
+% 
+%  
+% leadOnlyVestibular = setdiff(leadVestibularAxons, lagVestibularAxons);
+% lagOnlyVestibular  = setdiff(lagVestibularAxons, leadVestibularAxons);
+% commonVestibular  = intersect(leadVestibularAxons,lagVestibularAxons);
+% 
+% for i = 1:numel(commonVestibular)
+%      commonVestibularDiff(i).ID = commonVestibular(i);
+%      commonVestibularDiff(i).Lead = sum(ismember(vertcat(Lead.Vestibular), commonVestibular(i)));
+%      commonVestibularDiff(i).Lag = sum(ismember(vertcat(Lag.Vestibular), commonVestibular(i)));
+%  end
+%  
+%  index = find([commonVestibularDiff.Lead]>[commonVestibularDiff.Lag]);
+%  leadOnlyVestibular = [leadOnlyVestibular;[commonVestibularDiff(index).ID]'];
+%  index = find([commonVestibularDiff.Lead]<[commonVestibularDiff.Lag]);
+%  lagOnlyVestibular = [lagOnlyVestibular;[commonVestibularDiff(index).ID]'];
+% 
+%  % plot lead and Lag neurons
+%  subplot(1,2,1)
+%  transform_swc_AV(leadNeurons,colors(9,:),[],true,false);
+%  transform_swc_AV(leadOnlyVestibular,colors(4,:),[],false,false);
+% export_fig('/Users/ashwin/Desktop/VestibularLEADOntoInt.png','-r300','-transparent');
+% close all;
+%  
+%  subplot(1,2,2)
+%  transform_swc_AV(lagNeurons,colors(12,:),[],true,false);
+%  transform_swc_AV(lagOnlyVestibular,colors(16,:),[],false,false);
+%  export_fig('/Users/ashwin/Desktop/VestibularLAGOntoInt.png','-r300','-transparent');
+% close all;
+%  
+%  % Contra pop
+% 
+%  
+% leadOnlyContra = setdiff(leadContraAxons, lagContraAxons);
+% lagOnlyContra  = setdiff(lagContraAxons, leadContraAxons);
+% commonContra  = intersect(leadContraAxons,lagContraAxons);
+% 
+% for i = 1:numel(commonContra)
+%      commonContraDiff(i).ID = commonContra(i);
+%      commonContraDiff(i).Lead = sum(ismember(vertcat(Lead.Contra), commonContra(i)));
+%      commonContraDiff(i).Lag = sum(ismember(vertcat(Lag.Contra), commonContra(i)));
+%  end
+%  
+%  index = find([commonContraDiff.Lead]>[commonContraDiff.Lag]);
+%  leadOnlyContra = [leadOnlyContra;[commonContraDiff(index).ID]'];
+%  index = find([commonContraDiff.Lead]<[commonContraDiff.Lag]);
+%  lagOnlyContra = [lagOnlyContra;[commonContraDiff(index).ID]'];
+% 
+%  % plot lead and Lag neurons
+%  subplot(1,2,1)
+%  transform_swc_AV(leadNeurons,colors(9,:),[],true,false);
+%  transform_swc_AV(leadOnlyContra,colors(4,:),[],false,false);
+%  export_fig('/Users/ashwin/Desktop/ContraLEADOntoInt.png','-r300','-transparent');
+% close all;
+%  
+%  subplot(1,2,2)
+%  transform_swc_AV(lagNeurons,colors(12,:),[],true,false);
+%  transform_swc_AV(lagOnlyContra,colors(16,:),[],false,false);
+%   export_fig('/Users/ashwin/Desktop/ContraLAGOntoInt.png','-r300','-transparent');
+% close all;
+%  
+% % seperate the Contra by R5/R6 and remaining
+% clear temp;
+% R4LeadContra = [];
+% R5LeadContra = [];
+% R6LeadContra = [];
+% 
+% for i = 1:numel(leadNeurons)
+%     temp = find(ismember(Lead(i).Inputs,leadOnlyContra));
+%     R4LeadContra = [R4LeadContra;Lead(i).InputsRhombomeres(temp(find(Lead(i).InputsRhombomeres(temp,6) ==1)),1)];
+%     R5LeadContra = [R5LeadContra;Lead(i).InputsRhombomeres(temp(find(Lead(i).InputsRhombomeres(temp,7) ==1)),1)];
+%     R6LeadContra = [R6LeadContra;Lead(i).InputsRhombomeres(temp(find(Lead(i).InputsRhombomeres(temp,8) ==1)),1)];
+%     clear temp;
+% end
+% 
+% 
+% 
+% 
+% 
+% clear temp;
+% R4LagContra = [];
+% R5LagContra = [];
+% R6LagContra = [];
+% 
+% for i = 1:numel(lagNeurons)
+%     temp = find(ismember(Lag(i).Inputs,lagOnlyContra));
+%     R4LagContra = [R4LagContra;Lag(i).InputsRhombomeres(temp(find(Lag(i).InputsRhombomeres(temp,6) ==1)),1)];
+%     R5LagContra = [R5LagContra;Lag(i).InputsRhombomeres(temp(find(Lag(i).InputsRhombomeres(temp,7) ==1)),1)];
+%     R6LagContra = [R6LagContra;Lag(i).InputsRhombomeres(temp(find(Lag(i).InputsRhombomeres(temp,8) ==1)),1)];
+%     clear temp;
+% end
+% 
+% subplot(1,3,1)
+% transform_swc_AV(R4LeadContra,colors(4,:),[],true,false);
+% transform_swc_AV(R4LagContra,colors(16,:),[],false,false);
+% 
+% subplot(1,3,2)
+% transform_swc_AV(R5LeadContra,colors(4,:),[],true,false);
+% transform_swc_AV(R5LagContra,colors(16,:),[],false,false);
+% 
+% subplot(1,3,3)
+% transform_swc_AV(R6LeadContra,colors(4,:),[],true,false);
+% transform_swc_AV(R6LagContra,colors(16,:),[],false,false);
 
 
 
