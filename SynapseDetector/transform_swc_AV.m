@@ -10,28 +10,12 @@ function  transform_swc_AV(cellID, neuronColor, IdsHighlight, displayBoundary, d
 %colors = cbrewer('qual','Dark2',10);
 %[m,n] = min(abs(neuronColor - colors)) ;
 
-if size(neuronColor,1)>3
-    for i = 1:size(neuronColor,1)
-        [~,n(i)] = max(neuronColor(i,:)) ;
-        if n(i) == 1
-            somataColor(i,:) = neuronColor(i,:) + [0,0.1,0.1];
-        elseif n ==2
-            somataColor(i,:) = neuronColor(i,:) + [0.1,0,0.1];
-        else
-            somataColor(i,:) = neuronColor(i,:) + [0.1,0.1,0];
-        end
-    end
+if size(neuronColor,1)>1
+    somataColor  = neuronColor(2,:);
+    neuronColor  = neuronColor(1,:);
 else
-    [m,n] = max(neuronColor) ;
-    if n == 1
-        somataColor = neuronColor + [0,0.1,0.1];
-    elseif n ==2
-        somataColor = neuronColor + [0.1,0,0.1];
-    else
-        somataColor = neuronColor + [0.1,0.1,0];
-    end
-    neuronColor = repmat(neuronColor,length(cellID),1);
-    somataColor = repmat(somataColor,length(cellID),1);
+    somataColor  = neuronColor(1,:);
+    neuronColor  = neuronColor(1,:);
 end
 
 
@@ -293,9 +277,9 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',neuronColor(i,:),'LineWidth',0.15);
+            'Color',neuronColor,'LineWidth',1);
         hold on;
-        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),35,'MarkerFaceColor',somataColor(i,:),...
+        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor,...
             'MarkerEdgeColor','k','LineWidth',0.25);
         clear I;
         clear J;
@@ -319,7 +303,7 @@ end
 % text(500,1300,'50um','FontName','Arila','FontSize',10);
 
 axis off;
-title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
+%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
 
 
 end
