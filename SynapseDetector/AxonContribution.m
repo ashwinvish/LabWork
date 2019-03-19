@@ -36,65 +36,97 @@ CellOrder = [ones(1,size(DbxCells,2)), 2* ones(1,size(DBX_vglut_neg,2)), 3* ones
 sprintf('first %d components capture %f of the data',5, sum(E(1:5)))
 Firing = B(:,1:5)*A(:,1:5)'+ F;
 normFiring = Firing(:,1:9);
+
+
+temp1 = colorcet('CBTL1','N',5);
+temp2 = colorcet('CBL2','N',5);
+
+leadColor = temp1(3,:); % dark red, CB safe
+lagColor = temp2(3,:); % dark blue, CB safe
+
+
 %%  plot population data according to groups
 % 2 --> Vglut_negative; blue
 % 3 --> Vglut_positive; red
 
 figure(1)
 subplot(4,4,1)
-shadedErrorBar(t,mean(Firing(:,CellOrder==2),2),std(Firing(:,CellOrder==2),[],2),'lineprops',{'b'});
+shadedErrorBar(t,mean(Firing(:,CellOrder==2),2),std(Firing(:,CellOrder==2),[],2),'lineprops',{'Color',lagColor});
 hold on ;
-shadedErrorBar(t,mean(Firing(:,CellOrder==3),2),std(Firing(:,CellOrder==3),[],2),'lineprops',{'r'});
+shadedErrorBar(t,mean(Firing(:,CellOrder==3),2),std(Firing(:,CellOrder==3),[],2),'lineprops',{'Color',leadColor});
 xlabel('Time (sec)');
 ylabel('df/f');
 axis square;
-title('Clusters from type');
+
+title('Saccade triggered fluorescence (by labels)');
+
+molOrder = [find(CellOrder ==1)'; find(CellOrder ==2)'; find(CellOrder ==3)'];
+
+subplot(4,4,3)
+imagesc(Firing(:,molOrder)');
+colormap(colorcet('L16'));
+colorbar;
+set(gca,'XTick',[0,41,81,121,161],'XTickLabel',[-2,0,2,4,6]);
+xlabel('Time(sec)');
+box off;
+ylabel('Neurons');
+daspect([1,1,1]);
 
 %% Coorelation analyis of the cells.
-CorrVals = corr(Firing);
-CorrVals = CorrVals - eye(size(CorrVals));
+% CorrVals = corr(Firing);
+% CorrVals = CorrVals - eye(size(CorrVals));
 % cutoff = 0.5;
 % Z = linkage(CorrVals,'complete','correlation')
 
-subplot(4,4,2);
-molOrder = [find(CellOrder ==1)'; find(CellOrder ==2)'; find(CellOrder ==3)'];
-imagesc(CorrVals(molOrder,molOrder));
-colormap(colorcet('L1'));
-% set(gca,'XTick',1:size(order,1),'XTickLabel',{CellOrder(order)},'YTick',1:size(order,1),'YTickLabel',{CellOrder(order)});
-colorbar;
+eva = evalclusters(Firing','kmeans','silhouette','Distance','correlation','KList',1:6);
+
+subplot(4,4,4)
+plot(eva);
+title('Optimal clusters');
 axis square;
+box off;
+
+% subplot(4,4,2);
+% molOrder = [find(CellOrder ==1)'; find(CellOrder ==2)'; find(CellOrder ==3)'];
+% imagesc(CorrVals(molOrder,molOrder));
+% colormap(colorcet('L1'));
+% % set(gca,'XTick',1:size(order,1),'XTickLabel',{CellOrder(order)},'YTick',1:size(order,1),'YTickLabel',{CellOrder(order)});
+% colorbar;
+% axis square;
 
 
+% [idx,c] = kmeans(CorrVals',2,'Distance','correlation','MaxIter',100);
+% corrIds = idx;
+% [~,order]=sort(idx);
 
-[idx,c] = kmeans(CorrVals',2,'Distance','correlation','MaxIter',100);
-corrIds = idx;
-[~,order]=sort(idx);
-
-leadColor = 'r';
-lagColor = 'b';
 
 figure(1);
 
-if trapz(mean(Firing(1:50,corrIds==1),2)) > trapz(mean(Firing(1:50,corrIds==2),2))
-    leadCorrIDs = find(corrIds==1);
-    lagCorrIDs = find(corrIds==2);
+if max(mean(Firing(1:50,eva.OptimalY==1),2)) > max(mean(Firing(1:50,eva.OptimalY==2),2))
+    leadCorrIDs = find(eva.OptimalY==1);
+    lagCorrIDs = find(eva.OptimalY==2);
 else
-    leadCorrIDs = find(corrIds==2);
-    lagCorrIDs = find(corrIds==1);
+    leadCorrIDs = find(eva.OptimalY==2);
+    lagCorrIDs = find(eva.OptimalY==1);
 end
 
+order = [find(eva.OptimalY==1);find(eva.OptimalY ==2)];
+
 subplot(4,4,5);
-imagesc(CorrVals(order,order));
-colormap(colorcet('L1'));
-% set(gca,'XTick',1:size(order,1),'XTickLabel',{CellOrder(order)},'YTick',1:size(order,1),'YTickLabel',{CellOrder(order)});
+imagesc(Firing(:,order)');
+colormap(colorcet('L16'));
 colorbar;
-axis square;
-% title('Sorted by coorelations');
+set(gca,'XTick',[0,41,81,121,161],'XTickLabel',[-2,0,2,4,6]);
+xlabel('Time(sec)');
+box off;
+ylabel('Neurons');
+daspect([1,1,1]);
+
 
 subplot(4,4,6);
-shadedErrorBar(t,mean(Firing(:,leadCorrIDs),2),std(Firing(:,leadCorrIDs),[],2),'lineprops',{leadColor});
+shadedErrorBar(t,mean(Firing(:,leadCorrIDs),2),std(Firing(:,leadCorrIDs),[],2),'lineProps',{'Color',leadColor});
 hold on;
-shadedErrorBar(t,mean(Firing(:,lagCorrIDs),2),std(Firing(:,lagCorrIDs),[],2),'lineprops',{lagColor});
+shadedErrorBar(t,mean(Firing(:,lagCorrIDs),2),std(Firing(:,lagCorrIDs),[],2),'lineprops',{'Color',lagColor});
 xlabel('Time (sec)');
 ylabel('df/f');
 box off;
@@ -142,9 +174,9 @@ title('Type dist');
 subplot(4,4,10)
 randomPop1 = randperm(160,80);
 randomPop2 = 161-randomPop1;
-shadedErrorBar(t,mean(Firing(:,randomPop1),2),std(Firing(:,randomPop1),[],2),'lineprops',{leadColor});
+shadedErrorBar(t,mean(Firing(:,randomPop1),2),std(Firing(:,randomPop1),[],2),'lineprops',{'Color',leadColor});
 hold on;
-shadedErrorBar(t,mean(Firing(:,randomPop2),2),std(Firing(:,randomPop2),[],2),'lineprops',{lagColor});
+shadedErrorBar(t,mean(Firing(:,randomPop2),2),std(Firing(:,randomPop2),[],2),'lineprops',{'Color',lagColor});
 axis square;
 xlabel('Time (sec)');
 ylabel('df/f');
@@ -280,7 +312,7 @@ for i = 1:numel(uniqueSaccadicAxons)
         l = find(saccadicMotorDist(:,1) == uniqueSaccadicAxons(i));
         leadDiff(i).Saccadic =sum(leadSaccadicAxons == uniqueSaccadicAxons(i)) - sum(lagSaccadicAxons == uniqueSaccadicAxons(i));
         leadMotorSynapseDiff(i).Saccadic = (saccadicMotorDist(l(1),2)+saccadicMotorDist(l(1),3)) - (saccadicMotorDist(l(1),4)+saccadicMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueSaccadicAxons(i),df);
+        temp  = isMotor(uniqueSaccadicAxons(i),df);
         leadMotorDiff(i).Saccadic = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         leadDiffAxons(i).Saccadic = uniqueSaccadicAxons(i);
         plot([1,2],[leadDiff(i).Saccadic,leadMotorSynapseDiff(i).Saccadic],'-','Color',[1,0,0,0.1]);
@@ -290,7 +322,7 @@ for i = 1:numel(uniqueSaccadicAxons)
         lagDiff(i).Saccadic = sum(leadSaccadicAxons == uniqueSaccadicAxons(i)) - sum(lagSaccadicAxons == uniqueSaccadicAxons(i));
         l = find(saccadicMotorDist(:,1) == uniqueSaccadicAxons(i));
         lagMotorSynapseDiff(i).Saccadic = (saccadicMotorDist(l(1),2)+saccadicMotorDist(l(1),3)) - (saccadicMotorDist(l(1),4)+saccadicMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueSaccadicAxons(i),df);
+        temp  = isMotor(uniqueSaccadicAxons(i),df);
         lagMotorDiff(i).Saccadic = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         lagDiffAxons(i).Saccadic =  uniqueSaccadicAxons(i);
         plot([1,2],[lagDiff(i).Saccadic,lagMotorSynapseDiff(i).Saccadic],'-','Color',[0,0,1,0.1]);
@@ -359,7 +391,7 @@ for i = 1:numel(uniqueVestibularAxons)
         l = find(vestibularMotorDist(:,1) == uniqueVestibularAxons(i));
         leadDiff(i).Vestibular =sum(leadVestibularAxons == uniqueVestibularAxons(i)) - sum(lagVestibularAxons == uniqueVestibularAxons(i));
         leadMotorSynapseDiff(i).Vestibular = (vestibularMotorDist(l(1),2)+vestibularMotorDist(l(1),3)) - (vestibularMotorDist(l(1),4)+vestibularMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueVestibularAxons(i),df);
+        temp  = isMotor(uniqueVestibularAxons(i),df);
         leadMotorDiff(i).Vestibular = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         leadDiffAxons(i).Vestibular = uniqueVestibularAxons(i);
         plot([1,2],[leadDiff(i).Vestibular,leadMotorSynapseDiff(i).Vestibular],'-','Color',[1,0,0,0.1]);
@@ -369,7 +401,7 @@ for i = 1:numel(uniqueVestibularAxons)
         lagDiff(i).Vestibular = sum(leadVestibularAxons == uniqueVestibularAxons(i)) - sum(lagVestibularAxons == uniqueVestibularAxons(i));
         l = find(vestibularMotorDist(:,1) == uniqueVestibularAxons(i));
         lagMotorSynapseDiff(i).Vestibular = (vestibularMotorDist(l(1),2)+vestibularMotorDist(l(1),3)) - (vestibularMotorDist(l(1),4)+vestibularMotorDist(l(1),4));
-         temp  = isPostSynapseMotor(uniqueVestibularAxons(i),df);
+         temp  = isMotor(uniqueVestibularAxons(i),df);
         lagMotorDiff(i).Vestibular = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         lagDiffAxons(i).Vestibular = uniqueVestibularAxons(i);
         plot([1,2],[lagDiff(i).Vestibular,lagMotorSynapseDiff(i).Vestibular],'-','Color',[0,0,1,0.1]);
@@ -433,7 +465,7 @@ for i = 1:numel(uniqueIntegratorAxons)
         l = find(integratorMotorDist(:,1) == uniqueIntegratorAxons(i));
         leadDiff(i).Integrator =sum(leadIntegratorAxons == uniqueIntegratorAxons(i)) - sum(lagIntegratorAxons == uniqueIntegratorAxons(i));
         leadMotorSynapseDiff(i).Integrator = (integratorMotorDist(l(1),2)+integratorMotorDist(l(1),3)) - (integratorMotorDist(l(1),4)+integratorMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueIntegratorAxons(i),df);
+        temp  = isMotor(uniqueIntegratorAxons(i),df);
         leadMotorDiff(i).Integrator = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         leadDiffAxons(i).Integrator = uniqueIntegratorAxons(i);
         plot([1,2],[leadDiff(i).Integrator,leadMotorSynapseDiff(i).Integrator],'-','Color',[1,0,0,0.1]);
@@ -443,7 +475,7 @@ for i = 1:numel(uniqueIntegratorAxons)
         lagDiff(i).Integrator = sum(leadIntegratorAxons == uniqueIntegratorAxons(i)) - sum(lagIntegratorAxons == uniqueIntegratorAxons(i));
         l = find(integratorMotorDist(:,1) == uniqueIntegratorAxons(i));
         lagMotorSynapseDiff(i).Integrator = (integratorMotorDist(l(1),2)+integratorMotorDist(l(1),3)) - (integratorMotorDist(l(1),4)+integratorMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueIntegratorAxons(i),df);
+        temp  = isMotor(uniqueIntegratorAxons(i),df);
         lagMotorDiff(i).Integrator = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         lagDiffAxons(i).Integrator = uniqueIntegratorAxons(i);
         plot([1,2],[lagDiff(i).Integrator,lagMotorSynapseDiff(i).Integrator],'-','Color',[0,0,1,0.1]);
@@ -508,7 +540,7 @@ for i = 1:numel(uniqueContraAxons)
         l = find(contraMotorDist(:,1) == uniqueContraAxons(i));
         leadDiff(i).Contra =sum(leadContraAxons == uniqueContraAxons(i)) - sum(lagContraAxons == uniqueContraAxons(i));
         leadMotorSynapseDiff(i).Contra = (contraMotorDist(l(1),2)+contraMotorDist(l(1),3)) - (contraMotorDist(l(1),4)+contraMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueContraAxons(i),df);
+        temp  = isMotor(uniqueContraAxons(i),df);
         leadMotorDiff(i).Contra = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         leadDiffAxons(i).Contra = uniqueContraAxons(i);
         plot([1,2],[leadDiff(i).Contra,leadMotorSynapseDiff(i).Contra],'-','Color',[1,0,0,0.1]);
@@ -518,7 +550,7 @@ for i = 1:numel(uniqueContraAxons)
         lagDiff(i).Contra = sum(leadContraAxons == uniqueContraAxons(i)) - sum(lagContraAxons == uniqueContraAxons(i));
         l = find(contraMotorDist(:,1) == uniqueContraAxons(i));
         lagMotorSynapseDiff(i).Contra = (contraMotorDist(l(1),2)+contraMotorDist(l(1),3)) - (contraMotorDist(l(1),4)+contraMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueContraAxons(i),df);
+        temp  = isMotor(uniqueContraAxons(i),df);
         lagMotorDiff(i).Contra = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         lagDiffAxons(i).Contra = uniqueContraAxons(i);
         plot([1,2],[lagDiff(i).Contra,lagMotorSynapseDiff(i).Contra],'-','Color',[0,0,1,0.1]);
@@ -584,7 +616,7 @@ for i = 1:numel(uniqueEverythingElseAxons)
         l = find(everythginElseMotorDist(:,1) ==uniqueEverythingElseAxons(i));
         leadDiff(i).EverythingElse =sum(leadEverythingElseAxons == uniqueEverythingElseAxons(i)) - sum(lagEverythingElseAxons == uniqueEverythingElseAxons(i));
         leadMotorSynapseDiff(i).EverythingElse = (everythginElseMotorDist(l(1),2)+everythginElseMotorDist(l(1),3)) - (everythginElseMotorDist(l(1),4)+everythginElseMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueEverythingElseAxons(i),df);
+        temp  = isMotor(uniqueEverythingElseAxons(i),df);
         leadMotorDiff(i).EverythingElse = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         leadDiffAxons(i).EverythingElse = uniqueEverythingElseAxons(i);
         plot([1,2],[leadDiff(i).EverythingElse,leadMotorSynapseDiff(i).EverythingElse],'-','Color',[1,0,0,0.1]);
@@ -594,7 +626,7 @@ for i = 1:numel(uniqueEverythingElseAxons)
         lagDiff(i).EverythingElse = sum(leadEverythingElseAxons == uniqueEverythingElseAxons(i)) - sum(lagEverythingElseAxons == uniqueEverythingElseAxons(i));
         l = find(everythginElseMotorDist(:,1) == uniqueEverythingElseAxons(i));
         lagMotorSynapseDiff(i).EverythingElse = (everythginElseMotorDist(l(1),2)+everythginElseMotorDist(l(1),3)) - (everythginElseMotorDist(l(1),4)+everythginElseMotorDist(l(1),4));
-        temp  = isPostSynapseMotor(uniqueEverythingElseAxons(i),df);
+        temp  = isMotor(uniqueEverythingElseAxons(i),df);
         lagMotorDiff(i).EverythingElse = (temp(1,2)+temp(1,3)) - (temp(1,4)+temp(1,5));
         lagDiffAxons(i).EverythingElse = uniqueEverythingElseAxons(i)
         plot([1,2],[lagDiff(i).EverythingElse,lagMotorSynapseDiff(i).EverythingElse],'-','Color',[0,0,1,0.1]);
@@ -841,6 +873,10 @@ xlabel('Pathlength (um)')
 box off;
 axis square;
 
+%% Saccadic/Vestibular ratios
+
+
+
 %% Looking at unique populations only
 
 
@@ -870,7 +906,7 @@ axis square;
 
 
 
-% %% Plot all Lead/Lag axons from connectome
+%% Plot all Lead/Lag axons from connectome
 % 
 % load ConnMatrixPre.mat;
 % load AllCells.mat;
@@ -920,7 +956,7 @@ axis square;
 % title('Integrator');
 % 
 % 
-% %% plot location on cells based on identity
+%% plot location on cells based on identity
 % 
 % figure;
 % for i = 1:numel(leadNeurons)
@@ -1010,7 +1046,7 @@ axis square;
 % sgtitle('Lag Neurons');
 %     
 % 
-% %% plot based on rhombomere pop
+ %% plot based on rhombomere pop
 % 
 % 
 %  %r3
@@ -1050,44 +1086,44 @@ axis square;
 % 
  %% make pretty plots
  
- colors2 = colorcet('CBTD1','N',5,'reverse',1); % blue-->red for the partners
- colors1 = colorcet('D1A','N',5, 'reverse',1); % blue -->red for the neurons
- 
-%colors = colorcet('D1A','N',20,'reverse',1);
-%colors = distinguishable_colors(5,{'w','k'});
- 
-leadOnlySaccadic = setdiff(leadSaccadicAxons, lagSaccadicAxons);
-lagOnlySaccadic = setdiff(lagSaccadicAxons, leadSaccadicAxons);
-commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
- 
- for i = 1:numel(commonSaccadic)
-     commonSaccadicDiff(i).ID = commonSaccadic(i);
-     commonSaccadicDiff(i).Lead = sum(ismember(vertcat(Lead.Saccadic), commonSaccadic(i)));
-     commonSaccadicDiff(i).Lag = sum(ismember(vertcat(Lag.Saccadic), commonSaccadic(i)));
- end
- 
- index = find([commonSaccadicDiff.Lead]>[commonSaccadicDiff.Lag]);
- leadOnlySaccadic = [leadOnlySaccadic;[commonSaccadicDiff(index).ID]'];
- index = find([commonSaccadicDiff.Lead]<[commonSaccadicDiff.Lag]);
- lagOnlySaccadic = [lagOnlySaccadic;[commonSaccadicDiff(index).ID]'];
-
- % plot lead and Lag neurons
- subplot(1,2,1)
- transform_swc_AV(leadNeurons,colors1(1:2,:),[],true,false);
- transform_swc_AV(leadOnlySaccadic,colors2(1:2,:),[],false,false);
- 
-%export_fig('/Users/ashwin/Desktop/SaccadicsLEADOntoInt.png','-r300','-transparent');
-%close all;
-
- subplot(1,2,2)
- transform_swc_AV(lagNeurons,colors1(4:5,:),[],true,false);
- transform_swc_AV(lagOnlySaccadic,colors2(4:5,:),[],false,false);
- 
-
- export_fig('/Users/ashwin/Desktop/SaccadicsLAGOntoInt.png','-r300','-transparent');
- close all;
+% clear temp1;
+% clear temp2;
 % 
-%  %transform_swc_AV(commonSaccadic,[colors(9,:)+colors(12,:)]/3,[],false,false);
+% temp1 = colorcet('CBTD1','N',5,'reverse',1);
+% 
+% lightRed = temp1(2,:);
+% lightBlue = temp1(4,:);
+% 
+% leadOnlySaccadic = setdiff(leadSaccadicAxons, lagSaccadicAxons);
+% lagOnlySaccadic = setdiff(lagSaccadicAxons, leadSaccadicAxons);
+% commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
+%  
+%  for i = 1:numel(commonSaccadic)
+%      commonSaccadicDiff(i).ID = commonSaccadic(i);
+%      commonSaccadicDiff(i).Lead = sum(ismember(vertcat(Lead.Saccadic), commonSaccadic(i)));
+%      commonSaccadicDiff(i).Lag = sum(ismember(vertcat(Lag.Saccadic), commonSaccadic(i)));
+%  end
+%  
+%  index = find([commonSaccadicDiff.Lead]>[commonSaccadicDiff.Lag]);
+%  leadOnlySaccadic = [leadOnlySaccadic;[commonSaccadicDiff(index).ID]'];
+%  index = find([commonSaccadicDiff.Lead]<[commonSaccadicDiff.Lag]);
+%  lagOnlySaccadic = [lagOnlySaccadic;[commonSaccadicDiff(index).ID]'];
+% 
+%  % plot lead and Lag neurons
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
+%  transform_swc_AV(leadOnlySaccadic,lightRed,[],false,false);
+%  
+% export_fig('/Users/ashwin/Desktop/SaccadicsLEADOntoInt.png','-r300','-transparent');
+% close all;
+% 
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
+%  transform_swc_AV(lagOnlySaccadic,lightBlue,[],false,false);
+% 
+%  export_fig('/Users/ashwin/Desktop/SaccadicsLAGOntoInt.png','-r300','-transparent');
+%  close all;
+% 
 % 
 % % vestibular pop
 % 
@@ -1108,15 +1144,15 @@ commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
 %  lagOnlyVestibular = [lagOnlyVestibular;[commonVestibularDiff(index).ID]'];
 % 
 %  % plot lead and Lag neurons
-%  subplot(1,2,1)
-%  transform_swc_AV(leadNeurons,colors(9,:),[],true,false);
-%  transform_swc_AV(leadOnlyVestibular,colors(4,:),[],false,false);
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
+%  transform_swc_AV(leadOnlyVestibular,lightRed,[],false,false);
 % export_fig('/Users/ashwin/Desktop/VestibularLEADOntoInt.png','-r300','-transparent');
 % close all;
 %  
-%  subplot(1,2,2)
-%  transform_swc_AV(lagNeurons,colors(12,:),[],true,false);
-%  transform_swc_AV(lagOnlyVestibular,colors(16,:),[],false,false);
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
+%  transform_swc_AV(lagOnlyVestibular,lightBlue,[],false,false);
 %  export_fig('/Users/ashwin/Desktop/VestibularLAGOntoInt.png','-r300','-transparent');
 % close all;
 %  
@@ -1139,17 +1175,51 @@ commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
 %  lagOnlyContra = [lagOnlyContra;[commonContraDiff(index).ID]'];
 % 
 %  % plot lead and Lag neurons
-%  subplot(1,2,1)
-%  transform_swc_AV(leadNeurons,colors(9,:),[],true,false);
-%  transform_swc_AV(leadOnlyContra,colors(4,:),[],false,false);
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
+%  transform_swc_AV(leadOnlyContra,lightRed,[],false,false);
 %  export_fig('/Users/ashwin/Desktop/ContraLEADOntoInt.png','-r300','-transparent');
 % close all;
 %  
-%  subplot(1,2,2)
-%  transform_swc_AV(lagNeurons,colors(12,:),[],true,false);
-%  transform_swc_AV(lagOnlyContra,colors(16,:),[],false,false);
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
+%  transform_swc_AV(lagOnlyContra,lightBlue,[],false,false);
 %   export_fig('/Users/ashwin/Desktop/ContraLAGOntoInt.png','-r300','-transparent');
 % close all;
+% 
+% 
+%  % Integrator Pop
+% 
+%  
+% leadOnlyIntegrator = setdiff(leadIntegratorAxons, lagContraAxons);
+% lagOnlyIntegrator  = setdiff(lagIntegratorAxons, leadContraAxons);
+% commonIntegrator  = intersect(leadIntegratorAxons,leadIntegratorAxons);
+% 
+% for i = 1:numel(commonIntegrator)
+%      commonIntegratorDiff(i).ID = commonIntegrator(i);
+%      commonIntegratorDiff(i).Lead = sum(ismember(vertcat(Lead.Integrator), commonIntegrator(i)));
+%      commonIntegratorDiff(i).Lag = sum(ismember(vertcat(Lag.Integrator), commonIntegrator(i)));
+%  end
+%  
+%  index = find([commonIntegratorDiff.Lead]>[commonIntegratorDiff.Lag]);
+%  leadOnlyIntegrator = [leadOnlyIntegrator;[commonIntegratorDiff(index).ID]'];
+%  index = find([commonIntegratorDiff.Lead]<[commonIntegratorDiff.Lag]);
+%  lagOnlyIntegrator = [lagOnlyIntegrator;[commonIntegratorDiff(index).ID]'];
+% 
+%  % plot lead and Lag neurons
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
+%  transform_swc_AV(leadOnlyIntegrator,lightRed,[],false,false);
+%  export_fig('/Users/ashwin/Desktop/IntegratorLEADOntoInt.png','-r300','-transparent');
+% close all;
+%  
+% figure('units','normalized','outerposition',[0 0 1 1]);
+%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
+%  transform_swc_AV(lagOnlyIntegrator,lightBlue,[],false,false);
+%   export_fig('/Users/ashwin/Desktop/IntegratorLAGOntoInt.png','-r300','-transparent');
+% close all;
+% 
+% 
 %  
 % % seperate the Contra by R5/R6 and remaining
 % clear temp;
@@ -1166,9 +1236,6 @@ commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
 % end
 % 
 % 
-% 
-% 
-% 
 % clear temp;
 % R4LagContra = [];
 % R5LagContra = [];
@@ -1182,18 +1249,19 @@ commonSaccadic = intersect(leadSaccadicAxons,lagSaccadicAxons);
 %     clear temp;
 % end
 % 
+% figure('units','normalized','outerposition',[0 0 1 1]);
 % subplot(1,3,1)
-% transform_swc_AV(R4LeadContra,colors(4,:),[],true,false);
-% transform_swc_AV(R4LagContra,colors(16,:),[],false,false);
+% transform_swc_AV(R4LeadContra,lightRed,[],true,false);
+% transform_swc_AV(R4LagContra,lightBlue,[],false,false);
 % 
 % subplot(1,3,2)
-% transform_swc_AV(R5LeadContra,colors(4,:),[],true,false);
-% transform_swc_AV(R5LagContra,colors(16,:),[],false,false);
+% transform_swc_AV(R5LeadContra,lightRed,[],true,false);
+% transform_swc_AV(R5LagContra,lightBlue,[],false,false);
 % 
 % subplot(1,3,3)
-% transform_swc_AV(R6LeadContra,colors(4,:),[],true,false);
-% transform_swc_AV(R6LagContra,colors(16,:),[],false,false);
+% transform_swc_AV(R6LeadContra,lightRed,[],true,false);
+% transform_swc_AV(R6LagContra,lightBlue,[],false,false);
+% 
 
-
-
+%%
 
