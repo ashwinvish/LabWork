@@ -182,6 +182,26 @@ set(gca, 'XTick',[1,2,3,4], 'XTickLabel',{'ABDr', 'ABDc', 'ABDIr', 'ABDIc'}, 'XT
 ylabel('Remaining Synapses');
 
 
+subplot(4,4,7)
+a = [ABDr.NumberOfSaccadic]./[ABDr.NumberOfVestibular];
+b = [ABDc.NumberOfSaccadic]./[ABDc.NumberOfVestibular];
+c = [ABDIr.NumberOfSaccadic]./[ABDIr.NumberOfVestibular]; 
+d = [ABDIc.NumberOfSaccadic]./[ABDIc.NumberOfVestibular];
+
+plot(ones(1,size([ABDr.NumberOfRemaining],2)),a,'ko');
+hold on;
+plot(2*ones(1,size([ABDc.NumberOfRemaining],2)),b,'ko');
+plot(3*ones(1,size([ABDIr.NumberOfRemaining],2)),c,'ko')
+plot(4*ones(1,size([ABDIc.NumberOfRemaining],2)),d,'ko')
+
+plot([1,2,3,4], [mean(a(~isinf(a))),mean(b(~isinf(b))), mean(c(~isinf(c))),mean(d(~isinf(d)))], '-ko', 'LineWidth',2);
+
+axis square;
+box off
+set(gca, 'XTick',[1,2,3,4], 'YLim',[0,50],'XTickLabel',{'ABDr', 'ABDc', 'ABDIr', 'ABDIc'}, 'XTickLabelRotation',45);
+ylabel('Saccade/Vestibular ratio');
+
+
 
 %% plot positon of synapses on Z-brain space
 
@@ -613,7 +633,7 @@ subplot(4,4,4)
 SaccadicAxons = [vertcat(ABDr.Saccadic);vertcat(ABDc.Saccadic);vertcat(ABDIr.Saccadic);vertcat(ABDIc.Saccadic)];
 uniqueSaccadicAxons = unique(SaccadicAxons);
 saccadicMotorSynapses = isMotor(uniqueSaccadicAxons,df);
-saccadicMotorNeuronTargets = isPostSynapseMotor(uniqueSaccadicAxons,df);
+saccadicMotorNeuronTargets = isMotor(uniqueSaccadicAxons,df);
 
 scatter([sum(saccadicMotorSynapses(:,2:3),2)-sum(saccadicMotorSynapses(:,4:5),2)], ...
     [sum(saccadicMotorNeuronTargets(:,2:3),2)-sum(saccadicMotorNeuronTargets(:,4:5),2)],20,'o',...
@@ -772,7 +792,7 @@ subplot(4,4,8)
 VestibularAxons = [vertcat(ABDr.Vestibular);vertcat(ABDc.Vestibular);vertcat(ABDIr.Vestibular);vertcat(ABDIc.Vestibular)];
 uniqueVestibularAxons = unique(VestibularAxons);
 vestibularMotorSynapses = isMotor(uniqueVestibularAxons,df);
-vestibularMotorNeuronTargets = isPostSynapseMotor(uniqueVestibularAxons,df);
+vestibularMotorNeuronTargets = isMotor(uniqueVestibularAxons,df);
 
 scatter([sum(vestibularMotorSynapses(:,2:3),2)-sum(vestibularMotorSynapses(:,4:5),2)], ...
     [sum(vestibularMotorNeuronTargets(:,2:3),2)-sum(vestibularMotorNeuronTargets(:,4:5),2)],20,'o',...
@@ -930,7 +950,7 @@ subplot(4,4,12)
 IntegratorAxons = [vertcat(ABDr.Integrator);vertcat(ABDc.Integrator);vertcat(ABDIr.Integrator);vertcat(ABDIc.Integrator)];
 uniqueIntegratorAxons = unique(IntegratorAxons);
 integratorMotorSynapses = isMotor(uniqueIntegratorAxons,df);
-integratorMotorNeuronTargets = isPostSynapseMotor(uniqueIntegratorAxons,df);
+integratorMotorNeuronTargets = isMotor(uniqueIntegratorAxons,df);
 
 scatter([sum(integratorMotorSynapses(:,2:3),2)-sum(integratorMotorSynapses(:,4:5),2)], ...
     [sum(integratorMotorNeuronTargets(:,2:3),2)-sum(integratorMotorNeuronTargets(:,4:5),2)],20,'o',...
@@ -1088,7 +1108,7 @@ subplot(4,4,16)
 ContraAxons = [vertcat(ABDr.Contra);vertcat(ABDc.Contra);vertcat(ABDIr.Contra);vertcat(ABDIc.Contra)];
 uniqueContraAxons = unique(ContraAxons);
 contraMotorSynapses = isMotor(uniqueContraAxons,df);
-contraMotorNeuronTargets = isPostSynapseMotor(uniqueContraAxons,df);
+contraMotorNeuronTargets = isMotor(uniqueContraAxons,df);
 
 scatter([sum(contraMotorSynapses(:,2:3),2)-sum(contraMotorSynapses(:,4:5),2)], ...
     [sum(contraMotorNeuronTargets(:,2:3),2)-sum(contraMotorNeuronTargets(:,4:5),2)],20,'o',...
@@ -1279,7 +1299,7 @@ EverythingElseAxons = [vertcat(ABDr.EverythingElse);vertcat(ABDc.EverythingElse)
 uniqueEverythingElseAxons = unique(EverythingElseAxons);
 uniqueEverythingElseAxons = uniqueEverythingElseAxons(uniqueEverythingElseAxons<1e5);
 EverythingElseMotorSynapses = isMotor(uniqueEverythingElseAxons,df);
-EverythingElseAxonsMotorNeuronTargets = isPostSynapseMotor(uniqueEverythingElseAxons,df);
+EverythingElseAxonsMotorNeuronTargets = isMotor(uniqueEverythingElseAxons,df);
 
 scatter([sum(EverythingElseMotorSynapses(:,2:3),2)-sum(EverythingElseMotorSynapses(:,4:5),2)], ...
     [sum(EverythingElseAxonsMotorNeuronTargets(:,2:3),2)-sum(EverythingElseAxonsMotorNeuronTargets(:,4:5),2)],20,'o',...
