@@ -6,5 +6,4 @@ end
 
 popMotorDiff = (MotorDistribution(:,2)+MotorDistribution(:,3)) - ...
         (MotorDistribution(:,4)+MotorDistribution(:,5));
-    
 end
