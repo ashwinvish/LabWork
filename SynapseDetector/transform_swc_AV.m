@@ -1,4 +1,4 @@
-function  transform_swc_AV(cellID, neuronColor, IdsHighlight, displayBoundary, displayRefBrain)
+function [RCdist, MLdist, DVdist] =  transform_swc_AV(cellID, neuronColor, IdsHighlight, displayBoundary, displayRefBrain)
 % transfroms cellID fronm NG space to Z-brain space.
 % cellID is a nx1 vector
 % neuroncolor is [r,g,b] color of the neuron
@@ -10,6 +10,11 @@ function  transform_swc_AV(cellID, neuronColor, IdsHighlight, displayBoundary, d
 %colors = cbrewer('qual','Dark2',10);
 %[m,n] = min(abs(neuronColor - colors)) ;
 
+if isempty(cellID)
+    disp('********no cells here**********');
+    return;
+end
+
 if size(neuronColor,1)>1
     somataColor  = neuronColor(2,:);
     neuronColor  = neuronColor(1,:);
@@ -17,10 +22,6 @@ else
     somataColor  = neuronColor(1,:);
     neuronColor  = neuronColor(1,:);
 end
-
-
-
-
 %somataColor = colors(round(mean(n)),:);
 
 if ismac
@@ -36,7 +37,7 @@ end
 % NOTE: Original files needs to be rotated ccw 90 and the zaxis needs to be
 % reversed in FIJI only.
 
-imageFileName = '6.7FRhcrtR-Gal4-uasKaede.tif';
+imageFileName = 'ZBB-ml2-mnx-red-evx2-green-Gal4-merged.tif';
 if ismac
     imageFilePath = '/Users/ashwin/Documents/RefBrains/';
 else
@@ -49,10 +50,11 @@ height = imagesInfo(1).Height;
 %images = zeros(height, width,length(imagesInfo),'uint8');
 images = zeros(height, width,length(imagesInfo));
 TifLink = Tiff(fullfile(imageFilePath,imageFileName),'r');
-
-for i = 1:length(imagesInfo)
-    TifLink.setDirectory(i);
-    images(:,:,i) = TifLink.read();
+if displayRefBrain
+    for i = 1:length(imagesInfo)
+        TifLink.setDirectory(i);
+        images(:,:,i) = TifLink.read();
+    end
 end
 warning('off','last');
 TifLink.close();
@@ -95,6 +97,10 @@ end
 %% get swc coordinate
 swc = cell(1,size(cellID,1));
 swc_new = cell(1,size(cellID,1));
+RCdist = [];
+MLdist = [];
+DVdist = [];
+
 for i = 1:length(cellID)
     filename = sprintf('%d_reRoot_reSample_5000.swc',cellID(i));
     if exist(fullfile(fname,filename))
@@ -158,6 +164,11 @@ for i = 1:length(cellID)
     swc_new{i}(:,3:5) = coord_transformed;
     % dlmwrite('76748_LM.swc',  swc_new, ' ');
     
+    % compute edges
+    RCdist = [RCdist;swc_new{1,i}(:,4)];
+    MLdist = [MLdist;swc_new{1,i}(:,3)];
+    DVdist = [DVdist;swc_new{1,i}(:,5)];
+    
     % get mask plane and image (in mircron space, atlas space) through which the root node traverses.
     
     rootNodePlane(i) = round(coord_transformed(1,3)); % in micron space
@@ -211,6 +222,7 @@ cols = cbrewer('qual','Accent',length(IdsBase));
 % Base level maske IDs (used for oveall orientation, e.g. rhombomere
 % boundaries)
 if displayBoundary
+    
     for i = 1:length(IdsBase)
         invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
         invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
@@ -220,7 +232,7 @@ if displayBoundary
         if size(B,1)>0
             boundaries = B{1};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2);
             clear boundaries;
@@ -228,8 +240,8 @@ if displayBoundary
         if size(B,1)>1
             boundaries = B{2};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
-            % fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
+            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
+             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2);
         end
     end
@@ -239,6 +251,7 @@ end
 
 if IdsHighlight
     index = 0.1;
+    
     for i = 1:length(IdsHighlight)
         invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
         invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
@@ -248,7 +261,7 @@ if IdsHighlight
         if size(B,1)>0
             boundaries = B{1};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
             clear boundaries;
@@ -256,7 +269,7 @@ if IdsHighlight
         if size(B,1)>1
             boundaries = B{2};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = invertedPlaneinMicrons*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
             annotation('textbox',[0.42,0.4-index,0.5,0],'EdgeColor','none','String',maskImageHighlight(i).name,'Color',cols(i,:));
@@ -265,11 +278,8 @@ if IdsHighlight
     end
 end
 
-set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse');
-%set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
-set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
+% plot cells in cellID
 
-%% plot cells in cellID
 
 for i = 1:length(cellID)
     filename = sprintf('%d_reRoot_reSample_5000.swc',cellID(i));
@@ -277,7 +287,7 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',neuronColor,'LineWidth',1);
+            'Color',neuronColor,'LineWidth',0.75);
         hold on;
         scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor,...
             'MarkerEdgeColor','k','LineWidth',0.25);
@@ -298,13 +308,18 @@ for i = 1:length(cellID)
     end
 end
 
+
+set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse','color','none');
+%set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
+set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
+box on;
+%
 %draw scale bar 1px = 0.798 us
-% line([500,563],[1280,1280],'Color','m','LineWidth',4);
-% text(500,1300,'50um','FontName','Arila','FontSize',10);
+%line([500,563],[1280,1280],'Color','m','LineWidth',4);
+%text(500,1300,'50um','FontName','Arial','FontSize',10);
 
-axis off;
-%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
-
+%axis on;
+title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
 
 end
 
