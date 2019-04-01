@@ -39,8 +39,8 @@ transform_swc_AV(LagLikeALXSaccadicAxons,colors(2,:),[],true,false);
 
 %% partners of lead and Lag axons and how recurrently they.
 
-[LeadLikeAxons,countsLead,Leadgraph,LeadShortestPaths] = PartnerConnectivity(LeadLikeALXSaccadicAxons,uniqeALXSaccadicAxons,df);
-[LagLikeAxons,countsLag,Laggraph,LagShortestPaths] = PartnerConnectivity(LagLikeALXSaccadicAxons,uniqeALXSaccadicAxons,df);
+[LeadLikeAxons,countsLead,Leadgraph,LeadShortestPaths] = PartnerConnectivity(LeadLikeALXSaccadicAxons,uniqeALXSaccadicAxons,'Saccadic',df);
+[LagLikeAxons,countsLag,Laggraph,LagShortestPaths] = PartnerConnectivity(LagLikeALXSaccadicAxons,uniqeALXSaccadicAxons,'Saccadic',df);
 
 countsLeadLag = vertcat(countsLead,countsLag);
 
