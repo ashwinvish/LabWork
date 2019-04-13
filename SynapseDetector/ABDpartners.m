@@ -14,7 +14,13 @@ else
 
 end
 
-colors = cbrewer('qual','Dark2',10);    
+colors = cbrewer('qual','Dark2',10);   
+
+temp1 = colorcet('CBTL1','N',5); %  linear-tritanopic_krjcw_5-98_c46_n256
+temp2 = colorcet('CBL2','N',5);  %  linear-protanopic-deuteranopic_kbw_5-98_c40_n256
+
+leadColor = temp1(3,:); % dark red, CB safe
+lagColor = temp2(3,:); % dark blue, CB safe
 
 ABDr_CellIDs = [77648, 77710, 77300, 77705, 77305, 77301, 77709, 77672, 77302];
 ABDc_CellIDs = [77154, 77646, 77682 ,77628 ,77295 , 77652 ,77292 ,77688 ,77654 ,77658 ,77657 ,77662, 77296];
@@ -567,13 +573,13 @@ end
 
 subplot(4,4,2)
 h1=histogram([vertcat(ABDr.LeadSaccadicDist);vertcat(ABDc.LeadSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDr.LagSaccadicDist);vertcat(ABDc.LagSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -629,13 +635,13 @@ end
 
 subplot(4,4,3)
 h1=histogram([vertcat(ABDIr.LeadSaccadicDist);vertcat(ABDIc.LeadSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDIr.LagSaccadicDist);vertcat(ABDIc.LagSaccadicDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -726,13 +732,13 @@ end
 
 subplot(4,4,6)
 h1=histogram([vertcat(ABDr.LeadVestibularDist);vertcat(ABDc.LeadVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDr.LagVestibularDist);vertcat(ABDc.LagVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -788,13 +794,13 @@ end
 
 subplot(4,4,7)
 h1=histogram([vertcat(ABDIr.LeadVestibularDist);vertcat(ABDIc.LeadVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDIr.LagVestibularDist);vertcat(ABDIc.LagVestibularDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -884,13 +890,13 @@ end
 
 subplot(4,4,10)
 h1=histogram([vertcat(ABDr.LeadIntegratorDist);vertcat(ABDc.LeadIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDr.LagIntegratorDist);vertcat(ABDc.LagIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -946,13 +952,13 @@ end
 
 subplot(4,4,11)
 h1=histogram([vertcat(ABDIr.LeadIntegratorDist);vertcat(ABDIc.LeadIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDIr.LagIntegratorDist);vertcat(ABDIc.LagIntegratorDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -1042,13 +1048,13 @@ end
 
 subplot(4,4,14)
 h1=histogram([vertcat(ABDr.LeadContraDist);vertcat(ABDc.LeadContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDr.LagContraDist);vertcat(ABDc.LagContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -1104,13 +1110,13 @@ end
 
 subplot(4,4,15)
 h1=histogram([vertcat(ABDIr.LeadContraDist);vertcat(ABDIc.LeadContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDIr.LagContraDist);vertcat(ABDIc.LagContraDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -1232,13 +1238,13 @@ end
 
 subplot(4,4,2)
 h1=histogram([vertcat(ABDr.LeadEverythingElseDist);vertcat(ABDc.LeadEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDr.LagEverythingElseDist);vertcat(ABDc.LagEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
@@ -1294,13 +1300,13 @@ end
 
 subplot(4,4,3)
 h1=histogram([vertcat(ABDIr.LeadEverythingElseDist);vertcat(ABDIc.LeadEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'r';
+h1.EdgeColor = leadColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
 hold on;
 h1=histogram([vertcat(ABDIr.LagEverythingElseDist);vertcat(ABDIc.LagEverythingElseDist)],20,'FaceColor','none','DisplayStyle','stairs');
-h1.EdgeColor = 'b';
+h1.EdgeColor = lagColor;
 h1.LineWidth = 2;
 %set(gca,'XLim',[0,100],'YLim',[0,0.15]);
 box off;
