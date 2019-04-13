@@ -28,14 +28,39 @@ end
 uniqeALXSaccadicAxons = unique(vertcat(ALX.Saccadic));
 ALXSaccadicMotorDist = MotorDiff(uniqeALXSaccadicAxons,df);
 
-%histogram(ALXSaccadicMotorDist,10);
-
 LeadLikeALXSaccadicAxons = uniqeALXSaccadicAxons(ALXSaccadicMotorDist>0);
 LagLikeALXSaccadicAxons = uniqeALXSaccadicAxons(ALXSaccadicMotorDist<0);
-subplot(2,3,[1,4])
-transform_swc_AV(LeadLikeALXSaccadicAxons,colors(1,:),[],true,false);
-subplot(2,3,[2,5])
-transform_swc_AV(LagLikeALXSaccadicAxons,colors(2,:),[],true,false);
+
+save('LeadLikeALXSaccadicAxons.mat','LeadLikeALXSaccadicAxons');
+save('LagLikeALXSaccadicAxons.mat','LagLikeALXSaccadicAxons');
+
+LeadLikeALX = [];
+LagLikeALX = [];
+for i = 1:numel(allALX)
+    [a,~] = SynapticPartners(allALX(i),1,df);
+    a = a(a<1e5);
+    leadSum = 0;
+    lagSum = 0;
+    for jj = 1:length(a)
+        leadSum = leadSum + sum(a(jj) == LeadLikeALXSaccadicAxons);
+        lagSum = lagSum + sum(a(jj) == LagLikeALXSaccadicAxons);
+    end
+    if (leadSum-lagSum) > 0 
+        LeadLikeALX = [LeadLikeALX; allALX(i)];
+    else
+        LagLikeALX = [LagLikeALX; allALX(i)];
+    end
+end
+
+save('LeadLikeALX.mat','LeadLikeALX');
+save('LagLikeALX.mat','LagLikeALX');
+%histogram(ALXSaccadicMotorDist,10);
+
+
+% subplot(2,3,[1,4])
+% transform_swc_AV(LeadLikeALXSaccadicAxons,colors(1,:),[],true,false);
+% subplot(2,3,[2,5])
+% transform_swc_AV(LagLikeALXSaccadicAxons,colors(2,:),[],true,false);
 
 %% partners of lead and Lag axons and how recurrently they.
 

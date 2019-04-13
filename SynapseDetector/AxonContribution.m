@@ -164,6 +164,9 @@ title('Clusters from coorelation values');
 leadNeurons = DbxCells(leadCorrIDs(leadCorrIDs<10));
 lagNeurons  = DbxCells(lagCorrIDs(lagCorrIDs<10));
 
+save('leadNeurons.mat','leadNeurons');
+save('lagNeurons.mat','lagNeurons');
+
 % find our cells in the population
 subplot(4,4,9)
 histogram(CellOrder(leadCorrIDs),'faceColor',leadColor)
@@ -203,49 +206,49 @@ end
 
 % plot location on cells based in rhombomered organization.
 
-for i = 1:numel(leadNeurons)
-    Lead(i).r3(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,5) == 1,1);
-    [~,Lead(i).r3(:,2)] = ismember(Lead(i).r3(:,1),Lead(i).Inputs);
-    
-    Lead(i).r4(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,6) == 1,1);
-    [~,Lead(i).r4(:,2)] = ismember(Lead(i).r4(:,1),Lead(i).Inputs);
-    
-    Lead(i).r5(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,7) == 1,1);
-    [~,Lead(i).r5(:,2)] = ismember(Lead(i).r5(:,1),Lead(i).Inputs);
-    
-    Lead(i).r6(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,8) == 1,1);
-    [~,Lead(i).r6(:,2)] = ismember(Lead(i).r6(:,1),Lead(i).Inputs);
-    
-    Lead(i).r7(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,9) == 1,1);
-    [~,Lead(i).r7(:,2)] = ismember(Lead(i).r7(:,1),Lead(i).Inputs);
-    
-end
-
-for i = 1:numel(lagNeurons)
-    Lag(i).r3(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,5) == 1,1);
-    [~,Lag(i).r3(:,2)] = ismember(Lag(i).r3(:,1),Lag(i).Inputs);
-    
-    Lag(i).r4(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,6) == 1,1);
-    [~,Lag(i).r4(:,2)] = ismember(Lag(i).r4(:,1),Lag(i).Inputs);
-    
-    Lag(i).r5(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,7) == 1,1);
-    [~,Lag(i).r5(:,2)] = ismember(Lag(i).r5(:,1),Lag(i).Inputs);
-    
-    Lag(i).r6(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,8) == 1,1);
-    [~,Lag(i).r6(:,2)] = ismember(Lag(i).r6(:,1),Lag(i).Inputs);
-    
-    Lag(i).r7(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,9) == 1,1);
-    [~,Lag(i).r7(:,2)] = ismember(Lag(i).r7(:,1),Lag(i).Inputs);
-    
-end
-
+% for i = 1:numel(leadNeurons)
+%     Lead(i).r3(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,5) == 1,1);
+%     [~,Lead(i).r3(:,2)] = ismember(Lead(i).r3(:,1),Lead(i).Inputs);
+%     
+%     Lead(i).r4(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,6) == 1,1);
+%     [~,Lead(i).r4(:,2)] = ismember(Lead(i).r4(:,1),Lead(i).Inputs);
+%     
+%     Lead(i).r5(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,7) == 1,1);
+%     [~,Lead(i).r5(:,2)] = ismember(Lead(i).r5(:,1),Lead(i).Inputs);
+%     
+%     Lead(i).r6(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,8) == 1,1);
+%     [~,Lead(i).r6(:,2)] = ismember(Lead(i).r6(:,1),Lead(i).Inputs);
+%     
+%     Lead(i).r7(:,1) =  Lead(i).InputsRhombomeres(Lead(i).InputsRhombomeres(:,9) == 1,1);
+%     [~,Lead(i).r7(:,2)] = ismember(Lead(i).r7(:,1),Lead(i).Inputs);
+%     
+% end
+% 
+% for i = 1:numel(lagNeurons)
+%     Lag(i).r3(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,5) == 1,1);
+%     [~,Lag(i).r3(:,2)] = ismember(Lag(i).r3(:,1),Lag(i).Inputs);
+%     
+%     Lag(i).r4(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,6) == 1,1);
+%     [~,Lag(i).r4(:,2)] = ismember(Lag(i).r4(:,1),Lag(i).Inputs);
+%     
+%     Lag(i).r5(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,7) == 1,1);
+%     [~,Lag(i).r5(:,2)] = ismember(Lag(i).r5(:,1),Lag(i).Inputs);
+%     
+%     Lag(i).r6(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,8) == 1,1);
+%     [~,Lag(i).r6(:,2)] = ismember(Lag(i).r6(:,1),Lag(i).Inputs);
+%     
+%     Lag(i).r7(:,1) =  Lag(i).InputsRhombomeres(Lag(i).InputsRhombomeres(:,9) == 1,1);
+%     [~,Lag(i).r7(:,2)] = ismember(Lag(i).r7(:,1),Lag(i).Inputs);
+%     
+% end
+%%
 figure(2)
 
 subplot(4,4,1)
 
-histogram(vertcat(Lead.PSDsize)/sum(vertcat(Lead.PSDsize)),'FaceColor',leadColor,'EdgeColor','none');
+histogram(vertcat(Lead.PSDsize),'Normalization','probability','FaceColor',leadColor,'EdgeColor','none');
 hold on;
-histogram(vertcat(Lag.PSDsize)/sum(vertcat(Lag.PSDsize)),'FaceColor',lagColor,'EdgeColor','none');
+histogram(vertcat(Lag.PSDsize),'Normalization','probability','FaceColor',lagColor,'EdgeColor','none');
 box off;
 axis square;
 title('PSDsize/sum(PSDsize)');
@@ -309,6 +312,9 @@ leadSaccadicAxons = vertcat(Lead.Saccadic);
 lagSaccadicAxons = vertcat(Lag.Saccadic);
 uniqueSaccadicAxons = unique([leadSaccadicAxons;lagSaccadicAxons]);
 SaccadicMotorDist = [vertcat(Lead.SaccadicMotorDist);vertcat(Lag.SaccadicMotorDist)];
+
+save('LeadFunctionalSaccadicAxons.mat','leadSaccadicAxons');
+save('LagFunctionalSaccadicAxons.mat','lagSaccadicAxons');
 
 
 for i = 1:numel(uniqueSaccadicAxons)
@@ -716,78 +722,257 @@ title('lag makeup');
 
 %  plot spatial locaiton onto integrator neurons
 
+% for i = 1:numel(leadNeurons)    
+%     leadSaccadicPathlength(1:size(Lead(i).Saccadic,1),i) = Lead(i).PathLength(Lead(i).isSaccadic)/max(Pvec_tree(Lead(i).Tree{1}));
+%     leadVestibularPathlength(1:size(Lead(i).Vestibular,1),i) = Lead(i).PathLength(Lead(i).isVestibular)/max(Pvec_tree(Lead(i).Tree{1}));
+%     leadIntegratorPathlength(1:size(Lead(i).Integrator,1),i) = Lead(i).PathLength(Lead(i).isIntegrator)/max(Pvec_tree(Lead(i).Tree{1}));
+%     leadContraPathlength(1:size(Lead(i).Contra,1),i) = Lead(i).PathLength(Lead(i).isContra)/max(Pvec_tree(Lead(i).Tree{1}));
+%     leadEverythingElsePathlength(1:size(Lead(i).EverythingElse,1),i) = Lead(i).PathLength(Lead(i).isEverythingElse)/max(Pvec_tree(Lead(i).Tree{1}));
+% end
+
+leadSaccadicSynapseSize =[];
+leadVestibularSynapseSize = [];
+leadIntegratorSynapseSize = [];
+leadContraSynapseSize = [];
+leadEverythingElseSynapseSize = [];
+
+
 for i = 1:numel(leadNeurons)    
-    leadSaccadicPathlength(1:size(Lead(i).Saccadic,1),i) = Lead(i).PathLength(Lead(i).isSaccadic)/max(Pvec_tree(Lead(i).Tree{1}));
-    leadVestibularPathlength(1:size(Lead(i).Vestibular,1),i) = Lead(i).PathLength(Lead(i).isVestibular)/max(Pvec_tree(Lead(i).Tree{1}));
-    leadIntegratorPathlength(1:size(Lead(i).Integrator,1),i) = Lead(i).PathLength(Lead(i).isIntegrator)/max(Pvec_tree(Lead(i).Tree{1}));
-    leadContraPathlength(1:size(Lead(i).Contra,1),i) = Lead(i).PathLength(Lead(i).isContra)/max(Pvec_tree(Lead(i).Tree{1}));
-    leadEverythingElsePathlength(1:size(Lead(i).EverythingElse,1),i) = Lead(i).PathLength(Lead(i).isEverythingElse)/max(Pvec_tree(Lead(i).Tree{1}));
+    leadSaccadicPathlength(i,:) = histcounts(Lead(i).PathLength(Lead(i).isSaccadic)/max(Pvec_tree(Lead(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lead(i).PathLength(Lead(i).isSaccadic)/max(Pvec_tree(Lead(i).Tree{1})),Lead(i).PSDsize(Lead(i).isSaccadic)];
+    y = discretize(temp(:,1),0:0.1:1);
+    leadSaccadicSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    leadVestibularPathlength(i,:) = histcounts(Lead(i).PathLength(Lead(i).isVestibular)/max(Pvec_tree(Lead(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lead(i).PathLength(Lead(i).isVestibular)/max(Pvec_tree(Lead(i).Tree{1})),Lead(i).PSDsize(Lead(i).isVestibular)];
+    y = discretize(temp(:,1),0:0.1:1); 
+    leadVestibularSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    leadIntegratorPathlength(i,:) = histcounts(Lead(i).PathLength(Lead(i).isIntegrator)/max(Pvec_tree(Lead(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lead(i).PathLength(Lead(i).isIntegrator)/max(Pvec_tree(Lead(i).Tree{1})),Lead(i).PSDsize(Lead(i).isIntegrator)];
+    y = discretize(temp(:,1),0:0.1:1); 
+    leadIntegratorSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    leadContraPathlength(i,:) = histcounts(Lead(i).PathLength(Lead(i).isContra)/max(Pvec_tree(Lead(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lead(i).PathLength(Lead(i).isContra)/max(Pvec_tree(Lead(i).Tree{1})),Lead(i).PSDsize(Lead(i).isContra)];
+    y = discretize(temp(:,1),0:0.1:1); 
+    leadContraSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    leadEverythingElsePathlength(i,:) = histcounts(Lead(i).PathLength(Lead(i).isEverythingElse)/max(Pvec_tree(Lead(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [ Lead(i).PathLength(Lead(i).isEverythingElse)/max(Pvec_tree(Lead(i).Tree{1})),Lead(i).PSDsize(Lead(i).isEverythingElse)];
+     y = discretize(temp(:,1),0:0.1:1); 
+    leadEverythingElseSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
 end
+
+leadVestibularPathlength(5,:) = zeros(1,10);
 
 % lag neurons
 
+% for i = 1:numel(lagNeurons)    
+%     lagSaccadicPathlength(1:size(Lag(i).Saccadic,1),i) = Lag(i).PathLength(Lag(i).isSaccadic)/max(Pvec_tree(Lag(i).Tree{1}));
+%     lagVestibularPathlength(1:size(Lag(i).Vestibular,1),i) = Lag(i).PathLength(Lag(i).isVestibular)/max(Pvec_tree(Lag(i).Tree{1}));
+%     lagIntegratorPathlength(1:size(Lag(i).Integrator,1),i) = Lag(i).PathLength(Lag(i).isIntegrator)/max(Pvec_tree(Lag(i).Tree{1}));
+%     lagContraPathlength(1:size(Lag(i).Contra,1),i) = Lag(i).PathLength(Lag(i).isContra)/max(Pvec_tree(Lag(i).Tree{1}));
+%     lagEverythingElsePathlength(1:size(Lag(i).EverythingElse,1),i) = Lag(i).PathLength(Lag(i).isEverythingElse)/max(Pvec_tree(Lag(i).Tree{1}));
+% end
+
+lagSaccadicSynapseSize =[];
+lagVestibularSynapseSize = [];
+lagIntegratorSynapseSize = [];
+lagContraSynapseSize = [];
+lagEverythingElseSynapseSize = [];
+
 for i = 1:numel(lagNeurons)    
-    lagSaccadicPathlength(1:size(Lag(i).Saccadic,1),i) = Lag(i).PathLength(Lag(i).isSaccadic)/max(Pvec_tree(Lag(i).Tree{1}));
-    lagVestibularPathlength(1:size(Lag(i).Vestibular,1),i) = Lag(i).PathLength(Lag(i).isVestibular)/max(Pvec_tree(Lag(i).Tree{1}));
-    lagIntegratorPathlength(1:size(Lag(i).Integrator,1),i) = Lag(i).PathLength(Lag(i).isIntegrator)/max(Pvec_tree(Lag(i).Tree{1}));
-    lagContraPathlength(1:size(Lag(i).Contra,1),i) = Lag(i).PathLength(Lag(i).isContra)/max(Pvec_tree(Lag(i).Tree{1}));
-    lagEverythingElsePathlength(1:size(Lag(i).EverythingElse,1),i) = Lag(i).PathLength(Lag(i).isEverythingElse)/max(Pvec_tree(Lag(i).Tree{1}));
+    lagSaccadicPathlength(i,:) = histcounts(Lag(i).PathLength(Lag(i).isSaccadic)/max(Pvec_tree(Lag(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lag(i).PathLength(Lag(i).isSaccadic)/max(Pvec_tree(Lag(i).Tree{1})),Lag(i).PSDsize(Lag(i).isSaccadic)];
+    y = discretize(temp(:,1),0:0.1:1);
+    lagSaccadicSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    
+    lagVestibularPathlength(i,:) = histcounts(Lag(i).PathLength(Lag(i).isVestibular)/max(Pvec_tree(Lag(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lag(i).PathLength(Lag(i).isVestibular)/max(Pvec_tree(Lag(i).Tree{1})),Lag(i).PSDsize(Lag(i).isVestibular)];
+    y = discretize(temp(:,1),0:0.1:1);
+    lagVestibularSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    lagIntegratorPathlength(i,:) = histcounts(Lag(i).PathLength(Lag(i).isIntegrator)/max(Pvec_tree(Lag(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lag(i).PathLength(Lag(i).isIntegrator)/max(Pvec_tree(Lag(i).Tree{1})),Lag(i).PSDsize(Lag(i).isIntegrator)];
+    y = discretize(temp(:,1),0:0.1:1);
+    lagIntegratorSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    lagContraPathlength(i,:) = histcounts(Lag(i).PathLength(Lag(i).isContra)/max(Pvec_tree(Lag(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [Lag(i).PathLength(Lag(i).isContra)/max(Pvec_tree(Lag(i).Tree{1})),Lag(i).PSDsize(Lag(i).isContra)];
+    y = discretize(temp(:,1),0:0.1:1);
+    lagContraSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
+    lagEverythingElsePathlength(i,:) = histcounts(Lag(i).PathLength(Lag(i).isEverythingElse)/max(Pvec_tree(Lag(i).Tree{1})),0:0.1:1,'Normalization','probability');
+    temp = [ Lag(i).PathLength(Lag(i).isEverythingElse)/max(Pvec_tree(Lag(i).Tree{1})),Lag(i).PSDsize(Lag(i).isEverythingElse)];
+    y = discretize(temp(:,1),0:0.1:1);
+    lagEverythingElseSynapseSize(i,y) = temp(:,2);
+    clear temp;
+    clear y;
+    
 end
 
+
 subplot(3,5,6)
-histogram(leadSaccadicPathlength(leadSaccadicPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
-    'Normalization','probability');
+shadedErrorBar(0.1:0.1:1,mean(leadSaccadicPathlength),std(leadSaccadicPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
 hold on;
-histogram(lagSaccadicPathlength(lagSaccadicPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
-    'Normalization','probability');
-title('Saccadic axons');
+shadedErrorBar(0.1:0.1:1,mean(lagSaccadicPathlength),std(lagSaccadicPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Saccadic axons');
 ylabel('Probability');
 box off;
 axis square;
 
 subplot(3,5,7)
-histogram(leadVestibularPathlength(leadVestibularPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
-    'Normalization','probability');
+shadedErrorBar(0.1:0.1:1,mean(leadVestibularPathlength),std(leadVestibularPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
 hold on;
-histogram(lagVestibularPathlength(lagVestibularPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
-    'Normalization','probability');
-title('Vestibular axons');
-
+shadedErrorBar(0.1:0.1:1,mean(lagVestibularPathlength),std(lagVestibularPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Vestibular axons');
 box off;
 axis square;
 
 subplot(3,5,8)
-histogram(leadIntegratorPathlength(leadIntegratorPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
-    'Normalization','probability');
+shadedErrorBar(0.1:0.1:1,mean(leadIntegratorPathlength),std(leadIntegratorPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
 hold on;
-histogram(lagIntegratorPathlength(lagIntegratorPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
-    'Normalization','probability');
-title('Integrator axons');
-
+shadedErrorBar(0.1:0.1:1,mean(lagIntegratorPathlength),std(lagIntegratorPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Integrator axons');
 box off;
 axis square;
 
 subplot(3,5,9)
-histogram(leadContraPathlength(leadContraPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
-    'Normalization','probability');
+shadedErrorBar(0.1:0.1:1,mean(leadContraPathlength),std(leadContraPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
 hold on;
-histogram(lagContraPathlength(lagContraPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
-    'Normalization','probability');
-title('Contra axons');
-
+shadedErrorBar(0.1:0.1:1,mean(lagContraPathlength),std(lagContraPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Contra axons');
 box off;
 axis square;
 
 subplot(3,5,10)
-histogram(leadEverythingElsePathlength(leadEverythingElsePathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
-    'Normalization','probability');
+shadedErrorBar(0.1:0.1:1,mean(leadEverythingElsePathlength),std(leadEverythingElsePathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
 hold on;
-histogram(lagEverythingElsePathlength(lagEverythingElsePathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
-    'Normalization','probability');
+shadedErrorBar(0.1:0.1:1,mean(lagEverythingElsePathlength),std(lagEverythingElsePathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
 title('Rest axons');
 xlabel('Pathlength (um)')
 box off;
 axis square;
+
+% plot size of synapses
+
+subplot(3,5,11)
+plot(0.1:0.1:0.1*length(leadSaccadicSynapseSize),sum(leadSaccadicSynapseSize),'Color',leadColor,'LineWidth',2);
+hold on;
+plot(0.1:0.1:0.1*length(lagSaccadicSynapseSize),sum(lagSaccadicSynapseSize),'Color',lagColor,'LineWidth',2);
+title('Saccadic axons');
+ylabel('PSD size (voxels)');
+box off;
+axis square;
+
+subplot(3,5,12)
+plot(0.1:0.1:0.1*length(leadVestibularSynapseSize),sum(leadVestibularSynapseSize),'Color',leadColor,'LineWidth',2);
+hold on;
+plot(0.1:0.1:0.1*length(lagVestibularSynapseSize),sum(lagVestibularSynapseSize),'Color',lagColor,'LineWidth',2);
+title('Vestibular axons');
+box off;
+axis square;
+
+subplot(3,5,13)
+plot(0.1:0.1:0.1*length(leadIntegratorSynapseSize),sum(leadIntegratorSynapseSize),'Color',leadColor,'LineWidth',2);
+hold on;
+plot(0.1:0.1:0.1*length(lagIntegratorSynapseSize),sum(lagIntegratorSynapseSize),'Color',lagColor,'LineWidth',2);
+title('Integrator axons');
+box off;
+axis square;
+
+subplot(3,5,14)
+plot(0.1:0.1:0.1*length(leadContraSynapseSize),sum(leadContraSynapseSize),'Color',leadColor,'LineWidth',2);
+hold on;
+plot(0.1:0.1:0.1*length(lagContraSynapseSize),sum(lagContraSynapseSize),'Color',lagColor,'LineWidth',2);
+title('Contra axons');
+box off;
+axis square;
+
+subplot(3,5,15)
+plot(0.1:0.1:0.1*length(leadEverythingElseSynapseSize),sum(leadEverythingElseSynapseSize),'Color',leadColor,'LineWidth',2);
+hold on;
+plot(0.1:0.1:0.1*length(lagEverythingElseSynapseSize),sum(lagEverythingElseSynapseSize),'Color',lagColor,'LineWidth',2);
+title('Rest axons');
+xlabel('Pathlength (um)')
+box off;
+axis square;
+
+% 
+% subplot(3,5,6)
+% histogram(leadSaccadicPathlength(leadSaccadicPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% hold on;
+% histogram(lagSaccadicPathlength(lagSaccadicPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% title('Saccadic axons');
+% ylabel('Probability');
+% box off;
+% axis square;
+% 
+% subplot(3,5,7)
+% histogram(leadVestibularPathlength(leadVestibularPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% hold on;
+% histogram(lagVestibularPathlength(lagVestibularPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% title('Vestibular axons');
+% 
+% box off;
+% axis square;
+% 
+% subplot(3,5,8)
+% histogram(leadIntegratorPathlength(leadIntegratorPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% hold on;
+% histogram(lagIntegratorPathlength(lagIntegratorPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% title('Integrator axons');
+% 
+% box off;
+% axis square;
+% 
+% subplot(3,5,9)
+% histogram(leadContraPathlength(leadContraPathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% hold on;
+% histogram(lagContraPathlength(lagContraPathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% title('Contra axons');
+% 
+% box off;
+% axis square;
+% 
+% subplot(3,5,10)
+% histogram(leadEverythingElsePathlength(leadEverythingElsePathlength~=0),20,'FaceColor',leadColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% hold on;
+% histogram(lagEverythingElsePathlength(lagEverythingElsePathlength~=0),20,'FaceColor',lagColor,'EdgeColor','none',...
+%     'Normalization','probability');
+% title('Rest axons');
+% xlabel('Pathlength (um)')
+% box off;
+% axis square;
 
 % distributions based on rhombomere organization
 
@@ -881,6 +1066,47 @@ axis square;
 %% Saccadic/Vestibular ratios
 
 
+subplot(4,4,1)
+shadedErrorBar(0.1:0.1:1,mean(leadSaccadicPathlength),std(leadSaccadicPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,mean(lagSaccadicPathlength),std(lagSaccadicPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Saccadic axons');
+ylabel('Probability');
+box off;
+axis square;
+
+subplot(4,4,2)
+shadedErrorBar(0.1:0.1:1,mean(leadVestibularPathlength),std(leadVestibularPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,mean(lagVestibularPathlength),std(lagVestibularPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Vestibular axons');
+box off;
+axis square;
+
+subplot(4,4,3)
+shadedErrorBar(0.1:0.1:1,mean(leadIntegratorPathlength),std(leadIntegratorPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,mean(lagIntegratorPathlength),std(lagIntegratorPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Integrator axons');
+box off;
+axis square;
+
+subplot(4,4,4)
+shadedErrorBar(0.1:0.1:1,mean(leadContraPathlength),std(leadContraPathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,mean(lagContraPathlength),std(lagContraPathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+%title('Contra axons');
+box off;
+axis square;
+
+subplot(4,4,5)
+shadedErrorBar(0.1:0.1:1,mean(leadEverythingElsePathlength),std(leadEverythingElsePathlength)/sqrt(5),'lineProps',{'Color',leadColor,'LineWidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,mean(lagEverythingElsePathlength),std(lagEverythingElsePathlength)/sqrt(4),'lineProps',{'Color',lagColor,'LineWidth',2});
+title('Rest axons');
+xlabel('Pathlength (um)')
+box off;
+axis square;
 
 %% Looking at unique populations only
 
@@ -1123,99 +1349,99 @@ figure('units','normalized','outerposition',[0 0 1 1]);
  close all;
 
 
-% % vestibular pop
-% 
-%  
-% leadOnlyVestibular = setdiff(leadVestibularAxons, lagVestibularAxons);
-% lagOnlyVestibular  = setdiff(lagVestibularAxons, leadVestibularAxons);
-% commonVestibular  = intersect(leadVestibularAxons,lagVestibularAxons);
-% 
-% for i = 1:numel(commonVestibular)
-%      commonVestibularDiff(i).ID = commonVestibular(i);
-%      commonVestibularDiff(i).Lead = sum(ismember(vertcat(Lead.Vestibular), commonVestibular(i)));
-%      commonVestibularDiff(i).Lag = sum(ismember(vertcat(Lag.Vestibular), commonVestibular(i)));
-%  end
-%  
-%  index = find([commonVestibularDiff.Lead]>[commonVestibularDiff.Lag]);
-%  leadOnlyVestibular = [leadOnlyVestibular;[commonVestibularDiff(index).ID]'];
-%  index = find([commonVestibularDiff.Lead]<[commonVestibularDiff.Lag]);
-%  lagOnlyVestibular = [lagOnlyVestibular;[commonVestibularDiff(index).ID]'];
-% 
-%  % plot lead and Lag neurons
-% figure('units','normalized','outerposition',[0 0 1 1]);
-%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
-%  transform_swc_AV(leadOnlyVestibular,lightRed,[],false,false);
-% export_fig('/Users/ashwin/Desktop/VestibularLEADOntoInt.png','-r300','-transparent');
-% close all;
-%  
-% figure('units','normalized','outerposition',[0 0 1 1]);
-%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
-%  transform_swc_AV(lagOnlyVestibular,lightBlue,[],false,false);
-%  export_fig('/Users/ashwin/Desktop/VestibularLAGOntoInt.png','-r300','-transparent');
-% close all;
-%  
-%  % Contra pop
-% 
-%  
-% leadOnlyContra = setdiff(leadContraAxons, lagContraAxons);
-% lagOnlyContra  = setdiff(lagContraAxons, leadContraAxons);
-% commonContra  = intersect(leadContraAxons,lagContraAxons);
-% 
-% for i = 1:numel(commonContra)
-%      commonContraDiff(i).ID = commonContra(i);
-%      commonContraDiff(i).Lead = sum(ismember(vertcat(Lead.Contra), commonContra(i)));
-%      commonContraDiff(i).Lag = sum(ismember(vertcat(Lag.Contra), commonContra(i)));
-%  end
-%  
-%  index = find([commonContraDiff.Lead]>[commonContraDiff.Lag]);
-%  leadOnlyContra = [leadOnlyContra;[commonContraDiff(index).ID]'];
-%  index = find([commonContraDiff.Lead]<[commonContraDiff.Lag]);
-%  lagOnlyContra = [lagOnlyContra;[commonContraDiff(index).ID]'];
-% 
-%  % plot lead and Lag neurons
-% figure('units','normalized','outerposition',[0 0 1 1]);
-%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
-%  transform_swc_AV(leadOnlyContra,lightRed,[],false,false);
-%  export_fig('/Users/ashwin/Desktop/ContraLEADOntoInt.png','-r300','-transparent');
-% close all;
-%  
-% figure('units','normalized','outerposition',[0 0 1 1]);
-%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
-%  transform_swc_AV(lagOnlyContra,lightBlue,[],false,false);
-%   export_fig('/Users/ashwin/Desktop/ContraLAGOntoInt.png','-r300','-transparent');
-% close all;
-% 
-% 
-%  % Integrator Pop
-% 
-%  
-% leadOnlyIntegrator = setdiff(leadIntegratorAxons, lagContraAxons);
-% lagOnlyIntegrator  = setdiff(lagIntegratorAxons, leadContraAxons);
-% commonIntegrator  = intersect(leadIntegratorAxons,leadIntegratorAxons);
-% 
-% for i = 1:numel(commonIntegrator)
-%      commonIntegratorDiff(i).ID = commonIntegrator(i);
-%      commonIntegratorDiff(i).Lead = sum(ismember(vertcat(Lead.Integrator), commonIntegrator(i)));
-%      commonIntegratorDiff(i).Lag = sum(ismember(vertcat(Lag.Integrator), commonIntegrator(i)));
-%  end
-%  
-%  index = find([commonIntegratorDiff.Lead]>[commonIntegratorDiff.Lag]);
-%  leadOnlyIntegrator = [leadOnlyIntegrator;[commonIntegratorDiff(index).ID]'];
-%  index = find([commonIntegratorDiff.Lead]<[commonIntegratorDiff.Lag]);
-%  lagOnlyIntegrator = [lagOnlyIntegrator;[commonIntegratorDiff(index).ID]'];
-% 
-%  % plot lead and Lag neurons
-% figure('units','normalized','outerposition',[0 0 1 1]);
-%  transform_swc_AV(leadNeurons,leadColor,[],true,false);
-%  transform_swc_AV(leadOnlyIntegrator,lightRed,[],false,false);
-%  export_fig('/Users/ashwin/Desktop/IntegratorLEADOntoInt.png','-r300','-transparent');
-% close all;
-%  
-% figure('units','normalized','outerposition',[0 0 1 1]);
-%  transform_swc_AV(lagNeurons,lagColor,[],true,false);
-%  transform_swc_AV(lagOnlyIntegrator,lightBlue,[],false,false);
-%   export_fig('/Users/ashwin/Desktop/IntegratorLAGOntoInt.png','-r300','-transparent');
-% close all;
+% vestibular pop
+
+ 
+leadOnlyVestibular = setdiff(leadVestibularAxons, lagVestibularAxons);
+lagOnlyVestibular  = setdiff(lagVestibularAxons, leadVestibularAxons);
+commonVestibular  = intersect(leadVestibularAxons,lagVestibularAxons);
+
+for i = 1:numel(commonVestibular)
+     commonVestibularDiff(i).ID = commonVestibular(i);
+     commonVestibularDiff(i).Lead = sum(ismember(vertcat(Lead.Vestibular), commonVestibular(i)));
+     commonVestibularDiff(i).Lag = sum(ismember(vertcat(Lag.Vestibular), commonVestibular(i)));
+ end
+ 
+ index = find([commonVestibularDiff.Lead]>[commonVestibularDiff.Lag]);
+ leadOnlyVestibular = [leadOnlyVestibular;[commonVestibularDiff(index).ID]'];
+ index = find([commonVestibularDiff.Lead]<[commonVestibularDiff.Lag]);
+ lagOnlyVestibular = [lagOnlyVestibular;[commonVestibularDiff(index).ID]'];
+
+ % plot lead and Lag neurons
+figure('units','normalized','outerposition',[0 0 1 1]);
+ transform_swc_AV(leadNeurons,leadColor,[],true,false);
+ transform_swc_AV(leadOnlyVestibular,lightRed,[],false,false);
+export_fig('/Users/ashwin/Desktop/VestibularLEADOntoInt.png','-r300','-transparent');
+close all;
+ 
+figure('units','normalized','outerposition',[0 0 1 1]);
+ transform_swc_AV(lagNeurons,lagColor,[],true,false);
+ transform_swc_AV(lagOnlyVestibular,lightBlue,[],false,false);
+ export_fig('/Users/ashwin/Desktop/VestibularLAGOntoInt.png','-r300','-transparent');
+close all;
+ 
+ % Contra pop
+
+ 
+leadOnlyContra = setdiff(leadContraAxons, lagContraAxons);
+lagOnlyContra  = setdiff(lagContraAxons, leadContraAxons);
+commonContra  = intersect(leadContraAxons,lagContraAxons);
+
+for i = 1:numel(commonContra)
+     commonContraDiff(i).ID = commonContra(i);
+     commonContraDiff(i).Lead = sum(ismember(vertcat(Lead.Contra), commonContra(i)));
+     commonContraDiff(i).Lag = sum(ismember(vertcat(Lag.Contra), commonContra(i)));
+ end
+ 
+ index = find([commonContraDiff.Lead]>[commonContraDiff.Lag]);
+ leadOnlyContra = [leadOnlyContra;[commonContraDiff(index).ID]'];
+ index = find([commonContraDiff.Lead]<[commonContraDiff.Lag]);
+ lagOnlyContra = [lagOnlyContra;[commonContraDiff(index).ID]'];
+
+ % plot lead and Lag neurons
+figure('units','normalized','outerposition',[0 0 1 1]);
+ transform_swc_AV(leadNeurons,leadColor,[],true,false);
+ transform_swc_AV(leadOnlyContra,lightRed,[],false,false);
+ export_fig('/Users/ashwin/Desktop/ContraLEADOntoInt.png','-r300','-transparent');
+close all;
+ 
+figure('units','normalized','outerposition',[0 0 1 1]);
+ transform_swc_AV(lagNeurons,lagColor,[],true,false);
+ transform_swc_AV(lagOnlyContra,lightBlue,[],false,false);
+  export_fig('/Users/ashwin/Desktop/ContraLAGOntoInt.png','-r300','-transparent');
+close all;
+
+
+ % Integrator Pop
+
+ 
+leadOnlyIntegrator = setdiff(leadIntegratorAxons, lagContraAxons);
+lagOnlyIntegrator  = setdiff(lagIntegratorAxons, leadContraAxons);
+commonIntegrator  = intersect(leadIntegratorAxons,leadIntegratorAxons);
+
+for i = 1:numel(commonIntegrator)
+     commonIntegratorDiff(i).ID = commonIntegrator(i);
+     commonIntegratorDiff(i).Lead = sum(ismember(vertcat(Lead.Integrator), commonIntegrator(i)));
+     commonIntegratorDiff(i).Lag = sum(ismember(vertcat(Lag.Integrator), commonIntegrator(i)));
+ end
+ 
+ index = find([commonIntegratorDiff.Lead]>[commonIntegratorDiff.Lag]);
+ leadOnlyIntegrator = [leadOnlyIntegrator;[commonIntegratorDiff(index).ID]'];
+ index = find([commonIntegratorDiff.Lead]<[commonIntegratorDiff.Lag]);
+ lagOnlyIntegrator = [lagOnlyIntegrator;[commonIntegratorDiff(index).ID]'];
+
+ % plot lead and Lag neurons
+figure('units','normalized','outerposition',[0 0 1 1]);
+ transform_swc_AV(leadNeurons,leadColor,[],true,false);
+ transform_swc_AV(leadOnlyIntegrator,lightRed,[],false,false);
+ export_fig('/Users/ashwin/Desktop/IntegratorLEADOntoInt.png','-r300','-transparent');
+close all;
+ 
+figure('units','normalized','outerposition',[0 0 1 1]);
+ transform_swc_AV(lagNeurons,lagColor,[],true,false);
+ transform_swc_AV(lagOnlyIntegrator,lightBlue,[],false,false);
+  export_fig('/Users/ashwin/Desktop/IntegratorLAGOntoInt.png','-r300','-transparent');
+close all;
 % 
 % 
 %  

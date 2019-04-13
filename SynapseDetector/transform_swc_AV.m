@@ -56,7 +56,7 @@ if displayRefBrain
         images(:,:,i) = TifLink.read();
     end
 end
-warning('off','last');
+%warning('off','last');
 TifLink.close();
 imagesRef = imref3d(size(images),0.798,0.798,2); % set the correct dimensions for the images using the ref object
 
@@ -287,7 +287,7 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',neuronColor,'LineWidth',0.75);
+            'Color',neuronColor,'LineWidth',0.25);
         hold on;
         scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor,...
             'MarkerEdgeColor','k','LineWidth',0.25);
@@ -310,16 +310,16 @@ end
 
 
 set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse','color','none');
-%set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
+set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
 set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
-box on;
+%box on;
 %
 %draw scale bar 1px = 0.798 us
 %line([500,563],[1280,1280],'Color','m','LineWidth',4);
 %text(500,1300,'50um','FontName','Arial','FontSize',10);
 
-%axis on;
-title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
+axis off;
+%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
 
 end
 
