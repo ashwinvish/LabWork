@@ -3,7 +3,7 @@ clear;
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/11252018.csv');
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
     fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
 
 else
@@ -22,10 +22,10 @@ temp2 = colorcet('CBL2','N',5);  %  linear-protanopic-deuteranopic_kbw_5-98_c40_
 leadColor = temp1(3,:); % dark red, CB safe
 lagColor = temp2(3,:); % dark blue, CB safe
 
-ABDr_CellIDs = [77648, 77710, 77300, 77705, 77305, 77301, 77709, 77672, 77302];
-ABDc_CellIDs = [77154, 77646, 77682 ,77628 ,77295 , 77652 ,77292 ,77688 ,77654 ,77658 ,77657 ,77662, 77296];
-ABDIr_CellIDs = [77631, 77150, 77618, 77886, 78547, 77158, 78556, 78552, 77665, 77668, 77634, 78553];
-ABDIc_CellIDs = [77148, 77625, 77641, 77692, 77144, 77643, 77640, 79051, 79066, 78574];
+    ABDr_CellIDs = [77648 77710 77300 77705 77305 77301 77709 77672 77302 82194 82192 82193 82146 82145 82143 82140];
+    ABDc_CellIDs = [77154 77646 77682 77628 77295 77652 77292 77688 77654 77658 77657 77662 77296 81172 82195 82196 82212 82213 82197];
+    ABDIr_CellIDs = [77631, 77150, 77618, 77886, 78547, 77158, 78556, 78552, 77665, 77668, 77634, 78553];
+    ABDIc_CellIDs = [77148, 77625, 77641, 77692, 77144, 77643, 77640, 79051, 79066, 78574];
 
 % complete recontrustucon for 
 % ABDr - 77710, 77648
@@ -51,7 +51,11 @@ parfor i = 1:numel(ABDIc_CellIDs)
     ABDIc(i) = InputsByClass(ABDIc_CellIDs(i),df);
 end
 
-
+    
+    save('ABDr.mat','ABDr');
+    save('ABDc.mat','ABDc');
+    save('ABDIr.mat','ABDIr');
+    save('ABDIc.mat','ABDIc');
 %% plot basic statistics
 
 for i = 1:numel(ABDr_CellIDs)

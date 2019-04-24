@@ -1,7 +1,7 @@
 % Manual Sort List
 if ismac
     addpath(genpath('../'));
-    ml = readtable('/Users/ashwin/Documents/SynapseDetector/ManualSortList-102218.csv');
+    ml = readtable('/Users/ashwin/Documents/SynapseDetector/ManualSortList-04212019.csv');
 else
     addpath(genpath('../'));
     ml = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/ManualSortList-102218.csv');

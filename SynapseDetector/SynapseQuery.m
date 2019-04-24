@@ -1,9 +1,9 @@
 %clc;
-%clear all;
+clear all;
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/11252018.csv');
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
@@ -144,7 +144,7 @@ save('IntConnMatrixPre.mat','IntConnMatrixPre');
 AllCells = [];
 
 AllCells = unique([unique(df.postsyn_segid(df.postsyn_segid<1e5)); unique(df.presyn_segid(df.presyn_segid<1e5))]);
-AllCells = AllCells(AllCells>1e4);
+AllCells = AllCells(AllCells<1e5);
 ConnMatrixPre = zeros(length(AllCells));
 clear tempPrePartner
 
@@ -206,7 +206,7 @@ ylabel('Postsynaptic cell');
 %colormap hot;
 %colorcet('CBTL1');
 set(gcf,'Color','white');
-set(gca, 'FontName','Aria','FontSize',25);
+set(gca, 'FontName','Arial','FontSize',25);
 
 figure;
 cspy(ConnMatrixPost,'Colormap', map,'Levels',255,'MarkerSize',15)

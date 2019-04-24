@@ -103,6 +103,103 @@ xlabel('Normalized path length');
 % set(gca,'YDir','reverse');
 % ylabel('DV positon in \mu');
 % xlabel('Normalized path length');
+%%
+for i = 1:numel(DBX)
+   dbxOrigins(i,:) = DBX(i).Origin;
+end
+
+%DBXpariwiseDist = pdist(dbxOrigins);
+%[~,RCindex] = sort(DBXpariwiseDist);
+
+for i = 1:size(dbxOrigins,1)
+    for j = 1:size(dbxOrigins,1)
+        DBXpariwiseDist(i,j) = sqrt(sum((dbxOrigins(i,:) - dbxOrigins(j,:)).^2));
+        commonSaccadic = intersect(DBX(i).Saccadic,DBX(j).Saccadic);
+        commonVestibular = intersect(DBX(i).Vestibular,DBX(j).Vestibular);
+        commonIntgrators = intersect(DBX(i).Integrator,DBX(j).Integrator);
+        commonContra = intersect(DBX(i).Contra,DBX(j).Contra);
+        
+        DBXcommonSaccadic(i,j) = length(commonSaccadic);
+        DBXcommonVestibular(i,j) = length(commonVestibular);
+        DBXcommonIntegrators(i,j) = length(commonIntgrators);
+        DBXcommonContra(i,j) = length(commonContra);
+        
+        clear commonSaccadic;
+        clear commonVestibular;
+        clear commonIntgrators;
+        clear commonContra;
+    end
+end
+
+DBXcommonSaccadic(DBXcommonSaccadic ==0) = NaN;
+DBXcommonVestibular(DBXcommonVestibular ==0) = NaN;
+DBXcommonIntegrators(DBXcommonIntegrators ==0) = NaN;
+DBXcommonContra(DBXcommonContra ==0) = NaN;
+DBXpariwiseDist(DBXpariwiseDist ==0) = NaN;
+[h,e,ind] = histcounts(DBXpariwiseDist(:),0:10:120);
+
+figure;
+subplot(4,4,1)
+for i = 1:max(ind)
+    errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonSaccadic(i==ind)),...
+        nanstd(DBXcommonSaccadic(i==ind))./sqrt(numel(DBXcommonSaccadic(i==ind))),'vertical',...
+        'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
+    hold on
+    
+end
+
+axis square
+xlabel('Pairwise distance (\mum)');
+ylabel('Common axons');
+title('Saccadic')
+box off;
+
+subplot(4,4,2)
+for i = 1:max(ind)
+    errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonVestibular(i==ind)),...
+        nanstd(DBXcommonVestibular(i==ind))./sqrt(numel(DBXcommonVestibular(i==ind))),'vertical',...
+        'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
+    hold on
+    
+end
+
+axis square
+xlabel('Pairwise distance (\mum)');
+ylabel('Common axons');
+title('Vestibular')
+box off;
+
+subplot(4,4,3)
+for i = 1:max(ind)
+    errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonIntegrators(i==ind)),...
+        nanstd(DBXcommonIntegrators(i==ind))./sqrt(numel(DBXcommonIntegrators(i==ind))),'vertical',...
+        'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
+    hold on
+    
+end
+
+axis square
+xlabel('Pairwise distance (\mum)');
+ylabel('Common axons');
+title('Integrators')
+box off;
+
+
+subplot(4,4,4)
+for i = 1:max(ind)
+    errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonContra(i==ind)),...
+        nanstd(DBXcommonContra(i==ind))./sqrt(numel(DBXcommonContra(i==ind))),'vertical',...
+        'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
+    hold on
+    
+end
+
+axis square
+xlabel('Pairwise distance (\mum)');
+ylabel('Common axons');
+title('Contra')
+box off;
+
 
 %% Saccadic Axons
 
@@ -160,10 +257,10 @@ set(gca,'YDir','reverse','YLim',[0,1280]);
 daspect([1,30,1]);
 
 
-%% Saccadic module
-
+%% 
 load('smallABDneurons.mat');
 load('largeABDneurons.mat');
+%% Saccadic module
 
 UniqueSaccadicAxons = unique(vertcat(DBX.Saccadic));
     ix1 = 1;
@@ -179,6 +276,8 @@ for i = 1:numel(UniqueSaccadicAxons)
 
     if leadSum>lagSum
         Lead(ix1).SaccadeAxonID = UniqueSaccadicAxons(i);
+        Lead(ix1).SaccadeLeadSum = leadSum;
+        Lead(ix1).SaccadeLagSum = lagSum;
         Lead(ix1).SaccadeDiff = leadSum-lagSum;
         Lead(ix1).SaccadeMotorDist = MotorDiff(UniqueSaccadicAxons(i),df);
         Lead(ix1).SaccadeSmallCount = smallCount;
@@ -187,6 +286,8 @@ for i = 1:numel(UniqueSaccadicAxons)
         ix1 = ix1+1;
     else
         Lag(ix2).SaccadeAxonID = UniqueSaccadicAxons(i);
+        Lag(ix2).SaccadeLeadSum = leadSum;
+        Lag(ix2).SaccadeLagSum = lagSum;
         Lag(ix2).SaccadeDiff = leadSum-lagSum;
         Lag(ix2).SaccadeMotorDist = MotorDiff(UniqueSaccadicAxons(i),df);
         Lag(ix2).SaccadeSmallCount = smallCount;
@@ -222,25 +323,52 @@ axis square;
 xlabel('Synapse diff');
 ylabel('A-Ai diff');
 
+% subplot(4,4,2)
+% histogram(vertcat(DBX.LeadSaccadicPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
+% hold on;
+% histogram(vertcat(DBX.LagSaccadicPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+% axis square;
+% box off;
+% xlabel('Norm. pathlength');
+% ylabel('count')
+
 subplot(4,4,2)
-histogram(vertcat(DBX.LeadSaccadicPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
-hold on;
-histogram(vertcat(DBX.LagSaccadicPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+scatter([Lag.SaccadeSmallCount],[Lag.SaccadeLargeCount],20,'filled','MarkerFaceColor',lagColor,'jitter','on','jitterAmount',0.3);
+hold on ; 
+scatter([Lead.SaccadeSmallCount],[Lead.SaccadeLargeCount],20,'filled','MarkerFaceColor',leadColor,'jitter','on','jitterAmount',0.3);
+xlabel('Syn on MIF (small) ABD');
+ylabel('Syn on SIF (large) ABD');
+set(gca,'XLim',[-0.5,70],'YLim',[-0.5,70]);
+line([0,70],[0,70],'color','k','lineStyle','--');
 axis square;
-box off;
-xlabel('Norm. pathlength');
-ylabel('count')
+
+% subplot(4,4,3)
+% shadedErrorBar(0.1:0.1:1,mean(LeadSaccadicPathLengths),std(LeadSaccadicPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+% hold on;
+% shadedErrorBar(0.1:0.1:1,mean(LagSaccadicPathLengths),std(LagSaccadicPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+% axis square;
+% xlabel('Norm pathlength');
+% ylabel('count per cell');
 
 subplot(4,4,3)
-shadedErrorBar(0.1:0.1:1,mean(LeadSaccadicPathLengths),std(LeadSaccadicPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+
+scatter([Lead.SaccadeLeadSum],[Lead.SaccadeLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
 hold on;
-shadedErrorBar(0.1:0.1:1,mean(LagSaccadicPathLengths),std(LagSaccadicPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+scatter([Lag.SaccadeLeadSum],[Lag.SaccadeLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
+xlabel('Syn on phasic int');
+ylabel('Syn on tonic int');
+set(gca,'XLim',[-0.5,10],'YLim',[-0.5,10]);
+line([0,10],[0,10],'color','k','lineStyle','--');
 axis square;
-xlabel('Norm pathlength');
-ylabel('count per cell');
 
-%% Vestibular Module
-
+SaccadicMotorDist = isMotor(UniqueSaccadicAxons,df);
+subplot(4,4,4)
+scatter(SaccadicMotorDist(:,2)+SaccadicMotorDist(:,3) , SaccadicMotorDist(:,4)+SaccadicMotorDist(:,5),20,'filled','MarkerFaceColor','k');
+xlabel('ABD synapses');
+ylabel('ABDi synapses');
+set(gca,'XLim',[-5,150],'YLim',[-5,150]);
+line([0,150],[0,150],'color','k','lineStyle','--');
+axis square;
 
 UniqueVestibularAxons = unique(vertcat(DBX.Vestibular));
     ix1 = 1;
@@ -255,6 +383,8 @@ for i = 1:numel(UniqueVestibularAxons)
 
     if leadSum>lagSum
         Lead(ix1).VestibularAxonID = UniqueVestibularAxons(i);
+        Lead(ix1).VestibularLeadSum = leadSum;
+        Lead(ix1).VestibularLagSum  = lagSum;
         Lead(ix1).VestibularDiff = leadSum-lagSum;
         Lead(ix1).VestibularMotorDist = MotorDiff(UniqueVestibularAxons(i),df);
         Lead(ix1).VestibularSmallCount = smallCount;
@@ -263,6 +393,8 @@ for i = 1:numel(UniqueVestibularAxons)
         ix1 = ix1+1;
     else
         Lag(ix2).VestibularAxonID = UniqueVestibularAxons(i);
+        Lag(ix2).VestibularLeadSum = leadSum;
+        Lag(ix2).VestibularLagSum  = lagSum;
         Lag(ix2).VestibularDiff = leadSum-lagSum;
         Lag(ix2).VestibularMotorDist = MotorDiff(UniqueVestibularAxons(i),df);
         Lag(ix2).VestibularSmallCount = smallCount;
@@ -299,25 +431,55 @@ axis square;
 xlabel('Synapse diff');
 ylabel('A-Ai diff');
 
+% subplot(4,4,6)
+% histogram(vertcat(DBX.LeadVestibularPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
+% hold on;
+% histogram(vertcat(DBX.LagVestibularPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+% axis square;
+% box off;
+% xlabel('Norm. pathlength');
+% ylabel('count')
+
 subplot(4,4,6)
-histogram(vertcat(DBX.LeadVestibularPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
-hold on;
-histogram(vertcat(DBX.LagVestibularPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+scatter([Lag.VestibularSmallCount],[Lag.VestibularLargeCount],20,'filled','MarkerFaceColor',lagColor,'jitter','on','jitterAmount',0.3);
+hold on ; 
+scatter([Lead.VestibularSmallCount],[Lead.VestibularLargeCount],20,'filled','MarkerFaceColor',leadColor,'jitter','on','jitterAmount',0.3);
+xlabel('Syn on MIF (small) ABD');
+ylabel('Syn on SIF (large) ABD');
+set(gca,'XLim',[-0.5,70],'YLim',[-0.5,70]);
+line([0,70],[0,70],'color','k','lineStyle','--');
 axis square;
-box off;
-xlabel('Norm. pathlength');
-ylabel('count')
+
+
+% subplot(4,4,7)
+% shadedErrorBar(0.1:0.1:1,mean(LeadVestibularPathLengths),std(LeadVestibularPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+% hold on;
+% shadedErrorBar(0.1:0.1:1,mean(LagVestibularPathLengths),std(LagVestibularPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+% axis square;
+% xlabel('Norm pathlength');
+% ylabel('count per cell');
 
 subplot(4,4,7)
-shadedErrorBar(0.1:0.1:1,mean(LeadVestibularPathLengths),std(LeadVestibularPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+scatter([Lead.VestibularLeadSum],[Lead.VestibularLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
 hold on;
-shadedErrorBar(0.1:0.1:1,mean(LagVestibularPathLengths),std(LagVestibularPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+scatter([Lag.VestibularLeadSum],[Lag.VestibularLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
+xlabel('Syn on phasic int');
+ylabel('Syn on tonic int');
+set(gca,'XLim',[-0.5,10],'YLim',[-0.5,10]);
+line([0,10],[0,10],'color','k','lineStyle','--');
 axis square;
-xlabel('Norm pathlength');
-ylabel('count per cell');
+
+VestibularMotorDist = isMotor(UniqueVestibularAxons,df);
+
+subplot(4,4,8)
+scatter(VestibularMotorDist(:,2)+VestibularMotorDist(:,3) , VestibularMotorDist(:,4)+VestibularMotorDist(:,5),20,'filled','MarkerFaceColor','k');
+xlabel('ABD synapses');
+ylabel('ABDi synapses');
+set(gca,'XLim',[-5,150],'YLim',[-5,150]);
+line([0,150],[0,150],'color','k','lineStyle','--');
+axis square;
 
 %% Integrator Module
-
 
 UniqueIntegratorAxons = unique(vertcat(DBX.Integrator));
     ix1 = 1;
@@ -332,6 +494,8 @@ for i = 1:numel(UniqueIntegratorAxons)
 
     if leadSum>lagSum
         Lead(ix1).IntegratorAxonID = UniqueIntegratorAxons(i);
+        Lead(ix1).IntegratorLeadSum = leadSum;
+        Lead(ix1).IntegratorLagSum  = lagSum;
         Lead(ix1).IntegratorDiff = leadSum-lagSum;
         Lead(ix1).IntegratorMotorDist = MotorDiff(UniqueIntegratorAxons(i),df);
         Lead(ix1).IntegratorSmallCount = smallCount;
@@ -340,6 +504,8 @@ for i = 1:numel(UniqueIntegratorAxons)
         ix1 = ix1+1;
     else
         Lag(ix2).IntegratorAxonID = UniqueIntegratorAxons(i);
+        Lag(ix2).IntegratorLeadSum = leadSum;
+        Lag(ix2).IntegratorLagSum  = lagSum;
         Lag(ix2).IntegratorDiff = leadSum-lagSum;
         Lag(ix2).IntegratorMotorDist = MotorDiff(UniqueIntegratorAxons(i),df);
         Lag(ix2).IntegratorSmallCount = smallCount;
@@ -376,22 +542,54 @@ axis square;
 xlabel('Synapse diff');
 ylabel('A-Ai diff');
 
+% subplot(4,4,10)
+% histogram(vertcat(DBX.LeadIntegratorPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
+% hold on;
+% histogram(vertcat(DBX.LagIntegratorPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+% axis square;
+% box off;
+% xlabel('Norm. pathlength');
+% ylabel('count')
+
 subplot(4,4,10)
-histogram(vertcat(DBX.LeadIntegratorPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
-hold on;
-histogram(vertcat(DBX.LagIntegratorPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+scatter([Lag.IntegratorSmallCount],[Lag.IntegratorLargeCount],20,'filled','MarkerFaceColor',lagColor,'jitter','on','jitterAmount',0.3);
+hold on ; 
+scatter([Lead.IntegratorSmallCount],[Lead.IntegratorLargeCount],20,'filled','MarkerFaceColor',leadColor,'jitter','on','jitterAmount',0.3);
+xlabel('Syn on MIF (small) ABD');
+ylabel('Syn on SIF (large) ABD');
+set(gca,'XLim',[-0.5,70],'YLim',[-0.5,70]);
+line([0,70],[0,70],'color','k','lineStyle','--');
 axis square;
-box off;
-xlabel('Norm. pathlength');
-ylabel('count')
+
+
+% subplot(4,4,11)
+% shadedErrorBar(0.1:0.1:1,mean(LeadIntegratorPathLengths),std(LeadIntegratorPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+% hold on;
+% shadedErrorBar(0.1:0.1:1,mean(LagIntegratorPathLengths),std(LagIntegratorPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+% axis square;
+% xlabel('Norm pathlength');
+% ylabel('count per cell');
 
 subplot(4,4,11)
-shadedErrorBar(0.1:0.1:1,mean(LeadIntegratorPathLengths),std(LeadIntegratorPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+scatter([Lead.IntegratorLeadSum],[Lead.IntegratorLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
 hold on;
-shadedErrorBar(0.1:0.1:1,mean(LagIntegratorPathLengths),std(LagIntegratorPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+scatter([Lag.IntegratorLeadSum],[Lag.IntegratorLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
+xlabel('Syn on phasic int');
+ylabel('Syn on tonic int');
+set(gca,'XLim',[-0.5,10],'YLim',[-0.5,10]);
+line([0,10],[0,10],'color','k','lineStyle','--');
 axis square;
-xlabel('Norm pathlength');
-ylabel('count per cell');
+
+IntegratorMotorDist = isMotor(UniqueIntegratorAxons,df);
+
+subplot(4,4,12)
+scatter(IntegratorMotorDist(:,2)+IntegratorMotorDist(:,3) , IntegratorMotorDist(:,4)+IntegratorMotorDist(:,5),20,'filled','MarkerFaceColor','k');
+xlabel('ABD synapses');
+ylabel('ABDi synapses');
+set(gca,'XLim',[-5,150],'YLim',[-5,150]);
+line([0,150],[0,150],'color','k','lineStyle','--');
+axis square;
+
 
 %% Contra Module
 
@@ -408,6 +606,8 @@ for i = 1:numel(UniqueContraAxons)
 
     if leadSum>lagSum
         Lead(ix1).ContraAxonID = UniqueContraAxons(i);
+        Lead(ix1).ContraLeadSum = leadSum;
+        Lead(ix1).ContraLagSum  = lagSum;
         Lead(ix1).ContraDiff = leadSum-lagSum;
         Lead(ix1).ContraMotorDist = MotorDiff(UniqueContraAxons(i),df);
         Lead(ix1).ContraSmallCount = smallCount;
@@ -416,6 +616,8 @@ for i = 1:numel(UniqueContraAxons)
         ix1 = ix1+1;
     else
         Lag(ix2).ContraAxonID = UniqueContraAxons(i);
+        Lag(ix2).ContraLeadSum = leadSum;
+        Lag(ix2).ContraLagSum  = lagSum;
         Lag(ix2).ContraDiff = leadSum-lagSum;
         Lag(ix2).ContraMotorDist = MotorDiff(UniqueContraAxons(i),df);
         Lag(ix2).ContraSmallCount = smallCount;
@@ -452,22 +654,54 @@ axis square;
 xlabel('Synapse diff');
 ylabel('A-Ai diff');
 
+% subplot(4,4,14)
+% histogram(vertcat(DBX.LeadContraPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
+% hold on;
+% histogram(vertcat(DBX.LagContraPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+% axis square;
+% box off;
+% xlabel('Norm. pathlength');
+% ylabel('count')
+
 subplot(4,4,14)
-histogram(vertcat(DBX.LeadContraPathLength),10,'FaceColor',leadColor,'EdgeColor','none');
-hold on;
-histogram(vertcat(DBX.LagContraPathLength),10,'FaceColor',lagColor,'EdgeColor','none');
+scatter([Lag.ContraSmallCount],[Lag.ContraLargeCount],20,'filled','MarkerFaceColor',lagColor,'jitter','on','jitterAmount',0.3);
+hold on ; 
+scatter([Lead.ContraSmallCount],[Lead.ContraLargeCount],20,'filled','MarkerFaceColor',leadColor,'jitter','on','jitterAmount',0.3);
+xlabel('Syn on MIF (small) ABD');
+ylabel('Syn on SIF (large) ABD');
+set(gca,'XLim',[-0.5,70],'YLim',[-0.5,70]);
+line([0,70],[0,70],'color','k','lineStyle','--');
 axis square;
-box off;
-xlabel('Norm. pathlength');
-ylabel('count')
+
+
+% subplot(4,4,15)
+% shadedErrorBar(0.1:0.1:1,mean(LeadContraPathLengths),std(LeadContraPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+% hold on;
+% shadedErrorBar(0.1:0.1:1,mean(LagContraPathLengths),std(LagContraPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+% axis square;
+% xlabel('Norm pathlength');
+% ylabel('count per cell');
 
 subplot(4,4,15)
-shadedErrorBar(0.1:0.1:1,mean(LeadContraPathLengths),std(LeadContraPathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
+scatter([Lead.ContraLeadSum],[Lead.ContraLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
 hold on;
-shadedErrorBar(0.1:0.1:1,mean(LagContraPathLengths),std(LagContraPathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
+scatter([Lag.ContraLeadSum],[Lag.ContraLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
+xlabel('Syn on phasic int');
+ylabel('Syn on tonic int');
+set(gca,'XLim',[-0.5,10],'YLim',[-0.5,10]);
+line([0,10],[0,10],'color','k','lineStyle','--');
 axis square;
-xlabel('Norm pathlength');
-ylabel('count per cell');
+
+ContraMotorDist = isMotor(UniqueContraAxons,df);
+
+subplot(4,4,16)
+scatter(ContraMotorDist(:,2)+ContraMotorDist(:,3) , ContraMotorDist(:,4)+ContraMotorDist(:,5),20,'filled','MarkerFaceColor','k');
+xlabel('ABD synapses');
+ylabel('ABDi synapses');
+set(gca,'XLim',[-5,150],'YLim',[-5,150]);
+line([0,150],[0,150],'color','k','lineStyle','--');
+axis square;
+
 
 %% Everything Else module
 
@@ -478,8 +712,8 @@ UniqueEverythingElseAxons = unique(vertcat(DBX.EverythingElse));
 for i = 1:numel(UniqueEverythingElseAxons)
     [A,~] = SynapticPartners(UniqueEverythingElseAxons(i),2,df);
     %A = A(A<1e5);
-    leadSum  = sum(ismember(A,LeadLikeDBX));
-    lagSum = sum(ismember(A,LagLikeDBX));
+    leadSum  = sum(ismember(A,leadNeurons));
+    lagSum = sum(ismember(A,lagNeurons));
     smallCount = sum(ismember(A,smallABDCellIDs));
     largeCount = sum(ismember(A,largeABDCellIDs));
 
@@ -548,7 +782,8 @@ end
 
 
 
-%%
+
+%% graph stuff
 [DBXSaccadicAxons,SaccadicCounts,SaccadicGraph,SaccadicShortestPaths] = PartnerConnectivity(UniqueDBXSaccadicAxons,UniqueDBXSaccadicAxons,'Saccadic',df);
 
 SaccadicCounts = SaccadicCounts.*~eye(size(SaccadicCounts));
@@ -629,6 +864,7 @@ daspect([1,1,1]);
 % box off;
 % xlabel('shortest path nodes');
 % ylabel('count');
+
 
 %% Vestibular Axons
 
