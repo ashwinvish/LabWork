@@ -16,12 +16,12 @@ if isempty(cellID)
 end
 
 if size(neuronColor,1)>1
-    somataColor  = neuronColor(2,:);
-    neuronColor  = neuronColor(1,:);
+    somataColor = neuronColor;
 else
-    somataColor  = neuronColor(1,:);
-    neuronColor  = neuronColor(1,:);
+    neuronColor = repmat(neuronColor,(numel(cellID)),1);
+    somataColor = neuronColor;
 end
+
 %somataColor = colors(round(mean(n)),:);
 
 if ismac
@@ -37,7 +37,7 @@ end
 % NOTE: Original files needs to be rotated ccw 90 and the zaxis needs to be
 % reversed in FIJI only.
 
-imageFileName = 'ZBB-ml2-mnx-red-evx2-green-Gal4-merged.tif';
+imageFileName = 'AlexFish-AtlasLM-trial3-uint16.tif';
 if ismac
     imageFilePath = '/Users/ashwin/Documents/RefBrains/';
 else
@@ -120,7 +120,8 @@ for i = 1:length(cellID)
     % compute offset as data in NG is offset from origin
     offset = [920,752,16400] .* [80, 80, 45]; % offset at mip4 number can be obtained from NG .info file
     
-    
+    [1840, 1504,16400 ].* [40,40,45];
+
     coord(:,1) = coord(:,1) - offset(1);
     coord(:,2) = coord(:,2) - offset(2);
     coord(:,3) = coord(:,3) - offset(3);
@@ -200,8 +201,8 @@ img = flip(img,2);
 % construct the mean plane as a surface
 
 if displayRefBrain
-    %hsurf1 = surface(X,Y,Z,imcomplement(medfilt2(imadjust(img/max(img(:))))),'FaceColor','flat','EdgeColor','none');
-    hsurf1 = surface(X,Y,Z,medfilt2(imadjust(img/max(img(:)))),'FaceColor','flat','EdgeColor','none');
+    hsurf1 = surface(X,Y,Z,imcomplement(medfilt2(imadjust(img/max(img(:))))),'FaceColor','flat','EdgeColor','none');
+    %hsurf1 = surface(X,Y,Z,medfilt2(imadjust(img/max(img(:)))),'FaceColor','flat','EdgeColor','none');
     %hold on;
     %hsurf2 = surface(X,Y,Z,img/max(img(:)),'FaceColor','flat','EdgeColor','none');
     colormap gray;
@@ -287,10 +288,12 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',neuronColor,'LineWidth',0.25);
+            'Color',[neuronColor(i,:)],'LineWidth',0.25);
         hold on;
-        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor,...
-            'MarkerEdgeColor','k','LineWidth',0.25);
+%         h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor(i,:),...
+%             'MarkerEdgeColor','k','LineWidth',0.25);
+%         hMarker = h.MarkerHandle;
+%         hMarker.FaceColorData = uint8(255*[somataColor(i,:),0.2])';
         clear I;
         clear J;
         clear tree;
@@ -299,7 +302,7 @@ for i = 1:length(cellID)
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]','Color',neuronColor(i,:));
         hold on;
-        scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','none');
+        %scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','none');
         clear I;
         clear J;
         clear tree;
@@ -319,7 +322,7 @@ set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExten
 %text(500,1300,'50um','FontName','Arial','FontSize',10);
 
 axis off;
-%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
+title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
 
 end
 

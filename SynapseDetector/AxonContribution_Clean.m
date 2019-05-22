@@ -184,9 +184,9 @@ title('Type dist');
 subplot(4,4,10)
 randomPop1 = randperm(160,80);
 randomPop2 = 161-randomPop1;
-shadedErrorBar(t,mean(Firing(:,randomPop1),2),std(Firing(:,randomPop1),[],2),'lineprops',{'Color',leadColor});
+shadedErrorBar(t,mean(Firing(:,randomPop1),2),std(Firing(:,randomPop1),[],2),'lineprops',{'Color','k'});
 hold on;
-shadedErrorBar(t,mean(Firing(:,randomPop2),2),std(Firing(:,randomPop2),[],2),'lineprops',{'Color',lagColor});
+shadedErrorBar(t,mean(Firing(:,randomPop2),2),std(Firing(:,randomPop2),[],2),'lineprops',{'Color','k'});
 axis square;
 xlabel('Time (sec)');
 ylabel('df/f');
@@ -292,7 +292,7 @@ axis square;
 % ylabel('count per cell');
 
 subplot(4,4,3)
-
+cmap = colorcet('R3','N',numel(UniqueSaccadicAxons));
 scatter([Lead.SaccadeLeadSum],[Lead.SaccadeLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
 hold on;
 scatter([Lag.SaccadeLeadSum],[Lag.SaccadeLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
@@ -662,6 +662,8 @@ for i = 1:numel(UniqueEverythingElseAxons)
 
     if leadSum>lagSum
         Lead(ix1).EverythingElseAxonID = UniqueEverythingElseAxons(i);
+        Lead(ix1).EverythingElseLeadSum = leadSum;
+        Lead(ix1).EverythingElseLagSum  = lagSum;
         Lead(ix1).EverythingElseDiff = leadSum-lagSum;
         Lead(ix1).EverythingElseMotorDist = MotorDiff(UniqueEverythingElseAxons(i),df);
         Lead(ix1).EverythingElseSmallCount = smallCount;
@@ -670,6 +672,8 @@ for i = 1:numel(UniqueEverythingElseAxons)
         ix1 = ix1+1;
     else
         Lag(ix2).EverythingElseAxonID = UniqueEverythingElseAxons(i);
+        Lag(ix1).EverythingElseLeadSum = leadSum;
+        Lag(ix1).EverythingElseLagSum  = lagSum;
         Lag(ix2).EverythingElseDiff = leadSum-lagSum;
         Lag(ix2).EverythingElseMotorDist = MotorDiff(UniqueEverythingElseAxons(i),df);
         Lag(ix2).EverythingElseSmallCount = smallCount;
@@ -696,17 +700,17 @@ for i = 1:numel(DbxCells)
 end
 
 
-% subplot(4,4,5)
-% scatter([Lead.EverythingElseDiff],[Lead.EverythingElseMotorDist],20,'filled','MarkerFaceColor',leadColor);
-% hold on;
-% scatter([Lag.EverythingElseDiff],[Lag.EverythingElseMotorDist],20,'filled','MarkerFaceColor',lagColor);
-% line([-10,10],[0,0],'color','k','LineStyle','--');
-% line([0,0],[-100,100],'color','k','LineStyle','--');
-% axis square;
-% xlabel('Synapse diff');
-% ylabel('A-Ai diff');
-% 
-% subplot(4,4,6)
+subplot(4,4,13)
+scatter([Lead.EverythingElseDiff],[Lead.EverythingElseMotorDist],20,'filled','MarkerFaceColor',leadColor);
+hold on;
+scatter([Lag.EverythingElseDiff],[Lag.EverythingElseMotorDist],20,'filled','MarkerFaceColor',lagColor);
+line([-10,10],[0,0],'color','k','LineStyle','--');
+line([0,0],[-100,100],'color','k','LineStyle','--');
+axis square;
+xlabel('Synapse diff');
+ylabel('A-Ai diff');
+
+% subplot(4,4,14)
 % histogram(vertcat(DBX.LeadEverythingElsePathLength),10,'FaceColor',leadColor,'EdgeColor','none');
 % hold on;
 % histogram(vertcat(DBX.LagEverythingElsePathLength),10,'FaceColor',lagColor,'EdgeColor','none');
@@ -714,14 +718,46 @@ end
 % box off;
 % xlabel('Norm. pathlength');
 % ylabel('count')
-% 
-% subplot(4,4,7)
+
+subplot(4,4,14)
+scatter([Lag.EverythingElseSmallCount],[Lag.EverythingElseLargeCount],20,'filled','MarkerFaceColor',lagColor,'jitter','on','jitterAmount',0.3);
+hold on ; 
+scatter([Lead.EverythingElseSmallCount],[Lead.EverythingElseLargeCount],20,'filled','MarkerFaceColor',leadColor,'jitter','on','jitterAmount',0.3);
+xlabel('Syn on MIF (small) ABD');
+ylabel('Syn on SIF (large) ABD');
+set(gca,'XLim',[-0.5,70],'YLim',[-0.5,70]);
+line([0,70],[0,70],'color','k','lineStyle','--');
+axis square;
+
+
+% subplot(4,4,15)
 % shadedErrorBar(0.1:0.1:1,mean(LeadEverythingElsePathLengths),std(LeadEverythingElsePathLengths)/sqrt(9),'lineProps',{'Color',leadColor,'LineWidth',2});
 % hold on;
 % shadedErrorBar(0.1:0.1:1,mean(LagEverythingElsePathLengths),std(LagEverythingElsePathLengths)/sqrt(9),'lineProps',{'Color',lagColor,'LineWidth',2});
 % axis square;
 % xlabel('Norm pathlength');
 % ylabel('count per cell');
+
+subplot(4,4,15)
+scatter([Lead.EverythingElseLeadSum],[Lead.EverythingElseLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
+hold on;
+scatter([Lag.EverythingElseLeadSum],[Lag.EverythingElseLagSum],20,'filled','MarkerFaceColor','k','jitter','on','jitterAmount',0.3);
+xlabel('Syn on phasic int');
+ylabel('Syn on tonic int');
+set(gca,'XLim',[-0.5,10],'YLim',[-0.5,10]);
+line([0,10],[0,10],'color','k','lineStyle','--');
+axis square;
+
+EverythingElseMotorDist = isMotor(UniqueEverythingElseAxons,df);
+
+subplot(4,4,16)
+scatter(EverythingElseMotorDist(:,2)+EverythingElseMotorDist(:,3) , EverythingElseMotorDist(:,4)+EverythingElseMotorDist(:,5),20,'filled','MarkerFaceColor','k');
+xlabel('ABD synapses');
+ylabel('ABDi synapses');
+set(gca,'XLim',[-5,150],'YLim',[-5,150]);
+line([0,150],[0,150],'color','k','lineStyle','--');
+axis square;
+
 
 
 %% Pie plots of input/putput fractions

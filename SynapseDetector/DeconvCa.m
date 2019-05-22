@@ -12,7 +12,7 @@ zpad = zeros(dlen-1,1);         % zero-padding
 
 
 dstaf = (tau_cirf/delt)*deconv([staf;zpad],ker);
-dstaf = medfilt1(dstaf,5);
+dstaf = medfilt1(dstaf,20);
 
 end
 

@@ -10,7 +10,7 @@ function[] = ReRoot(cellID)
     fileName = sprintf('%d.swc',cellID);
     
     if exist(fullfile(filePath,fileName))==0
-        filePath  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20181125/';
+        filePath  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20190415/swc/';
         oldFilePath = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
     end
     

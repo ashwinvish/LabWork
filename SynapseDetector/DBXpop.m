@@ -1,4 +1,4 @@
-% DBX population distributions
+ % DBX population distributions
 clear;
 addpath(genpath('/Users/ashwin/Documents/'));
 
@@ -19,7 +19,7 @@ startup
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/11252018.csv');
+    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
@@ -141,13 +141,15 @@ DBXpariwiseDist(DBXpariwiseDist ==0) = NaN;
 figure;
 subplot(4,4,1)
 for i = 1:max(ind)
+    x(i) = nanmean(DBXpariwiseDist(i==ind));
+    y(i) = nanmean(DBXcommonSaccadic(i==ind));
     errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonSaccadic(i==ind)),...
         nanstd(DBXcommonSaccadic(i==ind))./sqrt(numel(DBXcommonSaccadic(i==ind))),'vertical',...
         'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
     hold on
     
 end
-
+showfit(ezfit(x(1:6),y(1:6),'power'),'dispeqboxmode','off','fitcolor','r');
 axis square
 xlabel('Pairwise distance (\mum)');
 ylabel('Common axons');
@@ -156,6 +158,8 @@ box off;
 
 subplot(4,4,2)
 for i = 1:max(ind)
+    x(i) = nanmean(DBXpariwiseDist(i==ind));
+    y(i) = nanmean(DBXcommonVestibular(i==ind))
     errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonVestibular(i==ind)),...
         nanstd(DBXcommonVestibular(i==ind))./sqrt(numel(DBXcommonVestibular(i==ind))),'vertical',...
         'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
@@ -163,6 +167,7 @@ for i = 1:max(ind)
     
 end
 
+showfit(ezfit(x(1:6),y(1:6),'power'),'dispeqboxmode','off','fitcolor','r');
 axis square
 xlabel('Pairwise distance (\mum)');
 ylabel('Common axons');
@@ -171,13 +176,15 @@ box off;
 
 subplot(4,4,3)
 for i = 1:max(ind)
+    x(i) = nanmean(DBXpariwiseDist(i==ind));
+    y(i) = nanmean(DBXcommonIntegrators(i==ind))
     errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonIntegrators(i==ind)),...
         nanstd(DBXcommonIntegrators(i==ind))./sqrt(numel(DBXcommonIntegrators(i==ind))),'vertical',...
         'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
     hold on
     
 end
-
+showfit(ezfit(x(1:6),y(1:6),'power'),'dispeqboxmode','off','fitcolor','r');
 axis square
 xlabel('Pairwise distance (\mum)');
 ylabel('Common axons');
@@ -187,13 +194,15 @@ box off;
 
 subplot(4,4,4)
 for i = 1:max(ind)
+    x(i) = nanmean(DBXpariwiseDist(i==ind));
+    y(i) = nanmean(DBXcommonContra(i==ind));
     errorbar(nanmean(DBXpariwiseDist(i==ind)),nanmean(DBXcommonContra(i==ind)),...
         nanstd(DBXcommonContra(i==ind))./sqrt(numel(DBXcommonContra(i==ind))),'vertical',...
         'o','MarkerFaceColor','w','MarkerEdgeColor','k','MarkerSize',4,'Color','k','LineWidth',2);
     hold on
     
 end
-
+showfit(ezfit(x(1:6),y(1:6),'power'),'dispeqboxmode','off','fitcolor','r');
 axis square
 xlabel('Pairwise distance (\mum)');
 ylabel('Common axons');
@@ -240,22 +249,22 @@ save('LeadLikeDBX.mat','LeadLikeDBX');
 save('LagLikeDBX.mat','LagLikeDBX');
 
 
-subplot(2,3,[1,4])
-transform_swc_AV(LeadLikeDBX,leadColor,[],true,false);
-%subplot(2,3,[2,5])
-transform_swc_AV(LagLikeDBX,lagColor,[],true,false);
-
-subplot(2,3,[2,5])
-LeadDBXOrder = find(ismember(AllDBX,LeadLikeDBX));
-LagDBXOrder = find(ismember(AllDBX,LagLikeDBX));
-LeadDBXOrigins = vertcat(DBX(LeadDBXOrder).Origin);
-LagDBXOrigins = vertcat(DBX(LagDBXOrder).Origin);
-histogram(LeadDBXOrigins(:,2),30,'EdgeColor',leadColor,'Orientation','horizontal','DisplayStyle','stairs','LineWidth',2);
-hold on;
-histogram(LagDBXOrigins(:,2),30,'EdgeColor',lagColor,'Orientation','horizontal','DisplayStyle','stairs','LineWidth',2);
-set(gca,'YDir','reverse','YLim',[0,1280]);
-daspect([1,30,1]);
-
+% subplot(2,3,[1,4])
+% transform_swc_AV(LeadLikeDBX,leadColor,[],true,false);
+% %subplot(2,3,[2,5])
+% transform_swc_AV(LagLikeDBX,lagColor,[],true,false);
+% 
+% subplot(2,3,[2,5])
+% LeadDBXOrder = find(ismember(AllDBX,LeadLikeDBX));
+% LagDBXOrder = find(ismember(AllDBX,LagLikeDBX));
+% LeadDBXOrigins = vertcat(DBX(LeadDBXOrder).Origin);
+% LagDBXOrigins = vertcat(DBX(LagDBXOrder).Origin);
+% histogram(LeadDBXOrigins(:,2),30,'EdgeColor',leadColor,'Orientation','horizontal','DisplayStyle','stairs','LineWidth',2);
+% hold on;
+% histogram(LagDBXOrigins(:,2),30,'EdgeColor',lagColor,'Orientation','horizontal','DisplayStyle','stairs','LineWidth',2);
+% set(gca,'YDir','reverse','YLim',[0,1280]);
+% daspect([1,30,1]);
+% 
 
 %% 
 load('smallABDneurons.mat');
@@ -370,6 +379,7 @@ set(gca,'XLim',[-5,150],'YLim',[-5,150]);
 line([0,150],[0,150],'color','k','lineStyle','--');
 axis square;
 
+%%
 UniqueVestibularAxons = unique(vertcat(DBX.Vestibular));
     ix1 = 1;
     ix2 = 1;  
@@ -712,8 +722,8 @@ UniqueEverythingElseAxons = unique(vertcat(DBX.EverythingElse));
 for i = 1:numel(UniqueEverythingElseAxons)
     [A,~] = SynapticPartners(UniqueEverythingElseAxons(i),2,df);
     %A = A(A<1e5);
-    leadSum  = sum(ismember(A,leadNeurons));
-    lagSum = sum(ismember(A,lagNeurons));
+    leadSum  = sum(ismember(A,LeadLikeDBX));
+    lagSum = sum(ismember(A,LagLikeDBX));
     smallCount = sum(ismember(A,smallABDCellIDs));
     largeCount = sum(ismember(A,largeABDCellIDs));
 
@@ -780,7 +790,18 @@ end
 % xlabel('Norm pathlength');
 % ylabel('count per cell');
 
+%%
 
+leadAxonsNumbers = [numel([Lead.SaccadeAxonID]),numel([Lead.VestibularAxonID]),numel([Lead.IntegratorAxonID]),numel([Lead.ContraAxonID]),numel([Lead.EverythingElseAxonID])];
+lagAxonsNumbers = [numel([Lag.SaccadeAxonID]),numel([Lag.VestibularAxonID]),numel([Lag.IntegratorAxonID]),numel([Lag.ContraAxonID]),numel([Lag.EverythingElseAxonID])];
+
+figure;
+subplot(4,4,1)
+plot([1,2,3,4],leadAxonsNumbers(1:4),'-o','Color',leadColor);
+hold on;
+plot([1,2,3,4],lagAxonsNumbers(1:4),'-o','Color',lagColor);
+axis square;
+set(gca,'XTick',[1,2,3,4],'XTickLabel',[{'Sac'},{'Vest'},{'Int'},{'Cont'}],'XTickLabelRotation',45);
 
 
 %% graph stuff

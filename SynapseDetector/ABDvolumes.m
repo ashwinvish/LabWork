@@ -1,4 +1,4 @@
-clear;
+%clear;
 
 colorPallete = cbrewer('div','BrBG',5);
 
@@ -22,7 +22,8 @@ load('ABDVols.mat');
 for i = 1:numel(AllABD)
     if ismember(AllABD(i),ABDvols(:,1))
         index = find(AllABD(i)==ABDvols(:,1));
-        vol(i) = ABDvols(index,2);
+        ABD.vol(i) = ABDvols(index,2);
+        ABD.cellID(i) = AllABD(i);
     end
 end
 
@@ -34,7 +35,7 @@ subplot(4,4,1)
 histogram(vol(1:numel(Allmotor)),20,'FaceColor','g');
 title('ABD volumes');
 box off;
-line([132,132],[0,5],'color','k','LineStyle','--','LineWidth',2);
+line([110,110],[0,5],'color','k','LineStyle','--','LineWidth',2);
 axis square;
 
 subplot(4,4,2)
@@ -105,12 +106,14 @@ if (str == 'Y' )
     
     
     % correct order
-    smallABDCellIDs = Allmotor(find(vol(1:22)<132));
+    %smallABDCellIDs = Allmotor(find(vol(1:22)<110));
+    smallABDCellIDs = [82140,82145,82143,77648,82146,77302,82213,77654];
     save('smallABDneurons.mat','smallABDCellIDs');
-    smallABDvol = vol(find(vol(1:22)<132));
-    largeABDCellIDs = Allmotor(find(vol(1:22)>132));
+    %smallABDvol = vol(find(vol(1:22)<132));
+    %largeABDCellIDs = Allmotor(find(vol(1:22)>110));
+    largeABDCellIDs= [77301, 82194,77705,77710,77305,77672,77300,77709, 77646,82212,77295,81172,77657,82197,77682,77154, 77652,77658,77628,77292,77688,82195,77296];
     save('largeABDneurons.mat','largeABDCellIDs');
-    largeABDvol = vol(find(vol(1:22)>132));
+    %largeABDvol = vol(find(vol(1:22)>132));
     
     
     for i = 1:numel(ABDr_CellIDs)
