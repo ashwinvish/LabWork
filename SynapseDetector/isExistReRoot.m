@@ -1,7 +1,7 @@
 function [logical] = isExistReRoot(cellID)
 % isExistReRoot checks if cellID has be reRooted 
 
-filePath  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+filePath  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
 reSampleFactor = 5000;
 
 for i = 1:length(cellID)

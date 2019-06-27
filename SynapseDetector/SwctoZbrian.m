@@ -4,7 +4,7 @@ function tree =  SwctoZBrain(cellID)
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+    fname  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
     
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
@@ -62,7 +62,7 @@ for i = 1:numel(cellID)
     
     % perform transformation
     if ismac
-        load('/Users/ashwin/Documents/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
+        load('/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
     else
         load('/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
     end
