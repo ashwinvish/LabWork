@@ -5,13 +5,13 @@ function[] = ReRoot(cellID)
  %    disp('Rerooted file exists');
  %else
     
-    filePath  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+    filePath  = '/Users/ashwin/Google Drive/Zfish//LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
     oldFilePath = filePath;
     fileName = sprintf('%d.swc',cellID);
     
     if exist(fullfile(filePath,fileName))==0
-        filePath  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20190415/swc/';
-        oldFilePath = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+        filePath  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20190415/swc/';
+        oldFilePath = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
     end
     
     if exist(fullfile(filePath,fileName))

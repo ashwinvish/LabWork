@@ -3,8 +3,8 @@ clear;
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
-    fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+    df = readtable('//Users/ashwin/Google Drive/Zfish/SynapseDetector/04152019.csv');
+    fname  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
 
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
@@ -226,11 +226,13 @@ end
 
 % ABDc
 for i = 1:numel(ABDc_CellIDs)
+    if ~isempty(ABDc(i).Tree)
     ABDc(i).SaccadicDist  = ABDc(i).PathLength(ABDc(i).isSaccadic)/max(Pvec_tree(ABDc(i).Tree{1}));
     ABDc(i).VestibularDist  = ABDc(i).PathLength(ABDc(i).isVestibular)/max(Pvec_tree(ABDc(i).Tree{1}));
     ABDc(i).ContraDist  = ABDc(i).PathLength(ABDc(i).isContra)/max(Pvec_tree(ABDc(i).Tree{1}));
     ABDc(i).IntegratorDist  =  ABDc(i).PathLength(ABDc(i).isIntegrator)/max(Pvec_tree(ABDc(i).Tree{1}));
     ABDc(i).EverythingElseDist = ABDc(i).PathLength(ABDc(i).isEverythingElse)/max(Pvec_tree(ABDc(i).Tree{1}));
+    end
 end
 
 % ABDIr

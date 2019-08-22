@@ -8,7 +8,7 @@ function [pointCloudZB] =  TransformPoints(pointCloudNG,mipLevel)
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+    fname  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
     
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
@@ -53,7 +53,7 @@ if mipLevel == 0
     coord(:,2) = coord(:,2) + 436;
     
     % perform transformation (transforms were computed in micron space)
-    load('tformRough-LowEMtoHighEM-set2.mat')
+    load('/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat')
     
     % transform from voxels to microns.
     coord(:,1) = coord(:,1) * 0.798 ;

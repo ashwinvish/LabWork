@@ -1,4 +1,4 @@
-clear;
+%clear;
 addpath(genpath('/Users/ashwin/Documents/'));
 
 colorPallete = cbrewer('div','BrBG',5);
@@ -19,7 +19,7 @@ startup
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
+    df = readtable('/Users/ashwin/Google Drive/Zfish/SynapseDetector/04152019.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
@@ -51,7 +51,7 @@ for i = 1:size(ABDvols,1)
     end
 end
 
-[~,ABD.sortOrder] = sort(ABDvols(:,2));
+[~,ABD.sortOrder] = sort(ABD.vol);
 ABD.vol = ABD.vol/1e9;
 
 
@@ -73,34 +73,88 @@ ABD.ABDIcTotalSynapses =  ABD.Synapses(ABD.ABDIcLocs);
 
 figure;
 subplot(4,4,1);
-scatter(ABD.Origin(ABD.ABDcLocs), ABD.ABDcvols,25,lightGreen,'filled')
+scatter(ABD.Origin(ABD.ABDcLocs), ABD.ABDcvols,25,lightGreen,'filled','MarkerEdgeColor','k')
 hold on;
-scatter(ABD.Origin(ABD.ABDrLocs), ABD.ABDrvols,25,lightGreen,'filled')
-scatter(ABD.Origin(ABD.ABDIrLocs), ABD.ABDIrvols,25,lightMagenta,'filled')
-scatter(ABD.Origin(ABD.ABDIcLocs), ABD.ABDIcvols,25,lightMagenta,'filled')
+scatter(ABD.Origin(ABD.ABDrLocs), ABD.ABDrvols,25,lightGreen,'filled','MarkerEdgeColor','k')
+scatter(ABD.Origin(ABD.ABDIrLocs), ABD.ABDIrvols,25,lightMagenta,'filled','MarkerEdgeColor','k')
+scatter(ABD.Origin(ABD.ABDIcLocs), ABD.ABDIcvols,25,lightMagenta,'filled','MarkerEdgeColor','k')
 axis square
 xlabel('Medial <---> Lateral');
 ylabel('Soma volume \mu^3');
 
 subplot(4,4,2);
-scatter(ABD.ABDrvols, ABD.ABDrTotalSynapses,25,lightGreen,'filled')
+scatter(ABD.ABDrvols, ABD.ABDrTotalSynapses,25,lightGreen,'filled','MarkerEdgeColor','k')
 hold on;
-scatter(ABD.ABDcvols, ABD.ABDcTotalSynapses,25,lightGreen,'filled')
-scatter(ABD.ABDIrvols, ABD.ABDIrTotalSynapses,25,lightMagenta,'filled')
-scatter(ABD.ABDIcvols,ABD.ABDIcTotalSynapses,25,lightMagenta,'filled')
+scatter(ABD.ABDcvols, ABD.ABDcTotalSynapses,25,lightGreen,'filled','MarkerEdgeColor','k')
+scatter(ABD.ABDIrvols, ABD.ABDIrTotalSynapses,25,lightMagenta,'filled','MarkerEdgeColor','k')
+scatter(ABD.ABDIcvols,ABD.ABDIcTotalSynapses,25,lightMagenta,'filled','MarkerEdgeColor','k')
 axis square;
 ylabel('Synapses');
 xlabel('Soma volume \mu^3');
 
 subplot(4,4,4)
-scatter3([ABD.Origin(ABD.ABDrLocs);ABD.Origin(ABD.ABDcLocs)], [ABD.Origin(ABD.ABDrLocs,3);ABD.Origin(ABD.ABDcLocs,3)], [ABD.ABDrvols;ABD.ABDcvols],25,lightGreen,'filled')
+scatter3([ABD.Origin(ABD.ABDrLocs);ABD.Origin(ABD.ABDcLocs)], [ABD.Origin(ABD.ABDrLocs,3);ABD.Origin(ABD.ABDcLocs,3)], [ABD.ABDrvols;ABD.ABDcvols],25,lightGreen,'filled','MarkerEdgeColor','k')
 hold on
-scatter3([ABD.Origin(ABD.ABDIrLocs);ABD.Origin(ABD.ABDIcLocs)], [ABD.Origin(ABD.ABDIrLocs,3);ABD.Origin(ABD.ABDIcLocs,3)], [ABD.ABDIrvols;ABD.ABDIcvols],25,lightMagenta,'filled')
+scatter3([ABD.Origin(ABD.ABDIrLocs);ABD.Origin(ABD.ABDIcLocs)], [ABD.Origin(ABD.ABDIrLocs,3);ABD.Origin(ABD.ABDIcLocs,3)], [ABD.ABDIrvols;ABD.ABDIcvols],25,lightMagenta,'filled','MarkerEdgeColor','k')
 axis square;
 ylabel('Dorsal <---> Ventral');
 xlabel('Medial <---> Lateral');
 zlabel('Soma volume \mu^3');
-set(gca, 'YDir','reverse');
+%set(gca, 'YDir','reverse');
+
+
+subplot(4,4,5)
+cmap = colorcet('R3','N',length([ABD.ABDrvols;ABD.ABDcvols]));
+scatter([ABD.Origin(ABD.ABDrLocs,1);ABD.Origin(ABD.ABDcLocs,1)]+ [ABD.Origin(ABD.ABDrLocs,3);ABD.Origin(ABD.ABDcLocs,3)], [ABD.ABDrvols;ABD.ABDcvols],...
+    25, ABDcolor,'filled','MarkerEdgeColor','k')
+hold on;
+a = [ABD.Origin(ABD.ABDrLocs);ABD.Origin(ABD.ABDcLocs)]+ [ABD.Origin(ABD.ABDrLocs,3);ABD.Origin(ABD.ABDcLocs,3)];
+b = [ABD.ABDrvols;ABD.ABDcvols];
+b = b(~isnan(a));
+a = a(~isnan(a));
+f = showfit(ezfit(a,b,'a*x+b'),'fitcolor',ABDcolor,'dispeqboxmode','off','dispfitlegend','on','corrcoefmode','r2');
+legend off;
+text(max(a),max(b),sprintf('R^2=%0.2f',f.r^2));
+axis square;
+xlabel('ML+DV');
+ylabel('Soma volume \mu^3');
+clear a;
+clear b;
+offsetAxes(gca);
+%set(gca, 'YDir','reverse');
+
+
+subplot(4,4,6);
+scatter(ABD.Origin(ABD.ABDrLocs), ABD.ABDcvols,25,ABDcolor,'filled','MarkerEdgeColor','k');
+hold on;
+scatter(ABD.Origin(ABD.ABDrLocs), ABD.ABDrvols,25,ABDcolor,'filled','MarkerEdgeColor','k');
+a = [ABD.Origin(ABD.ABDrLocs);ABD.Origin(ABD.ABDcLocs)];
+b = [ABD.ABDrvols;ABD.ABDcvols];
+b = b(~isnan(a));
+a = a(~isnan(a));
+f = showfit(ezfit(a,b,'a*x+b'),'fitcolor',ABDcolor,'dispeqboxmode','off','dispfitlegend','on','corrcoefmode','r2');
+legend off;
+text(max(a),max(b),sprintf('R^2=%0.2f',f.r^2));
+axis square
+xlabel('Medial <---> Lateral');
+ylabel('Soma volume \mu^3');
+
+
+subplot(4,4,7)
+
+temp1 = [ABD.Origin(ABD.ABDrLocs,:);ABD.Origin(ABD.ABDcLocs,:)];
+temp2 = [ABD.ABDrvols;ABD.ABDcvols];
+temp2 = temp2(~isnan(temp1(:,1)));
+temp1 = [temp1(~isnan(temp1(:,1))),temp1(~isnan(temp1(:,2)),2),temp1(~isnan(temp1(:,3)),3)];
+
+[~,ABDmotorSorted] = sort(temp2);
+
+scatter(temp2,temp1(:,1));
+
+
+
+f = showfit(ezfit(a,b,'a*x+b'),'fitcolor',ABDcolor,'dispeqboxmode','off','dispfitlegend','on','corrcoefmode','r2');
+
 
 %%
 load ABDr.mat
@@ -110,7 +164,7 @@ load ABDIc.mat
 %%
 
 for i = 1:numel(ABDr)
-    ABD.SaccadicSynapses(i) = length(ABDr(i).Saccadic);
+    ABD.ABDrSaccadicSynapses(i) = length(ABDr(i).Saccadic);
     ABD.ABDrVestibularSynapses(i) = length(ABDr(i).Vestibular);
     ABD.ABDrIntegratorSynapses(i) = length(ABDr(i).Integrator);
     ABD.ABDrContraSynapses(i) = length(ABDr(i).Contra);
@@ -142,190 +196,156 @@ showfit(ezfit(ABD.ABDrvols,ABD.ABDrIntegratorSynapses./ABD.ABDrTotalSynapses','a
 showfit(ezfit(ABD.ABDrvols,ABD.ABDrContraSynapses./ABD.ABDrTotalSynapses','affine'),'fitcolor',cols(4,:),'dispeqboxmode','off')
 showfit(ezfit(ABD.ABDrvols,ABD.ABDrRestSynapses./ABD.ABDrTotalSynapses','affine'),'fitcolor',cols(5,:),'dispeqboxmode','off')
 
-    
-
+   
 
 %%
 for i = 1:numel(ABDr_CellIDs)
-    temp1 = ismember(ABDr(i).Inputs,unique([vertcat(ABDr.Saccadic);vertcat(ABDc.Saccadic);vertcat(ABDIr.Saccadic);vertcat(ABDIc.Saccadic)]));
-    ABD.SaccPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
-    clear temp1;
+    ABD.SaccPathLengthABDr{i} = ABDr(i).PathLength(ABDr(i).isSaccadic)./max(Pvec_tree(ABDr(i).Tree{1}));
+    ABD.VestPathLengthABDr{i} = ABDr(i).PathLength(ABDr(i).isVestibular)./max(Pvec_tree(ABDr(i).Tree{1}));
+    ABD.IntPathLengthABDr{i} = ABDr(i).PathLength(ABDr(i).isIntegrator)./max(Pvec_tree(ABDr(i).Tree{1}));
+    ABD.ContraPathLengthABDr{i} = ABDr(i).PathLength(ABDr(i).isContra)./max(Pvec_tree(ABDr(i).Tree{1}));
+    ABD.RestPathLengthABDr{i} = ABDr(i).PathLength(ABDr(i).isEverythingElse)./max(Pvec_tree(ABDr(i).Tree{1}));
     
-    temp1 = ismember(ABDr(i).Inputs,unique([vertcat(ABDr.Vestibular);vertcat(ABDc.Vestibular);vertcat(ABDIr.Vestibular);vertcat(ABDIc.Vestibular)]));
-    ABD.VestPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
-    clear temp1;
-    
-    temp1 = ismember(ABDr(i).Inputs,unique([vertcat(ABDr.Integrator);vertcat(ABDc.Integrator);vertcat(ABDIr.Integrator);vertcat(ABDIc.Integrator)]));
-    ABD.IntPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
-    clear temp1;
-    
-    temp1 = ismember(ABDr(i).Inputs,unique([vertcat(ABDr.Contra);vertcat(ABDc.Contra);vertcat(ABDIr.Contra);vertcat(ABDIc.Contra)]));
-    ABD.ContraPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
-    clear temp1
-    
-    temp1 = ismember(ABDr(i).Inputs,unique([vertcat(ABDr.EverythingElse);vertcat(ABDc.EverythingElse);vertcat(ABDIr.EverythingElse);vertcat(ABDIc.EverythingElse)]));
-    ABD.RestPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
-    clear temp1
+    ABD.ABDrSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDr{i},0:0.1:1);
+    ABD.ABDrVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDr{i},0:0.1:1);
+    ABD.ABDrIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDr{i},0:0.1:1);
+    ABD.ABDrContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDr{i},0:0.1:1);
+    ABD.ABDrRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDr{i},0:0.1:1);   
 end
-
-
-for i = 1:numel(ABDr_CellIDs)
-    ABD.ABDrSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.SaccPathLengthABDr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDrVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.VestPathLengthABDr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDrIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.IntPathLengthABDr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDrContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.ContraPathLengthABDr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDrRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDr{i},0:0.1:1,'Normalization','probability')/max( histcounts(ABD.RestPathLengthABDr{i},0:0.1:1,'Normalization','probability'));
-end
+%cellfun(@(x) histogram(x,0:0.1:1),ABD.SaccPathLengthABDr)
 
 % ABDc
 
 for i = 1:numel(ABDc_CellIDs)
     if ~isempty(ABDc(i).Tree)
+        ABD.SaccPathLengthABDc{i} = ABDc(i).PathLength(ABDc(i).isSaccadic)./max(Pvec_tree(ABDc(i).Tree{1}));
+        ABD.VestPathLengthABDc{i} = ABDc(i).PathLength(ABDc(i).isVestibular)./max(Pvec_tree(ABDc(i).Tree{1}));
+        ABD.IntPathLengthABDc{i} = ABDc(i).PathLength(ABDc(i).isIntegrator)./max(Pvec_tree(ABDc(i).Tree{1}));
+        ABD.ContraPathLengthABDc{i} = ABDc(i).PathLength(ABDc(i).isContra)./max(Pvec_tree(ABDc(i).Tree{1}));
+        ABD.RestPathLengthABDc{i} = ABDc(i).PathLength(ABDc(i).isEverythingElse)./max(Pvec_tree(ABDc(i).Tree{1}));
         
-        temp1 = ismember(ABDc(i).Inputs,unique([vertcat(ABDc.Saccadic);vertcat(ABDc.Saccadic);vertcat(ABDIr.Saccadic);vertcat(ABDIc.Saccadic)]));
-        ABD.SaccPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
-        clear temp1;
-        
-        temp1 = ismember(ABDc(i).Inputs,unique([vertcat(ABDc.Vestibular);vertcat(ABDc.Vestibular);vertcat(ABDIr.Vestibular);vertcat(ABDIc.Vestibular)]));
-        ABD.VestPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
-        clear temp1;
-        
-        temp1 = ismember(ABDc(i).Inputs,unique([vertcat(ABDc.Integrator);vertcat(ABDc.Integrator);vertcat(ABDIr.Integrator);vertcat(ABDIc.Integrator)]));
-        ABD.IntPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
-        clear temp1;
-        
-        temp1 = ismember(ABDc(i).Inputs,unique([vertcat(ABDc.Contra);vertcat(ABDc.Contra);vertcat(ABDIr.Contra);vertcat(ABDIc.Contra)]));
-        ABD.ContraPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
-        clear temp1
-        
-        temp1 = ismember(ABDc(i).Inputs,unique([vertcat(ABDc.EverythingElse);vertcat(ABDc.EverythingElse);vertcat(ABDIr.EverythingElse);vertcat(ABDIc.EverythingElse)]));
-        ABD.RestPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
-        clear temp1
+        ABD.ABDcSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDc{i},0:0.1:1);
+        ABD.ABDcVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDc{i},0:0.1:1);
+        ABD.ABDcIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDc{i},0:0.1:1);
+        ABD.ABDcContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDc{i},0:0.1:1);
+        ABD.ABDcRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDc{i},0:0.1:1);
+    else
+        ABD.ABDcSaccadicGradient(i,:) = repmat(NaN,1,10);
+        ABD.ABDcVestibularGradient(i,:) = repmat(NaN,1,10);
+        ABD.ABDcIntegratorGradient(i,:) = repmat(NaN,1,10);
+        ABD.ABDcContraGradient(i,:) = repmat(NaN,1,10);
+        ABD.ABDcRestGradient(i,:)= repmat(NaN,1,10);
     end
 end
 
 
-for i = 1:numel(ABDc_CellIDs)
-    ABD.ABDcSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.SaccPathLengthABDc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDcVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.VestPathLengthABDc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDcIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.IntPathLengthABDc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDcContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.ContraPathLengthABDc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDcRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.RestPathLengthABDc{i},0:0.1:1,'Normalization','probability'));
-end
-
 % combine ABDr and ABDc
-ABD.motorCellIDsSorted = intersect(ABD.sortOrder,find(ismember(ABD.cellID,Allmotor)),'stable');
-ABD.motorVols = ABD.vol(ABD.motorCellIDsSorted);
-ABD.motorSaccadicGradient(find(ismember(ABDvols(:,1),ABDr_CellIDs)),:) = ABD.ABDrSaccadicGradient;
-ABD.motorSaccadicGradient(find(ismember(ABDvols(:,1),ABDc_CellIDs)),:) = ABD.ABDcSaccadicGradient;
-ABD.motorSaccadicGradient(setdiff(1:52,[find(ismember(ABDvols(:,1),ABDr_CellIDs));find(ismember(ABDvols(:,1),ABDc_CellIDs))])',:) = [];
+ABD.motorCellIDs  = [ABDr_CellIDs';ABDc_CellIDs'];
+%ABD.motorCellIDsSorted = intersect(ABD.sortOrder,find(ismember(ABD.cellID,Allmotor)),'stable');
 
-ABD.motorVestibularGradient(find(ismember(ABDvols(:,1),ABDr_CellIDs)),:) = ABD.ABDrVestibularGradient;
-ABD.motorVestibularGradient(find(ismember(ABDvols(:,1),ABDc_CellIDs)),:) = ABD.ABDcVestibularGradient;
-ABD.motorVestibularGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDr_CellIDs));find(ismember(ABDvols(:,1),ABDc_CellIDs))])',:) = [];
-
-ABD.motorIntegratorGradient(find(ismember(ABDvols(:,1),ABDr_CellIDs)),:) = ABD.ABDrIntegratorGradient;
-ABD.motorIntegratorGradient(find(ismember(ABDvols(:,1),ABDc_CellIDs)),:) = ABD.ABDcIntegratorGradient;
-ABD.motorIntegratorGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDr_CellIDs));find(ismember(ABDvols(:,1),ABDc_CellIDs))])',:) = [];
-
-ABD.motorContraGradient(find(ismember(ABDvols(:,1),ABDr_CellIDs)),:) = ABD.ABDrContraGradient;
-ABD.motorContraGradient(find(ismember(ABDvols(:,1),ABDc_CellIDs)),:) = ABD.ABDcContraGradient;
-ABD.motorContraGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDr_CellIDs));find(ismember(ABDvols(:,1),ABDc_CellIDs))])',:) = [];
-
-ABD.motorRestGradient(find(ismember(ABDvols(:,1),ABDr_CellIDs)),:) = ABD.ABDrRestGradient;
-ABD.motorRestGradient(find(ismember(ABDvols(:,1),ABDc_CellIDs)),:) = ABD.ABDcRestGradient;
-ABD.motorRestGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDr_CellIDs));find(ismember(ABDvols(:,1),ABDc_CellIDs))])',:) = [];
+ABD.motorSaccadicGradient = [horzcat(ABD.ABDrvols,ABD.ABDrSaccadicGradient);horzcat(ABD.ABDcvols,ABD.ABDcSaccadicGradient)];
+%ABD.motorSaccadicGradient = sortrows(ABD.motorSaccadicGradient,1);
+ABD.motorVols = [ABD.vol(ABD.ABDrLocs);ABD.vol(ABD.ABDcLocs)];
 
 
+ABD.motorVestibularGradient = [horzcat(ABD.ABDrvols,ABD.ABDrVestibularGradient);horzcat(ABD.ABDcvols,ABD.ABDcVestibularGradient)];
+%ABD.motorVestibularGradient = sortrows(ABD.motorVestibularGradient,1);
+
+ABD.motorIntegratorGradient = [horzcat(ABD.ABDrvols,ABD.ABDrIntegratorGradient);horzcat(ABD.ABDcvols,ABD.ABDcIntegratorGradient)];
+%ABD.motorIntegratorGradient = sortrows(ABD.motorIntegratorGradient,1);
+
+ABD.motorContraGradient = [horzcat(ABD.ABDrvols,ABD.ABDrContraGradient);horzcat(ABD.ABDcvols,ABD.ABDcContraGradient)];
+%ABD.motorContraGradient = sortrows(ABD.motorContraGradient,1);
+
+ABD.motorRestGradient = [horzcat(ABD.ABDrvols,ABD.ABDrRestGradient);horzcat(ABD.ABDcvols,ABD.ABDcRestGradient)];
+%ABD.motorRestGradient = sortrows(ABD.motorRestGradient,1);
 %%
 % ABDIr
 
 for i = 1:numel(ABDIr_CellIDs)
-    temp1 = ismember(ABDIr(i).Inputs,unique([vertcat(ABDIr.Saccadic);vertcat(ABDIr.Saccadic);vertcat(ABDIr.Saccadic);vertcat(ABDIc.Saccadic)]));
-    ABD.SaccPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
-    clear temp1;
+    ABD.SaccPathLengthABDIr{i} = ABDIr(i).PathLength(ABDIr(i).isSaccadic)./max(Pvec_tree(ABDIr(i).Tree{1}));
+    ABD.VestPathLengthABDIr{i} = ABDIr(i).PathLength(ABDIr(i).isVestibular)./max(Pvec_tree(ABDIr(i).Tree{1}));
+    ABD.IntPathLengthABDIr{i} = ABDIr(i).PathLength(ABDIr(i).isIntegrator)./max(Pvec_tree(ABDIr(i).Tree{1}));
+    ABD.ContraPathLengthABDIr{i} = ABDIr(i).PathLength(ABDIr(i).isContra)./max(Pvec_tree(ABDIr(i).Tree{1}));
+    ABD.RestPathLengthABDIr{i} = ABDIr(i).PathLength(ABDIr(i).isEverythingElse)./max(Pvec_tree(ABDIr(i).Tree{1}));
     
-    temp1 = ismember(ABDIr(i).Inputs,unique([vertcat(ABDIr.Vestibular);vertcat(ABDIr.Vestibular);vertcat(ABDIr.Vestibular);vertcat(ABDIc.Vestibular)]));
-    ABD.VestPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
-    clear temp1;
-    
-    temp1 = ismember(ABDIr(i).Inputs,unique([vertcat(ABDIr.Integrator);vertcat(ABDIr.Integrator);vertcat(ABDIr.Integrator);vertcat(ABDIc.Integrator)]));
-    ABD.IntPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
-    clear temp1;
-    
-    temp1 = ismember(ABDIr(i).Inputs,unique([vertcat(ABDIr.Contra);vertcat(ABDIr.Contra);vertcat(ABDIr.Contra);vertcat(ABDIc.Contra)]));
-    ABD.ContraPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
-    clear temp1
-    
-    temp1 = ismember(ABDIr(i).Inputs,unique([vertcat(ABDIr.EverythingElse);vertcat(ABDIr.EverythingElse);vertcat(ABDIr.EverythingElse);vertcat(ABDIc.EverythingElse)]));
-    ABD.RestPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
-    clear temp1
+    ABD.ABDIrSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDIr{i},0:0.1:1);
+    ABD.ABDIrVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDIr{i},0:0.1:1);
+    ABD.ABDIrIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDIr{i},0:0.1:1);
+    ABD.ABDIrContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDIr{i},0:0.1:1);
+    ABD.ABDIrRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDIr{i},0:0.1:1);
 end
 
-
-for i = 1:numel(ABDIr_CellIDs)
-    ABD.ABDIrSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDIr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.SaccPathLengthABDIr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIrVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDIr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.VestPathLengthABDIr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIrIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDIr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.IntPathLengthABDIr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIrContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDIr{i},0:0.1:1,'Normalization','probability')/max( histcounts(ABD.ContraPathLengthABDIr{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIrRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDIr{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.RestPathLengthABDIr{i},0:0.1:1,'Normalization','probability'));
-end
 
 % ABDIc
 
 for i = 1:numel(ABDIc_CellIDs)
-    temp1 = ismember(ABDIc(i).Inputs,unique([vertcat(ABDIc.Saccadic);vertcat(ABDIc.Saccadic);vertcat(ABDIc.Saccadic);vertcat(ABDIc.Saccadic)]));
-    ABD.SaccPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
-    clear temp1;
+    ABD.SaccPathLengthABDIc{i} = ABDIc(i).PathLength(ABDIc(i).isSaccadic)./max(Pvec_tree(ABDIc(i).Tree{1}));
+    ABD.VestPathLengthABDIc{i} = ABDIc(i).PathLength(ABDIc(i).isVestibular)./max(Pvec_tree(ABDIc(i).Tree{1}));
+    ABD.IntPathLengthABDIc{i} = ABDIc(i).PathLength(ABDIc(i).isIntegrator)./max(Pvec_tree(ABDIc(i).Tree{1}));
+    ABD.ContraPathLengthABDIc{i} = ABDIc(i).PathLength(ABDIc(i).isContra)./max(Pvec_tree(ABDIc(i).Tree{1}));
+    ABD.RestPathLengthABDIc{i} = ABDIc(i).PathLength(ABDIc(i).isEverythingElse)./max(Pvec_tree(ABDIc(i).Tree{1}));
     
-    temp1 = ismember(ABDIc(i).Inputs,unique([vertcat(ABDIc.Vestibular);vertcat(ABDIc.Vestibular);vertcat(ABDIc.Vestibular);vertcat(ABDIc.Vestibular)]));
-    ABD.VestPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
-    clear temp1;
-    
-    temp1 = ismember(ABDIc(i).Inputs,unique([vertcat(ABDIc.Integrator);vertcat(ABDIc.Integrator);vertcat(ABDIc.Integrator);vertcat(ABDIc.Integrator)]));
-    ABD.IntPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
-    clear temp1;
-    
-    temp1 = ismember(ABDIc(i).Inputs,unique([vertcat(ABDIc.Contra);vertcat(ABDIc.Contra);vertcat(ABDIc.Contra);vertcat(ABDIc.Contra)]));
-    ABD.ContraPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
-    clear temp1
-    
-    temp1 = ismember(ABDIc(i).Inputs,unique([vertcat(ABDIc.EverythingElse);vertcat(ABDIc.EverythingElse);vertcat(ABDIc.EverythingElse);vertcat(ABDIc.EverythingElse)]));
-    ABD.RestPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
-    clear temp1
+    ABD.ABDIcSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDIc{i},0:0.1:1);
+    ABD.ABDIcVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDIc{i},0:0.1:1);
+    ABD.ABDIcIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDIc{i},0:0.1:1);
+    ABD.ABDIcContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDIc{i},0:0.1:1);
+    ABD.ABDIcRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDIc{i},0:0.1:1);
 end
 
 
-for i = 1:numel(ABDIc_CellIDs)
-    ABD.ABDIcSaccadicGradient(i,:) =  histcounts(ABD.SaccPathLengthABDIc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.SaccPathLengthABDIc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIcVestibularGradient(i,:) =  histcounts(ABD.VestPathLengthABDIc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.VestPathLengthABDIc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIcIntegratorGradient(i,:) =  histcounts(ABD.IntPathLengthABDIc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.IntPathLengthABDIc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIcContraGradient(i,:) =  histcounts(ABD.ContraPathLengthABDIc{i},0:0.1:1,'Normalization','probability')/max(histcounts(ABD.ContraPathLengthABDIc{i},0:0.1:1,'Normalization','probability'));
-    ABD.ABDIcRestGradient(i,:) =  histcounts(ABD.RestPathLengthABDIc{i},0:0.1:1,'Normalization','probability')/max( histcounts(ABD.RestPathLengthABDIc{i},0:0.1:1,'Normalization','probability'));
-end
+
 
 % combine ABDIr and ABDIc
-ABD.InterCellIDsSorted = intersect(ABD.sortOrder,find(setdiff(ABD.cellID,Allmotor)),'stable');
-ABD.InterVols = ABD.vol(ABD.InterCellIDsSorted);
-ABD.InterSaccadicGradient(find(ismember(ABDvols(:,1),ABDIr_CellIDs)),:) = ABD.ABDIrSaccadicGradient;
-ABD.InterSaccadicGradient(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),:) = ABD.ABDIcSaccadicGradient;
-ABD.InterSaccadicGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDIr_CellIDs));find(ismember(ABDvols(:,1),ABDIc_CellIDs))])',:) = [];
+ABD.InterCellIDs = [ABDIr_CellIDs';ABDIc_CellIDs'];
+%ABD.InterCellIDsSorted = intersect(ABD.sortOrder,find(setdiff(ABD.cellID,Allmotor)),'stable');
 
-ABD.InterVestibularGradient(find(ismember(ABDvols(:,1),ABDIr_CellIDs)),:) = ABD.ABDIrVestibularGradient;
-ABD.InterVestibularGradient(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),:) = ABD.ABDIcVestibularGradient;
-ABD.InterVestibularGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDIr_CellIDs));find(ismember(ABDvols(:,1),ABDIc_CellIDs))])',:) = [];
+ABD.InterSaccadicGradient = [horzcat(ABD.ABDIrvols,ABD.ABDIrSaccadicGradient);horzcat(ABD.ABDIcvols,ABD.ABDIcSaccadicGradient)];
+ABD.InterSaccadicGradient = sortrows(ABD.InterSaccadicGradient,1);
 
-ABD.InterIntegratorGradient(find(ismember(ABDvols(:,1),ABDIr_CellIDs)),:) = ABD.ABDIrIntegratorGradient;
-ABD.InterIntegratorGradient(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),:) = ABD.ABDIcIntegratorGradient;
-ABD.InterIntegratorGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDIr_CellIDs));find(ismember(ABDvols(:,1),ABDIc_CellIDs))])',:) = [];
+ABD.InterVestibularGradient = [horzcat(ABD.ABDIrvols,ABD.ABDIrVestibularGradient);horzcat(ABD.ABDIcvols,ABD.ABDIcVestibularGradient)];
+ABD.InterVestibularGradient = sortrows(ABD.InterVestibularGradient,1);
 
-ABD.InterContraGradient(find(ismember(ABDvols(:,1),ABDIr_CellIDs)),:) = ABD.ABDIrContraGradient;
-ABD.InterContraGradient(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),:) = ABD.ABDIcContraGradient;
-ABD.InterContraGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDIr_CellIDs));find(ismember(ABDvols(:,1),ABDIc_CellIDs))])',:) = [];
+ABD.InterIntegratorGradient = [horzcat(ABD.ABDIrvols,ABD.ABDIrIntegratorGradient);horzcat(ABD.ABDIcvols,ABD.ABDIcIntegratorGradient)];
+ABD.InterIntegratorGradient = sortrows(ABD.InterIntegratorGradient,1);
 
-ABD.InterRestGradient(find(ismember(ABDvols(:,1),ABDIr_CellIDs)),:) = ABD.ABDIrRestGradient;
-ABD.InterRestGradient(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),:) = ABD.ABDIcRestGradient;
-ABD.InterRestGradient(setdiff(1:42,[find(ismember(ABDvols(:,1),ABDIr_CellIDs));find(ismember(ABDvols(:,1),ABDIc_CellIDs))])',:) = [];
+ABD.InterContraGradient = [horzcat(ABD.ABDIrvols,ABD.ABDIrContraGradient);horzcat(ABD.ABDIcvols,ABD.ABDIcContraGradient)];
+ABD.InterContraGradient = sortrows(ABD.InterContraGradient,1);
+
+ABD.InterRestGradient = [horzcat(ABD.ABDIrvols,ABD.ABDIrRestGradient);horzcat(ABD.ABDIcvols,ABD.ABDIcRestGradient)];
+ABD.InterRestGradient = sortrows(ABD.InterRestGradient ,1);
+
+%%
+figure;
+
+
+subplot(4,4,1)
+shadedErrorBar(0.1:0.1:1,nanmean(ABD.motorSaccadicGradient(:,2:end)),nanstd(ABD.motorSaccadicGradient(:,2:end))./sqrt(29),'lineprops',{'Color',ABDcolor,'Linewidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,nanmean(ABD.InterSaccadicGradient(:,2:end)),nanstd(ABD.InterSaccadicGradient(:,2:end))./sqrt(21),'lineprops',{'Color',ABDicolor,'Linewidth',2});
+axis square;
+title('Saccadic axons');
+legend({'M','I'},'Location','bestoutside');
+xlabel('Norm. pathlength');
+ylabel('Number of synapses');
+offsetAxes(gca);
+
+subplot(4,4,2)
+shadedErrorBar(0.1:0.1:1,nanmean(ABD.motorVestibularGradient(:,2:end)),nanstd(ABD.motorVestibularGradient(:,2:end))./sqrt(29),'lineprops',{'Color',ABDcolor,'Linewidth',2});
+hold on;
+shadedErrorBar(0.1:0.1:1,nanmean(ABD.InterVestibularGradient(:,2:end)),nanstd(ABD.InterVestibularGradient(:,2:end))./sqrt(21),'lineprops',{'Color',ABDicolor,'Linewidth',2});
+axis square;
+title('Vestibular axons');
+xlabel('Norm. pathlength');
+ylabel('Number of synapses');
+legend({'M','I'},'Location','bestoutside');
+offsetAxes(gca);
+
+figure;
+for i = 1:numel(ABD.motorCellIDs)
+subplot(5,6,i)
+plot(0.1:0.1:1,ABD.motorSaccadicGradient(i,2:end)./max(ABD.motorSaccadicGradient(i,2:end)));
+end
 
 
 %%
@@ -337,7 +357,7 @@ plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDrSaccadicGradient,ABD.ABDcSaccadicGrad
 hold on
 plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDIrSaccadicGradient,ABD.ABDIcSaccadicGradient)),'color',lightMagenta,'LineWidth',2);
 box off,
-set(gca,'XLim',[0,1],'YLim',[0,0.2]);
+%set(gca,'XLim',[0,1],'YLim',[0,0.2]);
 axis square;
 title('Saccadic');
 legend({'ABD','ABDi'},'Location','bestoutside');
@@ -347,7 +367,7 @@ plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDrVestibularGradient,ABD.ABDcVestibular
 hold on
 plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDIrVestibularGradient,ABD.ABDIcVestibularGradient)),'color',lightMagenta,'LineWidth',2);
 box off,
-set(gca,'XLim',[0,1],'YLim',[0,0.2]);
+%set(gca,'XLim',[0,1],'YLim',[0,0.2]);
 axis square;
 title('Vestibular');
 
@@ -356,7 +376,7 @@ plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDrIntegratorGradient,ABD.ABDcIntegrator
 hold on
 plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDIrIntegratorGradient,ABD.ABDIcIntegratorGradient)),'color',lightMagenta,'LineWidth',2);
 box off,
-set(gca,'XLim',[0,1],'YLim',[0,0.2]);
+%set(gca,'XLim',[0,1],'YLim',[0,0.2]);
 axis square;
 title('Integrator');
 
@@ -366,7 +386,7 @@ plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDrContraGradient,ABD.ABDcContraGradient
 hold on
 plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDIrContraGradient,ABD.ABDIcContraGradient)),'color',lightMagenta,'LineWidth',2);
 box off,
-set(gca,'XLim',[0,1],'YLim',[0,0.2]);
+%set(gca,'XLim',[0,1],'YLim',[0,0.2]);
 axis square;
 title('Contra');
 
@@ -376,175 +396,427 @@ plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDrRestGradient,ABD.ABDcRestGradient)),'
 hold on
 plot(0.05:0.1:0.95,nanmean(vertcat(ABD.ABDIrRestGradient,ABD.ABDIcRestGradient)),'color',lightMagenta,'LineWidth',2);
 box off,
-set(gca,'XLim',[0,1],'YLim',[0,0.2]);
+%set(gca,'XLim',[0,1],'YLim',[0,0.2]);
 axis square;
 title('Rest');
 
 
-figure
+figure;
 cmapABD = colorcet('D2','N',21);
-cmapmotor = flip(cmapABD(1:10,:));
-cmapInter = cmapABD(11:21,:);
+cmapmotor = flip(cmapABD(1:11,:));
+cmapInter = cmapABD(11:end,:);
 
 
 subplot(4,5,1)
-imagesc(ABD.ABDrSaccadicGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDrSaccadicGradient,'ColorScaling','scaledrows','CellLabelColor','none',...
+   'Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDrvols),'XDisplayLabels',0.1:0.1:1);
 
 
 subplot(4,5,2)
-imagesc(ABD.ABDrVestibularGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDrVestibularGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDrvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,3)
-imagesc(ABD.ABDrIntegratorGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDrIntegratorGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDrvols),'XDisplayLabels',0.1:0.1:1);
 
 subplot(4,5,4)
-imagesc(ABD.ABDrContraGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDrContraGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDrvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,5)
-imagesc(ABD.ABDrRestGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
-
-
+heatmap(ABD.ABDrRestGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDrvols),'XDisplayLabels',0.1:0.1:1);
 
 
 subplot(4,5,6)
-imagesc(ABD.ABDcSaccadicGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDcSaccadicGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDcvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,7)
-imagesc(ABD.ABDcVestibularGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDcVestibularGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDcvols),'XDisplayLabels',0.1:0.1:1);
 
 subplot(4,5,8)
-imagesc(ABD.ABDcIntegratorGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDcIntegratorGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDcvols),'XDisplayLabels',0.1:0.1:1);
 
 subplot(4,5,9)
-imagesc(ABD.ABDcContraGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDcContraGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDcvols),'XDisplayLabels',0.1:0.1:1);
 
 subplot(4,5,10)
-imagesc(ABD.ABDcRestGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapmotor);
+heatmap(ABD.ABDcRestGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.ABDcvols),'XDisplayLabels',0.1:0.1:1);
 
 
 
 subplot(4,5,11)
-imagesc(ABD.ABDIrSaccadicGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIrSaccadicGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIrvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,12)
-imagesc(ABD.ABDIrVestibularGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIrVestibularGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIrvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,13)
-imagesc(ABD.ABDIrIntegratorGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIrIntegratorGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIrvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,14)
-imagesc(ABD.ABDIrContraGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIrContraGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIrvols),'XDisplayLabels',0.1:0.1:1);
+
+
 
 subplot(4,5,15)
-imagesc(ABD.ABDIrRestGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIrRestGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIrvols),'XDisplayLabels',0.1:0.1:1);
 
 
 
 subplot(4,5,16)
-imagesc(ABD.ABDIcSaccadicGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIcSaccadicGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIcvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,17)
-imagesc(ABD.ABDIcVestibularGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIcVestibularGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIcvols),'XDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,18)
-imagesc(ABD.ABDIcIntegratorGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIcIntegratorGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIcvols),'YDisplayLabels',0.1:0.1:1);
+
 
 subplot(4,5,19)
-imagesc(ABD.ABDIcContraGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIcContraGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIcvols),'XDisplayLabels',0.1:0.1:1);
+
+
 
 subplot(4,5,20)
-imagesc(ABD.ABDIcRestGradient)
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1]);
-colormap(gca,cmapInter);
+heatmap(ABD.ABDIcRestGradient,'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.ABDIcvols),'XDisplayLabels',0.1:0.1:1);
+
 
 % plot ABD and ABDi lumped, but sorted by volumes
 
-figure 
-subplot(4,4,[1,5])
-imagesc(ABD.motorSaccadicGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTickLabel',[102,115,125,130,140,150]);
+figure;
+ABD.motorVols = ABD.motorSaccadicGradient(:,1);
+
+subplot(4,4,1)
+heatmap(ABD.motorSaccadicGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols),'XDisplayLabels',0.1:0.1:1);
 title('ADB Saccadic');
-colormap(gca,cmapmotor);
 
-subplot(4,4,[2,6])
-imagesc(ABD.InterSaccadicGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTick',[2:4:20],'YTickLabel',[115,130,147,149,169]);
+
+% hold on;
+% [~,b] = max(ABD.motorSaccadicGradient(:,2:end),[],2);
+% plot(b,'ko');
+% showfit(ezfit(1:size(b,1),b,'a*x+b'),'fitcolor','k','dispeqboxmode','off','dispfitlegend','on','corrcoefmode','r2');
+% clear b;
+
+ABD.interVols = ABD.InterSaccadicGradient(:,1);
+subplot(4,4,2)
+heatmap(ABD.InterSaccadicGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.interVols),'XDisplayLabels',0.1:0.1:1);
 title('ADBi Saccadic');
+%daspect([2,1,1]);
 colormap(gca,cmapInter);
+% hold on;
+% [~,b] = max(ABD.InterSaccadicGradient(:,2:end),[],2);
+% plot(11-b,'ko');
+% showfit(ezfit(1:size(b,1),11-b,'a*x'),'fitcolor','k','dispeqboxmode','off','corrcoefmode','r2');
+% clear b;
 
-subplot(4,4,[3,7])
-imagesc(ABD.motorVestibularGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTickLabel',[102,115,125,130,140,150]);
+subplot(4,4,3)
+heatmap(ABD.motorVestibularGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols),'XDisplayLabels',0.1:0.1:1);
+
 title('ADB Vestibular');
 colormap(gca,cmapmotor);
 
-subplot(4,4,[4,8])
-imagesc(ABD.InterVestibularGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTick',[2:4:20],'YTickLabel',[115,130,147,149,169]);
+subplot(4,4,4)
+heatmap(ABD.InterVestibularGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.interVols),'XDisplayLabels',0.1:0.1:1);
 title('ADBi Vestibular');
 colormap(gca,cmapInter);
 
-subplot(4,4,[9,13])
-imagesc(ABD.motorIntegratorGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTickLabel',[102,115,125,130,140,150]);
+subplot(4,4,5)
+heatmap(ABD.motorIntegratorGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols),'XDisplayLabels',0.1:0.1:1);
 title('ADB Integrator');
 colormap(gca,cmapmotor);
 
-subplot(4,4,[10,14])
-imagesc(ABD.InterIntegratorGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTick',[2:4:20],'YTickLabel',[115,130,147,149,169]);
+subplot(4,4,6)
+heatmap(ABD.InterIntegratorGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.interVols),'XDisplayLabels',0.1:0.1:1);
 title('ADB Integrator');
 colormap(gca,cmapInter);
 
-subplot(4,4,[11,15])
-imagesc(ABD.motorContraGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTickLabel',[102,115,125,130,140,150]);
+subplot(4,4,7)
+heatmap(ABD.motorContraGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols),'XDisplayLabels',0.1:0.1:1);
 title('ADB Contra');
 colormap(gca,cmapmotor);
 
-subplot(4,4,[12,16])
-imagesc(ABD.InterContraGradient);
-set(gca,'XTickLabel',[0.2,0.4,0.6,0.8,1],'YTick',[2:4:20],'YTickLabel',[115,130,147,149,169]);
-title('ADB Contra');
+subplot(4,4,8)
+heatmap(ABD.InterContraGradient(:,2:end),'ColorScaling','scaledcolumns','CellLabelColor',...
+    'none','Colormap',cmapInter,'YDisplayLabels',round(ABD.interVols),'XDisplayLabels',0.1:0.1:1);
+title('ADBi Contra');
 colormap(gca,cmapInter);
+
+%% Arrange Medial to Lateral
+
+ABD.MotorOrigins = [vertcat(ABDr.Origin);vertcat(ABDc.Origin)];
+ABD.motorVols(15) = [];
+ABD.motorVols(29) = [];
+ABD.motorSaccadicGradient(15,:) = [];
+ABD.motorSaccadicGradient(29,:) = [];
+
+figure;
+% arranged Small to Big
+ [~,ABDMotorSmallBig] = sort(ABD.motorVols);
+
+subplot(4,4,[1,5])
+heatmap(ABD.motorSaccadicGradient(ABDMotorSmallBig,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols(ABDMotorSmallBig)),'XDisplayLabels',0.1:0.1:1);
+title('Small to Big');
+
+% arranged ML+DV
+[~,ABDMotorMLDVSort] = sort(ABD.MotorOrigins(:,1) + ABD.MotorOrigins(:,3));
+
+subplot(4,4,[2,6])
+heatmap(ABD.motorSaccadicGradient(ABDMotorMLDVSort,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols(ABDMotorMLDVSort)),'XDisplayLabels',0.1:0.1:1);
+title('ML+DV');
+
+
+subplot(4,4,9)
+ToptwothirdMean = nanmean(ABD.motorSaccadicGradient(ABDMotorMLDVSort(1:10),2:end));
+ToptwothirdSEM = nanstd(ABD.motorSaccadicGradient(ABDMotorMLDVSort(1:10),2:end))./ sqrt(9);
+
+LastonethirdMean = nanmean(ABD.motorSaccadicGradient(ABDMotorMLDVSort(22:end),2:end));
+LastonethirdSEM = nanstd(ABD.motorSaccadicGradient(ABDMotorMLDVSort(22:end),2:end))./sqrt(9);
+
+
+shadedErrorBar(0.1:0.1:1,ToptwothirdMean,ToptwothirdSEM,'lineprops',{'Color','r'});
+hold on;
+shadedErrorBar(0.1:0.1:1,LastonethirdMean,LastonethirdSEM,'lineprops',{'Color','k'});
+ylabel('average synapses');
+legend({'top 1/3','bottom 1/3'},'location','best');
+
+
+% un normalized
+subplot(4,4,13)
+ToptwothirdMean = nanmean(ABD.motorSaccadicGradient(ABDMotorMLDVSort(1:21),2:end));
+ToptwothirdSEM = nanstd(ABD.motorSaccadicGradient(ABDMotorMLDVSort(1:21),2:end))./ sqrt(20);
+
+LastonethirdMean = nanmean(ABD.motorSaccadicGradient(ABDMotorMLDVSort(22:end),2:end));
+LastonethirdSEM = nanstd(ABD.motorSaccadicGradient(ABDMotorMLDVSort(22:end),2:end))./sqrt(9);
+
+shadedErrorBar(0.1:0.1:1,ToptwothirdMean,ToptwothirdSEM,'lineprops',{'Color','r'});
+hold on;
+shadedErrorBar(0.1:0.1:1,LastonethirdMean,LastonethirdSEM,'lineprops',{'Color','k'});
+xlabel('Norm. path length');
+legend({'top 2/3','bottom 1/3'},'location','best');
+
+
+% vestibular nuerons
+ABD.motorVestibularGradient(15,:) = [];
+ABD.motorVestibularGradient(29,:) = [];
+
+subplot(4,4,[2,6])
+heatmap(ABD.motorVestibularGradient(ABDMotorMLDVSort,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols(ABDMotorMLDVSort)),'XDisplayLabels',0.1:0.1:1);
+title('ML+DV');
+
+
+subplot(4,4,14)
+ToptwothirdMean = nanmean(ABD.motorVestibularGradient(ABDMotorMLDVSort(1:21),2:end));
+ToptwothirdSEM = nanstd(ABD.motorVestibularGradient(ABDMotorMLDVSort(1:21),2:end))./ sqrt(20);
+
+LastonethirdMean = nanmean(ABD.motorVestibularGradient(ABDMotorMLDVSort(22:end),2:end));
+LastonethirdSEM = nanstd(ABD.motorVestibularGradient(ABDMotorMLDVSort(22:end),2:end))./sqrt(9);
+
+shadedErrorBar(0.1:0.1:1,ToptwothirdMean,ToptwothirdSEM,'lineprops',{'Color','r'});
+hold on;
+shadedErrorBar(0.1:0.1:1,LastonethirdMean,LastonethirdSEM,'lineprops',{'Color','k'});
+
+
+
+% plot for R and C seperately
+
+% [~,ABD.ABDrMLDVorder] = sort(ABD.MotorOrigins(1:14,1)+ABD.MotorOrigins(1:14,3));
+% 
+% 
+% subplot(4,4,[2 6])
+% heatmap(ABD.motorSaccadicGradient(ABD.ABDrMLDVorder,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+%     'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols(ABD.ABDrMLDVorder)),'XDisplayLabels',0.1:0.1:1);
+% title('ABDr: ML+DV');
+% 
+% subplot(4,4,10)
+% % plot(sort(ABD.MotorOrigins(:,1) + ABD.MotorOrigins(:,3)),round(ABD.motorVols(ABDMotorMLDVSort)),'o', ...
+% %     'MarkerFaceColor',lightGreen,'MarkerEdgeColor','none');
+%  axis square;
+% % box off;
+% % xlabel('ML+DV');
+% % ylabel('Soma volume');
+% 
+% ToptwothirdMean = nanmean(ABD.motorSaccadicGradient(ABD.ABDrMLDVorder(1:9),2:end));
+% ToptwothirdSEM = nanstd(ABD.motorSaccadicGradient(ABD.ABDrMLDVorder(1:9),2:end))./ sqrt(8);
+% 
+% LastonethirdMean = nanmean(ABD.motorSaccadicGradient(ABD.ABDrMLDVorder(10:end),2:end));
+% LastonethirdSEM = nanstd(ABD.motorSaccadicGradient(ABD.ABDrMLDVorder(10:end),2:end))./sqrt(5);
+% 
+% subplot(4,4,14)
+% shadedErrorBar(0.1:0.1:1,ToptwothirdMean,ToptwothirdSEM,'lineprops',{'Color','r'});
+% hold on;
+% shadedErrorBar(0.1:0.1:1,LastonethirdMean,LastonethirdSEM,'lineprops',{'Color','k'});
+% 
+% 
+% 
+% [~,ABD.ABDcMLDVorder] = sort(ABD.MotorOrigins(15:end,1)+ABD.MotorOrigins(15:end,3));
+% 
+% subplot(4,4,[3 7])
+% heatmap(ABD.motorSaccadicGradient(14+ABD.ABDcMLDVorder,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+%     'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols(14+ABD.ABDcMLDVorder)),'XDisplayLabels',0.1:0.1:1);
+% title('ABDc: ML+DV');
+% 
+% subplot(4,4,11)
+% % plot(sort(ABD.MotorOrigins(:,1) + ABD.MotorOrigins(:,3)),round(ABD.motorVols(ABDMotorMLDVSort)),'o', ...
+% %     'MarkerFaceColor',lightGreen,'MarkerEdgeColor','none');
+%  axis square;
+% % box off;
+% % xlabel('ML+DV');
+% % ylabel('Soma volume');
+% 
+% ToptwothirdMean = nanmean(ABD.motorSaccadicGradient(14+ABD.ABDcMLDVorder(1:9),2:end));
+% ToptwothirdSEM = nanstd(ABD.motorSaccadicGradient(14+ABD.ABDcMLDVorder(1:9),2:end))./ sqrt(9);
+% 
+% LastonethirdMean = nanmean(ABD.motorSaccadicGradient(14+ABD.ABDcMLDVorder(10:end),2:end));
+% LastonethirdSEM = nanstd(ABD.motorSaccadicGradient(14+ABD.ABDcMLDVorder(10:end),2:end))./sqrt(7);
+% 
+% subplot(4,4,15)
+% shadedErrorBar(0.1:0.1:1,ToptwothirdMean,ToptwothirdSEM,'lineprops',{'Color','r'});
+% hold on;
+% shadedErrorBar(0.1:0.1:1,LastonethirdMean,LastonethirdSEM,'lineprops',{'Color','k'});
+% 
+% 
+% 
+% 
+
+%% Plot Neuros with ML+DV order
+
+cmap = colorcet('R3','N',numel(ABD.motorCellIDs));
+transform_swc_AV(ABD.motorCellIDs(ABDMotorMLDVSort), cmap,[],true,false);
+colormap(cmap);
+colorbar('Ticks',[0,1],'TickLabels',{'Medio-dorsal','Ventro-lateral'});
+
+%% sort by mono Bi order
+
+ABDc_monostratified = [82212,77654,77295,77646]; % removed 82213
+ABDc_bistratified = [77662,77154,77688,77292,77658,77657,77682,77296,82195,77652,82197,81172,77628,82196];
+
+ABDr_monostratified = [82145,77302,82140,82143,82146]; % removed 77299
+ABDr_bistratified = [82192,77709,77672,82193,77305,77710,77300,77648,82194,77301,77705];
+
+ABDStratCellIDs = [ABDr_monostratified'; ABDc_monostratified';ABDr_bistratified'; ABDc_bistratified'];
+[~,ABDStratOrder] = ismember(ABDStratCellIDs,ABD.motorCellIDs);
+
+ABDStratOrder = ABDStratOrder(ABDStratOrder~=0); 
+
+ABD.motorSaccadicGradientNormalized = ABD.motorSaccadicGradient(:,2:end)./max(ABD.motorSaccadicGradient(:,2:end),[],2);
+
+subplot(4,4,[1,5])
+heatmap(ABD.motorSaccadicGradient(:,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols),'XDisplayLabels',0.1:0.1:1);
+title('size');
+
+subplot(4,4,9)
+Quantile25th = find(ABD.motorSaccadicGradient(:,1)<quantile(ABD.motorSaccadicGradient(:,1),0.25));
+Quantile25thRest = find(ABD.motorSaccadicGradient(:,1)>quantile(ABD.motorSaccadicGradient(:,1),0.25));
+
+Quantile25thMean = nanmean(ABD.motorSaccadicGradient(Quantile25th,2:end));
+Quantile25thSEM = nanstd(ABD.motorSaccadicGradient(Quantile25th,2:end))./sqrt(length(Quantile25th));
+
+Quantile25thRestMean = nanmean(ABD.motorSaccadicGradient(Quantile25thRest,2:end));
+Quantile25thRestSEM = nanstd(ABD.motorSaccadicGradient(Quantile25thRest,2:end))./sqrt(length(Quantile25thRest));
+
+shadedErrorBar(0.1:0.1:1,Quantile25thMean,Quantile25thSEM,'lineprops',{'Color','k'});
+hold on;
+shadedErrorBar(0.1:0.1:1,Quantile25thRestMean,Quantile25thRestSEM,'lineprops',{'Color','r'});
+set(gca, 'XLim',[0.1,1]);
+title('25th Quantile and rest');
+
+subplot(4,4,13)
+
+Quantile75th = find(ABD.motorSaccadicGradient(:,1)>quantile(ABD.motorSaccadicGradient(:,1),0.75));
+Quantile75thRest = find(ABD.motorSaccadicGradient(:,1)<quantile(ABD.motorSaccadicGradient(:,1),0.75));
+
+Quantile75thMean = nanmean(ABD.motorSaccadicGradient(Quantile75th,2:end));
+Quantile75thSEM = nanstd(ABD.motorSaccadicGradient(Quantile75th,2:end))./sqrt(length(Quantile75th));
+
+Quantile75thRestMean = nanmean(ABD.motorSaccadicGradient(Quantile75thRest,2:end));
+Quantile75thRestSEM = nanstd(ABD.motorSaccadicGradient(Quantile75thRest,2:end)) ./ sqrt(length(Quantile75thRest));
+
+shadedErrorBar(0.1:0.1:1,Quantile75thMean,Quantile75thSEM,'lineprops',{'Color','k'});
+hold on;
+shadedErrorBar(0.1:0.1:1,Quantile75thRestMean,Quantile75thRestSEM,'lineprops',{'Color','r'});
+set(gca, 'XLim',[0.1,1]);
+title('75th Quantile and rest');
+
+
+%offsetAxes(gca);
+
+subplot(4,4,[3,7])
+heatmap(ABD.motorSaccadicGradient(ABDStratOrder,2:end),'ColorScaling','scaledrows','CellLabelColor',...
+    'none','Colormap',cmapmotor,'YDisplayLabels',round(ABD.motorVols(ABDStratOrder)),'XDisplayLabels', 0.1:0.1:1 );
+title('mono_bi');
+
+monoMean = nanmean(ABD.motorSaccadicGradient(ABDStratOrder(2:9),2:end));
+monoSEM = nanstd(ABD.motorSaccadicGradient(ABDStratOrder(1:9),2:end))./sqrt(8);
+
+BiMean = nanmean(ABD.motorSaccadicGradient(ABDStratOrder(10:end),2:end));
+BiSEM = nanstd(ABD.motorSaccadicGradient(ABDStratOrder(10:end),2:end))./sqrt(21);
+
+subplot(4,4,11)
+shadedErrorBar(0.1:0.1:1,monoMean,monoSEM,'lineprops',{'Color','k'});
+hold on;
+shadedErrorBar(0.1:0.1:1,BiMean,BiSEM,'lineprops',{'Color','r'});
+set(gca, 'XLim',[0.1,1]);
+
+
+ABDcMyelinated = [77292,77296,77154,77295,81172];
+
+
+%% translate ABD neurons to same position to see effect
+
+% get Motor neuron Origins
+
+
+
+for i = 1:numel(ABD.motorCellIDs)
+    if ismember(ABD.motorCellIDs(i), ABDr_CellIDs)
+        [~,b] = ismember(ABD.motorCellIDs(i), ABDr_CellIDs);
+        ABD.MotorSaccadicSites{i} = ABDr(b).PreSynCoordsTransformed(ABDr(b).isSaccadic,:);
+    elseif ismember(ABD.motorCellIDs(i), ABDc_CellIDs)
+        [~,b] = ismember(ABD.motorCellIDs(i), ABDc_CellIDs);
+        ABD.MotorSaccadicSites{i} = ABDc(b).PreSynCoordsTransformed(ABDc(b).isSaccadic,:);
+    end
+end
+
+
+newOrigin = ABD.MotorOrigins(ABDMotorMLSort(1),:);
+
 
 %% locate axons in the proxiomal region
 
@@ -603,3 +875,10 @@ for i = 1:numel(ABDc_CellIDs)
         clear temp;
     end
 end
+
+%% plot numbers for all neurons
+
+
+
+
+

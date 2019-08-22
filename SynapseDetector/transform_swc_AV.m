@@ -7,7 +7,7 @@ function [RCdist, MLdist, DVdist] =  transform_swc_AV(cellID, neuronColor, IdsHi
 % displayRefBrain is true if the background needs to be an image plane from
 % the zbrain atlas.
 
-%colors = cbrewer('qual','Dark2',10);
+cols = cbrewer('qual','Dark2',10);
 %[m,n] = min(abs(neuronColor - colors)) ;
 
 if isempty(cellID)
@@ -36,45 +36,51 @@ end
 %% Read reference brain or any brain from the ref atlas
 % NOTE: Original files needs to be rotated ccw 90 and the zaxis needs to be
 % reversed in FIJI only.
-
-imageFileName = 'ZBB_ml2_mnx1-GFP.tif';
-if ismac
-    imageFilePath = '/Users/ashwin/Google Drive/Zfish/RefBrains/';
-else
-    imageFilePath = '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/RefBrains/';
-end
-
-imagesInfo = imfinfo(fullfile(imageFilePath,imageFileName));
-width = imagesInfo(1).Width;
-height = imagesInfo(1).Height;
-%images = zeros(height, width,length(imagesInfo),'uint8');
-images = zeros(height, width,length(imagesInfo));
-TifLink = Tiff(fullfile(imageFilePath,imageFileName),'r');
-if displayRefBrain
-    for i = 1:length(imagesInfo)
-        TifLink.setDirectory(i);
-        images(:,:,i) = TifLink.read();
+    
+    imageFileName = 'ZBB_evx2-Gal4.tif';
+    if ismac
+        imageFilePath = '/Users/ashwin/Google Drive/Zfish/RefBrains/';
+    else
+        imageFilePath = '/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/RefBrains/';
     end
-end
-%warning('off','last');
-TifLink.close();
-imagesRef = imref3d(size(images),0.798,0.798,2); % set the correct dimensions for the images using the ref object
+    
+    imagesInfo = imfinfo(fullfile(imageFilePath,imageFileName));
+    width = imagesInfo(1).Width;
+    height = imagesInfo(1).Height;
+    %images = zeros(height, width,length(imagesInfo),'uint8');
+    images = zeros(height, width,length(imagesInfo));
+    
+    if displayRefBrain
+        TifLink = Tiff(fullfile(imageFilePath,imageFileName),'r');
+        
+        for i = 1:length(imagesInfo)
+            TifLink.setDirectory(i);
+            images(:,:,i) = TifLink.read();
+        end
+        TifLink.close();
+    end
+    %warning('off','last');
+    imagesRef = imref3d(size(images),0.798,0.798,2); % set the correct dimensions for the images using the ref object
 
 %% Mask Image
 
-disp('Load Mask database');         % mask database can be obtained from the Z-Brain atlas.
-
-if ismac
-    load('/Users/ashwin/Google Drive/ZFish/RefBrains/MaskDatabase.mat');
-else
-    load('/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/RefBrains/MaskDatabase.mat');
-end
-
-IdsBase = [114,221:225]; %          r3-7; Keep this always ON
-for i = 1:length(IdsBase)
-    maskImage(i).Ids = IdsBase(i);
-    maskImage(i).name = MaskDatabaseNames(IdsBase(i));
-    maskImage(i).image = reshape(full(MaskDatabase(:,IdsBase(i))),height,width,length(imagesInfo));
+if displayBoundary
+    
+    disp('Load Mask database');         % mask database can be obtained from the Z-Brain atlas.
+    
+    if ismac
+        load('/Users/ashwin/Google Drive/ZFish/RefBrains/MaskDatabase.mat');
+    else
+        load('/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/RefBrains/MaskDatabase.mat');
+    end
+    
+    IdsBase = [114,221:225]; %          r3-7; Keep this always ON
+    
+    for i = 1:length(IdsBase)
+        maskImage(i).Ids = IdsBase(i);
+        maskImage(i).name = MaskDatabaseNames(IdsBase(i));
+        maskImage(i).image = reshape(full(MaskDatabase(:,IdsBase(i))),height,width,length(imagesInfo));
+    end
 end
 
 % other masks that need to be displayed!
@@ -83,7 +89,7 @@ if IdsHighlight
     
     %IdsHighlight = [238,235,186];        % Vestibular Clusters
     %Ids =  [Ids,184,185,187:190];        % Reticulospinal Clusters
-    %Ids =  [Ids,135,186,246,250];        % Gad1b-s2, Gly2-s2, VglutS3, vglut2-strip4
+    IdsHighlight =  [135,186,246,250];        % Gad1b-s2, Gly2-s2, VglutS3, vglut2-strip4
     %Ids =  [93,131,130,134];             % Cerebellum
     
     for i = 1:length(IdsHighlight)
@@ -95,6 +101,7 @@ end
 
 
 %% get swc coordinate
+cellID = cellID(isExistReRoot(cellID));
 swc = cell(1,size(cellID,1));
 swc_new = cell(1,size(cellID,1));
 RCdist = [];
@@ -120,7 +127,7 @@ for i = 1:length(cellID)
     % compute offset as data in NG is offset from origin
     offset = [920,752,16400] .* [80, 80, 45]; % offset at mip4 number can be obtained from NG .info file
     
-    [1840, 1504,16400 ].* [40,40,45];
+    %[1840, 1504,16400 ].* [40,40,45];
 
     coord(:,1) = coord(:,1) - offset(1);
     coord(:,2) = coord(:,2) - offset(2);
@@ -148,7 +155,7 @@ for i = 1:length(cellID)
     
     % perform transformation
     if ismac
-        load('/Users/ashwin/Google Drive/ZFish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set3.mat');
+        load('/Users/ashwin/Google Drive/ZFish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2-Elavl3-Mnx-SB-set4.mat');
     else
         load('/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
     end
@@ -172,42 +179,61 @@ for i = 1:length(cellID)
     
     % get mask plane and image (in mircron space, atlas space) through which the root node traverses.
     
-    rootNodePlane(i) = round(coord_transformed(1,3)); % in micron space
-    rootNodeImage(:,:,i) = images(:,:,round(rootNodePlane(i)/imagesRef.PixelExtentInWorldZ));
+    rootNodePlaneXY(i) = round(coord_transformed(1,3)); % in micron space
+    rootNodePlaneXZ(i) = round(coord_transformed(1,2));
+    rootNodePlaneYZ(i) = round(coord_transformed(1,1));
+
+    
+   %[~, rootNodePlaneindex(i)] = min(coord_transformed(:,1)); % in micron space
+   % rootNodePlane(i) = round(coord_transformed(rootNodePlaneindex(i),3));
+   if displayRefBrain
+    rootNodeImageXY(:,:,i) = images(:,:,round(rootNodePlaneXY(i)/imagesRef.PixelExtentInWorldZ));
+   end
 end
 %% construct a grided volume
 
 % deteremine the mean plane through which the root nodes traverses
-meanRootNodePlane = mean(rootNodePlane);
+meanRootNodePlaneXY = mean(rootNodePlaneXY);
+meanRootNodePlaneXZ = mean(rootNodePlaneXZ);
+meanRootNodePlaneYZ = mean(rootNodePlaneYZ);
+
+
+%meanRootNodePlane = mean(rootNodePlane(rootNodePlane>quantile(rootNodePlane,0.5) & rootNodePlane<quantile(rootNodePlane,0.95)));
 
 % sample above and below root node plane
-meanRootNodePlane = meanRootNodePlane;
+meanRootNodePlaneXY = meanRootNodePlaneXY;
 
 [X,Y] = meshgrid(linspace(0,ceil(imagesRef.ImageExtentInWorldX), ceil(imagesRef.ImageExtentInWorldX)),...
     linspace(0,ceil(imagesRef.ImageExtentInWorldY),ceil(imagesRef.ImageExtentInWorldY)));
 
 % determine the mean plane image
 
-%meanImage = mean(rootNodeImage,3);
-meanImage = images(:,:,round(meanRootNodePlane/imagesRef.PixelExtentInWorldZ));
+meanImageXY = images(:,:,round(meanRootNodePlaneXY/imagesRef.PixelExtentInWorldZ));
+
+for i = 1:size(images,3)
+    meanImageXZ(i,:)  = images(round(meanRootNodePlaneXZ/imagesRef.PixelExtentInWorldX),:,i);
+end
+
+for i = 1:size(images,3)
+    meanImageYZ(i,:)  = images(:,round(meanRootNodePlaneYZ/imagesRef.PixelExtentInWorldX),i);
+end
 
 %Z = round(meanRootNodePlane)*ones(size(X)); % this is the correct way to plot
-Z = round(276)*ones(size(X)); % this is to render the image layer to the back for visualization
+Zplane = round(276)*ones(size(X)); % this is to render the image layer to the back for visualization
 
 % resize the mean image to micron space
-img = imresize(meanImage,[imagesRef.ImageExtentInWorldY,imagesRef.ImageExtentInWorldX]);
-img = flip(img,2);
+imgXY = imresize(meanImageXY,[imagesRef.ImageExtentInWorldY,imagesRef.ImageExtentInWorldX]);
+%imgXY = flip(imgXY,2);
 
 % construct the mean plane as a surface
 
 if displayRefBrain
-    hsurf1 = surface(X,Y,Z,imcomplement(medfilt2(imadjust(img/max(img(:))))),'FaceColor','flat','EdgeColor','none');
-    %hsurf1 = surface(X,Y,Z,medfilt2(imadjust(img/max(img(:)))),'FaceColor','flat','EdgeColor','none');
-    %hold on;
-    %hsurf2 = surface(X,Y,Z,img/max(img(:)),'FaceColor','flat','EdgeColor','none');
-    colormap gray;
-    %alpha(hsurf1, 0.5);
-    %alpha(hsurf2, 0.5);
+    hsurf1 = surface(X,Y,Zplane,imcomplement(medfilt2(imadjust(imgXY/max(imgXY(:))))),'FaceColor','flat','EdgeColor','none');
+    %hsurf1 = surface(X,Y,Zplane,medfilt2(imgXY),'FaceColor','flat','EdgeColor','none');
+    colormap (colorcet('L1'));
+    lighting gouraud;
+    material shiny;
+    %alpha(hsurf1, 0.8);
 end
 
 daspect([1,1,1]);
@@ -219,7 +245,7 @@ if IdsHighlight
     index = 0.1;
     
     for i = 1:length(IdsHighlight)
-        invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
+        invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlaneXY;
         invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
         [B,L] = bwboundaries(maskImageHighlight(i).image(:,:,invertedPlaneinVoxel));
         %invertedPlaneinMicrons = meanRootNodePlane;
@@ -227,7 +253,7 @@ if IdsHighlight
         if size(B,1)>0
             boundaries = B{1};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
             clear boundaries;
@@ -235,7 +261,7 @@ if IdsHighlight
         if size(B,1)>1
             boundaries = B{2};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
             annotation('textbox',[0.42,0.4-index,0.5,0],'EdgeColor','none','String',maskImageHighlight(i).name,'Color',cols(i,:));
@@ -252,11 +278,10 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,filename));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',[neuronColor(i,:),0.5],'LineWidth',0.5);
-
+            'Color',[neuronColor(i,:)],'LineWidth',0.1);
         hold on;
          h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor(i,:),...
-             'MarkerEdgeColor','k','LineWidth',1);
+             'MarkerEdgeColor','k','LineWidth',0.1);
         hMarker = h.MarkerHandle;
         hMarker.FaceColorData = uint8(255*[somataColor(i,1);somataColor(i,2);somataColor(i,3);0.1]);
         %drawnow;
@@ -266,9 +291,9 @@ for i = 1:length(cellID)
     elseif exist(fullfile(fname,sprintf('%d.swc',cellID(i))))
         tree = load_tree(fullfile(fname,sprintf('%d.swc',cellID(i))));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
-        line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]','Color',neuronColor(i,:),'LineWidth',2);
+        line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]','Color',[neuronColor(i,:),0.5],'LineWidth',0.1);
         hold on;
-        h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','none');
+        h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','k','LineWidth',0.1);
         hMarker = h.MarkerHandle;
         hMarker.FaceColorData = uint8(255*[somataColor(i,1);somataColor(i,2);somataColor(i,3);0.1]);
         clear I;
@@ -281,7 +306,6 @@ end
 
 % draw boundary of the anatomical region of interst
 
-cols = cbrewer('qual','Accent',length(IdsBase));
 
 %All masks are in voxel dimensions, need to covert them to micron space.
 %masks are also inverted, meaning from V-->D.
@@ -289,9 +313,10 @@ cols = cbrewer('qual','Accent',length(IdsBase));
 % Base level maske IDs (used for oveall orientation, e.g. rhombomere
 % boundaries)
 if displayBoundary
+    cols = cbrewer('qual','Accent',length(IdsBase));
     
     for i = 1:length(IdsBase)
-        invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlane;
+        invertedPlaneinMicrons = imagesRef.ImageExtentInWorldZ-meanRootNodePlaneXY;
         invertedPlaneinVoxel = round(invertedPlaneinMicrons/imagesRef.PixelExtentInWorldZ);
         [B,L] = bwboundaries(maskImage(i).image(:,:,invertedPlaneinVoxel));
         %invertedPlaneinMicrons = meanRootNodePlane;
@@ -299,15 +324,15 @@ if displayBoundary
         if size(B,1)>0
             boundaries = B{1};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8,0.5],'LineWidth',2,'LineStyle','-');
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2,'LineStyle','-');
             clear boundaries;
         end
         if size(B,1)>1
             boundaries = B{2};
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
-            boundaries(:,3) = meanRootNodePlane*ones(size(boundaries,1),1);
+            boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
              %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
             plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2,'LineStyle','-');
         end
@@ -316,7 +341,7 @@ end
 
 
 set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse','color','none');
-set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
+%set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
 set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
 %box on;
 %
@@ -325,7 +350,7 @@ set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExten
 %text(500,1300,'50um','FontName','Arial','FontSize',10);
 
 axis off;
-%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlane/2)));
+%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlaneXY/2)));
 %title(sprintf('Zbr dorsal plane: %1d \n Zbr ventral plane: %1d', round(min(rootNodePlane(rootNodePlane~=0))/2), round(max(rootNodePlane)/2)));
 
 end

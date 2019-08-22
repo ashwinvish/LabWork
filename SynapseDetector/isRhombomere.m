@@ -7,9 +7,9 @@ function [inBoundary] = isRhombomere(cellID)
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    fname  = '/Users/ashwin/Documents/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
-    load('/Users/ashwin/Documents/RefBrains/MaskDatabase.mat');
-    imagesFile = '/Users/ashwin/Documents/RefBrains/SpinalBackfills.tif';
+    fname  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
+    load('/Users/ashwin/Google Drive/Zfish/RefBrains/MaskDatabase.mat');
+    imagesFile = '/Users/ashwin/Google Drive/Zfish/RefBrains/SpinalBackfills.tif';
     
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
@@ -92,10 +92,8 @@ for j = 1:length(cellID)
         end
     else
         inBoundary.cellID(j) = cellID(j);
-    end
-    
+    end  
 end
-
 
 end
 

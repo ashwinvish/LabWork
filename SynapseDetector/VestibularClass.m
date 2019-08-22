@@ -1,5 +1,5 @@
 % Classes by anatomy
-clear;
+%clear;
 addpath(genpath('/Users/ashwin/Documents/'));
 
 colors = cbrewer('qual','Dark2',10);
@@ -19,7 +19,7 @@ startup
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
+    df = readtable('/Users/ashwin/Google Drive/Zfish/SynapseDetector/04152019.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
@@ -27,9 +27,9 @@ end
 
 %% Load Vestibular Neurons
 
- vestibularCellIds = [76631 76700 76656 76655 76660 76679 77393 77395 77375 ...
-     77815 77803 77807 80591 80579 77255 77697 77364 80223 81126 80760 81117 ...
-     80672 80622 80572 80569 81122 78426 81328 81575 81582 81870];
+ vestibularCellIds = [76631,76700,76656,76655,76660,76679,77393,77395,77375,...
+     77815,77803,77807,80591,80579,77255,77697,77364,80223,81126,80760,81117,...
+     80672,80622,80572,80569,81122,78426,81328,81575,81582,81870,82161,82165,81553,82169];
  
  MVNs = [76664 76784 76783 77394 77326 77772 77766 77756 77753 77767 77775 ...
      77780 80883 80247 80669 80698 80762 80748 80696 80761 80749 81070 81044 ...
@@ -55,13 +55,24 @@ ABDIc_vols = ABDvols(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),2);
 %%
  for i = 1:numel(VestibularAxons)
      if ~isExistReRoot(VestibularAxons(i))==0
-     VEST(i) = InputsByClass(VestibularAxons(i),df,2);
+     Vest(i) = InputsByClass(VestibularAxons(i),df,2);
      end
  end
  
+%% Fraction reconstructed
+
+for i= 1:numel(Vest)
+    if ~isempty(Vest(i).cellID)
+    [a,~] = SynapticPartners(Vest(i).cellID,1,df);
+    NumberOfPrePartners(i) = numel(a);
+    NumberOfPrePartnersReconstructed(i) = numel(a(a<1e5));
+    clear a;
+    end
+end
+
 %%
 
-motorDistribution = vertcat(VEST.MotorDist);
+motorDistribution = vertcat(Vest.MotorDist);
 noSynapsesOnMotor = find(sum(motorDistribution(:,2:5),2)==0);
 motorDistribution(noSynapsesOnMotor,:) = [];
 motorDistributionABD = sum(motorDistribution(:,2:3),2);
@@ -74,12 +85,12 @@ ix2 = 1;
 for i = 1:size(motorDistribution,1)
     if (motorDistributionABD(i)-motorDistributionABDi(i))>0
     ABDVestibularpop(ix1).cellIDs = motorDistribution(i,1);
-    ABDVestibularpop(ix1).Origin = VEST(find(ABDVestibularpop(ix1).cellIDs==VestibularAxons)).Origin;
+    ABDVestibularpop(ix1).Origin = Vest(find(ABDVestibularpop(ix1).cellIDs==VestibularAxons)).Origin;
     ABDVestibularpop(ix1).MotorCounts = normalizedMotorCounts(i);
     ix1 = ix1+1;
     elseif (motorDistributionABD(i)-motorDistributionABDi(i))<0
      ABDiVestibularpop(ix2).cellIDs = motorDistribution(i,1);
-     ABDiVestibularpop(ix2).Origin = VEST(find(ABDiVestibularpop(ix2).cellIDs==VestibularAxons)).Origin;
+     ABDiVestibularpop(ix2).Origin = Vest(find(ABDiVestibularpop(ix2).cellIDs==VestibularAxons)).Origin;
      ABDiVestibularpop(ix2).MotorCounts = normalizedMotorCounts(i);
      ix2 = ix2+1;
     end
@@ -103,6 +114,9 @@ colorbar(gca);
 figure;
 subplot(4,4,1)
 histogram(normalizedMotorCounts,-1:0.1:1,'FaceColor','k');
+hold on;
+line([0.5,0.5],[0,40],'color','k','LineStyle',':');
+line([-0.5,-0.5],[0,40],'color','k','LineStyle',':');
 xlabel('(A-Ai)/A+Ai)');
 axis square;
 box off;
@@ -115,8 +129,27 @@ subplot(4,4,[3,4])
 scatterhist(locs(:,1),locs(:,2),'Group',groups,'color',[lightRed;lightBlue]);
 set(gca,'YDir','reverse');
 
+%% Breakdown by individual populations
 
-%% Saccadic Motor partners
+transform_swc_AV(vestibularCellIds,Vestcolor,[],true,false);
+figure;
+transform_swc_AV(MVNs,MVNcolor,[],true,false);
+
+numberOfVestCells = numel(vestibularCellIds);
+
+figure;
+subplot(4,4,1)
+histogram(normalizedMotorCounts(1:numberOfVestCells),-1:0.1:1,'FaceColor',Vestcolor);
+hold on;
+histogram(normalizedMotorCounts(numberOfVestCells+1:end),-1:0.1:1,'FaceColor',MVNcolor);
+
+line([0.5,0.5],[0,10],'color','k','LineStyle',':');
+line([-0.5,-0.5],[0,10],'color','k','LineStyle',':');
+xlabel('(A-Ai)/A+Ai)');
+axis square;
+box off;
+
+%% Vestibular Motor partners
 
 for i = 1:numel([ABDVestibularpop.cellIDs])
   ABDVestibularpop(i).MotorNeuronCounts = isPostSynapseMotor(ABDVestibularpop(i).cellIDs,df); 

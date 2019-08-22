@@ -1,11 +1,12 @@
 load('IntConnMatrixPre.mat');
 load('IntPartners.mat');
-if ismac
-    addpath(genpath('/Users/admin/Documents/ComDetTBv091'));
-    addpath(genpath('/Users/admin/Documents/BCT'));
-else
-    addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/BCT'));
-end
+
+% if ismac
+%     addpath(genpath('/Users/admin/Documents/ComDetTBv091'));
+%     addpath(genpath('/Users/admin/Documents/BCT'));
+% else
+%     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/BCT'));
+% end
 
 [m,n,v] = find(IntConnMatrixPre); % m -postSynapse,row, n - column, v - number of synapses,value
 % for i = 1:size(intPartners,1)
@@ -15,14 +16,15 @@ AllCellNames = intPartners;
 G = digraph(n',m',v',size(AllCellNames,1));                 % digraph(source, target, weight, numNodes)
 %G.Nodes.Names = AllCellNames';
 G.Nodes.Names = num2str(intPartners);  % nodeNames
-for i = 1:size(AllCellNames)
-    temp = find(AllCellNames(i) == mlOrdered);
-    if ~isempty(temp)
-        AllCellManualID(i) = mlOrderedTypes(temp);
-    else
-        AllCellManualID(i) = cellstr(sprintf('%d',AllCellNames(i)));
-    end
-end
+
+% for i = 1:size(AllCellNames)
+%     temp = find(AllCellNames(i) == mlOrdered);
+%     if ~isempty(temp)
+%         AllCellManualID(i) = mlOrderedTypes(temp);
+%     else
+%         AllCellManualID(i) = cellstr(sprintf('%d',AllCellNames(i)));
+%     end
+% end
 
 %%
 inDeg = indegree(G);

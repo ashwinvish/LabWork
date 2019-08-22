@@ -62,7 +62,7 @@ for i = 1:numel(cellID)
     
     % perform transformation
     if ismac
-        load('/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
+        load('/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set3.mat');
     else
         load('/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
     end
