@@ -1,12 +1,15 @@
-function [cellProperties] = InputsByClass(cellID,df,varargin);
+function [cellProperties] = InputsByClass(cellID,df,synapseIden);
+ %synapseIden = 2; % look for postsynaptic neurons
+ %synapseIden = 1; % presynaptic neurons, default
 
-if nargin >2
-    synapseIden = 2; % look for postsynaptic neurons
-else
-    synapseIden = 1; % presynaptic neurons, default
-end
+% if nargin >2
+%     synapseIden = 2; % look for postsynaptic neurons
+% else
+%     synapseIden = 1; % presynaptic neurons, default
+% end
 
 cellProperties.cellID = cellID;
+
 
 % transfrom teee to Z-brian space, in microns
 if (isExistReRoot(cellID) == 1)
@@ -20,7 +23,7 @@ else
 end
 
 
-if nargin > 2
+if synapseIden == 2
     [cellProperties.Outputs, cellProperties.PSDID] = SynapticPartners(cellID,synapseIden,df);
     if ~isempty(cellProperties.Outputs)
         for i =1:size(cellProperties.PSDID,1)

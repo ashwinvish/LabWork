@@ -1,4 +1,4 @@
-function [logic] = isPostSynapseIntegrator(cellID,df)
+function [logic] = isPreSynapseIntegrator(cellID,df)
 %UNTITLED14 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,7 +9,7 @@ allIntegrators  = [confirmedALX,confirmedDBX,confirmedBARHL];
 
 logic = zeros(size(cellID));
 for i = 1:numel(cellID)
-    [A,~] = SynapticPartners(cellID(i),2,df);
+    [A,~] = SynapticPartners(cellID(i),1,df);
     valid = ismember(A,allIntegrators);
     if sum(valid)>0
         logic(i) = 1;

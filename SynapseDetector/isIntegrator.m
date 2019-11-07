@@ -17,6 +17,8 @@ putativeDBX = [77582 77588 77595 77597 77598 77599 77605 79040 76399 76828 ...
 confirmedBARHL = [76198 76190 76193 76194 76195 76196 ];
 putativeBARHL = [78452 80224 78391];
 
+% lateralVSaccadic = [80163 80167 80177 80179 76688 80204 80206 80210 76682];
+
 %allIntegrators = [confirmedALX,putativeALX,confirmedDBX,putativeDBX,confirmedBARHL,putativeBARHL];
 %allIntegrators(find(ismember(allIntegrators,cellID))) = [];
 

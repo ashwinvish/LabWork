@@ -1,9 +1,24 @@
 % density plots
 
+clc
+clear;
+if ismac
+    addpath(genpath('/Users/ashwin/Documents/'));
+    df = readtable('/Users/ashwin/Google Drive/Zfish/SynapseDetector/04152019.csv');
+else
+    addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
+    df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
+end
+
+startup
+
 load ABDr.mat
 load ABDc.mat
 load ABDIr.mat
 load ABDIc.mat
+colorSchemes
+
+%%
 
 
 ABDrCoords = [];
@@ -96,6 +111,20 @@ ABDIc_CellIDs = [78574,79051,77148,77625,77144,77692,77641,79066,77640,77643];
 AllABD = [ABDr_CellIDs,ABDc_CellIDs,ABDIr_CellIDs,ABDIc_CellIDs];
 Allmotor = [ABDr_CellIDs,ABDc_CellIDs];
  
+%%
+figure;
+subplot(1,2,1)
+transform_swc_AV([ABDr_CellIDs,ABDc_CellIDs],ABDcolor,[],true,false);
+subplot(1,2,2)
+transform_swc_AV([ABDIr_CellIDs,ABDIc_CellIDs],ABDicolor,[],true,false);
+
+figure;
+transform_swc_AV([ABDr_CellIDs,ABDc_CellIDs],ABDcolor,[],false,false);
+transform_swc_AV([ABDIr_CellIDs,ABDIc_CellIDs],ABDicolor,[],false,false);
+
+
+%%
+
  for i = 1:size(AllABD,2)
       [A,B] = SynapticPartners(AllABD(i),1,df);
       tempa = numel(A);
@@ -221,6 +250,28 @@ ABDImotorpattern = isMotor(ABDIinputs,df);
 ABDIOSI = (sum(ABDImotorpattern(:,2:3),2)- sum(ABDImotorpattern(:,4:5),2))./...
     (sum(ABDImotorpattern(:,2:3),2)+ sum(ABDImotorpattern(:,4:5),2));
 
+ABDcomplexInputs = unique([ABDinputs;ABDIinputs]);
+ABDcomplexMotorPattern = isMotor(ABDcomplexInputs,df);
+
+figure('Position',[100 100 350 300]);
+g = gramm('x',sum(ABDcomplexMotorPattern(:,2:3),2),'y',sum(ABDcomplexMotorPattern(:,4:5),2)); 
+g.geom_point('alpha',1);
+g.geom_abline();
+g.stat_cornerhist('aspect',0.5,'edges',[-120:5:120]);
+g.set_color_options('map',[0.1,0.1,0.1]);
+%g.set_limit_extra( [0.05,0.05],[0.05,0.05]);
+%g.axe_property('XLim',[0,250],'YLim',[0,250]);
+g.set_text_options('base_size',15);
+g.set_title('Abducens complex')
+g.set_names('x','Synapses on M','y','Synapses on I');
+g.draw();
+g.export('file_name','Abducens','export_path','/Users/ashwin/Desktop','file_type','png')
+
+
+
+
+figure;
+
 subplot(4,4,1)
 
 shadedErrorBar(-0.95:0.1:0.95,nanmean([OSIhistABDr;OSIhistABDc]),nanstd([OSIhistABDr;OSIhistABDc]),'lineprops',{'Color',ABDcolor,'Linewidth',2});
@@ -234,15 +285,9 @@ xlabel('OSI');
 ylabel('Count');
 
 subplot(4,4,2)
-histogram(ABDOSI,-1:0.1:1,'FaceColor',ABDcolor,'EdgeColor','none');
-axis square;
-box off;
-set(gca,'XTickLabels',[-1,0,1]);
-offsetAxes(gca);
-xlabel('OSI');
-ylabel('Count');
-subplot(4,4,3)
-histogram(ABDIOSI,-1:0.1:1,'FaceColor',ABDicolor,'EdgeColor','none')
+histogram(ABDOSI,-1:0.1:1,'FaceColor',ABDcolor,'EdgeColor','k');
+hold on;
+histogram(ABDIOSI,-1:0.1:1,'FaceColor',ABDicolor,'EdgeColor','k')
 axis square;
 box off;
 set(gca,'XTickLabels',[-1,0,1]);
@@ -261,6 +306,26 @@ offsetAxes(gca);
 xlabel('OSI');
 ylabel('Count');
 
+%%
+allABDinputs =[vertcat(ABDr.Inputs);vertcat(ABDc.Inputs);vertcat(ABDIr.Inputs);vertcat(ABDIc.Inputs)];
+allABDinputs = unique(allABDinputs);
+allABDinputs = allABDinputs(allABDinputs<1e5);
+allABDmotorPattern = isMotor(allABDinputs,df);
+allABDmotorOSI = (sum(allABDmotorPattern(:,2:3),2)- sum(allABDmotorPattern(:,4:5),2))./...
+    (sum(allABDmotorPattern(:,2:3),2)+ sum(allABDmotorPattern(:,4:5),2));
+
+figure;
+subplot(4,4,1)
+histogram(allABDmotorOSI,-1:0.1:1,'EdgeColor','k');
+axis square;
+box off;
+set(gca,'XTickLabels',[-1,0,1]);
+offsetAxes(gca);
+xlabel('OSI');
+ylabel('Count');
+
+colormap(colorcet('D2','N',21));
+colorbar;
 
 %% Monocular contributions
 
@@ -432,6 +497,208 @@ axis off;
 title(ABDr_bistratified(i));
 end
 
+%%
+
+ABDcInputs = vertcat(ABDc.Inputs);
+ABDcInputs = ABDcInputs(ABDcInputs<1e5);
+ABDcInputs = unique(ABDcInputs);
+ABDcInputsRhombomeres = isRhombomere(ABDcInputs);
+clear temp;
+temp = ABDcInputsRhombomeres.cellID(logical(ABDcInputsRhombomeres.r4));
+temp = temp(~isContra(temp)); 
+%transform_swc_AV(temp,SaccABDcolor,[],true,true,'R4ABDcInputs-Vel');
+transform_swc_AV(temp,SaccABDcolor,[],true,true);
+
+clear temp;
+temp = ABDcInputsRhombomeres.cellID(logical(ABDcInputsRhombomeres.r5));
+temp = temp(~isContra(temp)); 
+%transform_swc_AV(temp,SaccABDcolor,[],true,true,'R5ABDcInputs-Vel');
+transform_swc_AV(temp,SaccABDcolor,[],true,true);
+
+
+% ABDr
+
+ABDrInputs = vertcat(ABDr.Inputs);
+ABDrInputs = ABDrInputs(ABDrInputs<1e5);
+ABDrInputs = unique(ABDrInputs);
+ABDrInputsRhombomeres = isRhombomere(ABDrInputs);
+clear temp;
+temp = ABDrInputsRhombomeres.cellID(logical(ABDrInputsRhombomeres.r4));
+temp = temp(~isContra(temp)); 
+%transform_swc_AV(temp,SaccABDcolor,[],true,true,'R4ABDrInputs-Vel');
+transform_swc_AV(temp,SaccABDcolor,[],true,true);
+
+clear temp;
+temp = ABDrInputsRhombomeres.cellID(logical(ABDrInputsRhombomeres.r5));
+temp = temp(~isContra(temp)); 
+%transform_swc_AV(temp,SaccABDcolor,[],true,true,'R5ABDrInputs-Vel');
+transform_swc_AV(temp,SaccABDcolor,[],true,true);
+
+
+% both
+
+ABDinputs = [vertcat(ABDr.Inputs);vertcat(ABDc.Inputs)];
+ABDinputs = ABDinputs(ABDinputs<1e5);
+ABDinputs = unique(ABDinputs);
+ABDinputsRhombomeres = isRhombomere(ABDinputs);
+
+
+
+
+%% OSI analysis for ecverythingelse
+
+% ABD
+ABDEverythingElse = [vertcat(ABDr.EverythingElse);vertcat(ABDc.EverythingElse)];
+ABDEverythingElse = ABDEverythingElse(ABDEverythingElse<1e5);
+ABDEverythingElse = unique(ABDEverythingElse);
+ABDEverythingElseIpsi = ABDEverythingElse(~isContra(ABDEverythingElse));
+ABDEverythingElseIpsiMotorDist = isMotor(ABDEverythingElseIpsi,df);
+
+%ABDi
+ABDiEverythingElse = [vertcat(ABDIr.EverythingElse);vertcat(ABDIc.EverythingElse)];
+ABDiEverythingElse = ABDiEverythingElse(ABDiEverythingElse<1e5);
+ABDiEverythingElse = unique(ABDiEverythingElse);
+ABDiEverythingElseIpsi = ABDiEverythingElse(~isContra(ABDiEverythingElse));
+ABDiEverythingElseIpsiMotorDist = isMotor(ABDiEverythingElseIpsi,df);
+
+
+% histogram
+
+subplot(4,4,1)
+histogram(sum(ABDEverythingElseIpsiMotorDist(:,2:3),2),0:10:100);
+hold on;
+histogram(sum(ABDEverythingElseIpsiMotorDist(:,4:5),2),0:10:100);
+title('Presynaptic to ABD');
+
+subplot(4,4,2)
+histogram(sum(ABDiEverythingElseIpsiMotorDist(:,2:3),2),0:10:100);
+hold on;
+histogram(sum(ABDiEverythingElseIpsiMotorDist(:,4:5),2),0:10:100);
+title('Presynaptic to ABDi');
+
+
+% find neurons that have SaccadicPos and Integrators as Posts targets 
+ABDEverythingElseSaccadicVel = ABDEverythingElseIpsi(isPostSynapseSaccadic(ABDEverythingElseIpsi,df) & ...
+    isPostSynapseIntegrator(ABDEverythingElseIpsi,df) & isPostSynapseIBN(ABDEverythingElseIpsi,df));
+
+% find neurons that have SaccadicPos and Integrators as Posts targets 
+ABDiEverythingElseSaccadicVel = ABDiEverythingElseIpsi(isPostSynapseSaccadic(ABDiEverythingElseIpsi,df) & ...
+    isPostSynapseIntegrator(ABDiEverythingElseIpsi,df) & isPostSynapseIBN(ABDiEverythingElseIpsi,df));
+
+
+
+
+%remove medial integrators 
+lateralVSaccadic = [80163 80167 80177 80179 76688 80204 80206 80210 76682];
+ABDEverythingElseSaccadicVel = setdiff(ABDEverythingElseSaccadicVel,lateralVSaccadic);
+ABDEverythingElseSaccadicVelMotorDist = isMotor(ABDEverythingElseSaccadicVel,df);
+ABDiEverythingElseSaccadicVel = setdiff(ABDiEverythingElseSaccadicVel,lateralVSaccadic);
+ABDiEverythingElseSaccadicVelMotorDist = isMotor(ABDiEverythingElseSaccadicVel,df);
+
+
+ABD_ABDi_EverythginElseSaccadicVel = intersect(ABDEverythingElseSaccadicVel,ABDiEverythingElseSaccadicVel);
+
+% 
+subplot(4,4,3)
+scatter(sum(ABDEverythingElseSaccadicVelMotorDist(:,2:3),2), sum(ABDEverythingElseSaccadicVelMotorDist(:,4:5),2),25,ABDcolor);
+hold on;
+scatter(sum(ABDiEverythingElseSaccadicVelMotorDist(:,2:3),2), sum(ABDiEverythingElseSaccadicVelMotorDist(:,4:5),2),25,ABDicolor);
+
+subplot(4,4,4)
+ABDEverythingElseSaccadicVelOSI = (sum(ABDEverythingElseSaccadicVelMotorDist(:,2:3),2)-sum(ABDEverythingElseSaccadicVelMotorDist(:,4:5),2)) ./ ...
+    (sum(ABDEverythingElseSaccadicVelMotorDist(:,2:3),2)+sum(ABDEverythingElseSaccadicVelMotorDist(:,4:5),2));
+histogram(ABDEverythingElseSaccadicVelOSI,-1:0.1:1,'FaceColor',ABDcolor);
+hold on;
+ABDiEverythingElseSaccadicVelOSI = (sum(ABDiEverythingElseSaccadicVelMotorDist(:,2:3),2)-sum(ABDiEverythingElseSaccadicVelMotorDist(:,4:5),2)) ./ ...
+    (sum(ABDiEverythingElseSaccadicVelMotorDist(:,2:3),2)+sum(ABDiEverythingElseSaccadicVelMotorDist(:,4:5),2));
+histogram(ABDiEverythingElseSaccadicVelOSI,-1:0.1:1,'FaceColor',ABDicolor);
+axis square;
+
+
+% cleaned up and restricterd to only the medial axons.
+
+ ABDPutativeSaccadic.cellIDs = setdiff(ABDEverythingElseSaccadicVel,ABD_ABDi_EverythginElseSaccadicVel);
+ ABDiPutativeSaccadic.cellIDs = setdiff(ABDiEverythingElseSaccadicVel,ABD_ABDi_EverythginElseSaccadicVel);
+ ABD_ABDi_PutativeSaccadic.cellIDs = ABD_ABDi_EverythginElseSaccadicVel;
+ 
+ ABDPutativeSaccadic.cellIDs = [81833,81750,79838,81868,78886,80739,78643,80829,81797,78628,79736,81809,81839];
+ ABDiPutativeSaccadic.cellIDs = [81759,77338,78634,78680,77846,78628,77372,78643,81420,80286];
+ 
+ 
+ % plot populations
+ 
+figure;
+transform_swc_AV( ABDPutativeSaccadic.cellIDs,ABDputSaccColor,[],true,false);
+figure;
+transform_swc_AV( ABDiPutativeSaccadic.cellIDs ,ABDiputSaccColor,[],true,false);
+figure;
+transform_swc_AV(ABD_ABDi_EverythginElseSaccadicVel,[0.5,0.5,0.5],[],true,false);
+
+
+ 
+ % Where on ABD and ABDi are the Synapses.
+
+ 
+ [~,ABDPutativeSaccadic.ABDrpathLength] = getABDgradient(ABDr,ABDPutativeSaccadic.cellIDs,true);
+ [~,ABDiPutativeSaccadic.ABDrpathLength] = getABDgradient(ABDr,ABDiPutativeSaccadic.cellIDs,true);
+ [~,ABD_ABDi_PutativeSaccadic.ABDrpathLength] = getABDgradient(ABDr,ABD_ABDi_PutativeSaccadic.cellIDs,true);
+ 
+ [~,ABDPutativeSaccadic.ABDcpathLength] = getABDgradient(ABDc,ABDPutativeSaccadic.cellIDs,true);
+ [~,ABDiPutativeSaccadic.ABDcpathLength] = getABDgradient(ABDc,ABDiPutativeSaccadic.cellIDs,true);
+ [~,ABD_ABDi_PutativeSaccadic.ABDcpathLength] = getABDgradient(ABDc,ABD_ABDi_PutativeSaccadic.cellIDs,true);
+ 
+ [~,ABDPutativeSaccadic.ABDIrpathLength] = getABDgradient(ABDIr,ABDPutativeSaccadic.cellIDs,true);
+ [~,ABDiPutativeSaccadic.ABDIrpathLength] = getABDgradient(ABDIr,ABDiPutativeSaccadic.cellIDs,true);
+ [~,ABD_ABDi_PutativeSaccadic.ABDIrpathLength] = getABDgradient(ABDIr,ABD_ABDi_PutativeSaccadic.cellIDs,true);
+ 
+ [~,ABDPutativeSaccadic.ABDIcpathLength] = getABDgradient(ABDIc,ABDPutativeSaccadic.cellIDs,true);
+ [~,ABDiPutativeSaccadic.ABDIcpathLength] = getABDgradient(ABDIc,ABDiPutativeSaccadic.cellIDs,true);
+ [~,ABD_ABDi_PutativeSaccadic.ABDIcpathLength] = getABDgradient(ABDIc,ABD_ABDi_PutativeSaccadic.cellIDs,true);
+ 
+ABDPutativeSaccadic.meanABDgradient = nanmean(vertcat(ABDPutativeSaccadic.ABDrpathLength,ABDPutativeSaccadic.ABDcpathLength));
+ABDPutativeSaccadic.stdABDgradient = nanstd(vertcat(ABDPutativeSaccadic.ABDrpathLength,ABDPutativeSaccadic.ABDcpathLength));
+ABDPutativeSaccadic.numberOfABDneurons = 29;
+
+ABDiPutativeSaccadic.meanABDigradient = nanmean(vertcat(ABDiPutativeSaccadic.ABDIrpathLength,ABDiPutativeSaccadic.ABDIcpathLength));
+ABDiPutativeSaccadic.stdABDigradient = nanstd(vertcat(ABDiPutativeSaccadic.ABDIrpathLength,ABDiPutativeSaccadic.ABDIcpathLength));
+ABDiPutativeSaccadic.numberOfABDineurons = 21;
+
+ABD_ABDi_PutativeSaccadic.meanABD_ABDi_ABDgradient = nanmean(vertcat(ABD_ABDi_PutativeSaccadic.ABDrpathLength,ABD_ABDi_PutativeSaccadic.ABDcpathLength));
+ABD_ABDi_PutativeSaccadic.stdABD_ABDi_ABDgradient = nanstd(vertcat(ABD_ABDi_PutativeSaccadic.ABDrpathLength,ABD_ABDi_PutativeSaccadic.ABDcpathLength));
+
+ABD_ABDi_PutativeSaccadic.meanABD_ABDi_ABDigradient = nanmean(vertcat(ABD_ABDi_PutativeSaccadic.ABDIrpathLength,ABD_ABDi_PutativeSaccadic.ABDIcpathLength));
+ABD_ABDi_PutativeSaccadic.stdABD_ABDi_ABDigradient = nanstd(vertcat(ABD_ABDi_PutativeSaccadic.ABDIrpathLength,ABD_ABDi_PutativeSaccadic.ABDIcpathLength));
+
+ 
+figure;
+subplot(4,4,1)
+errorbar(ABDPutativeSaccadic.meanABDgradient,ABDPutativeSaccadic.stdABDgradient./sqrt(ABDPutativeSaccadic.numberOfABDneurons),...
+    '-o','color',ABDputSaccColor,'LineWidth',2,'MarkerFaceColor','w');
+hold on;
+errorbar(ABD_ABDi_PutativeSaccadic.meanABD_ABDi_ABDgradient,ABD_ABDi_PutativeSaccadic.stdABD_ABDi_ABDgradient./sqrt(ABDPutativeSaccadic.numberOfABDneurons),...
+    '-o','color',[0.5,0.5,0.5],'LineWidth',2,'MarkerFaceColor','w');
+axis square;
+set(gca,'XTickLabels',[0,0.5,1],'color',[ABDcolor,0.1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Norm. count');
+box off;
+offsetAxes(gca);
+
+subplot(4,4,2)
+errorbar(ABDiPutativeSaccadic.meanABDigradient,ABDiPutativeSaccadic.stdABDigradient./sqrt(ABDiPutativeSaccadic.numberOfABDineurons),...
+    '-o','color',ABDiputSaccColor,'LineWidth',2,'MarkerFaceColor','w');
+hold on;
+errorbar(ABD_ABDi_PutativeSaccadic.meanABD_ABDi_ABDigradient,ABD_ABDi_PutativeSaccadic.stdABD_ABDi_ABDigradient ./sqrt(ABDiPutativeSaccadic.numberOfABDineurons),...
+    '-o','color',[0.5,0.5,0.5],'LineWidth',2,'MarkerFaceColor','w');
+axis square;
+set(gca,'XTickLabels',[0,0.5,1],'color',[ABDicolor,0.1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Norm. count');
+box off;
+offsetAxes(gca);
+
+%%
+
 function  plotTree(cellID);
 
     filePath  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/SWC_all/consensus-20180920/swc/';
@@ -451,6 +718,17 @@ function  plotTree(cellID);
         view(0,90);
     end
 end
+
+ 
+ 
+ 
+
+
+
+
+
+
+
 
 
 

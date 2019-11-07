@@ -33,7 +33,7 @@ lightBlue = PartnerColors(1,:);
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
+    df = readtable('/Users/ashwin/Google Drive/Zfish/SynapseDetector/04152019.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
@@ -125,6 +125,30 @@ histogram(All.normalizedMotorCounts(All.RestIndex),-1:0.1:1,'FaceColor','k');
 axis square;
 box off;
 title('Rest');
+%% Make Monocular bionocular map
+% create a volume 
+MonoBiVolume = zeros(1406,621,138);
+MonoBiRef = imref3d(size(MonoBiVolume),0.798,0.798,2); % reference object 
+MonoBiCmap = colorcet('D2');
+OSIStandards = linspace(-1,1,256);
+[All.normalizedMotorCountsSorted,All.normalizedMotorCountsSortedIndex] = sort(All.normalizedMotorCounts);
+
+for i = 1:numel(All.Inputs)
+    tempOrigin = getOrigin(All.Inputs(i));
+    if ~isempty(temp);
+        tempMotorDist = isMotor(temp,df);
+        tempOSI =  (tempMotorDist(1,2)+ tempMotorDist(1,3)) - (tempMotorDist(1,4)+ tempMotorDist(1,5)) ./ ...
+                (tempMotorDist(1,2)+ tempMotorDist(1,3)) + (tempMotorDist(1,4)+ tempMotorDist(1,5));
+         tempOriginPixel =  tempOrigin./[0.798,0.798,2];
+         tempOSIindex = find(All.normalizedMotorCountsSorted == tempOSI)
+            
+    end
+end
+        
+end
+
+
+
 
 %%
 

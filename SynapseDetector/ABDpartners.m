@@ -32,6 +32,8 @@ ABDIc_CellIDs = [78574,79051,77148,77625,77144,77692,77641,79066,77640,77643];
 % ABDIr - 78556
 % ABDIc - 77641, 77148
 %
+load ABDPutativeSaccadic.mat
+load ABDiPutativeSaccadic.mat
 
 %%
 
@@ -255,6 +257,9 @@ for i = 1:numel(ABDIc_CellIDs)
     ABDIc(i).IntegratorDist  = ABDIc(i).PathLength(ABDIc(i).isIntegrator)/max(Pvec_tree(ABDIc(i).Tree{1}));
     ABDIc(i).EverythingElseDist = ABDIc(i).PathLength(ABDIc(i).isEverythingElse)/max(Pvec_tree(ABDIc(i).Tree{1}));
 end
+
+
+getABDgradient(ABDc,ABDPutativeSaccadic.cellIDs,true)
 %% Plot for each cell
 
 for i = 1:numel(ABDr_CellIDs)
@@ -401,6 +406,149 @@ h1.EdgeColor = colors(5,:);
 h1.LineWidth = 2;
 set(gca,'XLim',[0,1],'YLim',[0,0.15]);
 box off;
+
+%% Cumulative Plots
+
+figure;
+
+subplot(4,4,1);
+
+colormap = cbrewer('qual','Set1',5);
+
+histogram([ABDPutativeSaccadic.ABDcpathLength;ABDPutativeSaccadic.ABDrpathLength],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(1,:)); % Saccadic
+hold on;
+histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist);vertcat(ABDr.IntegratorDist);vertcat(ABDc.IntegratorDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(2,:)) ; % r45,r67 combined Integrator
+histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(3,:));
+
+legend({'S','Int','V','Contra'},'Location','bestoutside','Box','OFF');
+
+set(gca,'XLim',[0,1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Cumulative count');
+box off;
+offsetAxes
+axis square;
+
+subplot(4,4,2);
+
+histogram([ABDPutativeSaccadic.ABDcpathLength;ABDPutativeSaccadic.ABDrpathLength],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(1,:)); % Saccadic
+hold on;
+histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(2,:)) ; % r45,r67 combined Integrator
+
+histogram([vertcat(ABDr.IntegratorDist);vertcat(ABDc.IntegratorDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(3,:)) ; % r45,r67 combined Integrator
+
+histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(4,:));
+histogram([vertcat(ABDr.ContraDist);vertcat(ABDc.ContraDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(5,:));
+
+legend({'S','r23','r78','V','Contra'},'Location','bestoutside','Box','OFF');
+
+set(gca,'XLim',[0,1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Cumulative count');
+box off;
+offsetAxes
+axis square;
+
+
+subplot(4,4,3);
+
+histogram([ABDPutativeSaccadic.ABDcpathLength;ABDPutativeSaccadic.ABDrpathLength],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(1,:)); % Saccadic
+hold on;
+histogram([vertcat(ABDr.SaccadicDist);vertcat(ABDc.SaccadicDist);vertcat(ABDr.IntegratorDist);vertcat(ABDc.IntegratorDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(2,:)) ; % r45,r67 combined Integrator
+histogram([vertcat(ABDr.VestibularDist);vertcat(ABDc.VestibularDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(3,:));
+histogram([vertcat(ABDr.ContraDist);vertcat(ABDc.ContraDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(4,:));
+
+legend({'S','Int','V','Contra'},'Location','bestoutside','Box','OFF');
+
+set(gca,'XLim',[0,1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Cumulative count');
+box off;
+offsetAxes
+axis square;
+
+subplot(4,4,5);
+
+histogram([ABDiPutativeSaccadic.ABDIcpathLength;ABDiPutativeSaccadic.ABDIrpathLength],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(1,:)); % Saccadic
+hold on;
+histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist);vertcat(ABDIr.IntegratorDist);vertcat(ABDIc.IntegratorDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(2,:)) ; % r45,r67 combined Integrator
+histogram([vertcat(ABDIr.VestibularDist);vertcat(ABDIc.VestibularDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(3,:));
+% histogram([vertcat(ABDIr.ContraDist);vertcat(ABDIc.ContraDist)],...
+%     20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2);
+
+legend({'S','Int','V','Contra'},'Location','bestoutside','Box','OFF');
+
+set(gca,'XLim',[0,1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Cumulative count');
+box off;
+offsetAxes
+axis square;
+
+subplot(4,4,6);
+
+%colormap = colorcet('R3','N',6);
+histogram([ABDiPutativeSaccadic.ABDIcpathLength;ABDiPutativeSaccadic.ABDIrpathLength],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(1,:)); % Saccadic
+hold on;
+histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(2,:)) ; % r45,r67 combined Integrator
+
+histogram([vertcat(ABDIr.IntegratorDist);vertcat(ABDIc.IntegratorDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(3,:)) ; % r45,r67 combined Integrator
+
+histogram([vertcat(ABDIr.VestibularDist);vertcat(ABDIc.VestibularDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(4,:));
+histogram([vertcat(ABDIr.ContraDist);vertcat(ABDIc.ContraDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(5,:));
+
+legend({'S','r23','r78','V','Contra'},'Location','bestoutside','Box','OFF');
+
+set(gca,'XLim',[0,1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Cumulative count');
+box off;
+offsetAxes
+axis square;
+
+
+subplot(4,4,7);
+
+%colormap = colorcet('R3','N',5);
+histogram([ABDiPutativeSaccadic.ABDIcpathLength;ABDiPutativeSaccadic.ABDIrpathLength],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(1,:)); % Saccadic
+hold on;
+histogram([vertcat(ABDIr.SaccadicDist);vertcat(ABDIc.SaccadicDist);vertcat(ABDIr.IntegratorDist);vertcat(ABDIc.IntegratorDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(2,:)) ; % r45,r67 combined Integrator
+histogram([vertcat(ABDIr.VestibularDist);vertcat(ABDIc.VestibularDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(3,:));
+histogram([vertcat(ABDIr.ContraDist);vertcat(ABDIc.ContraDist)],...
+    20,'Normalization','cdf','DisplayStyle','stairs','LineWidth',2,'EdgeColor',colormap(4,:));
+
+legend({'S','Int','V','Contra'},'Location','bestoutside','Box','OFF');
+
+set(gca,'XLim',[0,1],'YLim',[0,1]);
+xlabel('Norm. pathlength');
+ylabel('Cumulative count');
+box off;
+offsetAxes
+axis square;
+
 
 
 %% distributions of each class onto lumped Motor classes.

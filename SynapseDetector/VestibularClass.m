@@ -1,5 +1,5 @@
 % Classes by anatomy
-%clear;
+clear;
 addpath(genpath('/Users/ashwin/Documents/'));
 
 colors = cbrewer('qual','Dark2',10);
@@ -25,6 +25,7 @@ else
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');
 end
 
+colorSchemes
 %% Load Vestibular Neurons
 
  vestibularCellIds = [76631,76700,76656,76655,76660,76679,77393,77395,77375,...
@@ -51,6 +52,49 @@ ABDr_vols = ABDvols(find(ismember(ABDvols(:,1),ABDr_CellIDs)),2);
 ABDc_vols = ABDvols(find(ismember(ABDvols(:,1),ABDc_CellIDs)),2);
 ABDIr_vols = ABDvols(find(ismember(ABDvols(:,1),ABDIr_CellIDs)),2);
 ABDIc_vols = ABDvols(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),2);
+
+
+DONMotorPattern = isMotor(vestibularCellIds',df);
+MVNmotorPattern = isMotor(MVNs',df);
+
+vestSize = size(sum(DONMotorPattern(:,2:3),2),1);
+MVNsize  = size(sum(MVNmotorPattern(:,2:3),2),1);
+
+figure;
+subplot(4,4,1)
+scatter(sum(DONMotorPattern(:,2:3),2),sum(DONMotorPattern(:,4:5),2),40,Vestcolor,'filled');
+hold on,
+scatter(sum(MVNmotorPattern(:,2:3),2),sum(MVNmotorPattern(:,4:5),2),40,MVNcolor,'filled');
+axis square;
+box off;
+xlabel('Synapses onto M');
+ylabel('Synapses onto I');
+offsetAxes;
+
+
+
+figure('Position',[100 100 350 300]);
+g = gramm('x',sum(DONMotorPattern(:,2:3),2),...
+    'y',sum(DONMotorPattern(:,4:5),2)); 
+g.set_color_options('map',Vestcolor);%[repmat(Vestcolor,vestSize,1);repmat(MVNcolor,MVNsize,1)],'n_color',2,'n_lightness',1);
+g.geom_point();
+g.geom_abline();
+g.stat_cornerhist('location',50,'edges',-50:5:50,'aspect',0.4);
+%g(1,1).set_limit_extra( [0.05,0.05],[0.05,0.05]);
+g.axe_property('XLim',[0,80],'YLim',[0,80]);
+g.set_text_options('base_size',15);
+g.set_names('x','Synapses on M','y','Synapses on I');
+g.set_title('Vestibular')
+%g.draw();
+
+g.update('x',sum(MVNmotorPattern(:,2:3),2),'y',sum(MVNmotorPattern(:,4:5),2));
+g.set_color_options('map',MVNcolor);
+g.geom_point();
+g.geom_abline();
+g.stat_cornerhist('location',50,'edges',-50:5:50, 'aspect',0.4);
+g.axe_property('XLim',[0,80],'YLim',[0,80]);
+g.draw();
+g.export('file_name','VestibularPlot','export_path','/Users/ashwin/Desktop','file_type','svg')
 
 %%
  for i = 1:numel(VestibularAxons)
@@ -113,10 +157,11 @@ colorbar(gca);
 
 figure;
 subplot(4,4,1)
-histogram(normalizedMotorCounts,-1:0.1:1,'FaceColor','k');
+histogram(normalizedMotorCounts(1:35),-1:0.1:1,'FaceColor','r');
 hold on;
-line([0.5,0.5],[0,40],'color','k','LineStyle',':');
-line([-0.5,-0.5],[0,40],'color','k','LineStyle',':');
+histogram(normalizedMotorCounts(36:end),-1:0.1:1,'FaceColor','g');
+line([0.5,0.5],[0,10],'color','k','LineStyle',':');
+line([-0.5,-0.5],[0,10],'color','k','LineStyle',':');
 xlabel('(A-Ai)/A+Ai)');
 axis square;
 box off;
@@ -130,7 +175,7 @@ scatterhist(locs(:,1),locs(:,2),'Group',groups,'color',[lightRed;lightBlue]);
 set(gca,'YDir','reverse');
 
 %% Breakdown by individual populations
-
+figure;
 transform_swc_AV(vestibularCellIds,Vestcolor,[],true,false);
 figure;
 transform_swc_AV(MVNs,MVNcolor,[],true,false);
@@ -145,9 +190,10 @@ histogram(normalizedMotorCounts(numberOfVestCells+1:end),-1:0.1:1,'FaceColor',MV
 
 line([0.5,0.5],[0,10],'color','k','LineStyle',':');
 line([-0.5,-0.5],[0,10],'color','k','LineStyle',':');
-xlabel('(A-Ai)/A+Ai)');
+xlabel('OSI');
 axis square;
 box off;
+offsetAxes
 
 %% Vestibular Motor partners
 
@@ -229,3 +275,174 @@ box off;
 subplot(4,4,16)
 plot(ABDIc_vols,sum(ABDIcVestibularpopMotorConn),'o','MarkerFaceColor','k','MarkerEdgeColor','none');
 box off;
+
+%% Where on the ABD are the synapses
+
+load ABDr.mat
+load ABDc.mat
+load ABDIr.mat
+load ABDIc.mat
+
+[ABDVestPathLengthABDr,ABDrVestibularGradient] = getABDgradient('ABDr',vestibularCellIds,true,true);
+[ABDVestPathLengthABDc,ABDcVestibularGradient] = getABDgradient('ABDc',vestibularCellIds,true,true);
+
+[ABDVestPathLengthABDIr,ABDIrVestibularGradient] = getABDgradient(ABDIr,vestibularCellIds,true,false);
+[ABDVestPathLengthABDIc,ABDIcVestibularGradient] = getABDgradient(ABDIc,vestibularCellIds,true,false);
+
+
+[ABDMVNPathLengthABDr,ABDrMVNGradient] = getABDgradient('ABDr',MVNs,true,true);
+[ABDMVNPathLengthABDc,ABDcMVNGradient] = getABDgradient('ABDc',MVNs,true,true);
+
+[ABDMVNPathLengthABDIr,ABDIrMVNGradient] = getABDgradient(ABDIr,MVNs,true,false);
+[ABDMVNPathLengthABDIc,ABDIcMVNGradient] = getABDgradient(ABDIc,MVNs,true,false);
+
+figure;
+
+subplot(4,4,1)
+histogram([cell2mat(ABDVestPathLengthABDr),cell2mat(ABDVestPathLengthABDc)],'EdgeColor','r','DisplayStyle','stairs','LineWidth',2);
+hold on;
+histogram([cell2mat(ABDVestPathLengthABDIr),cell2mat(ABDVestPathLengthABDIc)],'EdgeColor','b','DisplayStyle','stairs','LineWidth',2);
+axis square;
+box off;
+xlabel('Norm. pathlength');
+ylabel('counts');
+title('DO');
+
+subplot(4,4,2)
+histogram([cell2mat(ABDMVNPathLengthABDr),cell2mat(ABDMVNPathLengthABDc)],'EdgeColor','r','DisplayStyle','stairs','LineWidth',2);
+hold on;
+histogram([cell2mat(ABDMVNPathLengthABDIr),cell2mat(ABDMVNPathLengthABDIc)],'EdgeColor','b','DisplayStyle','stairs','LineWidth',2);
+axis square;
+box off;
+xlabel('Norm. pathlength');
+ylabel('counts');
+title('MVN');
+
+
+
+%%
+
+
+
+% for i = 1:numel(ABDr_CellIDs)
+%     temp1 = ismember(ABDr(i).Inputs,vestibularCellIds);
+%     ABDVestPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
+%     clear temp1;
+%     
+%     temp1 = ismember(ABDr(i).Inputs,MVNs);
+%     ABDMVNPathLengthABDr{i} = ABDr(i).PathLength(temp1)'./max(Pvec_tree(ABDr(i).Tree{1}));
+%     clear temp1;
+% end
+% 
+% for i = 1:numel(ABDr_CellIDs)
+%    ABDrVestibularGradient(i,:) =  histcounts(ABDVestPathLengthABDr{i},0:0.1:1);
+%    ABDrVestibularGradient(i,:) = ABDrVestibularGradient(i,:)/max(ABDrVestibularGradient(i,:));
+%    
+%    ABDrMVNGradient(i,:) =  histcounts(ABDMVNPathLengthABDr{i},0:0.1:1);
+%    ABDrMVNGradient(i,:) = ABDrMVNGradient(i,:)/max(ABDrMVNGradient(i,:));
+% end
+% 
+% 
+% for i = 1:numel(ABDc_CellIDs)
+%     if ~isempty(ABDc(i).Tree)
+%         temp1 = ismember(ABDc(i).Inputs,vestibularCellIds);
+%         ABDVestPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
+%         clear temp1;
+%         
+%         temp1 = ismember(ABDc(i).Inputs,MVNs);
+%         ABDMVNPathLengthABDc{i} = ABDc(i).PathLength(temp1)'./max(Pvec_tree(ABDc(i).Tree{1}));
+%         clear temp1;
+%     end
+% end
+% 
+% for i = 1:numel(ABDc_CellIDs)
+%    ABDcVestibularGradient(i,:) =  histcounts(ABDVestPathLengthABDc{i},0:0.1:1);
+%    ABDcVestibularGradient(i,:) = ABDcVestibularGradient(i,:)/max(ABDcVestibularGradient(i,:));
+%    
+%    ABDcMVNGradient(i,:) =  histcounts(ABDMVNPathLengthABDc{i},0:0.1:1);
+%    ABDcMVNGradient(i,:) = ABDcMVNGradient(i,:)/max(ABDcMVNGradient(i,:));
+% end
+% 
+% 
+% for i = 1:numel(ABDIr_CellIDs)
+%     temp1 = ismember(ABDIr(i).Inputs,vestibularCellIds);
+%     ABDVestPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
+%     clear temp1;
+%     
+%     temp1 = ismember(ABDIr(i).Inputs,MVNs);
+%     ABDMVNPathLengthABDIr{i} = ABDIr(i).PathLength(temp1)'./max(Pvec_tree(ABDIr(i).Tree{1}));
+%     clear temp1;
+% end
+% 
+% for i = 1:numel(ABDIr_CellIDs)
+%    ABDIrVestibularGradient(i,:) =  histcounts(ABDVestPathLengthABDIr{i},0:0.1:1);
+%    ABDIrVestibularGradient(i,:) = ABDIrVestibularGradient(i,:)/max(ABDIrVestibularGradient(i,:));
+%    
+%    ABDIrMVNGradient(i,:) =  histcounts(ABDMVNPathLengthABDIr{i},0:0.1:1);
+%    ABDIrMVNGradient(i,:) = ABDIrMVNGradient(i,:)/max(ABDIrMVNGradient(i,:));
+% end
+% 
+% for i = 1:numel(ABDIc_CellIDs)
+%     if ~isempty(ABDIc(i).Tree)
+%         temp1 = ismember(ABDIc(i).Inputs,vestibularCellIds);
+%         ABDVestPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
+%         clear temp1;
+%         
+%         temp1 = ismember(ABDIc(i).Inputs,MVNs);
+%         ABDMVNPathLengthABDIc{i} = ABDIc(i).PathLength(temp1)'./max(Pvec_tree(ABDIc(i).Tree{1}));
+%         clear temp1;
+%     end
+% end
+% 
+% for i = 1:numel(ABDIc_CellIDs)
+%    ABDIcVestibularGradient(i,:) =  histcounts(ABDVestPathLengthABDIc{i},0:0.1:1);
+%    ABDIcVestibularGradient(i,:) = ABDIcVestibularGradient(i,:)/max(ABDIcVestibularGradient(i,:));
+%    
+%    ABDIcMVNGradient(i,:) =  histcounts(ABDMVNPathLengthABDIc{i},0:0.1:1);
+%    ABDIcMVNGradient(i,:) = ABDIcMVNGradient(i,:)/max(ABDIcMVNGradient(i,:));
+% end
+
+meanVestibularABDgradient = nanmean(vertcat(ABDrVestibularGradient,ABDcVestibularGradient));
+stdVestibularABDgradient = nanstd(vertcat(ABDrVestibularGradient,ABDcVestibularGradient));
+numberOfABDneurons = 29;
+
+meanVeastibularABDigradient = nanmean(vertcat(ABDIrVestibularGradient,ABDIcVestibularGradient));
+stdVestibularABDigradient = nanstd(vertcat(ABDIrVestibularGradient,ABDIcVestibularGradient));
+numberOfABDineurons = 21;
+
+meanMVNABDgradient = nanmean(vertcat(ABDrMVNGradient,ABDcMVNGradient));
+stdMVNABDgradient = nanstd(vertcat(ABDrMVNGradient,ABDcMVNGradient));
+numberOfABDneurons = 29;
+
+meanMVNABDigradient = nanmean(vertcat(ABDIrMVNGradient,ABDIcMVNGradient));
+stdMVNABDigradient = nanstd(vertcat(ABDIrMVNGradient,ABDIcMVNGradient));
+numberOfABDineurons = 21;
+
+figure('Units','normalized','Position',[0,0,1,1]);
+subplot(4,4,1)
+errorbar(meanVestibularABDgradient,stdVestibularABDgradient./sqrt(numberOfABDneurons),...
+    '-o','color',Vestcolor,'LineWidth',2,'MarkerFaceColor','w');
+hold on;
+
+errorbar(meanMVNABDgradient,stdMVNABDgradient./sqrt(numberOfABDneurons),...
+    '-o','color',MVNcolor,'LineWidth',2,'MarkerFaceColor','w');
+
+axis square;
+set(gca,'XTickLabels',[0,0.5,1],'color',[ABDcolor,0.1]);
+xlabel('Norm. pathlength');
+ylabel('Norm. count');
+box off;
+offsetAxes(gca);
+
+subplot(4,4,2)
+errorbar(meanVeastibularABDigradient,stdVestibularABDigradient./sqrt(numberOfABDineurons),...
+    '-o','color',Vestcolor,'LineWidth',2,'MarkerFaceColor','w');
+hold on;
+errorbar(meanMVNABDigradient,stdMVNABDigradient./sqrt(numberOfABDineurons),...
+    '-o','color',MVNcolor,'LineWidth',2,'MarkerFaceColor','w');
+axis square;
+set(gca,'XTickLabels',[0,0.5,1],'color',[ABDicolor,0.1]);
+xlabel('Norm. pathlength');
+ylabel('Norm. count');
+box off;
+offsetAxes(gca);
