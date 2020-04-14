@@ -11,6 +11,10 @@ if nargin <3
 end
 
 load MotorAIS.mat
+load ABDr.mat
+load ABDc.mat
+load ABDIr.mat
+load ABDIc.mat
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/'));
@@ -22,21 +26,21 @@ end
 
 
 
-if strcmp(TargetingABDCellIDs,'ABDr')
-    load ABDr.mat
-    TargetingABDCellIDs = ABDr;
-    for i = 1:numel(ABDr)
-        TargetingABDCellIDs(i).motorAIStransformed = TransformPoints(MotorAIS(i,:),0);
-    end
-    
-else if strcmp(TargetingABDCellIDs,'ABDc')
-        load ABDc.mat
-        TargetingABDCellIDs = ABDc;
-        for i = 1:numel(ABDc)
-            TargetingABDCellIDs(i).motorAIStransformed = TransformPoints(MotorAIS(14+i,:),0);
-        end
-    end
-end
+% if strcmp(TargetingABDCellIDs,'ABDr')
+%     load ABDr.mat
+%     TargetingABDCellIDs = ABDr;
+%     for i = 1:numel(ABDr)
+%         TargetingABDCellIDs(i).motorAIStransformed = TransformPoints(MotorAIS(i,:),0);
+%     end
+%     
+% else if strcmp(TargetingABDCellIDs,'ABDc')
+%         load ABDc.mat
+%         TargetingABDCellIDs = ABDc;
+%         for i = 1:numel(ABDc)
+%             TargetingABDCellIDs(i).motorAIStransformed = TransformPoints(MotorAIS(14+i,:),0);
+%         end
+%     end
+% end
 
 %TargetQueryPathlength = cell(numel(TargetingABDCellIDs));
 

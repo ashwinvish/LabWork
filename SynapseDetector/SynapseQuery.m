@@ -2,8 +2,8 @@
 clear all;
 
 if ismac
-    addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    df = readtable('/Users/ashwin/Documents/SynapseDetector/04152019.csv');
+     addpath(genpath('/Users/ashwin/Documents/'));
+    df = readtable('/Users/ashwin/Google Drive/Zfish/SynapseDetector/04152019.csv');
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
     df = readtable('/usr/people/ashwinv/seungmount/research/Ashwin/SynapseDetector/11252018.csv');

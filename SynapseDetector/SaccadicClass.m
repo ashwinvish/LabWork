@@ -45,7 +45,7 @@ bushySaccadicMedial = [76618,76625,76627,77132,77162,77163,77329,77434,77447,...
     81503,81312,81297,81417,79078,81295,81317,79085,81336,80285,];
 
 %bushySaccadicLateral = [79067 79058 79069 79072 79055 79074 79062 79077 79085 ...
-%    79080 79086 79064 78576 78540 77146 78646 78542 78546 78541 78543 80728]; 
+ %   79080 79086 79064 78576 78540 77146 78646 78542 78546 78541 78543 80728]; 
 
 putativeBushySaccadic = [77342 77352 77336 77354 77373 78346 77433 77435 77453 77461];
 
@@ -97,11 +97,10 @@ allALX = [confirmedALX,putativeALX];
 allDBX = [confirmedDBX,putativeDBX];
 
 %%
-ABDr_CellIDs = [82140,82145,82143,77648,82146,77302,77301, 82194,77705,77710,77305,77672,77300,77709];
+ABDr_CellIDs = [82140,82145,82143,77648,82146,77302,77301,82194,77705,77710,77305,77672,77300,77709,77661];
 ABDc_CellIDs = [82213,77654,77646,82212,77295,81172,77657,82197,77682,77154, 77652,77658,77628,77292,77688,82195,77296];
-ABDIr_CellIDs = [78553,77150,77886,78547,77631,77158,77665,78552,77668,77618,77634];
+ABDIr_CellIDs = [78553,77150,77886,78547,77631,77158,77665,78552,77668,77618,77634,78556];
 ABDIc_CellIDs = [78574,79051,77148,77625,77144,77692,77641,79066,77640,77643];
-
 
 load ABDVols.mat
 load ABDr.mat
@@ -219,22 +218,14 @@ colorbar;
 xlabel('Synapses onto M');
 ylabel('Synapses onto I');
 
-%SaccadicProjectingToABDexclusively = SaccadicMotorDistribution.normalizedMotorCounts(find(SaccadicMotorDistribution.normalizedMotorCounts(:,2) == 1));
-%SaccadicProjectingToABDexclusivelyIndex = find(ismember(SaccadicAxons,SaccadicProjectingToABDexclusively));
 
-SaccadicProjectingToABDexclusively.Index = find(Saccadic.MotorDistributionABD > 10 & Saccadic.MotorDistributionABDi == 0)
+SaccadicProjectingToABDexclusively.Index = find(Saccadic.MotorDistributionABD > 0 & Saccadic.MotorDistributionABDi == 0)
 SaccadicProjectingToABDexclusively.cellID = SaccadicAxons(SaccadicProjectingToABDexclusively.Index);
 
-% SaccadicProjectingToABDiexclusively = SaccadicMotorDistribution.normalizedMotorCounts(find(SaccadicMotorDistribution.normalizedMotorCounts(:,2) ==-1));
-% SaccadicProjectingToABDiexclusivelyIndex = find(ismember(SaccadicAxons,SaccadicProjectingToABDiexclusively));
-
-SaccadicProjectingToABDiexclusively.Index = find(Saccadic.MotorDistributionABD == 0 & Saccadic.MotorDistributionABDi >10);
+SaccadicProjectingToABDiexclusively.Index = find(Saccadic.MotorDistributionABD == 0 & Saccadic.MotorDistributionABDi >1);
 SaccadicProjectingToABDiexclusively.cellID = SaccadicAxons(SaccadicProjectingToABDiexclusively.Index);
 
-% SaccadicProjectingToABD_ABDi = SaccadicMotorDistribution.normalizedMotorCounts(find(SaccadicMotorDistribution.normalizedMotorCounts(:,2)>-0.95 & SaccadicMotorDistribution.normalizedMotorCounts(:,2)<0.95 ));
-% SaccadicProjectingToABD_ABDi_Index = find(ismember(SaccadicAxons,SaccadicProjectingToABD_ABDi));
-
-SaccadicProjectingToABD_ABDi.Index =  find(Saccadic.MotorDistributionABD >10 & Saccadic.MotorDistributionABDi >10);
+SaccadicProjectingToABD_ABDi.Index =  find(Saccadic.MotorDistributionABD >0 & Saccadic.MotorDistributionABDi >0);
 SaccadicProjectingToABD_ABDi.cellID = SaccadicAxons(SaccadicProjectingToABD_ABDi.Index);
 
 save('SaccadicProjectingToABDexclusively.mat','SaccadicProjectingToABDexclusively');
@@ -1388,8 +1379,9 @@ contrar78Int = [SaccadicToIntegrator.SaccABDIntCellIDs(~isALX(SaccadicToIntegrat
 
 % PutativeSaccadic; Vestibular, IBNs, r456 Positon, Integrators, Motors, Contra
 % Everythingelse
-MatOrder = [ABDPutativeSaccadic.cellIDs;...
-            ABDiPutativeSaccadic.cellIDs;...
+
+MatOrder = [ABDPutativeSaccadic.cellIDs';...
+            ABDiPutativeSaccadic.cellIDs';...
             SaccadicToIBN.Sac_ABDcellIDs';...
             SaccadicToIBN.Sac_ABDicellIDs';...
             vestibularCellIds';...
@@ -1397,6 +1389,7 @@ MatOrder = [ABDPutativeSaccadic.cellIDs;...
             SaccadicProjectingToABDexclusively.cellID';...
             SaccadicProjectingToABDiexclusively.cellID';...
             SaccadicProjectingToABD_ABDi.cellID';...
+           % bushySaccadicLateral';...
             lateralVSaccadic';...
             ipsir78Int;...
             contrar78Int;...
@@ -1447,6 +1440,7 @@ endIBNABDi = find(SaccadicToIBN.Sac_ABDicellIDs(end) == AllCells(MatIndex))+0.5;
 endSacABD = find(SaccadicProjectingToABDexclusively.cellID(end) == AllCells(MatIndex))+0.5;
 endSACABDi = find(SaccadicProjectingToABDiexclusively.cellID(end) == AllCells(MatIndex))+0.5;
 endSACABD_ABDi = find(SaccadicProjectingToABD_ABDi.cellID(end) == AllCells(MatIndex))+0.5;
+endBushyLat = find(bushySaccadicLateral(end) ==  AllCells(MatIndex))+0.5;
 endSacVent = find(lateralVSaccadic(end) == AllCells(MatIndex))+0.5;
 endSacIntABD = find(ipsir78Int(end) == AllCells(MatIndex))+0.5;
 endSacIntABDi = find(contrar78Int(end) == AllCells(MatIndex))+0.5;
@@ -1471,7 +1465,7 @@ axis square;
 % colormap(colorcet('L17','N',15,'reverse',1));
 lighting phong;
 material shiny;
-set(gca, 'Xtick',[],'XTickLabel',[],'YTick',[],'YTickLabel',[]);
+%set(gca, 'Xtick',[],'XTickLabel',[],'YTick',[],'YTickLabel',[]);
 set(gca,'color',[0.90,0.9,0.90]);
 colorbar;
 box on;
@@ -1479,6 +1473,7 @@ box on;
 
 hold on;
 line([0,size(connMatCKT,1)],[endSacVent,endSacVent],'color',[0.5,0.5,0.5],'lineWidth',0.5);
+%line([0,size(connMatCKT,1)],[endBushyLat,endBushyLat],'color',[0.5,0.5,0.5],'lineWidth',0.5);
 line([0,size(connMatCKT,1)],[endr23SaccABD(1),endr23SaccABD(1)],'color',[0.5,0.5,0.5],'lineWidth',0.5);
 line([0,size(connMatCKT,1)],[endr23SaccABDi,endr23SaccABDi],'color',[0.5,0.5,0.5],'lineWidth',0.5);
 line([0,size(connMatCKT,1)],[endSacABD,endSacABD],'color',[0.5,0.5,0.5],'lineWidth',0.5);
@@ -1495,6 +1490,7 @@ line([0,size(connMatCKT,1)],[endABDi,endABDi],'color',[0.5,0.5,0.5],'lineWidth',
 
 
 % 
+%line([endBushyLat,endBushyLat],[0,size(connMatCKT,1)],'color',[0.5,0.5,0.5],'lineWidth',0.5);
 line([endSacVent,endSacVent],[0,size(connMatCKT,1)],'color',[0.5,0.5,0.5],'lineWidth',0.5);
 line([endr23SaccABD(1),endr23SaccABD(1)],[0,size(connMatCKT,1)],'color',[0.5,0.5,0.5],'lineWidth',0.5);
 line([endr23SaccABDi,endr23SaccABDi],[0,size(connMatCKT,1)],'color',[0.5,0.5,0.5],'lineWidth',0.5);
@@ -1602,8 +1598,8 @@ end
 
 connMatCKT = ConnMatrixPre(MatIndex,MatIndex);
 figure;
-subplot(2,3,[1,2,4,5]);
-cspy(connMatCKT,'Colormap',colorcet('L2','N',15,'reverse',1),'Levels',15,'MarkerSize',7,'Marker','s','filled');
+subplot(1,2,1)
+cspy(connMatCKT,'Colormap',colorcet('R3','N',15),'Levels',15,'MarkerSize',7);
 axis square;
 lighting phong;
 material shiny;
@@ -1616,12 +1612,67 @@ hold on;
 line([0,size(connMatCKT,1)],[lineNumber,lineNumber],'color','k','lineWidth',0.5);
 line([lineNumber,lineNumber],[0,size(connMatCKT,1)],'color','k','lineWidth',0.5);
 
-subplot(2,3,[3,6]);
-barh(1:size(connMatCKT,1),sum(connMatCKT,2),'FaceColor','k');
-set(gca, 'YDir','reverse')%,'Xlim',[0,0.5],'Xtick',[0,0.25,0.5],'ylim',[0,size(connMatNorm,1)]);
-box off;
 %daspect([1,160,1]);
 
+%%
+
+clear MatOrder
+clear MatIndex
+clear connMat
+lineNumber = 331;
+
+newNeurons  = [76943,76902,77029,76564,76922,77041,76942,76490,76950,76610,...
+    76972,77058,76464,77088,76924,76554,76930,76452,76870,77059,77078,77090,...
+    77066,77057,77052,77083,77021,77020,76537,76551,76940,76923,77095,77071,...
+    76921,76964,77036,76952,77048,77076,77060,76971,77081,77092,76403,76451,...
+    77082,77096,76457,77086,77054,77085,76938,77027,76553,76936,77093,76933,...
+    76955,76491,76454,76560,76466,76561,76465,77042,76453,76530,76872,77084,...
+    76907,77022,76552,76871,76492,76468,76903,76912];
+
+
+MatOrder = [ABDPutativeSaccadic.cellIDs';...
+            ABDiPutativeSaccadic.cellIDs';...
+            SaccadicToIBN.Sac_ABDcellIDs';...
+            SaccadicToIBN.Sac_ABDicellIDs';...
+            vestibularCellIds';...
+            MVNs';...
+            SaccadicProjectingToABDexclusively.cellID';...
+            SaccadicProjectingToABDiexclusively.cellID';...
+            SaccadicProjectingToABD_ABDi.cellID';...
+            bushySaccadicLateral';...
+            lateralVSaccadic';...
+            ipsir78Int;...
+            contrar78Int;...
+            ABDr_CellIDs';ABDc_CellIDs';ABDIr_CellIDs';ABDIc_CellIDs';...
+            newNeurons'];
+             
+
+ for i = 1:numel(MatOrder)
+ temp = SynapticPartners(MatOrder(i),1,df);
+connMatOrderedTotalPostSynapses(i,1) =  numel(temp);
+connMatOrderedTotalReconPostSynapses(i,1) = numel(temp(temp<1e5));
+clear temp;
+end
+        
+for i = 1:numel(MatOrder)
+    MatIndex(i) = find(AllCells == MatOrder(i),1);
+end
+
+connMatCKT = ConnMatrixPre(MatIndex,MatIndex);
+figure;
+subplot(1,2,1);
+cspy(connMatCKT,'Colormap',colorcet('R3','N',15),'Levels',15,'MarkerSize',7);
+axis square;
+lighting phong;
+material shiny;
+set(gca, 'Xtick',[],'XTickLabel',[],'YTick',[],'YTickLabel',[]);
+%set(gca,'color',[0.9,0.9,0.9]);
+colorbar;
+box on;
+
+hold on;
+line([0,size(connMatCKT,1)],[lineNumber,lineNumber],'color','k','lineWidth',0.5);
+line([lineNumber,lineNumber],[0,size(connMatCKT,1)],'color','k','lineWidth',0.5);
 
 
 %% Vestibular projection patterns

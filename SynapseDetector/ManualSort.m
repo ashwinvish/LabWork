@@ -69,8 +69,8 @@ figure;
 cspy(mlConnAll,'Colormap',colorcet('L8'),'Levels',255,'MarkerSize',25);
 hold on;
 %set(gca,'FontName','Arial','FontSize',20);
-set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells(mlConnOrder),'XTickLabelRotation',45,'XAxisLocation','top', ...
-    'YTick',1:size(AllCells,1),'YTickLabel',AllCells(mlConnOrder),'YTickLabelRotation',45);
+% set(gca,'XTick',1:size(AllCells,1),'XTickLabel',AllCells(mlConnOrder),'XTickLabelRotation',45,'XAxisLocation','top', ...
+%     'YTick',1:size(AllCells,1),'YTickLabel',AllCells(mlConnOrder),'YTickLabelRotation',45);
 line([0,size(ConnMatrixPre,1)],[size(v,1),size(v,1)],'color','k');
 line([size(v,1),size(v,1)],[0,size(ConnMatrixPre,1)],'color','k');
 

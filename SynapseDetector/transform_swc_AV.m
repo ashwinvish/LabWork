@@ -11,8 +11,9 @@ if nargin<6
     savePref = [];
 end
 
-cols = cbrewer('qual','Dark2',10);
-cmapRed = colorcet('L1','reverse',1);
+%cols = cbrewer('qual','Dark2',10);
+%cmapRed = colorcet('L17');
+%cmapRed = colorcet('L1','reverse',1);
 %cmapRed = colorcet('L18');
 %cmapRed = cmapRed(128:end,:,:); % red to white
 %[m,n] = min(abs(neuronColor - colors)) ;
@@ -33,7 +34,7 @@ end
 
 if ismac
     addpath(genpath('/Users/ashwin/Documents/LabWork'));
-    fname  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM//SWC_all/consensus-20180920//swc/';
+    fname  = '/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM//SWC_all/combinedConsensus-resampled/';
     
 else
     addpath(genpath('/usr/people/ashwinv/seungmount/research/Ashwin/Scripts'));
@@ -44,7 +45,7 @@ end
 % NOTE: Original files needs to be rotated ccw 90 and the zaxis needs to be
 % reversed in FIJI only.
 
-imageFileName = 'mbrainTransformedWarp-Purk.tif';
+imageFileName = 'aLZBTm90-37-B45-60-footPrint-rightPos.tif';
 if ismac
     imageFilePath = '/Users/ashwin/Google Drive/Zfish/RefBrains/';
 else
@@ -96,8 +97,9 @@ if IdsHighlight
     
     %IdsHighlight = [238,235,186];        % Vestibular Clusters
     %Ids =  [Ids,184,185,187:190];        % Reticulospinal Clusters
-    IdsHighlight =  [135,186,246,250];        % Gad1b-s2, Gly2-s2, VglutS3, vglut2-strip4
+    %IdsHighlight =  [135,186,246,250];    % Gad1b-s2, Gly2-s2, VglutS3, vglut2-strip4
     %Ids =  [93,131,130,134];             % Cerebellum
+    IdsHighlight = [91];
     
     for i = 1:length(IdsHighlight)
         maskImageHighlight(i).Ids = IdsHighlight(i);
@@ -163,6 +165,7 @@ for i = 1:length(cellID)
     % perform transformation
     if ismac
         load('/Users/ashwin/Google Drive/ZFish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2-Elavl3-Mnx-SB-set4.mat');
+        %load('/Users/ashwin/Google Drive/ZFish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set3.mat');
     else
         load('/usr/people/ashwinv/seungmount/research/Ashwin/Z-Brain/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat');
     end
@@ -220,25 +223,35 @@ meanRootNodePlaneXY = meanRootNodePlaneXY;
 
 if displayRefBrain
     
-for ii = 1:size(rootNodePlaneXZ,2)
-    for i = 1:size(images,3)
-        temp2(i,:,ii)  = images(round(rootNodePlaneXZ(ii)/imagesRef.PixelExtentInWorldX),:,i);
+    for ii = 1:size(rootNodePlaneXZ,2)
+        for i = 1:size(images,3)
+            rootNodeImageXZ(i,:,ii)  = images(round(rootNodePlaneXZ(ii)/imagesRef.PixelExtentInWorldX),:,i);
+        end
     end
-end
-
-
-for ii = 1:size(rootNodePlaneYZ,2)
-    for i = 1:size(images,3)
-        temp3(i,:,ii)  = images(:,round(rootNodePlaneYZ(ii)/imagesRef.PixelExtentInWorldX),i);
+    
+    
+    for ii = 1:size(rootNodePlaneYZ,2)
+        for i = 1:size(images,3)
+            rootNodeImagYZ(i,:,ii)  = images(:,round(rootNodePlaneYZ(ii)/imagesRef.PixelExtentInWorldX),i);
+        end
     end
-end
     
     %Z = round(meanRootNodePlane)*ones(size(X)); % this is the correct way to plot
     
-    meanImageXY = mean(rootNodeImageXY,3);
-    meanImageXZ = mean(temp2,3);
-    meanImageYZ = mean(temp3,3);
-    
+    % mean projection
+%     meanImageXY = mean(rootNodeImageXY,3);
+%     meanImageXZ = mean(rootNodeImageXZ,3);
+%     meanImageYZ = mean(rootNodeImagYZ,3);
+%     
+    % Maximum intensity projections
+     %meanImageXY = max(images(:,:,round(min(rootNodePlaneXY)/imagesRef.PixelExtentInWorldZ):round(max(rootNodePlaneXY)/imagesRef.PixelExtentInWorldZ)),[],3);
+    % meanImageXY = max(images(:,:,:),[],3);
+
+%     % max projection
+         meanImageXY = max(rootNodeImageXY,[],3);
+         meanImageXZ = max(rootNodeImageXZ,[],3);
+         meanImageYZ = max(rootNodeImagYZ,[],3);
+%     %
     % resize the mean image to micron space
     imgXY = imresize(meanImageXY,[imagesRef.ImageExtentInWorldY,imagesRef.ImageExtentInWorldX]);
     
@@ -264,9 +277,13 @@ if displayRefBrain
     [X,Y] = meshgrid(linspace(0,ceil(imagesRef.ImageExtentInWorldX), ceil(imagesRef.ImageExtentInWorldX)),...
         linspace(0,ceil(imagesRef.ImageExtentInWorldY),ceil(imagesRef.ImageExtentInWorldY)));
     Zplane = 276*ones(size(X)); % this is to render the image layer to the back for visualization
-    % hsurf1 = surface(X,Y,Zplane,imcomplement(medfilt2(imadjust(imgXY/max(imgXY(:))))),'FaceColor','flat','EdgeColor','none');
-    hsurf1 = surface(X,Y,Zplane,abs(imcomplement(medfilt2(imgXY))),'FaceColor','flat','EdgeColor','none');
-    colormap(cmapRed);
+      hsurf1 = surface(X,Y,Zplane,imcomplement(medfilt2(imadjust(imgXY/max(imgXY(:))))),'FaceColor','flat','EdgeColor','none');
+     colormap(gray);
+      %  hsurf1 = surface(X,Y,Zplane,abs(imcomplement(medfilt2(imgXY))),'FaceColor','flat','EdgeColor','none');
+       %hsurf1 = surface(X,Y,Zplane,imcomplement(imgXY),'FaceColor','flat','EdgeColor','none');
+
+        %colormap(cmapRed);
+    %
     lighting gouraud;
     material shiny;
     %alpha(hsurf1, 0.8);
@@ -294,7 +311,7 @@ if IdsHighlight
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1,'LineStyle','--');
             clear boundaries;
         end
         if size(B,1)>1
@@ -302,7 +319,7 @@ if IdsHighlight
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1);
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',cols(i,:),'LineWidth',1,'LineStyle','--');
             annotation('textbox',[0.42,0.4-index,0.5,0],'EdgeColor','none','String',maskImageHighlight(i).name,'Color',cols(i,:));
         end
         index = index+0.01;
@@ -315,15 +332,17 @@ for i = 1:length(cellID)
     filename = sprintf('%d_reRoot_reSample_5000.swc',cellID(i));
     if exist(fullfile(fname,filename))
         tree = load_tree(fullfile(fname,filename));
-        [I,J] = ind2sub(size(tree.dA),find(tree.dA));
-        line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',[neuronColor(i,:),0.4],'LineWidth',1);
-        hold on;
-        h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor(i,:),...
-            'MarkerEdgeColor','k','LineWidth',0.1);
-        hMarker = h.MarkerHandle;
-        hMarker.FaceColorData = uint8(255*[somataColor(i,1);somataColor(i,2);somataColor(i,3);0.1]);
-% %         %%drawnow;
+%                 [I,J] = ind2sub(size(tree.dA),find(tree.dA));
+%                  line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
+%                   'Color',[neuronColor(i,:),0.4],'LineWidth',0.75);
+                 hold on;
+        h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'o','MarkerEdgeColor',somataColor(i,:),...
+            'MarkerFaceColor','none','LineWidth',1);
+%         hMarker = h.MarkerHandle;
+%         hMarker.FaceColorType = 'truecoloralpha';
+%         hMarker.FaceColorData = uint8(255*[somataColor(i,1);somataColor(i,2);somataColor(i,3);0.2]);
+%         %drawnow;
+        %uistack(h,'top');
         clear I;
         clear J;
         clear tree;
@@ -331,11 +350,12 @@ for i = 1:length(cellID)
         tree = load_tree(fullfile(fname,sprintf('%d.swc',cellID(i))));
         [I,J] = ind2sub(size(tree.dA),find(tree.dA));
         line([swc_new{i}(J,3) swc_new{i}(I,3)]',[swc_new{i}(J,4) swc_new{i}(I,4)]',[swc_new{i}(J,5) swc_new{i}(I,5)]',...
-            'Color',[neuronColor(i,:),0.5],'LineWidth',1);
+            'Color',[neuronColor(i,:),0.1],'LineWidth',0.1);
         hold on;
-        h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),25,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','k','LineWidth',0.1);
+        h = scatter3(swc_new{i}(1,3), swc_new{i}(1,4), swc_new{i}(1,5),50,'MarkerFaceColor',somataColor(i,:),'MarkerEdgeColor','k','LineWidth',1.0);
         hMarker = h.MarkerHandle;
-        hMarker.FaceColorData = uint8(255*[somataColor(i,1);somataColor(i,2);somataColor(i,3);0.1]);
+        hMarker.FaceColorData = uint8(255*[somataColor(i,1);somataColor(i,2);somataColor(i,3)]);
+        
         clear I;
         clear J;
         clear tree;
@@ -367,7 +387,7 @@ if displayBoundary
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2,'LineStyle','-');
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.5,0.5,0.5],'LineWidth',2,'LineStyle','-');
             clear boundaries;
         end
         if size(B,1)>1
@@ -375,7 +395,7 @@ if displayBoundary
             boundaries = boundaries.*[imagesRef.PixelExtentInWorldX,imagesRef.PixelExtentInWorldY];
             boundaries(:,3) = meanRootNodePlaneXY*ones(size(boundaries,1),1);
             %fill3(boundaries(:,2),boundaries(:,1),boundaries(:,3),cols(i,:),'FaceAlpha',0.3,'LineStyle','none','LineWidth',0.5);
-            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.8,0.8,0.8],'LineWidth',2,'LineStyle','-');
+            plot3(boundaries(:,2),boundaries(:,1),boundaries(:,3),'Color',[0.5,0.5,0.5],'LineWidth',2,'LineStyle',':');
         end
     end
 end
@@ -383,12 +403,14 @@ end
 
 set(gca, 'BoxStyle','full','YDir','reverse','ZDir','reverse','color','none');
 %set(gca, 'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[]);
-set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
-%draw scale bar 1px = 0.798 us
-%line([500,563],[1280,1280],'Color','m','LineWidth',4);
-%text(500,1300,'50um','FontName','Arial','FontSize',10);
+axis off;
+%set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[0,imagesRef.ImageExtentInWorldX], 'YLim', [0,imagesRef.ImageExtentInWorldY]);
+set(gca,'ZLim',[0,imagesRef.ImageExtentInWorldZ], 'XLim',[250,imagesRef.ImageExtentInWorldX], 'YLim', [400,800]);
 
-axis on;
+%draw scale bar 1px = 0.798 us
+%line([400,463],[750,750],'Color','k','LineWidth',4);
+%text(500,1300,'50um','FontName','Arial','FontSize',10);
+%axis off;
 
 if ~isempty(savePref)
     folderName = sprintf('/Users/ashwin/Desktop/%s',savePref);
@@ -432,7 +454,9 @@ if ~isempty(savePref)
     close all;
     
 end
-title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlaneXY/2)));
+%title(sprintf('Zbr plane: %1d',138-round(meanRootNodePlaneXY/2)));
+%title(sprintf('cellID: %1d',cellID));
+
 %title(sprintf('Zbr dorsal plane: %1d \n Zbr ventral plane: %1d', round(min(rootNodePlane(rootNodePlane~=0))/2), round(max(rootNodePlane)/2)));
 
 

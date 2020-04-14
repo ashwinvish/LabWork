@@ -1,4 +1,4 @@
-function [] = cspy(varargin)
+function [h] = cspy(varargin)
 %CSPY Visualize sparsity pattern.
 %   CSPY(S) plots the sparsity pattern of the matrix S with L levels where
 %   L by default is number of integers between min matrix value and max
@@ -207,6 +207,7 @@ for j=1:channels
         set(gca,'XDir', xdir);
         set(gca,'YDir', ydir);
         set(gca, 'XAxisLocation', 'bottom');
+        h = gca;
         %step_init = step_init + step;
         %step_end = step_end + step;
     end

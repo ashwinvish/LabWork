@@ -19,7 +19,7 @@ lateralVSaccadic = [80163 80167 80177 80179 76688 80204 80206 80210 76682];
 %IBNordered = [77125 77128 77231 77941 77940 77157 77247 77153 79053 77135 77941 78550];
 %IBNrem = [77137 77942 78557 78567 78685 79083 79084 80971];
 
-IBNall = [ 77125 77128 77135 77153 77231 77247 78685 77941 77137 79053 77940 77942 80971 77157 78550 79084 78557 79083 78567];
+IBNall = [77153,77231,82710,77137,82709,77125,82713,78685,77942,82264,77247,83184,78550,83183,82711];
 
 %IBNall = [SaccadicToIBN.Sac_ABDcellIDs, SaccadicToIBN.Sac_ABDicellIDs];
 %IBNall = [IBNordered,IBNrem];
@@ -71,7 +71,7 @@ vestibuarColorMap = ['#ffffff'; '#fff9f4'; '#fff3e9'; '#ffedde'; '#ffe7d3'; '#ff
 integratorColorMap = ['#ffffff'; '#f5f8fb'; '#ecf1f8'; '#e2e9f4'; '#d9e2f0'; '#cfdbec'; '#c5d4e9'; '#bccde5'; '#b2c6e1'; '#a8c0dd'; '#9eb9da'; '#94b2d6'; '#8aabd2'; '#80a5ce'; '#769ecb'; '#6b98c7'; '#5f91c3'; '#538bbf'; '#4684bc'; '#377eb8'];
 
 subplot(2,3,1)
-[a,b] = getABDgradient(IBN,[ABDPutativeSaccadic.cellIDs;ABDiPutativeSaccadic.cellIDs],false);
+[a,b] = getABDgradient(IBN,[ABDPutativeSaccadic.cellIDs';ABDiPutativeSaccadic.cellIDs'],false);
 heatmap(b,'Colormap',hex2rgb(saccadicColorMap),'ColorbarVisible','on','XDisplayLabels',0.1:0.1:1);
 title('r2/3 Saccadic');
 
@@ -160,8 +160,15 @@ h1.LineWidth = 2;
 set(gca,'XLim',[0,1],'YLim',[0,0.15]);
 box off;
 
+%% IBN manual contra pop.
+ 
+manualPop = [77303,79799,80194,80847,80701,77355,77353,80737];
+manualPop_motorDist = isMotor(manualPop',df);
+
+%manualPop = [80816,80707,81169,77855,79799,80847,77355,80700,80868];
 
 %% check for IBN contra pop.
+
 IBNSacc.ContraCellIDs = [];
 for i = 1:numel(SaccadicToIBN.Sac_ABDcellIDs)
     IBNSacc.ContraCellIDs = [IBNSacc.ContraCellIDs;IBN(i).Inputs(IBN(i).isContra)];

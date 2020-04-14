@@ -50,9 +50,11 @@ if synapseIden == 2
         cellProperties.Integrator = cellProperties.Outputs(cellProperties.isIntegrator);
         
         
-        idx = ~ismember(cellProperties.Outputs, ...
-            [cellProperties.Saccadic;cellProperties.Vestibular;cellProperties.Contra;cellProperties.Integrator],'rows');
-        cellProperties.EverythingElse = cellProperties.Outputs(idx);
+%         idx = ~ismember(cellProperties.Outputs, ...
+%             [cellProperties.Saccadic;cellProperties.Vestibular;cellProperties.Contra;cellProperties.Integrator],'rows');
+%        cellProperties.EverythingElse = cellProperties.Outputs(idx);
+
+        cellProperties.EverythingElse  = setdiff(cellProperties.Outputs,[cellProperties.Saccadic;cellProperties.Vestibular;cellProperties.Contra;cellProperties.Integrator]);
         cellProperties.isEverythingElse = ismember(cellProperties.Outputs,cellProperties.EverythingElse);
         
         cellProperties.MotorDist = isMotor(cellID,df); % 1X5 (cellID, ABDr, ABDc, ABDir, ABDic)
@@ -76,6 +78,7 @@ if synapseIden == 2
     
 else
     [cellProperties.Inputs, cellProperties.PSDID] = SynapticPartners(cellID,synapseIden,df);
+    
     for i =1:size(cellProperties.PSDID,1)
         cellProperties.PSDsize(i,1) = df.size(df.psd_segid == cellProperties.PSDID(i));
     end

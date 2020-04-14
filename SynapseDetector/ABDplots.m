@@ -561,6 +561,7 @@ ABDiEverythingElse = unique(ABDiEverythingElse);
 ABDiEverythingElseIpsi = ABDiEverythingElse(~isContra(ABDiEverythingElse));
 ABDiEverythingElseIpsiMotorDist = isMotor(ABDiEverythingElseIpsi,df);
 
+ABD_ABDi_EverythingElse = [ABDEverythingElseIpsi;ABDiEverythingElseIpsi];
 
 % histogram
 
@@ -585,7 +586,8 @@ ABDEverythingElseSaccadicVel = ABDEverythingElseIpsi(isPostSynapseSaccadic(ABDEv
 ABDiEverythingElseSaccadicVel = ABDiEverythingElseIpsi(isPostSynapseSaccadic(ABDiEverythingElseIpsi,df) & ...
     isPostSynapseIntegrator(ABDiEverythingElseIpsi,df) & isPostSynapseIBN(ABDiEverythingElseIpsi,df));
 
-
+ABD_ABDi_EverythingElseSaccadicVel = ABD_ABDi_EverythingElse(isPostSynapseSaccadic(ABD_ABDi_EverythingElse,df) & ...
+    isPostSynapseIntegrator(ABD_ABDi_EverythingElse,df) & isPostSynapseIBN(ABD_ABDi_EverythingElse,df));
 
 
 %remove medial integrators 
@@ -594,15 +596,15 @@ ABDEverythingElseSaccadicVel = setdiff(ABDEverythingElseSaccadicVel,lateralVSacc
 ABDEverythingElseSaccadicVelMotorDist = isMotor(ABDEverythingElseSaccadicVel,df);
 ABDiEverythingElseSaccadicVel = setdiff(ABDiEverythingElseSaccadicVel,lateralVSaccadic);
 ABDiEverythingElseSaccadicVelMotorDist = isMotor(ABDiEverythingElseSaccadicVel,df);
-
-
-ABD_ABDi_EverythginElseSaccadicVel = intersect(ABDEverythingElseSaccadicVel,ABDiEverythingElseSaccadicVel);
+ABD_ABDi_EverythingElseSaccadicVel = setdiff(ABD_ABDi_EverythingElseSaccadicVel,lateralVSaccadic);
+ABD_ABDi_EverythingElseSaccadicVelMotorDist = isMotor(ABD_ABDi_EverythingElseSaccadicVel,df);
+%ABD_ABDi_EverythginElseSaccadicVel = intersect(ABDEverythingElseSaccadicVel,ABDiEverythingElseSaccadicVel);
 
 % 
-subplot(4,4,3)
-scatter(sum(ABDEverythingElseSaccadicVelMotorDist(:,2:3),2), sum(ABDEverythingElseSaccadicVelMotorDist(:,4:5),2),25,ABDcolor);
-hold on;
-scatter(sum(ABDiEverythingElseSaccadicVelMotorDist(:,2:3),2), sum(ABDiEverythingElseSaccadicVelMotorDist(:,4:5),2),25,ABDicolor);
+% subplot(4,4,3)
+% scatter(sum(ABDEverythingElseSaccadicVelMotorDist(:,2:3),2), sum(ABDEverythingElseSaccadicVelMotorDist(:,4:5),2),25,ABDcolor);
+% hold on;
+% scatter(sum(ABDiEverythingElseSaccadicVelMotorDist(:,2:3),2), sum(ABDiEverythingElseSaccadicVelMotorDist(:,4:5),2),25,ABDicolor);
 
 subplot(4,4,4)
 ABDEverythingElseSaccadicVelOSI = (sum(ABDEverythingElseSaccadicVelMotorDist(:,2:3),2)-sum(ABDEverythingElseSaccadicVelMotorDist(:,4:5),2)) ./ ...
@@ -614,6 +616,9 @@ ABDiEverythingElseSaccadicVelOSI = (sum(ABDiEverythingElseSaccadicVelMotorDist(:
 histogram(ABDiEverythingElseSaccadicVelOSI,-1:0.1:1,'FaceColor',ABDicolor);
 axis square;
 
+ABD_ABDi_EverythingElseSaccadicVel_OSI = (sum(ABD_ABDi_EverythingElseSaccadicVelMotorDist(:,2:3),2)-sum(ABD_ABDi_EverythingElseSaccadicVelMotorDist(:,4:5),2)) ./ ...
+    (sum(ABD_ABDi_EverythingElseSaccadicVelMotorDist(:,2:3),2)+sum(ABD_ABDi_EverythingElseSaccadicVelMotorDist(:,4:5),2));
+
 
 % cleaned up and restricterd to only the medial axons.
 
@@ -622,7 +627,9 @@ axis square;
  ABD_ABDi_PutativeSaccadic.cellIDs = ABD_ABDi_EverythginElseSaccadicVel;
  
  ABDPutativeSaccadic.cellIDs = [81833,81750,79838,81868,78886,80739,78643,80829,81797,78628,79736,81809,81839];
+ [80739,81797,81809,81750,81833,79712,81868,79838,81839,80829,79736]
  ABDiPutativeSaccadic.cellIDs = [81759,77338,78634,78680,77846,78628,77372,78643,81420,80286];
+                                [77372,80286,81420,78634,77338,77846,81759,79871,78680,80252]
  
  
  % plot populations

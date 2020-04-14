@@ -28,7 +28,7 @@ end
 colorSchemes
 %% Load Vestibular Neurons
 
- vestibularCellIds = [76631,76700,76656,76655,76660,76679,77393,77395,77375,...
+vestibularCellIds = [76631,76700,76656,76655,76660,76679,77393,77395,77375,...
      77815,77803,77807,80591,80579,77255,77697,77364,80223,81126,80760,81117,...
      80672,80622,80572,80569,81122,78426,81328,81575,81582,81870,82161,82165,81553,82169];
  
@@ -36,9 +36,26 @@ colorSchemes
      77780 80883 80247 80669 80698 80762 80748 80696 80761 80749 81070 81044 ...
      80991 80967 81008 80883 81045 80986 81023 78647 78619 80247 81141];
  
-VestibularAxons = [vestibularCellIds,MVNs];
-%VestibularAxons = [MVNs];
+ TVNs = [78046,78049,78048,78047,78050,78051,78045,80345];
+ 
+ VestNerve = [78277,78313,80345,78238,80493,78301,82283];
+ contraTVN = [76257,77743,80741,81569,80738];
+ 
+VestibularAxons = [vestibularCellIds,MVNs,contraTVN];
 
+
+for i = 1:size(vestibularCellIds,2)
+    temp = SynapticPartners(vestibularCellIds(i),1,df);
+    a(i) = length(temp);
+    temp = temp(temp<1e5);
+    temp(find(temp == vestibularCellIds(i))) = [];
+    b(i) = sum(ismember(temp,vestibularCellIds));
+    clear temp;
+end
+
+allvest2allvest = mean(b./a);
+%VestibularAxons = [MVNs];
+%%
 ABDr_CellIDs = [82140,82145,82143,77648,82146,77302,77301, 82194,77705,77710,77305,77672,77300,77709];
 ABDc_CellIDs = [82213,77654,77646,82212,77295,81172,77657,82197,77682,77154, 77652,77658,77628,77292,77688,82195,77296];
 ABDIr_CellIDs = [78553,77150,77886,78547,77631,77158,77665,78552,77668,77618,77634];
@@ -56,17 +73,22 @@ ABDIc_vols = ABDvols(find(ismember(ABDvols(:,1),ABDIc_CellIDs)),2);
 
 DONMotorPattern = isMotor(vestibularCellIds',df);
 MVNmotorPattern = isMotor(MVNs',df);
+TONmotorPattern = isMotor(contraTVN',df);
 
 vestSize = size(sum(DONMotorPattern(:,2:3),2),1);
 MVNsize  = size(sum(MVNmotorPattern(:,2:3),2),1);
+TONsize = size(sum(TONmotorPattern(:,2:3),2),1);
 
 figure;
 subplot(4,4,1)
-scatter(sum(DONMotorPattern(:,2:3),2),sum(DONMotorPattern(:,4:5),2),40,Vestcolor,'filled');
+scatter(sum(DONMotorPattern(:,2:3),2),sum(DONMotorPattern(:,4:5),2),40,Vestcolor,'filled','MarkerEdgeColor','k');
 hold on,
-scatter(sum(MVNmotorPattern(:,2:3),2),sum(MVNmotorPattern(:,4:5),2),40,MVNcolor,'filled');
+scatter(sum(MVNmotorPattern(:,2:3),2),sum(MVNmotorPattern(:,4:5),2),40,MVNcolor,'filled','MarkerEdgeColor','k');
+scatter(sum(TONmotorPattern(:,2:3),2),sum(TONmotorPattern(:,4:5),2),40,TONcolor,'filled','MarkerEdgeColor','k');
+
 axis square;
 box off;
+set(gca,'XLim',[0,50],'YLim',[0,50]);
 xlabel('Synapses onto M');
 ylabel('Synapses onto I');
 offsetAxes;
@@ -116,7 +138,7 @@ end
 
 %%
 
-motorDistribution = vertcat(Vest.MotorDist);
+motorDistribution = isMotor(vertcat(Vest.MotorDist),df);
 noSynapsesOnMotor = find(sum(motorDistribution(:,2:5),2)==0);
 motorDistribution(noSynapsesOnMotor,:) = [];
 motorDistributionABD = sum(motorDistribution(:,2:3),2);
@@ -157,14 +179,17 @@ colorbar(gca);
 
 figure;
 subplot(4,4,1)
-histogram(normalizedMotorCounts(1:35),-1:0.1:1,'FaceColor','r');
+histogram(normalizedMotorCounts(1:35),-1:0.1:1,'FaceColor',Vestcolor);
 hold on;
-histogram(normalizedMotorCounts(36:end),-1:0.1:1,'FaceColor','g');
-line([0.5,0.5],[0,10],'color','k','LineStyle',':');
-line([-0.5,-0.5],[0,10],'color','k','LineStyle',':');
+histogram(normalizedMotorCounts(36:end-5),-1:0.1:1,'FaceColor',MVNcolor);
+histogram(normalizedMotorCounts(end-5:end),-1:0.1:1,'FaceColor',TONcolor);
+% line([0.5,0.5],[0,10],'color','k','LineStyle',':');
+% line([-0.5,-0.5],[0,10],'color','k','LineStyle',':');
 xlabel('(A-Ai)/A+Ai)');
+set(gca,'YLim',[0,10]);
 axis square;
 box off;
+offsetAxes(gca);
 
 locs = [vertcat(ABDVestibularpop.Origin);vertcat(ABDiVestibularpop.Origin)];
 groups = [ones(size(vertcat(ABDVestibularpop.Origin),1),1);2*ones(size(vertcat(ABDiVestibularpop.Origin),1),1)];
@@ -283,18 +308,26 @@ load ABDc.mat
 load ABDIr.mat
 load ABDIc.mat
 
-[ABDVestPathLengthABDr,ABDrVestibularGradient] = getABDgradient('ABDr',vestibularCellIds,true,true);
-[ABDVestPathLengthABDc,ABDcVestibularGradient] = getABDgradient('ABDc',vestibularCellIds,true,true);
+[ABDVestPathLengthABDr,ABDrVestibularGradient] = getABDgradient(ABDr,vestibularCellIds,true,false);
+[ABDVestPathLengthABDc,ABDcVestibularGradient] = getABDgradient(ABDc,vestibularCellIds,true,false);
 
 [ABDVestPathLengthABDIr,ABDIrVestibularGradient] = getABDgradient(ABDIr,vestibularCellIds,true,false);
 [ABDVestPathLengthABDIc,ABDIcVestibularGradient] = getABDgradient(ABDIc,vestibularCellIds,true,false);
 
 
-[ABDMVNPathLengthABDr,ABDrMVNGradient] = getABDgradient('ABDr',MVNs,true,true);
-[ABDMVNPathLengthABDc,ABDcMVNGradient] = getABDgradient('ABDc',MVNs,true,true);
+[ABDMVNPathLengthABDr,ABDrMVNGradient] = getABDgradient(ABDr,MVNs,true,false);
+[ABDMVNPathLengthABDc,ABDcMVNGradient] = getABDgradient(ABDc,MVNs,true,false);
 
 [ABDMVNPathLengthABDIr,ABDIrMVNGradient] = getABDgradient(ABDIr,MVNs,true,false);
 [ABDMVNPathLengthABDIc,ABDIcMVNGradient] = getABDgradient(ABDIc,MVNs,true,false);
+
+
+[ABDTONPathLengthABDr,ABDrTONGradient] = getABDgradient(ABDr,contraTVN,true,false);
+[ABDTONPathLengthABDc,ABDcTONGradient] = getABDgradient(ABDc,contraTVN,true,false);
+
+[ABDTONPathLengthABDIr,ABDIrTONGradient] = getABDgradient(ABDIr,contraTVN,true,false);
+[ABDTONPathLengthABDIc,ABDIcTONGradient] = getABDgradient(ABDIc,contraTVN,true,false);
+
 
 figure;
 
@@ -418,6 +451,14 @@ meanMVNABDigradient = nanmean(vertcat(ABDIrMVNGradient,ABDIcMVNGradient));
 stdMVNABDigradient = nanstd(vertcat(ABDIrMVNGradient,ABDIcMVNGradient));
 numberOfABDineurons = 21;
 
+meanTONABDgradient = nanmean(vertcat(ABDrTONGradient,ABDcTONGradient));
+stdTONABDgradient = nanstd(vertcat(ABDrTONGradient,ABDcTONGradient));
+numberOfABDneurons = 29;
+
+meanTONABDigradient = nanmean(vertcat(ABDIrTONGradient,ABDIcTONGradient));
+stdTONABDigradient = nanstd(vertcat(ABDIrTONGradient,ABDIcTONGradient));
+numberOfABDineurons = 21;
+
 figure('Units','normalized','Position',[0,0,1,1]);
 subplot(4,4,1)
 errorbar(meanVestibularABDgradient,stdVestibularABDgradient./sqrt(numberOfABDneurons),...
@@ -427,8 +468,11 @@ hold on;
 errorbar(meanMVNABDgradient,stdMVNABDgradient./sqrt(numberOfABDneurons),...
     '-o','color',MVNcolor,'LineWidth',2,'MarkerFaceColor','w');
 
+errorbar(meanTONABDgradient,stdTONABDgradient./sqrt(numberOfABDneurons),...
+    '-o','color',TONcolor,'LineWidth',2,'MarkerFaceColor','w');
+
 axis square;
-set(gca,'XTickLabels',[0,0.5,1],'color',[ABDcolor,0.1]);
+set(gca,'XTickLabels',[0,0.5,1]);
 xlabel('Norm. pathlength');
 ylabel('Norm. count');
 box off;
@@ -440,8 +484,10 @@ errorbar(meanVeastibularABDigradient,stdVestibularABDigradient./sqrt(numberOfABD
 hold on;
 errorbar(meanMVNABDigradient,stdMVNABDigradient./sqrt(numberOfABDineurons),...
     '-o','color',MVNcolor,'LineWidth',2,'MarkerFaceColor','w');
+errorbar(meanTONABDigradient,stdTONABDigradient./sqrt(numberOfABDineurons),...
+    '-o','color',TONcolor,'LineWidth',2,'MarkerFaceColor','w');
 axis square;
-set(gca,'XTickLabels',[0,0.5,1],'color',[ABDicolor,0.1]);
+set(gca,'XTickLabels',[0,0.5,1]);
 xlabel('Norm. pathlength');
 ylabel('Norm. count');
 box off;

@@ -25,18 +25,17 @@ hold on;
 
 plot3(PointCloud(:,1),PointCloud(:,2), -PointCloud(:,3),'o','MarkerSize',10,'MarkerFaceColor',PointColor, 'MarkerEdgeColor','w');
 
-
-
-    quiver3(p3(1),p3(2),p3(3), p1(1)/3, p1(2)/3,p1(3)/3, 50000,'k', 'LineWidth', 4);
-
+if nargin>3
+quiver3(p3(1),p3(2),p3(3), p1(1)/3, p1(2)/3,p1(3)/3, 50000,'k', 'LineWidth', 4);
+end
 
 %set orienataiton of plane and points
 box on;
-axis([ 20000 140000 60000 250000 -60000 0]);
-daspect([1 1 1]); % make aspect ratio [1 1 1]
-set (gca,'Ydir','reverse');
-set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
-view([-180,90]);
+%axis([ 20000 140000 60000 250000 -60000 0]);
+%daspect([1 1 1]); % make aspect ratio [1 1 1]
+%set (gca,'Ydir','reverse');
+%set (gca,'XTick',[], 'YTick',[],'ZTick', [], 'Ydir','reverse');
+%view([-180,90]);
 
 
 end

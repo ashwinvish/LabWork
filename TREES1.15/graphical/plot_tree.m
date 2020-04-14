@@ -58,7 +58,7 @@
 % the TREES toolbox: edit, visualize and analyze neuronal trees
 % Copyright (C) 2009  Hermann Cuntz
 
-function HP = plot_tree (intree, color, DD, ipart, res, options)
+function [HP,HS] = plot_tree (intree, color, DD, ipart, res, options)
 
 % trees : contains the tree structures in the trees package
 global trees
@@ -230,6 +230,8 @@ if ~isempty ([strfind(options, '-2') strfind(options, '-3')]),
             [X1 X2 Y1 Y2 Z1 Z2] = cyl_tree (intree);
             HP = line([X1(ipart) X2(ipart)]' + DD (1), [Y1(ipart) Y2(ipart)]' + DD (2),...
                 [Z1(ipart) Z2(ipart)]' + DD (3));
+            hold on;
+            HS = scatter3(X1(1),Y1(1),Z1(1),250,'MarkerFaceColor','r','MarkerEdgeColor','none'); % added by AV for soma
         end
         if size (color, 1) > 1,
             for ward = 1 : length (ipart)

@@ -53,7 +53,7 @@ if mipLevel == 0
     coord(:,2) = coord(:,2) + 436;
     
     % perform transformation (transforms were computed in micron space)
-    load('/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2.mat')
+    load('/Users/ashwin/Google Drive/Zfish/LowEMtoHighEM/tformRough-LowEMtoHighEM-set2-Elavl3-Mnx-SB-set4.mat')
     
     % transform from voxels to microns.
     coord(:,1) = coord(:,1) * 0.798 ;

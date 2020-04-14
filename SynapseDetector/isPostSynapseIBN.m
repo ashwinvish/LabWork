@@ -2,8 +2,8 @@ function [logic] = isPostSynapseIBN(cellID,df)
 %UNTITLED14 Summary of this function goes here
 %   Detailed explanation goes here
 
-IBNall = [ 77125 77128 77135 77153 77231 77247 78685 77941 77137 79053 ...
-    77940 77942 80971 77157 78550 79084 78557 79083 78567];
+IBNall = [82714,82710,79083,82264,78550,79084,82712,82709,82713,83184,...
+    77125,77942,77231,77247,77153,78685,77137,83183];
 
 logic = zeros(size(cellID));
 for i = 1:numel(cellID)

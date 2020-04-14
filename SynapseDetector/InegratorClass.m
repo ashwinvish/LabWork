@@ -28,7 +28,7 @@ end
 
 %% Load Saccadic Neurons
 
-confirmedALX = [76181 76201 76187 76184 76192 76197 ];
+confirmedALX = [76181 76201 76187 76184 76192 76197];
 putativeALX = [76657 76623 76701 76661 76673 76690 76677 76624 77327 77580 ...
     77341 77344 77868 77872 77349 76634 77592 77578 77607 78629 77581 77591 ...
     77602 77821 77844 77845 77822 78406 78667 79022 79033 78404 78441 78421 ...
@@ -36,11 +36,13 @@ putativeALX = [76657 76623 76701 76661 76673 76690 76677 76624 77327 77580 ...
     79746 80271 79720 79976 77586 77369 78633 80750 77142 79060 78453 80885 ...
     81423 81661 81683 81792];
 
+allPutativeALX = putativeALX;
 putativeALX = putativeALX(logical(isPostSynapseIntegrator(putativeALX,df))|logical(isPreSynapseIntegrator(putativeALX,df)));
 motorOut = isMotor(putativeALX',df);
+allPutativeALX_beforeMotorFilter = putativeALX;
 putativeALX = putativeALX(sum(motorOut(:,2:end),2)>0);
 ALX.cellIDs = [confirmedALX,putativeALX];
-ALX.cellIDs = ALX.cellIDs(isExistReRoot(ALX.cellIDs));
+c = ALX.cellIDs(isExistReRoot(ALX.cellIDs));
 
 % remove ALX cells that do not synapse onto M or I neurons
 ALX.motorDistribution  = isMotor(ALX.cellIDs',df);
@@ -62,7 +64,91 @@ confirmedBARHL = [76198 76190 76193 76194 76195 76196 ];
 putativeBARHL = [78452 80224 78391];
 
 IntegratorNeurons = [confirmedALX,putativeALX,confirmedDBX,putativeDBX,confirmedBARHL,putativeBARHL];
-IntegratorNeurons = IntegratorNeurons(isExistReRoot(IntegratorNeurons)); % remove those integrators for which we do not have meshes
+IntegratorNeurons = IntegratorNeurons(isExistReRoot(IntegratorNeurons));
+% remove those integrators for which we do not have meshes
+
+lateralVSaccadic = [80163 80167 80177 80179 76688 80204 80206 80210 76682];
+
+
+
+load SaccadicProjectingToABDexclusively.mat
+load SaccadicProjectingToABDiexclusively.mat
+load SaccadicProjectingToABD_ABDi.mat
+%% Recurrence fractions
+
+r456cellIDs = [SaccadicProjectingToABDexclusively.cellID';SaccadicProjectingToABDiexclusively.cellID';SaccadicProjectingToABD_ABDi.cellID'];
+
+for i = 1:size(ALX.cellIDs,2)
+    temp = SynapticPartners(ALX.cellIDs(i),1,df);
+    a(i) = length(temp);
+    temp = temp(temp<1e5);
+    %temp(find(temp == ALX.cellIDs(i))) = [];
+    b(i) = sum(ismember(temp,ALX.cellIDs));
+    if sum(ismember(temp,r456cellIDs))>0
+        d(i) = sum(ismember(temp,r456cellIDs));
+    else
+        d(i) = 0;
+    end
+    clear temp;
+end
+
+r78tor78 = mean(b./a); % mean(rmoutliers(b./a))
+r456tor78 = mean(d./a);
+
+clear temp;
+
+for i = 1:size(r456cellIDs,1)
+    temp = SynapticPartners(r456cellIDs(i),1,df);
+    e(i) = length(temp);
+    temp = temp(temp<1e5);
+    f(i) = sum(ismember(temp,r456cellIDs));
+    clear temp;
+end
+
+r456tor456 = mean(f./e);
+    clear temp;
+
+allIntegratorCellIDs = [r456cellIDs;ALX.cellIDs';lateralVSaccadic'];
+
+for i = 1:size(allIntegratorCellIDs,1)
+    temp = SynapticPartners(allIntegratorCellIDs(i),1,df);
+    g(i) = length(temp);
+    temp = temp(temp<1e5);
+    h(i) = sum(ismember(temp,allIntegratorCellIDs));
+    clear temp;
+end
+
+allint2allint = mean(h./g);
+
+%% int to int
+ 
+
+for i = 1:size(allPutativeALX,2)
+    temp = SynapticPartners(allPutativeALX(i),1,df);
+    temp = temp(temp<1e5);
+    a(i) = length(temp);
+    b(i) = sum(ismember(temp,allPutativeALX));
+   c(i) = sum(ismember(temp,confirmedALX'));
+end
+
+for i = 1:size(confirmedALX,2)
+    d(i) = isPreSynapseIntegrator(confirmedALX(i),df);
+    temp = SynapticPartners(confirmedALX(i),1,df);
+    temp = temp(temp<1e5);
+    e(i) = length(temp);
+    f(i) = sum(ismember(temp,allPutativeALX));
+end
+
+
+New2New = b./a;
+New2Old = f./e;
+
+Old2New = c./a;
+Old2Old = d./e;
+
+NewOldConn = [mean(New2New),mean(New2Old);mean(Old2New),mean(Old2Old)];
+
+
 %%
 for i = 1:numel(IntegratorNeurons)
     if ~isExistReRoot(IntegratorNeurons(i))==0
@@ -87,12 +173,18 @@ SaccadicProjectingToABDiexclusively.cellID
 ConfirmedNeuorons = find(ismember(IntegratorNeurons,[confirmedALX,confirmedDBX,confirmedBARHL]));
 
 for i =1:numel(ConfirmedNeuorons)
-    Conf.cellID(i)  = ConfirmedNeuorons(i);
-    Conf.SaccadicNumbers(i) = length(Int(ConfirmedNeuorons(i)).Saccadic);
-    Conf.VestibularNumbers(i) = length(Int(ConfirmedNeuorons(i)).Vestibular);
-    Conf.IntegratorNumbers(i) = length(Int(ConfirmedNeuorons(i)).Integrator);
-    Conf.ContraNumbers(i) = length(Int(ConfirmedNeuorons(i)).Contra);
-    Conf.RestNumbers(i) = length(Int(ConfirmedNeuorons(i)).EverythingElse);
+    Conf(i).cellID  = ConfirmedNeuorons(i);
+    Conf(i).Saccadic = Int(ConfirmedNeuorons(i)).Saccadic;
+    Conf(i).Vestibular = Int(ConfirmedNeuorons(i)).Vestibular;
+    Conf(i).Integrator = Int(ConfirmedNeuorons(i)).Integrator;
+    Conf(i).Contra = Int(ConfirmedNeuorons(i)).Contra;
+    Conf(i).Rest = Int(ConfirmedNeuorons(i)).EverythingElse;
+    
+    Conf(i).SaccadicNumbers = length(Int(ConfirmedNeuorons(i)).Saccadic);
+    Conf(i).VestibularNumbers = length(Int(ConfirmedNeuorons(i)).Vestibular);
+    Conf(i).IntegratorNumbers = length(Int(ConfirmedNeuorons(i)).Integrator);
+    Conf(i).ContraNumbers = length(Int(ConfirmedNeuorons(i)).Contra);
+    Conf(i).RestNumbers = length(Int(ConfirmedNeuorons(i)).EverythingElse);
 end
 
 for i =1:numel(IntegratorNeurons)
@@ -199,20 +291,20 @@ end
 
 figure;
 subplot(4,4,1)
-histogram(cell2mat(ALX.SaccadicPathLength),20,'Normalization','cdf','EdgeColor','k','LineWidth',2,'DisplayStyle','stairs');
+histogram(cell2mat(ALX.SaccadicPathLength),20,'Normalization','cdf','EdgeColor',[74,74,74]./255,'LineWidth',2,'DisplayStyle','stairs');
 hold on;
-histogram(cell2mat(ALX.VestibularPathLenght),20,'Normalization','cdf','EdgeColor','r','LineWidth',2,'DisplayStyle','stairs');
-histogram(cell2mat(ALX.IntegratorPathLength),20,'Normalization','cdf','EdgeColor','b','LineWidth',2,'DisplayStyle','stairs');
+histogram(cell2mat(ALX.VestibularPathLenght),20,'Normalization','cdf','EdgeColor',[255,127,0]./255,'LineWidth',2,'DisplayStyle','stairs');
+histogram(cell2mat(ALX.IntegratorPathLength),20,'Normalization','cdf','EdgeColor',[55,126,184]./255,'LineWidth',2,'DisplayStyle','stairs');
 axis square;
 title('r78ipsi');
 box off;
 offsetAxes(gca);
 
 subplot(4,4,2)
-histogram(cell2mat(DBX.SaccadicPathLength),20,'Normalization','cdf','EdgeColor','k','LineWidth',2,'DisplayStyle','stairs');
+histogram(cell2mat(DBX.SaccadicPathLength),20,'Normalization','cdf','EdgeColor',[74,74,74]./255,'LineWidth',2,'DisplayStyle','stairs');
 hold on;
-histogram(cell2mat(DBX.VestibularPathLenght),20,'Normalization','cdf','EdgeColor','r','LineWidth',2,'DisplayStyle','stairs');
-histogram(cell2mat(DBX.IntegratorPathLength),20,'Normalization','cdf','EdgeColor','b','LineWidth',2,'DisplayStyle','stairs');
+histogram(cell2mat(DBX.VestibularPathLenght),20,'Normalization','cdf','EdgeColor',[255,127,0]./255,'LineWidth',2,'DisplayStyle','stairs');
+histogram(cell2mat(DBX.IntegratorPathLength),20,'Normalization','cdf','EdgeColor',[55,126,184]./255,'LineWidth',2,'DisplayStyle','stairs');
 axis square;
 title('r78contra');
 box off;
@@ -272,12 +364,15 @@ subplot(1,5,5)
 heatmap(DBX.latIntegratorGradient(DBX.RCsort,:),'Colormap',hex2rgb(integratorColorMap),'MissingDataColor','w');
 title('r56');
 
+
 %% Total ALX contribution
 
 ALXtoALX = sum(ALX.r78IntegratorGradient,2)./ALX.TotalNumber';
 ALXtoALX(find(ALXtoALX == 16)) = [];
 
-AllIntegratortoALX =(sum(ALX.r78IntegratorGradient,2)+ sum(ALX.r456IntegratorGradient,2)) ./ ALX.TotalNumber' ; 
+
+
+AllIntegratortoALX =(sum(ALX.r78IntegratorGradient,2)+sum(ALX.r456IntegratorGradient,2)+sum(ALX.latIntegratorGradient,2)) ./ ALX.TotalNumber' ; 
 AllIntegratortoALX (find(AllIntegratortoALX  == 16)) = [];
 
 %%
@@ -421,8 +516,6 @@ histogram(ALX.Origin(:,2),'FaceColor',colors(1,:));
 hold on;
 histogram(DBX.Origin(:,2),'FaceColor',colors(2,:));
 box off;
-%%
-
 
 %% Pie plots of input/putput fractions
 
@@ -619,34 +712,111 @@ offsetAxes(gca);
 
 %%
 
-allContraAxons.cellID = vertcat(Int.Contra);
-allContraAxons.cellID = unique(allContraAxons.cellID);
-allContraAxons.rhombomeres = isRhombomere(allContraAxons.cellID);
-allContraAxons.r6r7 = [allContraAxons.cellID(logical(allContraAxons.rhombomeres.r6));...
-    allContraAxons.cellID(logical(allContraAxons.rhombomeres.r7))];
+% allContraAxons.cellID = vertcat(Conf.Contra);
+% allContraAxons.cellID = unique(allContraAxons.cellID);
+% allContraAxons.cellID = allContraAxons.cellID(isExistReRoot(allContraAxons.cellID));
+% allContraAxons.rhombomeres = isRhombomere(allContraAxons.cellID);
+% allContraAxons.r6r7 = [allContraAxons.cellID(logical(allContraAxons.rhombomeres.r6));...
+%     allContraAxons.cellID(logical(allContraAxons.rhombomeres.r7))];
+% % manually cleaned for r6 and r7
+allContraAxons.r6r7 = [79928,76666,78983,79922,78615,80203,77771,81681,80248,81399,78298,78923,77864,78653,78955,...
+    79950,76782,78347,77817,79915,77773,78677,80737,77822,78621,77869,78671,78838,78912,78631,...
+    79924,78310,78831,78973,81755,78603,78910,76776,79396,77758,79494,77348,77827,78687,77745,...
+    78846,77811,80241,78678,76675,77768,78969,78644,80279,77849,78675,77370,77830,79936,78978,...
+    77358,76693,78348,77865,79713,80212,78897,78185,81356,76774,80268,79437,79932,78652,80263,...
+    78343,78972,76621,80301,78602,78887,80242,78655,77392,81385,77863,77819,78240,81682,78106,...
+    80284,78168,78904,78835,77774,80340,78275,78843,79273,78651,78668,80219,81840,80299,79780,...
+    78903,76843,76781,77778,77810,79134,78947,79660,81331,78349];
+% 
+% allContraAxons.r6r7MotorDist = isMotor(allContraAxons.r6r7',df);
+% allContraAxons.r6r7NonMotor = allContraAxons.r6r7MotorDist(sum(allContraAxons.r6r7MotorDist(:,2:end),2) == 0);
+% allContraAxons.r6r7isMotor = allContraAxons.cellID(sum(allContraAxons.r6r7MotorDist(:,2:end),2)>0);
+% motor cleaned
+% allContraAxons.r6r7isMotor = [77771,77745,78602,76693,77865,77811,76774,...
+%     78343,78348,77774,76675,77773,77768,77863,77822,77358,77392,77849,76776];
 
-allContraAxons.r6r7MotorDist = isMotor(allContraAxons.r6r7,df);
-allContraAxons.r6r7isMotor = allContraAxons.cellID(sum(allContraAxons.r6r7MotorDist(:,2:end),2)>0);
-
-allContraAxons.r6r7NormCount = (sum(allContraAxons.r6r7MotorDist(:,2:3),2) - sum(allContraAxons.r6r7MotorDist(:,4:5),2)) ./ ...
-    (sum(allContraAxons.r6r7MotorDist(:,2:3),2) + sum(allContraAxons.r6r7MotorDist(:,4:5),2));
-
-figure;
-transform_swc_AV(allContraAxons.r6r7isMotor,'k',[],true,false);
+% allContraAxons.r6r7isMotorMotorDist = isMotor(allContraAxons.r6r7isMotor',df);
+% 
+% allContraAxons.r6r7NormCount = (sum(allContraAxons.r6r7MotorDist(:,2:3),2) - sum(allContraAxons.r6r7MotorDist(:,4:5),2)) ./ ...
+%     (sum(allContraAxons.r6r7MotorDist(:,2:3),2) + sum(allContraAxons.r6r7MotorDist(:,4:5),2));
+% 
+% figure;
+% transform_swc_AV(allContraAxons.r6r7isMotor,'k',[],true,false);
 
 %
 allDBXcontra.cellID = vertcat(Int(45:75).Contra);
 allDBXcontra.cellID = unique(allDBXcontra.cellID);
-allDBXcontra.cellID =  allDBXcontra.cellID(isExistReRoot(allDBXcontra.cellID));
-allDBXcontra.isMotor = isMotor(allDBXcontra.cellID ,df);
-allDBXcontra.cellID = allDBXcontra.cellID(sum(allDBXcontra.isMotor(:,2:end),2)>0);
 
-% manual list
-
-allDBXcontra.CellID = [77865,76776,77773,78651,81356,77444,78631,77370,77811,81682,76843,77852,76774,77819,...
+allDBXcontra.cellID = [77865,76776,77773,78651,81356,77444,78631,77370,77811,81682,76843,77852,76774,77819,...
 80246,77768,80248,81397,81385,76782,81840,78653,81681,76666,81597,78677,78227,78671,...
 76693,80219,77358,81106,78687,77830,77771,80575,81138,80203,80212,77774,78655];
 
+allDBXcontra.cellID =  allDBXcontra.cellID(isExistReRoot(allDBXcontra.cellID));
+allDBXcontra.isMotor = isMotor(allDBXcontra.cellID' ,df);
+allDBXcontra.NormCount = (sum(allDBXcontra.isMotor(:,2:3),2)-sum(allDBXcontra.isMotor(:,4:5),2))./...
+                         (sum(allDBXcontra.isMotor(:,2:3),2)+sum(allDBXcontra.isMotor(:,4:5),2))  ; 
+   
+ load ABDr.mat
+ load ABDc.mat
+ load ABDIr.mat
+ load ABDIc.mat
+ 
+[allDBXcontra.ABDrpathlength,allDBXcontra.ABDrGradient] =  getABDgradient('ABDr', allDBXcontra.cellID ,true,false);  
+[allDBXcontra.ABDcpathlength,allDBXcontra.ABDcGradient] =  getABDgradient('ABDc', allDBXcontra.cellID ,true,false);  
+[allDBXcontra.ABDIrpathlength,allDBXcontra.ABDIrGradient] =  getABDgradient(ABDIr, allDBXcontra.cellID ,true,false);  
+[allDBXcontra.ABDIcpathlength,allDBXcontra.ABDIcGradient] =  getABDgradient(ABDIc, allDBXcontra.cellID ,true,false);  
+
+allDBXcontra.meanABDgradient = nanmean(vertcat(allDBXcontra.ABDrGradient,allDBXcontra.ABDcGradient));
+allDBXcontra.stdABDgradient = nanstd(vertcat(allDBXcontra.ABDrGradient,allDBXcontra.ABDcGradient));
+numberOfABDneurons = 29;
+
+allDBXcontra.meanABDigradient = nanmean(vertcat(allDBXcontra.ABDIrGradient,allDBXcontra.ABDIcGradient));
+allDBXcontra.stdABDigradient = nanstd(vertcat(allDBXcontra.ABDIrGradient,allDBXcontra.ABDIcGradient));
+numberOfABDineurons = 21;
+
+figure;
+subplot(4,4,1)
+histogram(allDBXcontra.NormCount,-1:0.1:1,'FaceColor',[0.5,0.5,0.5]);
+axis square;
+box off;
+offsetAxes(gca);
+title('DBX mirror pop');
+
+subplot(4,4,2)
+errorbar(allDBXcontra.meanABDgradient,allDBXcontra.stdABDgradient./sqrt(numberOfABDneurons),...
+    '-o','color',[0.5,0.5,0.5],'LineWidth',2,'MarkerFaceColor','w');
+hold on;
+errorbar(allDBXcontra.meanABDigradient,allDBXcontra.stdABDigradient./sqrt(numberOfABDneurons),...
+    '-o','color',[0.5,0.5,0.5],'LineWidth',2,'MarkerFaceColor',[0.5,0.5,0.5]);
+
+axis square;
+set(gca,'XTickLabels',[0,0.5,1]);
+xlabel('Norm. pathlength');
+ylabel('Norm. count');
+box off;
+offsetAxes(gca);
+
+
+ figure;
+ transform_swc_AV(DBX.cellIDs,DBXcolor,[],true,false);
+ hold on
+ transform_swc_AV(allDBXcontra.cellID,[0.5,0.5,0.5],[],false,false);
+
+
+
+%fractions
+
+for i = 1:length(allDBXcontra.cellID)
+    temp = SynapticPartners(allDBXcontra.cellID(i),2,df);
+    tempSize(i) = length(temp);
+    temp = temp(temp<1e5);
+    numberofDBXpartners(i) = sum(ismember(temp,DBX.cellIDs));
+    numberofALXpartners(i) = sum(ismember(temp,ALX.cellIDs));
+end
+
+
+
+% manual list
 vestibularCells = unique(vertcat(Int.Vestibular));
 
 for i = 1:numel(vestibularCells)

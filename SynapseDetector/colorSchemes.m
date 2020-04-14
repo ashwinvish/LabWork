@@ -12,8 +12,9 @@ SaccABDicolor = [0,207,252]./255; % light blue
 IbnABDcolor = [215,48,39]./255; % dark red
 IbnABDicolor = [253,174,97]./255; % light red
 
-Vestcolor = [45,136,125]./255; % greenish teal
-MVNcolor = [154,95,31]./255; % brownish
+TONcolor = [45,136,125]./255; % greenish teal
+MVNcolor = [254,89,0]./255; % Orange
+Vestcolor = [166,86,40]./255; % brownish
 
 ALXcolor = [134,120,255]./255;  % purple
 DBXcolor = [139,53,149]./255; % light purple

@@ -16,8 +16,8 @@ end
 figure;
 plot(Vj,Sigma);
 
-Xlabel('Presynaptic potential mV');
-Ylabel('\sigma(V_j) Activation state');
+xlabel('Presynaptic potential mV');
+ylabel('\sigma(V_j) Activation state');
 
 %% Steady State Activation Curves
 
